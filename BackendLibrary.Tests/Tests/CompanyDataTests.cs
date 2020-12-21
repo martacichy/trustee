@@ -12,7 +12,7 @@ namespace BackendLibrary.Tests.Tests
         [Fact]
         public void GetCompaniesShouldReturnList()
         {
-            var output = DataAccess.CompanyData.GetCompanies();
+            var output = DataAccess.CompanyData.GetAllCompanies();
 
             Assert.IsType<List<CompanyModel>> (output);
         }
@@ -20,7 +20,7 @@ namespace BackendLibrary.Tests.Tests
         [Fact]
         public void AddCompanyShouldDoItsJob()
         {
-            DataAccess.CompanyData.GetCompanies();
+            DataAccess.CompanyData.GetAllCompanies();
         }
     }
 }
