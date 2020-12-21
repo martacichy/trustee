@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApp", "WebApp.csproj", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BackendLibrary", "..\BackendLibrary\BackendLibrary.csproj", "{8E66E449-CA08-4E64-97E1-F5FDBA762E04}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BackendLibrary.Tests", "..\BackendLibrary.Tests\BackendLibrary.Tests.csproj", "{EA0DB69E-02A7-446B-8335-B7DD34067EA7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BackendLibrary.Tests", "..\BackendLibrary.Tests\BackendLibrary.Tests.csproj", "{EA0DB69E-02A7-446B-8335-B7DD34067EA7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

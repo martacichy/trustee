@@ -26,9 +26,19 @@ namespace WebApp
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddMvc();
+            // Add functionality to inject IOptions<T>
+            services.AddOptions();
+            // Add our Config object so it can be injected
+            services.Configure<string>(Configuration.GetSection("ConnectionStrings"));
             services.AddRazorPages();
             services.AddServerSideBlazor();
+
+            // obiekty tworzone raz dla ca³ej aplikacji:
             services.AddSingleton<WeatherForecastService>();
+
+            // obiekty tworzone tylko, gdy s¹ potrzebne:
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
