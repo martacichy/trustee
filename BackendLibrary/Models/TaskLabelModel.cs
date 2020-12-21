@@ -4,7 +4,7 @@ using System.Text;
 
 namespace BackendLibrary.Models
 {
-    class TaskLabelModel
+    public class TaskLabelModel
 	{
 		public int Task_id { get; set; }
 		public int Label_id { get; set; }
