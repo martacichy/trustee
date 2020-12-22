@@ -9,7 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using WebApp.Data;
+
 
 namespace WebApp
 {
@@ -35,7 +35,7 @@ namespace WebApp
             services.AddServerSideBlazor();
 
             // obiekty tworzone raz dla ca³ej aplikacji:
-            services.AddSingleton<WeatherForecastService>();
+            
 
             // obiekty tworzone tylko, gdy s¹ potrzebne:
             

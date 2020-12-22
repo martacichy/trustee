@@ -1,0 +1,77 @@
+﻿@page "/tasks-m"
+
+<h3>TasksList</h3>
+
+<div>
+    <div style="float:left">
+        <button class="btn btn-primary" @onclick="addNew">Add Task</button>
+    </div>
+    <div style="float:right; width:40%;">
+        <div class="col-sm-6" style="float:left">
+            <input class="form-control" type="text" placeholder="Search" />
+        </div>
+        <div>
+            <button type="submit" class="btn btn-default btn-info">Filter</button>
+        </div>
+    </div>
+</div>
+
+@if (isAdd)
+{
+    <div class="modal" tabindex="-1" style="display:block" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">Add new Task</h3>
+                    <button type="button" class="close" @onclick="closeAdd">
+                        <span aria-hidden="true">X</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <label for="Tytuł" class="control-label">Tytuł</label>
+                            <input for="Tytuł" class="form-control" />
+                        </div>
+                        <div class="form-group">
+                            <label for="Opis" class="control-label">Opis</label>
+                            <input for="Opis" class="form-control" />
+                        </div>
+                        <div class="form-group">
+                            <label for="Deadline" class="control-label">Deadline</label>
+                            <input for="Deadline" type="date" class="form-control" />
+                        </div>
+                        <div class="form-group">
+                            <label for="rezygnacja" class="control-label">Mozliwosc Rezygnacji?</label>
+                            <input for="rezygnacja" type="checkbox" class="form-control" />
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="etykiety" class="control-label">Etykiety</label>
+                            <input for="etykiety" type="text" placeholder="Search..." class="form-control" />
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-block btn-info" data-dismiss="modal">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+
+    private Boolean isAdd;
+
+    private void addNew(MouseEventArgs e)
+    {
+        isAdd = true;
+    }
+
+    private void closeAdd(MouseEventArgs e)
+    {
+        isAdd = false;
+    }
+
+}
+

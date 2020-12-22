@@ -2,16 +2,23 @@
 
 html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    background-color: #26292C;
+    color: #d6d5d5;
 }
 
 a, .btn-link {
-    color: #0366d6;
+    color: #d6d5d5;
+    font-size: 16px;
 }
 
 .btn-primary {
-    color: #fff;
+    color: #253237;
     background-color: #1b6ec2;
-    border-color: #1861ac;
+    border-color: #1861ac
+}
+
+th {
+    color: azure;
 }
 
 app {
@@ -21,7 +28,7 @@ app {
 }
 
 .top-row {
-    height: 3.5rem;
+    height: 4rem;
     display: flex;
     align-items: center;
 }
@@ -31,8 +38,7 @@ app {
 }
 
     .main .top-row {
-        background-color: #f7f7f7;
-        border-bottom: 1px solid #d6d5d5;
+        background-color: #1C1F21;
         justify-content: flex-end;
     }
 
@@ -41,25 +47,26 @@ app {
             margin-left: 1.5rem;
         }
 
-.main .top-row a:first-child {
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
+        .main .top-row a:first-child {
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
 
 .sidebar {
-    background-image: linear-gradient(180deg, rgb(5, 39, 103) 0%, #3a0647 70%);
+    background-color: #131516;
 }
 
     .sidebar .top-row {
         background-color: rgba(0,0,0,0.4);
     }
 
+
     .sidebar .navbar-brand {
         font-size: 1.1rem;
     }
 
     .sidebar .oi {
-        width: 2rem;
+        width: 1rem;
         font-size: 1.1rem;
         vertical-align: text-top;
         top: -2px;
@@ -88,7 +95,7 @@ app {
         }
 
             .sidebar .nav-item a.active {
-                background-color: rgba(255,255,255,0.25);
+                background-color: #555E62;
                 color: white;
             }
 
@@ -129,12 +136,12 @@ app {
     z-index: 1000;
 }
 
-#blazor-error-ui .dismiss {
-    cursor: pointer;
-    position: absolute;
-    right: 0.75rem;
-    top: 0.5rem;
-}
+    #blazor-error-ui .dismiss {
+        cursor: pointer;
+        position: absolute;
+        right: 0.75rem;
+        top: 0.5rem;
+    }
 
 @media (max-width: 767.98px) {
     .main .top-row:not(.auth) {
