@@ -8,4 +8,8 @@
     <ProjectReference Include="..\BackendLibrary\BackendLibrary.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Data\" />
+  </ItemGroup>
+
 </Project>
