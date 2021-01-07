@@ -25,6 +25,16 @@ namespace BackendLibrary.DataAccess
                 connection.Execute(sql, newEmpLabel);
             }
         }
+        
+        public static void DeleteEmployeeLabel(EmployeeLabelData oldEmployeeLabel)
+        {
+            using (IDbConnection connection = new MySqlConnection(connectionString))
+            {
+                string sql = @"delete from database06.employeelabel where employee_id = @employee_id AND label_id = @label_id";
+
+                connection.Execute(sql, oldEmployeeLabel);
+            }
+        }
 
     }
 }
