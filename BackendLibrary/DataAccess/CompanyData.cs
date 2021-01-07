@@ -30,13 +30,23 @@ namespace BackendLibrary.DataAccess
             }
         }
 
+        /// <summary> Zwraca model o przekazanym w argumencie id. </summary>
+        public static CompanyModel GetById(int company_id)
+        {
+            using (IDbConnection connection = new MySqlConnection(connectionString))
+            {
+                string sql = $"SELECT * FROM database06.company WHERE Company_id = {company_id}";
+                var data = connection.Query<CompanyModel>(sql).FirstOrDefault();
+
+                return data;
+            }
+        }
+
         /// <summary> Dodaje nową firmę. </summary>
         public static void AddCompany(CompanyModel newCompany)
         {
-            using (IDbConnection connection = new MySqlConnection(connectionString)) {
-                
-                 // https://github.com/StackExchange/Dapper/tree/main/Dapper.Contrib
-                //tu znalazłem takie ulatwienie niby 
+            using (IDbConnection connection = new MySqlConnection(connectionString))
+            {
                 string sql = @"insert into database06.company (Name, Creation_date)
                             values (@Name, @Creation_date)";
 

@@ -24,9 +24,19 @@ namespace BackendLibrary.Tests.Tests
         }
 
         [Fact]
-        public void AddCompanyTest() {
+        public void AddCompanyTest()
+        {
             CompanyModel company = new CompanyModel("HymelCompany", new DateTime(2016, 11, 23));
+
             DataAccess.CompanyData.AddCompany(company);
+        }
+
+        [Fact]
+        public void GetByIdTest()
+        {
+            var output = DataAccess.CompanyData.GetById(1);
+
+            Assert.IsType<CompanyModel>(output);
         }
     }
 }

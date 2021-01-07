@@ -24,5 +24,13 @@ namespace BackendLibrary.Tests.Tests {
 
             DataAccess.LabelTypeData.AddLabelType(labelType);
         }
+
+        [Fact]
+        public void GetByIdTest()
+        {
+            var output = DataAccess.LabelTypeData.GetById(1);
+
+            Assert.IsType<LabelTypeModel>(output);
+        }
     }
 }
