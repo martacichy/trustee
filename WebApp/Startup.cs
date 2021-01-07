@@ -35,6 +35,7 @@ namespace WebApp
             services.AddServerSideBlazor();
 
             // obiekty tworzone raz dla ca³ej aplikacji:
+            // services.AddSingleton<TaskModelData>();
             
 
             // obiekty tworzone tylko, gdy s¹ potrzebne:

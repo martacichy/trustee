@@ -33,5 +33,23 @@ namespace BackendLibrary.DataAccess {
             }
         }
 
+        public static void DeleteTask(TaskModel oldTask)
+        {
+            using (IDbConnection connection = new MySqlConnection(connectionString))
+            {
+                string sql = @"delete from database06.employeetask Where task_id = @task_id";
+
+                connection.Execute(sql, oldTask);
+
+                sql = @"delete from database06.tasklabel Where task_id = @task_id";
+
+                connection.Execute(sql, oldTask);
+
+                sql = @"delete from database06.task Where task_id = @task_id AND company_id = @company_id";
+
+                connection.Execute(sql, oldTask);
+            }
+        }
+
     }
 }
