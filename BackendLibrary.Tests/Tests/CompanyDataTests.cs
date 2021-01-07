@@ -22,5 +22,10 @@ namespace BackendLibrary.Tests.Tests
         {
             DataAccess.CompanyData.GetAllCompanies();
         }
+        [Fact]
+        public void AddCompanyTest() {
+            CompanyModel company = new CompanyModel("HymelCompany", new DateTime(2016, 11, 23));
+            DataAccess.CompanyData.AddCompany(company);
+        }
     }
 }

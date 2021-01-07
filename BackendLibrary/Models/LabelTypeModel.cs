@@ -16,5 +16,10 @@ namespace BackendLibrary.Models
 			Label_type_id = label_type_id;
 			Name = name;
 		}
-	}
+
+        public LabelTypeModel(int company_id, string name) {
+            Company_id = company_id;
+            Name = name;
+        }
+    }
 }
