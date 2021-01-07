@@ -31,7 +31,6 @@ namespace BackendLibrary.DataAccess {
                             values (@Company_id, @First_name, @Last_name, @Email, @If_manager)";
                 
                 connection.Execute(sql, newEmployee);
-                  
             }
         }
     }

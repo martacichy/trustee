@@ -19,7 +19,7 @@ namespace BackendLibrary.Tests.Tests {
 
         [Fact]
         public void AddTaskTest() {
-            TaskModel task = new TaskModel(3, "TaskNumberOne", "Task number one description", new DateTime(2016, 11, 23), new DateTime(2021, 11, 23), "status", 1);
+            TaskModel task = new TaskModel(1, "TaskNumberOne", "Task number one description", new DateTime(2016, 11, 23), new DateTime(2021, 11, 23), "status", 1);
 
             DataAccess.TaskData.AddTask(task);
         }

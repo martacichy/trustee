@@ -41,8 +41,6 @@ namespace BackendLibrary.DataAccess
                             values (@Name, @Creation_date)";
 
                 connection.Execute(sql, newCompany);
-
-
             }
         }
     }

@@ -20,7 +20,7 @@ namespace BackendLibrary.Tests.Tests {
 
         [Fact]
         public void AddEmployeeTest() {
-            EmployeeModel employee = new EmployeeModel(3, "Jadwiga", "Hymel", "jadwigaHymel@gmail.com", 1);
+            EmployeeModel employee = new EmployeeModel(1, "Jadwiga", "Hymel", "jadwigaHymel@gmail.com", 1);
 
             DataAccess.EmployeeData.AddEmployee(employee);
         }

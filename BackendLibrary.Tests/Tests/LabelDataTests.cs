@@ -18,8 +18,8 @@ namespace BackendLibrary.Tests.Tests {
         }
 
         [Fact]
-        public void AddLableTest() {
-            LabelModel label = new LabelModel(3, 1, "labelNumberTwo", "Opis drugiej etykiety");
+        public void AddLabelTest() {
+            LabelModel label = new LabelModel(1, 1, "testowa etykieta", "Opis etykiety");
 
             DataAccess.LabelData.AddLabel(label);
         }

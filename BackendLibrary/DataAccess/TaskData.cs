@@ -30,8 +30,6 @@ namespace BackendLibrary.DataAccess {
                             values (@Company_id, @Name, @Description, @Start_time, @Deadline, @Status, @Auto_assigned)";
 
                 connection.Execute(sql, newTask);
-
-
             }
         }
 
