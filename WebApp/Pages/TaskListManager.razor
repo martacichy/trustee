@@ -1,28 +1,36 @@
 ﻿@page "/tasks-m"
 
-<h3>TasksList</h3>
+<h1>Zadania</h1>
 
 <div>
     <div style="float:left">
-        <button class="btn btn-primary" @onclick="addNew">Add Task</button>
+        <button class="btn btn-primary" @onclick="addNew">Dodaj zadanie</button>
     </div>
     <div style="float:right; width:40%;">
         <div class="col-sm-6" style="float:left">
-            <input class="form-control" type="text" placeholder="Search" />
+            <input class="form-control" type="text" placeholder="Szukaj" />
         </div>
         <div>
-            <button type="submit" class="btn btn-default btn-info">Filter</button>
+            <button type="submit" class="btn btn-default btn-info">Filtruj</button>
         </div>
     </div>
 </div>
-
+<table class='table'>
+    <thead>
+        <tr>
+            <th>Tytuł</th>
+            <th>Deadline</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+</table>
 @if (isAdd)
 {
     <div class="modal" tabindex="-1" style="display:block" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h3 class="modal-title">Add new Task</h3>
+                    <h3 class="modal-title">Dodaj nowe zadanie</h3>
                     <button type="button" class="close" @onclick="closeAdd">
                         <span aria-hidden="true">X</span>
                     </button>
@@ -30,7 +38,7 @@
                 <div class="modal-body">
                     <form>
                         <div class="form-group">
-                            <label for="Tytuł" class="control-label">Tytuł</label>
+                            <label for="Tytuł" class="control-label" required>Tytuł</label>
                             <input for="Tytuł" class="form-control" />
                         </div>
                         <div class="form-group">
@@ -38,21 +46,31 @@
                             <input for="Opis" class="form-control" />
                         </div>
                         <div class="form-group">
+                            <label for="Starttime" class="control-label">Czas rozpoczęcia</label>
+                            <input for="Starttime" type="date" class="form-control" />
+                        </div>
+                        <div class="form-group">
                             <label for="Deadline" class="control-label">Deadline</label>
                             <input for="Deadline" type="date" class="form-control" />
                         </div>
                         <div class="form-group">
-                            <label for="rezygnacja" class="control-label">Mozliwosc Rezygnacji?</label>
-                            <input for="rezygnacja" type="checkbox" class="form-control" />
+                            <label for="Status" class="control-label">Status zadania</label>
+                            <input for="Status" class="form-control" />
                         </div>
                         <div class="form-group">
+                            <label for="IfAutoAssigned" class="control-label">Czy przydzielić automatycznie?</label>
+                            <input for="IfAutoAssigned" type="checkbox" class="form-control" />
+                        </div>
+
+                        <div class="form-group">
                             <label asp-for="etykiety" class="control-label">Etykiety</label>
-                            <input for="etykiety" type="text" placeholder="Search..." class="form-control" />
+                            <input for="etykiety" type="text" placeholder="Szukaj..." class="form-control" />
+                            <button class="btn btn-default btn-xs">Dodaj</button>
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-block btn-info" data-dismiss="modal">Save</button>
+                    <button class="btn btn-block btn-info" data-dismiss="modal">Zapisz</button>
                 </div>
             </div>
         </div>
