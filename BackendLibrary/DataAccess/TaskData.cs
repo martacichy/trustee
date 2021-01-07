@@ -23,6 +23,18 @@ namespace BackendLibrary.DataAccess {
             }
         }
 
+        /// <summary> Zwraca model o przekazanym w argumencie id. </summary>
+        public static TaskModel GetById(int task_id)
+        {
+            using (IDbConnection connection = new MySqlConnection(connectionString))
+            {
+                string sql = $"SELECT * FROM database06.task WHERE Task_id = {task_id}";
+                var data = connection.Query<TaskModel>(sql).FirstOrDefault();
+
+                return data;
+            }
+        }
+
         /// <summary> Dodaje nowego taska. </summary>
         public static void AddTask(TaskModel newTask) {
             using (IDbConnection connection = new MySqlConnection(connectionString)) {

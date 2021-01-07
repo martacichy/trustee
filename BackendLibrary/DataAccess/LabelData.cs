@@ -23,6 +23,18 @@ namespace BackendLibrary.DataAccess {
             }
         }
 
+        /// <summary> Zwraca model o przekazanym w argumencie id. </summary>
+        public static LabelModel GetById(int label_id)
+        {
+            using (IDbConnection connection = new MySqlConnection(connectionString))
+            {
+                string sql = $"SELECT * FROM database06.label WHERE Label_id = {label_id}";
+                var data = connection.Query<LabelModel>(sql).FirstOrDefault();
+
+                return data;
+            }
+        }
+
         /// <summary> Dodaje nową etykietę </summary>
         public static void AddLabel(LabelModel newLabel) {
             using (IDbConnection connection = new MySqlConnection(connectionString)) {

@@ -23,6 +23,19 @@ namespace BackendLibrary.DataAccess {
                 return data;
             }
         }
+
+        /// <summary> Zwraca model o przekazanym w argumencie id. </summary>
+        public static EmployeeModel GetById(int employee_id)
+        {
+            using (IDbConnection connection = new MySqlConnection(connectionString))
+            {
+                string sql = $"SELECT * FROM database06.employee WHERE Employee_id = {employee_id}";
+                var data = connection.Query<EmployeeModel>(sql).FirstOrDefault();
+
+                return data;
+            }
+        }
+
         /// <summary> Dodaje nowego pracownika. </summary>
         public static void AddEmployee(EmployeeModel newEmployee) {
             using (IDbConnection connection = new MySqlConnection(connectionString)) {

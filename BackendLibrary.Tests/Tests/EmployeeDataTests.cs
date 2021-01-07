@@ -25,5 +25,13 @@ namespace BackendLibrary.Tests.Tests {
 
             DataAccess.EmployeeData.AddEmployee(employee);
         }
+
+        [Fact]
+        public void GetByIdTest()
+        {
+            var output = DataAccess.EmployeeData.GetById(1);
+
+            Assert.IsType<EmployeeModel>(output);
+        }
     }
 }
