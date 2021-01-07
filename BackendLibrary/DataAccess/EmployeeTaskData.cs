@@ -12,6 +12,7 @@ namespace BackendLibrary.DataAccess
 {
     public class EmployeeTaskData : SqlConnector
     {
+        // usuwa przypisanie pracownika do zadania
         public static void DeleteTaskModel(EmployeeTaskModel oldEmployeeTask)
         {
             using (IDbConnection connection = new MySqlConnection(connectionString))

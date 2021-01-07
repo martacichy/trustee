@@ -26,6 +26,7 @@ namespace BackendLibrary.DataAccess
             }
         }
         
+        // Usuwa etykiete pracownikowi
         public static void DeleteEmployeeLabel(EmployeeLabelData oldEmployeeLabel)
         {
             using (IDbConnection connection = new MySqlConnection(connectionString))

@@ -45,6 +45,7 @@ namespace BackendLibrary.DataAccess {
             }
         }
 
+        // usuwa zadanie z bazy danych, równocześnie usuwając wiersze z innych tabel, gdzie zawarty jest klucz obcy z tabeli Task
         public static void DeleteTask(TaskModel oldTask)
         {
             using (IDbConnection connection = new MySqlConnection(connectionString))
