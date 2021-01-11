@@ -5,16 +5,21 @@ using BackendLibrary.Models;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace BackendLibrary.Tests.Tests {
-    public class EmployeeDataTests {
+namespace BackendLibrary.Tests.Tests
+{
+    public class EmployeeDataTests
+    {
         [Fact]
-        public void GetEmployeesShouldReturnList() {
+        public void GetEmployeesShouldReturnList()
+        {
             var output = DataAccess.EmployeeData.GetAllEmployees();
 
             Assert.IsType<List<EmployeeModel>>(output);
         }
+
         [Fact]
-        public void AddEmployeeShouldDoItsJob() {
+        public void AddEmployeeShouldDoItsJob()
+        {
             DataAccess.EmployeeData.GetAllEmployees();
         }
 

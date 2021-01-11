@@ -12,7 +12,7 @@ namespace BackendLibrary.DataAccess
 {
     public class TaskLabelData : SqlConnector
     {
-        // usuwa przypisanie etykiety do danego zadania
+        /// <summary> usuwa przypisanie etykiety do danego zadania <summary>
         public static void DeleteTaskLabel(TaskLabelModel oldTaskLabel)
         {
             using (IDbConnection connection = new MySqlConnection(connectionString))

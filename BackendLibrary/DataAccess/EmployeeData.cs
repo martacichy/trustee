@@ -15,7 +15,8 @@ namespace BackendLibrary.DataAccess {
     public class EmployeeData : SqlConnector {
     
         /// <summary> Zwraca listę wszystkich pracownikow. </summary>
-        public static List<EmployeeModel> GetAllEmployees() {
+        public static List<EmployeeModel> GetAllEmployees()
+        {
             using (IDbConnection connection = new MySqlConnection(connectionString)) {
                 string sql = "SELECT * FROM database06.employee";
                 var data = connection.Query<EmployeeModel>(sql).ToList();
@@ -37,7 +38,8 @@ namespace BackendLibrary.DataAccess {
         }
 
         /// <summary> Dodaje nowego pracownika. </summary>
-        public static void AddEmployee(EmployeeModel newEmployee) {
+        public static void AddEmployee(EmployeeModel newEmployee)
+        {
             using (IDbConnection connection = new MySqlConnection(connectionString)) {
                 
                 string sql = @"insert into database06.employee (Company_id, First_name, Last_name, Email, If_manager)

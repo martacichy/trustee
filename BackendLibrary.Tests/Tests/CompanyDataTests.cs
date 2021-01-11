@@ -22,6 +22,7 @@ namespace BackendLibrary.Tests.Tests
         {
             DataAccess.CompanyData.GetAllCompanies();
         }
+
         [Fact]
         public void AddCompanyTest()
         {
