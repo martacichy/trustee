@@ -85,7 +85,6 @@ CREATE TABLE IF NOT EXISTS `database06`.`Label` (
   `description` VARCHAR(500) NULL,
   PRIMARY KEY (`label_id`),
   UNIQUE INDEX `label_id_UNIQUE` (`label_id` ASC) VISIBLE,
-  UNIQUE INDEX `name_UNIQUE` (`name` ASC) VISIBLE,
   INDEX `label_type_id_idx` (`label_type_id` ASC) VISIBLE,
   INDEX `company_id_idx` (`company_id` ASC) VISIBLE,
   CONSTRAINT `label_type_id`

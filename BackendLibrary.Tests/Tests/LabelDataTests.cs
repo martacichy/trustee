@@ -2,34 +2,37 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 using Xunit;
+using XUnitPriorityOrderer;
 
-namespace BackendLibrary.Tests.Tests {
-    public class LabelDataTests {
-        [Fact]    
-        public void GetLabelsShouldReturnList() {
+namespace BackendLibrary.Tests.Tests
+{
+    [Order(3)]
+    public class LabelDataTests
+    {
+        [Fact, Order(2)]    
+        public void GetLabelsShouldReturnList()
+        {
             var output = DataAccess.LabelData.GetAllLabels();
 
             Assert.IsType<List<LabelModel>>(output);
         }
-        [Fact]
-        public void AddLabelShouldDoItsJob() {
-            DataAccess.LabelData.GetAllLabels();
-        }
 
-        [Fact]
-        public void AddLabelTest() {
+        [Fact, Order(1)]
+        public async void AddLabelTest()
+        {
             LabelModel label = new LabelModel(1, 1, "testowa etykieta", "Opis etykiety");
 
-            DataAccess.LabelData.AddLabel(label);
+            await Task.Run(() => DataAccess.LabelData.AddLabel(label));
         }
 
-        [Fact]
-        public void GetByIdTest()
+        [Fact, Order(3)]
+        public async void GetByIdTest()
         {
-            var output = DataAccess.LabelData.GetById(1);
+            var output = await Task.Run(() => DataAccess.LabelData.GetById(1));
 
-            Assert.IsType<LabelModel>(output);
+            Assert.True(output.Label_id == 1);
         }
     }
 }

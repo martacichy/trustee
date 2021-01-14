@@ -2,41 +2,38 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 using Xunit;
+using XUnitPriorityOrderer;
 
 namespace BackendLibrary.Tests.Tests
 {
+    [Order(6)]
     public class TaskDataTests
     {
-        [Fact]
-        public void GetTasksShouldReturnList()
+        [Fact, Order(2)]
+        public async void GetTasksShouldReturnList()
         {
-            var output = DataAccess.TaskData.GetAllTasks();
+            var output = await Task.Run(() => DataAccess.TaskData.GetAllTasks());
 
             Assert.IsType<List<TaskModel>>(output);
         }
 
-        [Fact]
-        public void AddTaskTypeShouldDoItsJob()
-        {
-            DataAccess.TaskData.GetAllTasks();
-        }
-
-        [Fact]
-        public void AddTaskTest()
+        [Fact, Order(1)]
+        public async void AddTaskTest()
         {
             TaskModel task = new TaskModel(1, "TaskNumberOne", "Task number one description",
                 new DateTime(2016, 11, 23), new DateTime(2021, 11, 23), "status", 1);
 
-            DataAccess.TaskData.AddTask(task);
+            await Task.Run(() => DataAccess.TaskData.AddTask(task));
         }
 
-        [Fact]
-        public void GetByIdTest()
+        [Fact, Order(3)]
+        public async void GetByIdTest()
         {
-            var output = DataAccess.TaskData.GetById(1);
+            var output = await Task.Run(() => DataAccess.TaskData.GetById(1));
 
-            Assert.IsType<TaskModel>(output);
+            Assert.True(output.Task_id == 1);
         }
     }
 }

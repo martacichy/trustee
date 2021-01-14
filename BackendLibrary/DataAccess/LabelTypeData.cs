@@ -14,8 +14,10 @@ namespace BackendLibrary.DataAccess {
     public class LabelTypeData : SqlConnector {
 
         /// <summary> Zwraca listę wszystkich typów etykiet. </summary>
-        public static List<LabelTypeModel> GetAllLabelsType() {
-            using (IDbConnection connection = new MySqlConnection(connectionString)) {
+        public static List<LabelTypeModel> GetAll()
+        {
+            using (IDbConnection connection = new MySqlConnection(connectionString))
+            {
                 string sql = "SELECT * FROM database06.labeltype";
                 var data = connection.Query<LabelTypeModel>(sql).ToList();
 

@@ -19,7 +19,7 @@ namespace BackendLibrary.DataAccess
     public class CompanyData : SqlConnector
     {
         /// <summary> Zwraca listę wszystkich firm. </summary>
-        public static List<CompanyModel> GetAllCompanies()
+        public static List<CompanyModel> GetAll()
         {
             using (IDbConnection connection = new MySqlConnection(connectionString))
             {

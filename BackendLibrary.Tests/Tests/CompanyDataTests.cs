@@ -4,26 +4,22 @@ using System.Text;
 using BackendLibrary.Models;
 using System.Threading.Tasks;
 using Xunit;
+using XUnitPriorityOrderer;
 
 namespace BackendLibrary.Tests.Tests
 {
-    public class CompanyDataTests
+    [Order(1)]
+    public class CompanyDataTests : BaseTestClass
     {
-        [Fact]
-        public void GetCompaniesShouldReturnList()
+        [Fact, Order(3)]
+        public void GetAllTest()
         {
-            var output = DataAccess.CompanyData.GetAllCompanies();
+            var output = DataAccess.CompanyData.GetAll();
 
             Assert.IsType<List<CompanyModel>> (output);
         }
 
-        [Fact]
-        public void AddCompanyShouldDoItsJob()
-        {
-            DataAccess.CompanyData.GetAllCompanies();
-        }
-
-        [Fact]
+        [Fact, Order(1)]
         public void AddCompanyTest()
         {
             CompanyModel company = new CompanyModel("HymelCompany", new DateTime(2016, 11, 23));
@@ -31,7 +27,7 @@ namespace BackendLibrary.Tests.Tests
             DataAccess.CompanyData.AddCompany(company);
         }
 
-        [Fact]
+        [Fact, Order(2)]
         public void GetByIdTest()
         {
             var output = DataAccess.CompanyData.GetById(1);

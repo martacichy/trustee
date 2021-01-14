@@ -15,7 +15,7 @@ namespace BackendLibrary.DataAccess {
     public class EmployeeData : SqlConnector {
     
         /// <summary> Zwraca listę wszystkich pracownikow. </summary>
-        public static List<EmployeeModel> GetAllEmployees()
+        public static List<EmployeeModel> GetAll()
         {
             using (IDbConnection connection = new MySqlConnection(connectionString)) {
                 string sql = "SELECT * FROM database06.employee";

@@ -4,28 +4,30 @@ using System.Text;
 using BackendLibrary.Models;
 using System.Threading.Tasks;
 using Xunit;
+using XUnitPriorityOrderer;
 
-namespace BackendLibrary.Tests.Tests {
-    public class LabelTypeDataTests {
-        [Fact]
-        public void GetLabelTypesShouldReturnList() {
-            var output = DataAccess.LabelTypeData.GetAllLabelsType();
+namespace BackendLibrary.Tests.Tests
+{
+    [Order(2)]
+    public class LabelTypeDataTests : BaseTestClass
+    {
+        [Fact, Order(3)]
+        public void GetAllTests()
+        {
+            var output = DataAccess.LabelTypeData.GetAll();
 
             Assert.IsType<List<LabelTypeModel>>(output);
         }
-        [Fact]
-        public void AddLabelTypeShouldDoItsJob() {
-            DataAccess.LabelTypeData.GetAllLabelsType();
-        }
 
-        [Fact]
-        public void AddLableTypeTest() {
+        [Fact, Order(1)]
+        public void AddLableTypeTest()
+        {
             LabelTypeModel labelType = new LabelTypeModel(1, "labelTypeNumberOne");
 
             DataAccess.LabelTypeData.AddLabelType(labelType);
         }
 
-        [Fact]
+        [Fact, Order(2)]
         public void GetByIdTest()
         {
             var output = DataAccess.LabelTypeData.GetById(1);
