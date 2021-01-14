@@ -12,9 +12,9 @@ namespace BackendLibrary.Tests.Tests
     public class LabelDataTests
     {
         [Fact, Order(2)]    
-        public void GetLabelsShouldReturnList()
+        public async void GetLabelsShouldReturnList()
         {
-            var output = DataAccess.LabelData.GetAllLabels();
+            var output = await Task.Run(() => DataAccess.LabelData.GetAllLabels());
 
             Assert.IsType<List<LabelModel>>(output);
         }

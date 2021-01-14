@@ -12,25 +12,25 @@ namespace BackendLibrary.Tests.Tests
     public class EmployeeDataTests : BaseTestClass
     {
         [Fact, Order(3)]
-        public void GetEmployeesShouldReturnList()
+        public async void GetEmployeesShouldReturnList()
         {
-            var output = DataAccess.EmployeeData.GetAll();
+            var output = await Task.Run(() => DataAccess.EmployeeData.GetAll());
 
             Assert.IsType<List<EmployeeModel>>(output);
         }
 
         [Fact, Order(1)]
-        public void AddEmployeeTest()
+        public async void AddEmployeeTest()
         {
             EmployeeModel employee = new EmployeeModel(1, "Jadwiga", "Hymel", "jadwigaHymel@gmail.com", 0);
 
-            DataAccess.EmployeeData.AddEmployee(employee);
+            await Task.Run(() => DataAccess.EmployeeData.AddEmployee(employee));
         }
 
         [Fact, Order(2)]
-        public void GetByIdTest()
+        public async void GetByIdTest()
         {
-            var output = DataAccess.EmployeeData.GetById(1);
+            var output = await Task.Run(() => DataAccess.EmployeeData.GetById(1));
 
             Assert.IsType<EmployeeModel>(output);
         }

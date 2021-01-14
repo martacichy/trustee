@@ -12,25 +12,27 @@ namespace BackendLibrary.Tests.Tests
     public class EmployeeLabelDataTests : BaseTestClass
     {
         [Fact, Order(2)]
-        public void GetEmployeesShouldReturnList()
+        public async void GetEmployeesShouldReturnList()
         {
-            var output = DataAccess.EmployeeLabelData.GetAllLabelsByEmployeeId(1);
+            var output = await Task.Run(() => DataAccess.EmployeeLabelData.GetAllLabelsByEmployeeId(1));
 
             Assert.IsType<List<EmployeeLabelModel>>(output);
         }
 
         [Fact, Order(1)]
-        public void AddEmployeeLabelTest()
+        public async void AddEmployeeLabelTest()
         {
             EmployeeLabelModel testLabel = new EmployeeLabelModel(1, 1);
 
-            DataAccess.EmployeeLabelData.AddEmployeeLabel(testLabel);
+            await Task.Run(() => DataAccess.EmployeeLabelData.AddEmployeeLabel(testLabel));
+
+            DeleteEmployeeLabelTest();
         }
 
-        [Fact, Order(3)]
-        public void DeleteEmployeeLabelTest()
+        // wywołujemy ten test w innych testach, więc nie dajemy tu już [Fact]
+        private async void DeleteEmployeeLabelTest()
         {
-            int rowsAffected = DataAccess.EmployeeLabelData.DeleteEmployeeLabel(1, 1);
+            int rowsAffected = await Task.Run(() => DataAccess.EmployeeLabelData.DeleteEmployeeLabel(1, 1));
 
             Assert.True(rowsAffected == 1);
         }

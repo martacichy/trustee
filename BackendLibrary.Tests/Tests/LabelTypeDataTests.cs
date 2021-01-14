@@ -12,25 +12,25 @@ namespace BackendLibrary.Tests.Tests
     public class LabelTypeDataTests : BaseTestClass
     {
         [Fact, Order(3)]
-        public void GetAllTests()
+        public async void GetAllTests()
         {
-            var output = DataAccess.LabelTypeData.GetAll();
+            var output = await Task.Run(() => DataAccess.LabelTypeData.GetAll());
 
             Assert.IsType<List<LabelTypeModel>>(output);
         }
 
         [Fact, Order(1)]
-        public void AddLableTypeTest()
+        public async void AddLableTypeTest()
         {
             LabelTypeModel labelType = new LabelTypeModel(1, "labelTypeNumberOne");
 
-            DataAccess.LabelTypeData.AddLabelType(labelType);
+            await Task.Run(() => DataAccess.LabelTypeData.AddLabelType(labelType));
         }
 
         [Fact, Order(2)]
-        public void GetByIdTest()
+        public async void GetByIdTest()
         {
-            var output = DataAccess.LabelTypeData.GetById(1);
+            var output = await Task.Run(() => DataAccess.LabelTypeData.GetById(1));
 
             Assert.IsType<LabelTypeModel>(output);
         }

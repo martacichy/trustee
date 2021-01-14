@@ -12,25 +12,25 @@ namespace BackendLibrary.Tests.Tests
     public class CompanyDataTests : BaseTestClass
     {
         [Fact, Order(3)]
-        public void GetAllTest()
+        public async void GetAllTest()
         {
-            var output = DataAccess.CompanyData.GetAll();
+            var output = await Task.Run(() => DataAccess.CompanyData.GetAll());
 
             Assert.IsType<List<CompanyModel>> (output);
         }
 
         [Fact, Order(1)]
-        public void AddCompanyTest()
+        public async void AddCompanyTest()
         {
             CompanyModel company = new CompanyModel("HymelCompany", new DateTime(2016, 11, 23));
 
-            DataAccess.CompanyData.AddCompany(company);
+            await Task.Run(() => DataAccess.CompanyData.AddCompany(company));
         }
 
         [Fact, Order(2)]
-        public void GetByIdTest()
+        public async void GetByIdTest()
         {
-            var output = DataAccess.CompanyData.GetById(1);
+            var output = await Task.Run(() => DataAccess.CompanyData.GetById(1));
 
             Assert.IsType<CompanyModel>(output);
         }
