@@ -46,5 +46,25 @@ namespace BackendLibrary.DataAccess {
 
             }
         }
+
+        /// <summary> Usuwa etykiete z bazy danych, jednocześnie usuwając wiersze z innych tabel, gdzie zawarty jest klucz obcy z tabeli etykiety </summary>
+        public static int DeleteLabel(int label_id)
+        {
+            using (IDbConnection connection = new MySqlConnection(connectionString))
+            {
+                string sql = $"delete from database06.tasklabel Where label_id = {label_id}";
+
+                connection.Execute(sql);
+
+                sql = $"delete from database06.employeelabel Where label_id = {label_id}";
+
+                connection.Execute(sql);
+
+                sql = $"delete from database06.label Where employee_id = {label_id}";
+
+                int RowsAffected = connection.Execute(sql);
+                return RowsAffected;
+            }
+        }
     }
 }

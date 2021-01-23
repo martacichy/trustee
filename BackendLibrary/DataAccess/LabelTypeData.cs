@@ -48,5 +48,10 @@ namespace BackendLibrary.DataAccess {
 
             }
         }
+
+        /* public static void DeleteLabelType(int label_type_id)
+        {
+          
+        } */
     }
 }

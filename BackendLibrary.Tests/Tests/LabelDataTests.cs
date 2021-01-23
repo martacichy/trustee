@@ -25,6 +25,8 @@ namespace BackendLibrary.Tests.Tests
             LabelModel label = new LabelModel(1, 1, "testowa etykieta", "Opis etykiety");
 
             await Task.Run(() => DataAccess.LabelData.AddLabel(label));
+
+            DeleteLabelTest();
         }
 
         [Fact, Order(3)]
@@ -33,6 +35,13 @@ namespace BackendLibrary.Tests.Tests
             var output = await Task.Run(() => DataAccess.LabelData.GetById(1));
 
             Assert.True(output.Label_id == 1);
+        }
+
+        private async void DeleteLabelTest()
+        {
+            int rowsAffected = await Task.Run(() => DataAccess.LabelData.DeleteLabel(1));
+
+            Assert.True(rowsAffected == 1);
         }
     }
 }

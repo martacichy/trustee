@@ -48,6 +48,25 @@ namespace BackendLibrary.DataAccess {
                 connection.Execute(sql, newEmployee);
             }
         }
+
+        public static int DeleteEmployee(int employee_id)
+        {
+            using (IDbConnection connection = new MySqlConnection(connectionString))
+            {
+                string sql = $"delete from database06.employeetask Where employee_id = {employee_id}";
+
+                connection.Execute(sql);
+
+                sql = $"delete from database06.employeelabel Where employee_id = {employee_id}";
+
+                connection.Execute(sql);
+
+                sql = $"delete from database06.employee Where employee_id = {employee_id}";
+
+                int RowsAffected = connection.Execute(sql);
+                return RowsAffected;
+            }
+        }
     }
 }
 

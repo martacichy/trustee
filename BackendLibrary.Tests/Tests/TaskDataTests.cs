@@ -26,6 +26,8 @@ namespace BackendLibrary.Tests.Tests
                 new DateTime(2016, 11, 23), new DateTime(2021, 11, 23), "status", 1);
 
             await Task.Run(() => DataAccess.TaskData.AddTask(task));
+
+            DeleteTaskTest();
         }
 
         [Fact, Order(3)]
@@ -34,6 +36,13 @@ namespace BackendLibrary.Tests.Tests
             var output = await Task.Run(() => DataAccess.TaskData.GetById(1));
 
             Assert.True(output.Task_id == 1);
+        }
+
+        private async void DeleteTaskTest()
+        {
+            int rowsAffected = await Task.Run(() => DataAccess.TaskData.DeleteTask(1, 1));
+
+            Assert.True(rowsAffected == 1);
         }
     }
 }

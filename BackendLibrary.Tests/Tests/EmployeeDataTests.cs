@@ -25,6 +25,8 @@ namespace BackendLibrary.Tests.Tests
             EmployeeModel employee = new EmployeeModel(1, "Jadwiga", "Hymel", "jadwigaHymel@gmail.com", 0);
 
             await Task.Run(() => DataAccess.EmployeeData.AddEmployee(employee));
+            
+            DeleteEmployeeTest();
         }
 
         [Fact, Order(2)]
@@ -33,6 +35,13 @@ namespace BackendLibrary.Tests.Tests
             var output = await Task.Run(() => DataAccess.EmployeeData.GetById(1));
 
             Assert.IsType<EmployeeModel>(output);
+        }
+
+        private async void DeleteEmployeeTest()
+        {
+            int rowsAffected = await Task.Run(() => DataAccess.EmployeeData.DeleteEmployee(1));
+
+            Assert.True(rowsAffected == 1);
         }
     }
 }
