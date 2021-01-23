@@ -45,8 +45,10 @@ namespace BackendLibrary.DataAccess {
             }
         }
 
-        // usuwa zadanie z bazy danych, równocześnie usuwając wiersze z innych tabel, gdzie zawarty jest klucz obcy z tabeli Task
-        public static int DeleteTask(int task_id, int company_id)
+        /// <summary> Usuwa zadanie z bazy danych,
+        /// usuwając wcześniej wiersze z innych tabel, gdzie zawarty jest dany klucz obcy z tabeli Task
+        /// </summary>
+        public static int DeleteTask(int task_id)
         {
             using (IDbConnection connection = new MySqlConnection(connectionString))
             {
@@ -58,7 +60,7 @@ namespace BackendLibrary.DataAccess {
 
                 connection.Execute(sql);
 
-                sql = $"delete from database06.task Where task_id = {task_id} AND company_id = {company_id}";
+                sql = $"delete from database06.task Where task_id = {task_id}";
 
                 int RowsAffected = connection.Execute(sql);
                 return RowsAffected;

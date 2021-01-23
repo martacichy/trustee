@@ -14,7 +14,8 @@ namespace BackendLibrary.DataAccess {
     public class LabelData : SqlConnector {
 
         /// <summary> Zwraca listę wszystkich etykiet. </summary>
-        public static List<LabelModel> GetAllLabels() {
+        public static List<LabelModel> GetAllLabels()
+        {
             using (IDbConnection connection = new MySqlConnection(connectionString)) {
                 string sql = "SELECT * FROM database06.label";
                 var data = connection.Query<LabelModel>(sql).ToList();
@@ -37,7 +38,8 @@ namespace BackendLibrary.DataAccess {
 
         /// <summary> Dodaje nową etykietę </summary>
         public static void AddLabel(LabelModel newLabel) {
-            using (IDbConnection connection = new MySqlConnection(connectionString)) {
+            using (IDbConnection connection = new MySqlConnection(connectionString))
+            {
 
                 string sql = @"insert into database06.label (Company_id, Label_type_id, Name, Description)
                             values (@Company_id, @Label_type_id, @Name, @Description)";
@@ -47,7 +49,9 @@ namespace BackendLibrary.DataAccess {
             }
         }
 
-        /// <summary> Usuwa etykiete z bazy danych, jednocześnie usuwając wiersze z innych tabel, gdzie zawarty jest klucz obcy z tabeli etykiety </summary>
+        /// <summary> Usuwa etykietę z bazy danych,
+        /// usuwając wcześniej wiersze z innych tabel, gdzie zawarty jest dany klucz obcy z tabeli Label
+        /// </summary>
         public static int DeleteLabel(int label_id)
         {
             using (IDbConnection connection = new MySqlConnection(connectionString))

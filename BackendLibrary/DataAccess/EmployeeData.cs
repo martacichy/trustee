@@ -49,6 +49,9 @@ namespace BackendLibrary.DataAccess {
             }
         }
 
+        /// <summary> Usuwa pracownika z bazy danych,
+        /// usuwając wcześniej wiersze z innych tabel, gdzie zawarty jest dany klucz obcy z tabeli Employee
+        /// </summary>
         public static int DeleteEmployee(int employee_id)
         {
             using (IDbConnection connection = new MySqlConnection(connectionString))

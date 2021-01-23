@@ -40,7 +40,7 @@ namespace BackendLibrary.Tests.Tests
 
         private async void DeleteTaskTest()
         {
-            int rowsAffected = await Task.Run(() => DataAccess.TaskData.DeleteTask(1, 1));
+            int rowsAffected = await Task.Run(() => DataAccess.TaskData.DeleteTask(1));
 
             Assert.True(rowsAffected == 1);
         }
