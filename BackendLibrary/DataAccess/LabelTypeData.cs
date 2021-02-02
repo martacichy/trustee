@@ -49,9 +49,23 @@ namespace BackendLibrary.DataAccess {
             }
         }
 
-        /* public static void DeleteLabelType(int label_type_id)
+        /// <summary> Usuwa rodzaj etykiety z bazy danych,
+        /// a w etykietach, w których był użyty usuwa informację o rodzaju etykiety
+        /// </summary>
+        public static int DeleteLabelType(int label_type_id)
         {
-          
-        } */
+            using (IDbConnection connection = new MySqlConnection(connectionString))
+            {
+
+                string sql = $"update database06.label set label_type_id = NULL" +
+                             $" where label_id = {label_type_id}";
+                connection.Execute(sql);
+
+                sql = $"delete from database06.labeltype where Label_type_id = {label_type_id}";
+                int RowsAffected = connection.Execute(sql);
+
+                return RowsAffected;
+            }
+        }
     }
 }

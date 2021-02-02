@@ -57,16 +57,14 @@ namespace BackendLibrary.DataAccess {
             using (IDbConnection connection = new MySqlConnection(connectionString))
             {
                 string sql = $"delete from database06.tasklabel Where label_id = {label_id}";
-
                 connection.Execute(sql);
 
                 sql = $"delete from database06.employeelabel Where label_id = {label_id}";
-
                 connection.Execute(sql);
 
                 sql = $"delete from database06.label Where employee_id = {label_id}";
-
                 int RowsAffected = connection.Execute(sql);
+
                 return RowsAffected;
             }
         }
