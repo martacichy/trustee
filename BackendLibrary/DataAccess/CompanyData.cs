@@ -47,8 +47,8 @@ namespace BackendLibrary.DataAccess
         {
             using (IDbConnection connection = new MySqlConnection(connectionString))
             {
-                string sql = @"insert into database06.company (Name, Creation_date)
-                            values (@Name, @Creation_date)";
+                string sql = @"insert into database06.company (Name, Creation_date, Login, Password)
+                            values (@Name, @Creation_date, @Login, @Password)";
 
                 connection.Execute(sql, newCompany);
             }

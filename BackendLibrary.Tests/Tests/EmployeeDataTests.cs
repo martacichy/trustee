@@ -22,7 +22,8 @@ namespace BackendLibrary.Tests.Tests
         [Fact, Order(1)]
         public async void AddEmployeeTest()
         {
-            EmployeeModel employee = new EmployeeModel(1, "Jadwiga", "Hymel", "jadwigaHymel@gmail.com", 0);
+            EmployeeModel employee = new EmployeeModel(1, "Jadwiga", "Hymel", "jadwigaHymel@gmail.com",
+                                                        0, "jadwigaHymel@gmail.com", "pass123");
 
             await Task.Run(() => DataAccess.EmployeeData.AddEmployee(employee));
             

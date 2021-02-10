@@ -24,6 +24,8 @@ CREATE TABLE IF NOT EXISTS `database06`.`Company` (
   `company_id` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(100) NOT NULL,
   `creation_date` DATE NULL,
+  `login` VARCHAR(100) NULL,
+  `password` VARCHAR(100) NULL,
   PRIMARY KEY (`company_id`),
   UNIQUE INDEX `company_id_UNIQUE` (`company_id` ASC) VISIBLE)
 ENGINE = InnoDB;
@@ -41,6 +43,8 @@ CREATE TABLE IF NOT EXISTS `database06`.`Employee` (
   `last_name` VARCHAR(50) NOT NULL,
   `email` VARCHAR(100) NULL,
   `if_manager` INT NOT NULL DEFAULT 0,
+  `login` VARCHAR(100) NULL,
+  `password` VARCHAR(100) NULL,
   PRIMARY KEY (`employee_id`),
   UNIQUE INDEX `employee_id_UNIQUE` (`employee_id` ASC) VISIBLE,
   INDEX `company_id_idx` (`company_id` ASC) VISIBLE,
