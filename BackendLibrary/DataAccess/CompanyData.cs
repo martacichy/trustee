@@ -26,7 +26,7 @@ namespace BackendLibrary.DataAccess
                 string sql = "SELECT * FROM database06.company";
                 var data = connection.Query<CompanyModel>(sql).ToList();
 
-                return data;
+                return data; 
             }
         }
 
@@ -51,6 +51,32 @@ namespace BackendLibrary.DataAccess
                             values (@Name, @Creation_date, @Login, @Password)";
 
                 connection.Execute(sql, newCompany);
+            }
+        }
+
+        /// <summary> Usuwa firmę z bazy danych,
+        /// usuwając wcześniej wiersze z innych tabel, gdzie zawarty jest dany klucz obcy z tabeli Company
+        /// </summary>
+        public static int DeleteCompany(int company_id)
+        {
+            using (IDbConnection connection = new MySqlConnection(connectionString))
+            {
+                string sql = $"delete from database06.labeltype Where company_id = {company_id}";
+                connection.Execute(sql);
+
+                sql = $"delete from database06.label Where company_id = {company_id}";
+                connection.Execute(sql);
+
+                sql = $"delete from database06.task Where company_id = {company_id}";
+                connection.Execute(sql);
+
+                sql = $"delete from database06.employee Where company_id = {company_id}";
+                connection.Execute(sql);
+
+                sql = $"delete from database06.company Where company_id = {company_id}";
+                int RowsAffected = connection.Execute(sql);
+
+                return RowsAffected;
             }
         }
     }

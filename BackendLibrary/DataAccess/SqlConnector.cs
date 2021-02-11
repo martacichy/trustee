@@ -22,5 +22,18 @@ namespace BackendLibrary.DataAccess
         // Dane logowania do bazy z WebApp/appsettings.json
         public static readonly string connectionString =
             "server=localhost;user id=team06;password=progzesp123;database=database06";
+
+
+        /// <summary> Zwraca autowygenerowane Id w ostatnio wykonanym insercie.</summary>
+        public static int LastInstertId()
+        {
+            using (IDbConnection connection = new MySqlConnection(connectionString))
+            {
+                string sql = "SELECT LAST_INSERT_ID()";
+                int id = connection.Query(sql).FirstOrDefault();
+
+                return id;
+            }
+        }
     }
 }
