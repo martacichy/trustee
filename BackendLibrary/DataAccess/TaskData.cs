@@ -35,6 +35,18 @@ namespace BackendLibrary.DataAccess {
             }
         }
 
+        /// <summary> Zwraca listę wszystkich tasków danej firmy. </summary>
+        public static List<TaskModel> GetAllByCompanyId(int company_id)
+        {
+            using (IDbConnection connection = new MySqlConnection(connectionString))
+            {
+                string sql = $"SELECT * FROM database06.task where Company_id = {company_id}";
+                var data = connection.Query<TaskModel>(sql).ToList();
+
+                return data;
+            }
+        }
+
         /// <summary> Dodaje nowego taska. </summary>
         public static void AddTask(TaskModel newTask) {
             using (IDbConnection connection = new MySqlConnection(connectionString)) {

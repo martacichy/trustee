@@ -55,27 +55,24 @@ namespace BackendLibrary.DataAccess
         }
 
         /// <summary> Usuwa firmę z bazy danych,
-        /// usuwając wcześniej wiersze z innych tabel, gdzie zawarty jest dany klucz obcy z tabeli Company
+        /// usuwając wcześniej wszystkie wpisy z innych tabel związane z daną firmą.
         /// </summary>
         public static int DeleteCompany(int company_id)
         {
             using (IDbConnection connection = new MySqlConnection(connectionString))
             {
-                string sql = $"delete from database06.labeltype Where company_id = {company_id}";
-                connection.Execute(sql);
+                var labeltypes = LabelTypeData.GetAllByCompanyId(company_id);
+                var labels = LabelData.GetAllByCompanyId(company_id);
+                var tasks = TaskData.GetAllByCompanyId(company_id);
+                var employees = EmployeeData.GetAllByCompanyId(company_id);
 
-                sql = $"delete from database06.label Where company_id = {company_id}";
-                connection.Execute(sql);
+                foreach (var item in labeltypes) { LabelTypeData.DeleteLabelType(item.Label_type_id); }
+                foreach (var item in labels) { LabelData.DeleteLabel(item.Label_id); }
+                foreach (var item in tasks) { TaskData.DeleteTask(item.Task_id); }
+                foreach (var item in employees) { EmployeeData.DeleteEmployee(item.Employee_id); }
 
-                sql = $"delete from database06.task Where company_id = {company_id}";
-                connection.Execute(sql);
-
-                sql = $"delete from database06.employee Where company_id = {company_id}";
-                connection.Execute(sql);
-
-                sql = $"delete from database06.company Where company_id = {company_id}";
+                string sql = $"delete from database06.company Where company_id = {company_id}";
                 int RowsAffected = connection.Execute(sql);
-
                 return RowsAffected;
             }
         }

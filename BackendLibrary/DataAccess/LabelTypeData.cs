@@ -37,6 +37,18 @@ namespace BackendLibrary.DataAccess {
             }
         }
 
+        /// <summary> Zwraca listę wszystkich typów etykiet danej firmy. </summary>
+        public static List<LabelTypeModel> GetAllByCompanyId(int company_id)
+        {
+            using (IDbConnection connection = new MySqlConnection(connectionString))
+            {
+                string sql = $"SELECT * FROM database06.labeltype where Company_id = {company_id}";
+                var data = connection.Query<LabelTypeModel>(sql).ToList();
+
+                return data;
+            }
+        }
+
         /// <summary> Dodaje nowy typ etykiety </summary>
         public static void AddLabelType(LabelTypeModel newLabelType) {
             using (IDbConnection connection = new MySqlConnection(connectionString)) {

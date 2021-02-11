@@ -37,6 +37,18 @@ namespace BackendLibrary.DataAccess {
             }
         }
 
+        /// <summary> Zwraca listę wszystkich pracownikow danej firmy. </summary>
+        public static List<EmployeeModel> GetAllByCompanyId(int company_id)
+        {
+            using (IDbConnection connection = new MySqlConnection(connectionString))
+            {
+                string sql = $"SELECT * FROM database06.employee where Company_id = {company_id}";
+                var data = connection.Query<EmployeeModel>(sql).ToList();
+
+                return data;
+            }
+        }
+
         /// <summary> Dodaje nowego pracownika. </summary>
         public static void AddEmployee(EmployeeModel newEmployee)
         {
