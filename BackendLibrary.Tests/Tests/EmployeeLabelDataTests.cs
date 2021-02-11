@@ -22,19 +22,11 @@ namespace BackendLibrary.Tests.Tests
         [Fact, Order(1)]
         public async void AddEmployeeLabelTest()
         {
-            EmployeeLabelModel testLabel = new EmployeeLabelModel(1, 1);
+            int emp_id = await Task.Run(() => DataAccess.EmployeeData.GetMaxId());
+            int label_id = await Task.Run(() => DataAccess.LabelData.GetMaxId());
+            EmployeeLabelModel testLabel = new EmployeeLabelModel(emp_id, label_id);
 
             await Task.Run(() => DataAccess.EmployeeLabelData.AddEmployeeLabel(testLabel));
-
-            DeleteEmployeeLabelTest();
-        }
-
-        // wywołujemy ten test w innych testach, więc nie dajemy tu już [Fact]
-        private async void DeleteEmployeeLabelTest()
-        {
-            int rowsAffected = await Task.Run(() => DataAccess.EmployeeLabelData.DeleteEmployeeLabel(1, 1));
-
-            Assert.True(rowsAffected == 1);
         }
     }
 }

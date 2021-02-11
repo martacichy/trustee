@@ -35,6 +35,18 @@ namespace BackendLibrary.DataAccess {
             }
         }
 
+        /// <summary> Zwraca autowygenerowane Id w ostatnio wykonanym insercie.</summary>
+        public static int GetMaxId()
+        {
+            using (IDbConnection connection = new MySqlConnection(connectionString))
+            {
+                string sql = "SELECT max(Task_id) from database06.task";
+                int id = connection.Query<int>(sql).First();
+
+                return id;
+            }
+        }
+
         /// <summary> Zwraca listę wszystkich tasków danej firmy. </summary>
         public static List<TaskModel> GetAllByCompanyId(int company_id)
         {

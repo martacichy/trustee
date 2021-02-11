@@ -31,7 +31,8 @@ namespace BackendLibrary.Tests.Tests
         [Fact, Order(2)]
         public async void GetByIdTest()
         {
-            var output = await Task.Run(() => DataAccess.CompanyData.GetById(1));
+            int id = await Task.Run(() => DataAccess.CompanyData.GetMaxId());
+            var output = await Task.Run(() => DataAccess.CompanyData.GetById(id));
 
             Assert.IsType<CompanyModel>(output);
         }

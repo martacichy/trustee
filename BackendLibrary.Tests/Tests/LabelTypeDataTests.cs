@@ -22,7 +22,8 @@ namespace BackendLibrary.Tests.Tests
         [Fact, Order(1)]
         public async void AddLableTypeTest()
         {
-            LabelTypeModel labelType = new LabelTypeModel(1, "labelTypeNumberOne");
+            int company_id = await Task.Run(() => DataAccess.CompanyData.GetMaxId());
+            LabelTypeModel labelType = new LabelTypeModel(company_id, "labelTypeNumberOne");
 
             await Task.Run(() => DataAccess.LabelTypeData.AddLabelType(labelType));
         }
@@ -30,7 +31,8 @@ namespace BackendLibrary.Tests.Tests
         [Fact, Order(2)]
         public async void GetByIdTest()
         {
-            var output = await Task.Run(() => DataAccess.LabelTypeData.GetById(1));
+            int id = await Task.Run(() => DataAccess.LabelTypeData.GetMaxId());
+            var output = await Task.Run(() => DataAccess.LabelTypeData.GetById(id));
 
             Assert.IsType<LabelTypeModel>(output);
         }

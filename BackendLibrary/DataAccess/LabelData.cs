@@ -36,6 +36,18 @@ namespace BackendLibrary.DataAccess {
             }
         }
 
+        /// <summary> Zwraca autowygenerowane Id w ostatnio wykonanym insercie.</summary>
+        public static int GetMaxId()
+        {
+            using (IDbConnection connection = new MySqlConnection(connectionString))
+            {
+                string sql = "SELECT max(Label_id) from database06.label";
+                int id = connection.Query<int>(sql).First();
+
+                return id;
+            }
+        }
+
         /// <summary> Zwraca listę wszystkich etykiet danej firmy. </summary>
         public static List<LabelModel> GetAllByCompanyId(int company_id)
         {
@@ -74,7 +86,7 @@ namespace BackendLibrary.DataAccess {
                 sql = $"delete from database06.employeelabel Where label_id = {label_id}";
                 connection.Execute(sql);
 
-                sql = $"delete from database06.label Where employee_id = {label_id}";
+                sql = $"delete from database06.label Where label_id = {label_id}";
                 int RowsAffected = connection.Execute(sql);
 
                 return RowsAffected;

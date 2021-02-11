@@ -37,6 +37,18 @@ namespace BackendLibrary.DataAccess {
             }
         }
 
+        /// <summary> Zwraca autowygenerowane Id w ostatnio wykonanym insercie.</summary>
+        public static int GetMaxId()
+        {
+            using (IDbConnection connection = new MySqlConnection(connectionString))
+            {
+                string sql = "SELECT max(Label_type_id) from database06.labeltype";
+                int id = connection.Query<int>(sql).First();
+
+                return id;
+            }
+        }
+
         /// <summary> Zwraca listę wszystkich typów etykiet danej firmy. </summary>
         public static List<LabelTypeModel> GetAllByCompanyId(int company_id)
         {

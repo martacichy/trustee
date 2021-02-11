@@ -11,7 +11,7 @@ namespace BackendLibrary.Tests.Tests
     [Order(3)]
     public class LabelDataTests
     {
-        [Fact, Order(2)]    
+        [Fact, Order(3)]    
         public async void GetLabelsShouldReturnList()
         {
             var output = await Task.Run(() => DataAccess.LabelData.GetAllLabels());
@@ -22,26 +22,10 @@ namespace BackendLibrary.Tests.Tests
         [Fact, Order(1)]
         public async void AddLabelTest()
         {
-            LabelModel label = new LabelModel(1, 1, "testowa etykieta", "Opis etykiety");
+            int company_id = await Task.Run(() => DataAccess.CompanyData.GetMaxId());
+            LabelModel label = new LabelModel(company_id, 1, "testowa etykieta", "Opis etykiety");
 
             await Task.Run(() => DataAccess.LabelData.AddLabel(label));
-
-            DeleteLabelTest();
-        }
-
-        [Fact, Order(3)]
-        public async void GetByIdTest()
-        {
-            var output = await Task.Run(() => DataAccess.LabelData.GetById(1));
-
-            Assert.True(output.Label_id == 1);
-        }
-
-        private async void DeleteLabelTest()
-        {
-            int rowsAffected = await Task.Run(() => DataAccess.LabelData.DeleteLabel(1));
-
-            Assert.True(rowsAffected == 1);
         }
     }
 }

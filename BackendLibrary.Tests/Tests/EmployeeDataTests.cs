@@ -22,27 +22,20 @@ namespace BackendLibrary.Tests.Tests
         [Fact, Order(1)]
         public async void AddEmployeeTest()
         {
-            EmployeeModel employee = new EmployeeModel(1, "Jadwiga", "Hymel", "jadwigaHymel@gmail.com",
+            int company_id = await Task.Run(() => DataAccess.CompanyData.GetMaxId());
+            EmployeeModel employee = new EmployeeModel(company_id, "Jadwiga", "Hymel", "jadwigaHymel@gmail.com",
                                                         0, "jadwigaHymel@gmail.com", "pass123");
 
             await Task.Run(() => DataAccess.EmployeeData.AddEmployee(employee));
-            
-            DeleteEmployeeTest();
         }
 
         [Fact, Order(2)]
         public async void GetByIdTest()
         {
-            var output = await Task.Run(() => DataAccess.EmployeeData.GetById(1));
+            int id = await Task.Run(() => DataAccess.EmployeeData.GetMaxId());
+            var output = await Task.Run(() => DataAccess.EmployeeData.GetById(id));
 
-            Assert.IsType<EmployeeModel>(output);
-        }
-
-        private async void DeleteEmployeeTest()
-        {
-            int rowsAffected = await Task.Run(() => DataAccess.EmployeeData.DeleteEmployee(1));
-
-            Assert.True(rowsAffected == 1);
+            Assert.True(output.Employee_id == id);
         }
     }
 }

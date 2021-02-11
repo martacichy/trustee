@@ -54,6 +54,18 @@ namespace BackendLibrary.DataAccess
             }
         }
 
+        /// <summary> Zwraca autowygenerowane Id w ostatnio wykonanym insercie.</summary>
+        public static int GetMaxId()
+        {
+            using (IDbConnection connection = new MySqlConnection(connectionString))
+            {
+                string sql = "SELECT max(Company_id) from database06.company";
+                int id = connection.Query<int>(sql).First();
+
+                return id;
+            }
+        }
+
         /// <summary> Usuwa firmę z bazy danych,
         /// usuwając wcześniej wszystkie wpisy z innych tabel związane z daną firmą.
         /// </summary>
