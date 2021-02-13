@@ -39,27 +39,27 @@
                     <form>
                         <div class="form-group">
                             <label for="Tytuł" class="control-label" required>Tytuł</label>
-                            <input for="Tytuł" class="form-control" />
+                            <input for="Tytuł" class="form-control" @bind-value="name"/>
                         </div>
                         <div class="form-group">
                             <label for="Opis" class="control-label">Opis</label>
-                            <input for="Opis" class="form-control" />
+                            <input for="Opis" class="form-control" @bind-value="description"/>
                         </div>
                         <div class="form-group">
                             <label for="Starttime" class="control-label">Czas rozpoczęcia</label>
-                            <input for="Starttime" type="date" class="form-control" />
+                            <input for="Starttime" type="date" class="form-control" @bind-value="start_time"/>
                         </div>
                         <div class="form-group">
                             <label for="Deadline" class="control-label">Deadline</label>
-                            <input for="Deadline" type="date" class="form-control" />
+                            <input for="Deadline" type="date" class="form-control" @bind-value="deadline"/>
                         </div>
                         <div class="form-group">
                             <label for="Status" class="control-label">Status zadania</label>
-                            <input for="Status" class="form-control" />
+                            <input for="Status" class="form-control" @bind-value="status"/>
                         </div>
                         <div class="form-group">
                             <label for="IfAutoAssigned" class="control-label">Czy przydzielić automatycznie?</label>
-                            <input for="IfAutoAssigned" type="checkbox" class="form-control" />
+                            <input for="IfAutoAssigned" type="checkbox" class="form-control" @bind-value="auto_assigned"/>
                         </div>
 
                         <div class="form-group">
@@ -70,7 +70,7 @@
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-block btn-info" data-dismiss="modal">Zapisz</button>
+                    <button class="btn btn-block btn-info" data-dismiss="modal" @onclick="Zapisz">Zapisz</button>
                 </div>
             </div>
         </div>
@@ -78,6 +78,24 @@
 }
 
 @code {
+
+    public string name;
+    public string description;
+    public DateTime start_time;
+    public DateTime deadline;
+    public string status;
+    public int auto_assigned;
+
+    /// <summary> Dodaje do bazy danych taska, ktory zostal nakreślony w gui aplikacji 
+    /// </summary>
+    public void Zapisz()
+    {
+        BackendLibrary.Models.TaskModel task1 = new BackendLibrary.Models.TaskModel(1, name, description, start_time, deadline, status, auto_assigned);
+        // company_id jest wpisywane na sztywno, jednak to nalezy jeszcze poprawić by pobierało od pracownika
+        // nie wiem jak rozwiązać kwestie task_id by automatycznie się inkrementowało jako następne, ale to na czilku
+
+        BackendLibrary.DataAccess.TaskData.AddTask(task1);
+    }
 
     private Boolean isAdd;
 
