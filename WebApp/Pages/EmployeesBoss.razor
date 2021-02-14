@@ -57,34 +57,43 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form>
-                        <div class="form-group">
-                            <label asp-for="CompanyId" class="control-label">IdFirmy</label>
-                            <select asp-for="CompanyId" class="form-control">
-                                <option value="">-- Wybierz ID --</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="FirstName" class="control-label">Imię</label>
-                            <input for="FirstName" class="form-control" />
-                        </div>
-                        <div class="form-group">
-                            <label for="LastName" class="control-label">Nazwisko</label>
-                            <input for="LastName" class="form-control" />
-                        </div>
-                        <div class="form-group">
-                            <label for="Email" class="control-label">Email</label>
-                            <input for="Email" class="form-control" />
-                        </div>
-                        <div class="form-group">
-                            <label for="IfManager" class="control-label">Czy manager?</label>
-                            <input for="IfManager" type="checkbox" class="form-control" />
-                        </div>
-                    </form>
+
+                    <EditForm Model="@StarshipEmployee">
+                        <DataAnnotationsValidator />
+                        <form>
+                            <div class="form-group">
+                                <label asp-for="CompanyId" class="control-label">IdFirmy</label>
+                                <select asp-for="CompanyId" class="form-control">
+                                    <option value="">-- Wybierz ID --</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="FirstName" class="control-label">Imię</label>
+                                <input for="FirstName" class="form-control" @bind-value="StarshipEmployee.firstname" />
+                                <ValidationMessage For="@(() => StarshipEmployee.firstname)" />
+                            </div>
+                            <div class="form-group">
+                                <label for="LastName" class="control-label">Nazwisko</label>
+                                <input for="LastName" class="form-control" @bind-value="StarshipEmployee.lastname" />
+                                <ValidationMessage For="@(() => StarshipEmployee.lastname)" />
+                            </div>
+                            <div class="form-group">
+                                <label for="Email" class="control-label">Email</label>
+                                <input for="Email" class="form-control" @bind-value="StarshipEmployee.email" />
+                                <ValidationMessage For="@(() => StarshipEmployee.email)" />
+                            </div>
+                            <div class="form-group">
+                                <label for="IfManager" class="control-label">Czy manager?</label>
+                                <input for="IfManager" type="checkbox" class="form-control" @bind-value="StarshipEmployee.ifmanager" />
+                            </div>
+                            <div class="form-group">
+                                <button class="btn btn-block btn-info" data-dismiss="modal">Zapisz</button>
+                            </div>
+                        </form>
+                    </EditForm>
                 </div>
-                <div class="modal-footer">
-                    <button class="btn btn-block btn-info" data-dismiss="modal">Zapisz</button>
-                </div>
+                
+                
             </div>
         </div>
     </div>
@@ -92,6 +101,10 @@
 
 
 @code {
+
+
+    private BackendLibrary.Models.StarshipEmployee StarshipEmployee = new BackendLibrary.Models.StarshipEmployee();
+
 
     private Boolean isAdd;
 
