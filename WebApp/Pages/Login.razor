@@ -3,21 +3,25 @@
 
 
 <center>
-        <div>
-            <br /><br /><br /><br /><br />
-        </div>
-        <div>
-            <h3 style="font-weight:bold; color:#3da081">Zaloguj się</h3>
-        </div>
-        <div>
-            <br />
-        </div>
+    <div>
+        <br /><br /><br /><br /><br />
+    </div>
+    <div>
+        <h3 style="font-weight:bold; color:#3da081">Zaloguj się</h3>
+    </div>
+    <div>
+        <br />
+    </div>
+    <EditForm Model="@StarshipLogin">
+        <DataAnnotationsValidator />
         <div class="col-12 row">
-            <input class="form-control col-12" placeholder="email/id" />
+            <input class="form-control col-12" placeholder="email/id" @bind-value="StarshipLogin.login" />
+            <ValidationMessage For="@(() => StarshipLogin.login)" />
         </div>
         <br />
         <div class="col-12 row">
-            <input type="password" class="form-control col-12" placeholder="hasło" />
+            <input type="password" class="form-control col-12" placeholder="hasło" @bind-value="StarshipLogin.password" />
+            <ValidationMessage For="@(() => StarshipLogin.password)" />
         </div>
         <br />
         <div class="col-12 row">
@@ -29,5 +33,11 @@
         <div class="col-12 row" style="text-align:left; font-weight:bold">
             <span class="col-12"></span>
         </div>
+    </EditForm>
 </center>
-    
+
+
+@code{
+    private BackendLibrary.Models.StarshipLogin StarshipLogin = new BackendLibrary.Models.StarshipLogin();
+
+}

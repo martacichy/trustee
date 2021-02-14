@@ -212,3 +212,11 @@ app {
 .table-wrapper-scroll-y {
     display: block;
 }
+
+
+.validation-message {
+    font: Verdana;
+    color: #E3170A;
+    font-size: 13px;
+    font-weight: bold;
+}

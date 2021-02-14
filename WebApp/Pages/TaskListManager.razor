@@ -36,30 +36,37 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form>
+
+                    <EditForm Model="@StarshipTask">
+                        <DataAnnotationsValidator />
                         <div class="form-group">
                             <label for="Tytuł" class="control-label" required>Tytuł</label>
-                            <input for="Tytuł" class="form-control" @bind-value="name"/>
+                            <input form="Tytuł" class="form-control" @bind-value="StarshipTask.name" />
+                            <ValidationMessage For="@(() => StarshipTask.name)" />
                         </div>
                         <div class="form-group">
                             <label for="Opis" class="control-label">Opis</label>
-                            <input for="Opis" class="form-control" @bind-value="description"/>
+                            <input for="Opis" class="form-control" @bind-value="StarshipTask.description" />
+                            <ValidationMessage For="@(() => StarshipTask.description)" />
                         </div>
                         <div class="form-group">
                             <label for="Starttime" class="control-label">Czas rozpoczęcia</label>
-                            <input for="Starttime" type="date" class="form-control" @bind-value="start_time"/>
+                            <input for="Starttime" type="date" class="form-control" @bind-value="StarshipTask.start_time" />
+                            <ValidationMessage For="@(() => StarshipTask.start_time)" />
                         </div>
                         <div class="form-group">
                             <label for="Deadline" class="control-label">Deadline</label>
-                            <input for="Deadline" type="date" class="form-control" @bind-value="deadline"/>
+                            <input for="Deadline" type="date" class="form-control" @bind-value="StarshipTask.deadline" /> 
+                            <ValidationMessage For="@(() => StarshipTask.deadline)" />
                         </div>
                         <div class="form-group">
                             <label for="Status" class="control-label">Status zadania</label>
-                            <input for="Status" class="form-control" @bind-value="status"/>
+                            <input for="Status" class="form-control" @bind-value="StarshipTask.status" />
+                            <ValidationMessage For="@(() => StarshipTask.status)" />
                         </div>
                         <div class="form-group">
                             <label for="IfAutoAssigned" class="control-label">Czy przydzielić automatycznie?</label>
-                            <input for="IfAutoAssigned" type="checkbox" class="form-control" @bind-value="auto_assigned"/>
+                            <input for="IfAutoAssigned" type="checkbox" class="form-control" @bind-value="StarshipTask.auto_assigned" />
                         </div>
 
                         <div class="form-group">
@@ -67,11 +74,12 @@
                             <input for="etykiety" type="text" placeholder="Szukaj..." class="form-control" />
                             <button class="btn btn-default btn-xs">Dodaj</button>
                         </div>
-                    </form>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-block btn-info" data-dismiss="modal" @onclick="Zapisz">Zapisz</button>
+                        </div>
+                    </EditForm>
                 </div>
-                <div class="modal-footer">
-                    <button class="btn btn-block btn-info" data-dismiss="modal" @onclick="Zapisz">Zapisz</button>
-                </div>
+                
             </div>
         </div>
     </div>
@@ -79,18 +87,15 @@
 
 @code {
 
-    public string name;
-    public string description;
-    public DateTime start_time;
-    public DateTime deadline;
-    public string status;
-    public int auto_assigned;
+
+    private BackendLibrary.Models.StarshipTask StarshipTask = new BackendLibrary.Models.StarshipTask();
+
 
     /// <summary> Dodaje do bazy danych taska, ktory zostal nakreślony w gui aplikacji 
     /// </summary>
     public void Zapisz()
     {
-        BackendLibrary.Models.TaskModel task1 = new BackendLibrary.Models.TaskModel(1, name, description, start_time, deadline, status, auto_assigned);
+        BackendLibrary.Models.TaskModel task1 = new BackendLibrary.Models.TaskModel(1, StarshipTask.name, StarshipTask.description, StarshipTask.start_time, StarshipTask.deadline, StarshipTask.status, StarshipTask.auto_assigned);
         // company_id jest wpisywane na sztywno, jednak to nalezy jeszcze poprawić by pobierało od pracownika
         // nie wiem jak rozwiązać kwestie task_id by automatycznie się inkrementowało jako następne, ale to na czilku
 

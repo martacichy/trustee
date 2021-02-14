@@ -31,6 +31,7 @@ namespace BackendLibrary.Models
         public TaskModel(int company_id, string name, string description,
 			DateTime start_time, DateTime deadline, string status, int auto_assigned)
 		{
+
             Company_id = company_id;
             Name = name;
             Description = description;

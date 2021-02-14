@@ -1,0 +1,21 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Text;
+
+namespace BackendLibrary.Models
+{
+    public class StarshipLogin
+    {
+
+        [Required(ErrorMessage = "Wpisz login!")]
+        [StringLength(100,
+        ErrorMessage = "Login jest zbyt długi.")]
+        public string login { get; set; }
+
+        [Required(ErrorMessage = "Wpisz hasło!")]
+        [StringLength(100,
+        ErrorMessage = "Hasło jest zbyt długie.")]
+        public string password { get; set; }
+    }
+}
