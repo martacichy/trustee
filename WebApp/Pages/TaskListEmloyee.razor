@@ -22,9 +22,24 @@
             <th>Deadline</th>
             <th>Status</th>
         </tr>
+        @for (int i = 0; i < length; i++)
+        {
+            <tr>
+                <th> @tablica[i].Name </th>
+                <th> @tablica[i].Deadline </th>
+                <th> @tablica[i].Status </th>
+            </tr>
+        }
     </thead>
 </table>
 
 
 @code {
+
+    /// <summary>
+    /// Tworzymy liste, ktora przechowuje wszystkie taski zgodne z firmą pracownika, by je wyswietlic w aplikacji
+    /// </summary>
+    public static List<BackendLibrary.Models.TaskModel> tablica = BackendLibrary.DataAccess.TaskData.GetAllByCompanyId(1);
+    public int length = tablica.Count;
+    // company_id jest wpisywane na sztywno, jednak to należy poprawić, by pobierało od pracownika
 }

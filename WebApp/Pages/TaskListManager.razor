@@ -22,6 +22,15 @@
             <th>Deadline</th>
             <th>Status</th>
         </tr>
+        @for (int i = 0; i < length; i++)
+        {
+            <tr>
+                <th> @tablica[i].Name </th>
+                <th> @tablica[i].Deadline </th>
+                <th> @tablica[i].Status </th>
+            </tr>
+        }
+
     </thead>
 </table>
 @if (isAdd)
@@ -92,10 +101,17 @@
     {
         BackendLibrary.Models.TaskModel task1 = new BackendLibrary.Models.TaskModel(1, name, description, start_time, deadline, status, auto_assigned);
         // company_id jest wpisywane na sztywno, jednak to nalezy jeszcze poprawić by pobierało od pracownika
-        // nie wiem jak rozwiązać kwestie task_id by automatycznie się inkrementowało jako następne, ale to na czilku
 
         BackendLibrary.DataAccess.TaskData.AddTask(task1);
     }
+
+    /// <summary>
+    /// Tworzymy liste, ktora przechowuje wszystkie taski zgodne z firmą pracownika, by je wyswietlic w aplikacji
+    /// </summary>
+    public static List<BackendLibrary.Models.TaskModel> tablica = BackendLibrary.DataAccess.TaskData.GetAllByCompanyId(1);
+    public int length = tablica.Count;
+    // company_id jest wpisywane na sztywno, jednak to należy poprawić, by pobierało od pracownika
+
 
     private Boolean isAdd;
 
