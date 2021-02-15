@@ -1,5 +1,6 @@
 ﻿@page  "/"
 @layout CenteredCardLayout
+@inject NavigationManager NavigationManager
 
 
 <center>
@@ -12,21 +13,21 @@
     <div>
         <br />
     </div>
-    <EditForm Model="@StarshipLogin">
+    <EditForm Model="StarshipLogin">
         <DataAnnotationsValidator />
         <div class="col-12 row">
-            <input class="form-control col-12" placeholder="email/id" @bind-value="StarshipLogin.login" />
-            <ValidationMessage For="@(() => StarshipLogin.login)" />
+            <input class="form-control col-12" placeholder="email/id" @bind-value="StarshipLogin.Login" />
+            <ValidationMessage For="@(() => StarshipLogin.Login)" />
         </div>
         <br />
         <div class="col-12 row">
-            <input type="password" class="form-control col-12" placeholder="hasło" @bind-value="StarshipLogin.password" />
-            <ValidationMessage For="@(() => StarshipLogin.password)" />
+            <input type="password" class="form-control col-12" placeholder="hasło" @bind-value="StarshipLogin.Password" />
+            <ValidationMessage For="@(() => StarshipLogin.Password)" />
         </div>
         <br />
         <div class="col-12 row">
             <span class="col-12"></span>
-            <input type="submit" class="form-control col-6 btn btn-primary" value="Zaloguj się" />
+            <input type="submit" class="form-control col-6 btn btn-primary" @onclick="login" value="Zaloguj się" />
             <a href="/signup" class="col-6">Rejestracja</a>
         </div>
         <br />
@@ -38,6 +39,26 @@
 
 
 @code{
-    private BackendLibrary.Models.StarshipLogin StarshipLogin = new BackendLibrary.Models.StarshipLogin();
 
+    private BackendLibrary.Models.StarshipLogin StarshipLogin = new BackendLibrary.Models.StarshipLogin();
+    private void login() {
+        int if_manager = BackendLibrary.DataAccess.
+            EmployeeData.
+            GetIfManagerValue(StarshipLogin.Login, StarshipLogin.Password);
+
+        if (if_manager == -1) {
+            // tu jest zle haslo albo login trzeba to wyswietlic, potem ogarne :)
+
+        }
+        // 0 jest dla zyklego pracownika
+        else if (if_manager == 0) {
+            NavigationManager.NavigateTo("/tasks-e");
+        }
+
+        // 1 jest dla managera a 2 dla bosa(proszę nie psuć mi koncepcji zajęć)
+
+        else if (if_manager == 1 || if_manager == 2) {
+            NavigationManager.NavigateTo("/tasks-m");
+        }
+    }
 }

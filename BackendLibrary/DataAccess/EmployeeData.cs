@@ -24,6 +24,20 @@ namespace BackendLibrary.DataAccess {
                 return data;
             }
         }
+        /// <summary> Zwraca pole if_manager, jesli login i haslo nie pasuja zwraca -1. </summary>
+        public static int GetIfManagerValue(string login, string password) 
+        {
+            var parameters = new { Login = login, Password = password };
+            using (IDbConnection connection = new MySqlConnection(connectionString)) {
+                var sql = $"SELECT if_manager FROM database06.employee WHERE login = @Login and password = @Password";
+                try {
+                    int if_manager = connection.QueryFirst<int>(sql, parameters);
+                    return if_manager;  
+                 } catch(Exception e) {
+                      return -1;
+                  }
+            }
+        }
 
         /// <summary> Zwraca model o przekazanym w argumencie id. </summary>
         public static EmployeeModel GetById(int employee_id)

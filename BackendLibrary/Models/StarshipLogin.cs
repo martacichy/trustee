@@ -11,11 +11,11 @@ namespace BackendLibrary.Models
         [Required(ErrorMessage = "Wpisz login!")]
         [StringLength(100,
         ErrorMessage = "Login jest zbyt długi.")]
-        public string login { get; set; }
+        public string Login { get; set; }
 
         [Required(ErrorMessage = "Wpisz hasło!")]
         [StringLength(100,
         ErrorMessage = "Hasło jest zbyt długie.")]
-        public string password { get; set; }
+        public string Password { get; set; }
     }
 }

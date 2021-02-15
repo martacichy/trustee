@@ -22,7 +22,7 @@ namespace BackendLibrary.Models
         ErrorMessage = "To pole nie może mieć więcej niż 50 znaków.")]
         public string lastname { get; set; }
 
-        [StringLength(100,
+        [StringLength(50,
         ErrorMessage = "To pole nie może mieć więcej niż 50 znaków.")]
         public string email { get; set; }
 
