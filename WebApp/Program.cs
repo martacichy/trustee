@@ -13,6 +13,8 @@ namespace WebApp
 {
     public class Program
     {
+        //zmienna do rozrozniania typu pracownika (potrzebna do blokowania wyswietlania innych widoków)
+        public static int if_manager = -1;
         public static void Main(string[] args)
         {
             CreateHostBuilder(args).Build().Run();

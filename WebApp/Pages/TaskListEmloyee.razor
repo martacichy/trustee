@@ -1,37 +1,42 @@
 ﻿@page "/tasks-e"
 
-<h1>Zadania</h1>
+@*dostęp do podstrony tylko dla pracownika*@
+@if (WebApp.Program.if_manager == 0)
+{
+    <h1>Zadania</h1>
 
 
 
-<div>
-    <div style="float:right; width:40%;">
-        <div class="col-sm-6" style="float:left">
-            <input class="form-control" type="text" placeholder="Szukaj" />
-        </div>
-        <div>
-            <button type="submit" class="btn btn-default btn-info">Filtruj</button>
+    <div>
+        <div style="float:right; width:40%;">
+            <div class="col-sm-6" style="float:left">
+                <input class="form-control" type="text" placeholder="Szukaj" />
+            </div>
+            <div>
+                <button type="submit" class="btn btn-default btn-info">Filtruj</button>
+            </div>
         </div>
     </div>
-</div>
 
-<table class='table'>
-    <thead>
-        <tr>
-            <th>Tytuł</th>
-            <th>Deadline</th>
-            <th>Status</th>
-        </tr>
-        @for (int i = 0; i < length; i++)
-        {
+    <table class='table'>
+        <thead>
             <tr>
-                <th> @tablica[i].Name </th>
-                <th> @tablica[i].Deadline </th>
-                <th> @tablica[i].Status </th>
+                <th>Tytuł</th>
+                <th>Deadline</th>
+                <th>Status</th>
             </tr>
-        }
-    </thead>
-</table>
+            @for (int i = 0; i < length; i++)
+            {
+                <tr>
+                    <th> @tablica[i].Name </th>
+                    <th> @tablica[i].Deadline </th>
+                    <th> @tablica[i].Status </th>
+                </tr>
+            }
+        </thead>
+    </table>
+
+}
 
 
 @code {

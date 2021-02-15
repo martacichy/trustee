@@ -39,25 +39,24 @@
 
 
 @code{
-
     private BackendLibrary.Models.StarshipLogin StarshipLogin = new BackendLibrary.Models.StarshipLogin();
     private void login() {
-        int if_manager = BackendLibrary.DataAccess.
+        WebApp.Program.if_manager = BackendLibrary.DataAccess.
             EmployeeData.
             GetIfManagerValue(StarshipLogin.Login, StarshipLogin.Password);
 
-        if (if_manager == -1) {
+        if (WebApp.Program.if_manager == -1) {
             // tu jest zle haslo albo login trzeba to wyswietlic, potem ogarne :)
 
         }
         // 0 jest dla zyklego pracownika
-        else if (if_manager == 0) {
+        else if (WebApp.Program.if_manager == 0) {
             NavigationManager.NavigateTo("/tasks-e");
         }
 
         // 1 jest dla managera a 2 dla bosa(proszę nie psuć mi koncepcji zajęć)
 
-        else if (if_manager == 1 || if_manager == 2) {
+        else if (WebApp.Program.if_manager == 1 || WebApp.Program.if_manager == 2) {
             NavigationManager.NavigateTo("/tasks-m");
         }
     }

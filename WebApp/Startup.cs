@@ -37,10 +37,10 @@ namespace WebApp
 
             // obiekty tworzone raz dla ca³ej aplikacji:
             // services.AddSingleton<TaskModelData>();
-            
+
 
             // obiekty tworzone tylko, gdy s¹ potrzebne:
-            
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

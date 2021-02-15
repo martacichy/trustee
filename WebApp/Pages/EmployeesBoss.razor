@@ -1,107 +1,114 @@
 ﻿@page "/employees-b"
-<h1>Pracownicy</h1>
-<div>
-    <div style="float:left">
-        <button class="btn btn-primary" @onclick="addNew">Nowy pracownik</button>
-    </div>
-    <div style="float:right; width:40%;">
-        <div class="col-sm-6" style="float:left">
-            <input class="form-control" type="text" placeholder="Szukaj" />
-        </div>
-        <div>
-            <button type="submit" class="btn btn-default btn-info">Filter</button>
-        </div>
-    </div>
-</div>
 
-<table class='table'>
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Imię</th>
-            <th>Nazwisko</th>
-            <th>Email</th>
-            <th>Rodzaj pracownika</th>
-        </tr>
-        @for (int i = 0; i < length; i++)
-        {
-            <tr>
-                <th>@tablica[i].Employee_id</th>
-                <th>@tablica[i].First_name</th>
-                <th>@tablica[i].Last_name</th>
-                <th>@tablica[i].Email</th>
-                @if (tablica[i].If_manager == 1)
-                {
-                    <th>Kierownik</th>
-                }
-                @if (tablica[i].If_manager == 0)
-                {
-                    <th>Pracownik</th>
-                }
-
-            </tr>
-
-        }
-    </thead>
-</table>
-
-@if (isAdd)
+@*dostęp do postrony tylko dla szefa*@
+@if (WebApp.Program.if_manager == 2)
 {
-    <div class="modal" tabindex="-1" style="display:block" role="dialog">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h3 class="modal-title">Dodaj pracownika</h3>
-                    <button type="button" class="close" @onclick="closeAdd">
-                        <span aria-hidden="true">X</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-
-                    <EditForm Model="@StarshipEmployee">
-                        <DataAnnotationsValidator />
-                        <form>
-                            <div class="form-group">
-                                <label asp-for="CompanyId" class="control-label">IdFirmy</label>
-                                <select asp-for="CompanyId" class="form-control">
-                                    <option value="">-- Wybierz ID --</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="FirstName" class="control-label">Imię</label>
-                                <input for="FirstName" class="form-control" @bind-value="StarshipEmployee.firstname" />
-                                <ValidationMessage For="@(() => StarshipEmployee.firstname)" />
-                            </div>
-                            <div class="form-group">
-                                <label for="LastName" class="control-label">Nazwisko</label>
-                                <input for="LastName" class="form-control" @bind-value="StarshipEmployee.lastname" />
-                                <ValidationMessage For="@(() => StarshipEmployee.lastname)" />
-                            </div>
-                            <div class="form-group">
-                                <label for="Email" class="control-label">Email</label>
-                                <input for="Email" class="form-control" @bind-value="StarshipEmployee.email" />
-                                <ValidationMessage For="@(() => StarshipEmployee.email)" />
-                            </div>
-                            <div class="form-group">
-                                <label for="IfManager" class="control-label">Czy manager?</label>
-                                <input for="IfManager" type="checkbox" class="form-control" @bind-value="StarshipEmployee.ifmanager" />
-                            </div>
-                            <div class="form-group">
-                                <button class="btn btn-block btn-info" data-dismiss="modal">Zapisz</button>
-                            </div>
-                        </form>
-                    </EditForm>
-                </div>
-                
-                
+    <h1>Pracownicy</h1>
+    <div>
+        <div style="float:left">
+            <button class="btn btn-primary" @onclick="addNew">Nowy pracownik</button>
+        </div>
+        <div style="float:right; width:40%;">
+            <div class="col-sm-6" style="float:left">
+                <input class="form-control" type="text" placeholder="Szukaj" />
+            </div>
+            <div>
+                <button type="submit" class="btn btn-default btn-info">Filter</button>
             </div>
         </div>
     </div>
+
+    <table class='table'>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Imię</th>
+                <th>Nazwisko</th>
+                <th>Email</th>
+                <th>Rodzaj pracownika</th>
+            </tr>
+            @for (int i = 0; i < length; i++)
+            {
+                <tr>
+                    <th>@tablica[i].Employee_id</th>
+                    <th>@tablica[i].First_name</th>
+                    <th>@tablica[i].Last_name</th>
+                    <th>@tablica[i].Email</th>
+                    @if (tablica[i].If_manager == 1)
+                    {
+                        <th>Kierownik</th>
+                    }
+                    @if (tablica[i].If_manager == 0)
+                    {
+                        <th>Pracownik</th>
+                    }
+
+                </tr>
+
+            }
+        </thead>
+    </table>
+
+    @if (isAdd)
+    {
+        <div class="modal" tabindex="-1" style="display:block" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3 class="modal-title">Dodaj pracownika</h3>
+                        <button type="button" class="close" @onclick="closeAdd">
+                            <span aria-hidden="true">X</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+
+                        <EditForm Model="@StarshipEmployee">
+                            <DataAnnotationsValidator />
+                            <form>
+                                <div class="form-group">
+                                    <label asp-for="CompanyId" class="control-label">IdFirmy</label>
+                                    <select asp-for="CompanyId" class="form-control">
+                                        <option value="">-- Wybierz ID --</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="FirstName" class="control-label">Imię</label>
+                                    <input for="FirstName" class="form-control" @bind-value="StarshipEmployee.firstname" />
+                                    <ValidationMessage For="@(() => StarshipEmployee.firstname)" />
+                                </div>
+                                <div class="form-group">
+                                    <label for="LastName" class="control-label">Nazwisko</label>
+                                    <input for="LastName" class="form-control" @bind-value="StarshipEmployee.lastname" />
+                                    <ValidationMessage For="@(() => StarshipEmployee.lastname)" />
+                                </div>
+                                <div class="form-group">
+                                    <label for="Email" class="control-label">Email</label>
+                                    <input for="Email" class="form-control" @bind-value="StarshipEmployee.email" />
+                                    <ValidationMessage For="@(() => StarshipEmployee.email)" />
+                                </div>
+                                <div class="form-group">
+                                    <label for="IfManager" class="control-label">Czy manager?</label>
+                                    <input for="IfManager" type="checkbox" class="form-control" @bind-value="StarshipEmployee.ifmanager" />
+                                </div>
+                                <div class="form-group">
+                                    <button class="btn btn-block btn-info" data-dismiss="modal">Zapisz</button>
+                                </div>
+                            </form>
+                        </EditForm>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    }
 }
 
 
-@code {
 
+
+
+@code {
 
     private BackendLibrary.Models.StarshipEmployee StarshipEmployee = new BackendLibrary.Models.StarshipEmployee();
 

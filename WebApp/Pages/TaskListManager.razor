@@ -1,98 +1,105 @@
 ﻿@page "/tasks-m"
 
-<h1>Zadania</h1>
-
-<div>
-    <div style="float:left">
-        <button class="btn btn-primary" @onclick="addNew">Dodaj zadanie</button>
-    </div>
-    <div style="float:right; width:40%;">
-        <div class="col-sm-6" style="float:left">
-            <input class="form-control" type="text" placeholder="Szukaj" />
-        </div>
-        <div>
-            <button type="submit" class="btn btn-default btn-info">Filtruj</button>
-        </div>
-    </div>
-</div>
-<table class='table'>
-    <thead>
-        <tr>
-            <th>Tytuł</th>
-            <th>Deadline</th>
-            <th>Status</th>
-        </tr>
-        @for (int i = 0; i < length; i++)
-        {
-            <tr>
-                <th> @tablica[i].Name </th>
-                <th> @tablica[i].Deadline </th>
-                <th> @tablica[i].Status </th>
-            </tr>
-        }
-
-    </thead>
-</table>
-@if (isAdd)
+@*dostęp do podstrony tylko dla menadzera i szefa*@
+@if (WebApp.Program.if_manager == 1 || WebApp.Program.if_manager == 2)
 {
-    <div class="modal" tabindex="-1" style="display:block" role="dialog">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h3 class="modal-title">Dodaj nowe zadanie</h3>
-                    <button type="button" class="close" @onclick="closeAdd">
-                        <span aria-hidden="true">X</span>
-                    </button>
-                </div>
-                <div class="modal-body">
+    <h1>Zadania</h1>
 
-                    <EditForm Model="@StarshipTask">
-                        <DataAnnotationsValidator />
-                        <div class="form-group">
-                            <label for="Tytuł" class="control-label" required>Tytuł</label>
-                            <input form="Tytuł" class="form-control" @bind-value="StarshipTask.name" />
-                            <ValidationMessage For="@(() => StarshipTask.name)" />
-                        </div>
-                        <div class="form-group">
-                            <label for="Opis" class="control-label">Opis</label>
-                            <input for="Opis" class="form-control" @bind-value="StarshipTask.description" />
-                            <ValidationMessage For="@(() => StarshipTask.description)" />
-                        </div>
-                        <div class="form-group">
-                            <label for="Starttime" class="control-label">Czas rozpoczęcia</label>
-                            <input for="Starttime" type="date" class="form-control" @bind-value="StarshipTask.start_time" />
-                            <ValidationMessage For="@(() => StarshipTask.start_time)" />
-                        </div>
-                        <div class="form-group">
-                            <label for="Deadline" class="control-label">Deadline</label>
-                            <input for="Deadline" type="date" class="form-control" @bind-value="StarshipTask.deadline" /> 
-                            <ValidationMessage For="@(() => StarshipTask.deadline)" />
-                        </div>
-                        <div class="form-group">
-                            <label for="Status" class="control-label">Status zadania</label>
-                            <input for="Status" class="form-control" @bind-value="StarshipTask.status" />
-                            <ValidationMessage For="@(() => StarshipTask.status)" />
-                        </div>
-                        <div class="form-group">
-                            <label for="IfAutoAssigned" class="control-label">Czy przydzielić automatycznie?</label>
-                            <input for="IfAutoAssigned" type="checkbox" class="form-control" @bind-value="StarshipTask.auto_assigned" />
-                        </div>
-
-                        <div class="form-group">
-                            <label asp-for="etykiety" class="control-label">Etykiety</label>
-                            <input for="etykiety" type="text" placeholder="Szukaj..." class="form-control" />
-                            <button class="btn btn-default btn-xs">Dodaj</button>
-                        </div>
-                        <div class="form-group">
-                            <button type="submit" class="btn btn-block btn-info" data-dismiss="modal" @onclick="Zapisz">Zapisz</button>
-                        </div>
-                    </EditForm>
-                </div>
-                
+    <div>
+        <div style="float:left">
+            <button class="btn btn-primary" @onclick="addNew">Dodaj zadanie</button>
+        </div>
+        <div style="float:right; width:40%;">
+            <div class="col-sm-6" style="float:left">
+                <input class="form-control" type="text" placeholder="Szukaj" />
+            </div>
+            <div>
+                <button type="submit" class="btn btn-default btn-info">Filtruj</button>
             </div>
         </div>
     </div>
+    <table class='table'>
+        <thead>
+            <tr>
+                <th>Tytuł</th>
+                <th>Deadline</th>
+                <th>Status</th>
+            </tr>
+            @for (int i = 0; i < length; i++)
+            {
+                <tr>
+                    <th> @tablica[i].Name </th>
+                    <th> @tablica[i].Deadline </th>
+                    <th> @tablica[i].Status </th>
+                </tr>
+            }
+
+        </thead>
+    </table>
+    @if (isAdd)
+    {
+        <div class="modal" tabindex="-1" style="display:block" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3 class="modal-title">Dodaj nowe zadanie</h3>
+                        <button type="button" class="close" @onclick="closeAdd">
+                            <span aria-hidden="true">X</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+
+                        <EditForm Model="@StarshipTask">
+                            <DataAnnotationsValidator />
+                            <div class="form-group">
+                                <label for="Tytuł" class="control-label" required>Tytuł</label>
+                                <input form="Tytuł" class="form-control" @bind-value="StarshipTask.name" />
+                                <ValidationMessage For="@(() => StarshipTask.name)" />
+                            </div>
+                            <div class="form-group">
+                                <label for="Opis" class="control-label">Opis</label>
+                                <input for="Opis" class="form-control" @bind-value="StarshipTask.description" />
+                                <ValidationMessage For="@(() => StarshipTask.description)" />
+                            </div>
+                            <div class="form-group">
+                                <label for="Starttime" class="control-label">Czas rozpoczęcia</label>
+                                <input for="Starttime" type="date" class="form-control" @bind-value="StarshipTask.start_time" />
+                                <ValidationMessage For="@(() => StarshipTask.start_time)" />
+                            </div>
+                            <div class="form-group">
+                                <label for="Deadline" class="control-label">Deadline</label>
+                                <input for="Deadline" type="date" class="form-control" @bind-value="StarshipTask.deadline" />
+                                <ValidationMessage For="@(() => StarshipTask.deadline)" />
+                            </div>
+                            <div class="form-group">
+                                <label for="Status" class="control-label">Status zadania</label>
+                                <input for="Status" class="form-control" @bind-value="StarshipTask.status" />
+                                <ValidationMessage For="@(() => StarshipTask.status)" />
+                            </div>
+                            <div class="form-group">
+                                <label for="IfAutoAssigned" class="control-label">Czy przydzielić automatycznie?</label>
+                                <input for="IfAutoAssigned" type="checkbox" class="form-control" @bind-value="StarshipTask.auto_assigned" />
+                            </div>
+
+                            <div class="form-group">
+                                <label asp-for="etykiety" class="control-label">Etykiety</label>
+                                <input for="etykiety" type="text" placeholder="Szukaj..." class="form-control" />
+                                <button class="btn btn-default btn-xs">Dodaj</button>
+                            </div>
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-block btn-info" data-dismiss="modal" @onclick="Zapisz">Zapisz</button>
+                            </div>
+                        </EditForm>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    }
 }
+
+
+
 
 @code {
 
@@ -100,7 +107,7 @@
     private BackendLibrary.Models.StarshipTask StarshipTask = new BackendLibrary.Models.StarshipTask();
 
 
-    /// <summary> Dodaje do bazy danych taska, ktory zostal nakreślony w gui aplikacji 
+    /// <summary> Dodaje do bazy danych taska, ktory zostal nakreślony w gui aplikacji
     /// </summary>
     public void Zapisz()
     {

@@ -1,47 +1,52 @@
 ﻿@page "/employees-m"
-<h1>Pracownicy</h1>
-<div>
-    <div style="float:right; width:40%;">
-        <div class="col-sm-6" style="float:left">
-            <input class="form-control" type="text" placeholder="Szukaj" />
-        </div>
-        <div>
-            <button type="submit" class="btn btn-default btn-info">Filtruj</button>
+
+@*dostęp do podstrony tylko dla menadzera*@
+@if (WebApp.Program.if_manager == 1)
+{
+    <h1>Pracownicy</h1>
+    <div>
+        <div style="float:right; width:40%;">
+            <div class="col-sm-6" style="float:left">
+                <input class="form-control" type="text" placeholder="Szukaj" />
+            </div>
+            <div>
+                <button type="submit" class="btn btn-default btn-info">Filtruj</button>
+            </div>
         </div>
     </div>
-</div>
 
-<table class='table'>
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Imię</th>
-            <th>Nazwisko</th>
-            <th>Email</th>
-            <th>Rodzaj pracownika</th>
-        </tr>
-        @for (int i = 0; i < length; i++)
-        {
+    <table class='table'>
+        <thead>
             <tr>
-                <th>@tablica[i].Employee_id</th>
-                <th>@tablica[i].First_name</th>
-                <th>@tablica[i].Last_name</th>
-                <th>@tablica[i].Email</th>
-                @if (tablica[i].If_manager == 1)
-                {
-                    <th>Kierownik</th>
-                }
-                @if (tablica[i].If_manager == 0)
-                {
-                    <th>Pracownik</th>
-                }
-                
+                <th>ID</th>
+                <th>Imię</th>
+                <th>Nazwisko</th>
+                <th>Email</th>
+                <th>Rodzaj pracownika</th>
             </tr>
+            @for (int i = 0; i < length; i++)
+            {
+                <tr>
+                    <th>@tablica[i].Employee_id</th>
+                    <th>@tablica[i].First_name</th>
+                    <th>@tablica[i].Last_name</th>
+                    <th>@tablica[i].Email</th>
+                    @if (tablica[i].If_manager == 1)
+                    {
+                        <th>Kierownik</th>
+                    }
+                    @if (tablica[i].If_manager == 0)
+                    {
+                        <th>Pracownik</th>
+                    }
 
-        }
-    </thead>
-</table>
+                </tr>
 
+            }
+        </thead>
+    </table>
+
+}
 
 
 @code {
@@ -49,7 +54,7 @@
     /// <summary>
     /// Tworzymy liste, ktora przechowuje wszystkich pracownikow, zgodnych z ip firmy, by nastepnie ich wyswietlic w aplikacji
     /// </summary>
-    public  static List<BackendLibrary.Models.EmployeeModel> tablica = BackendLibrary.DataAccess.EmployeeData.GetAllByCompanyId(1);
+    public static List<BackendLibrary.Models.EmployeeModel> tablica = BackendLibrary.DataAccess.EmployeeData.GetAllByCompanyId(1);
     public int length = tablica.Count;
 
 }
