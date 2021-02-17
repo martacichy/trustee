@@ -39,6 +39,24 @@ namespace BackendLibrary.DataAccess {
             }
         }
 
+        public static int GetCompany_IdValue(string login, string password)
+        {
+            var parameters = new { Login = login, Password = password };
+            using (IDbConnection connection = new MySqlConnection(connectionString))
+            {
+                var sql = $"SELECT company_id FROM database06.employee WHERE login = @Login and password = @Password";
+                try
+                {
+                    int company_id = connection.QueryFirst<int>(sql, parameters);
+                    return company_id;
+                }
+                catch (Exception e)
+                {
+                    return -1;
+                }
+            }
+        }
+
         /// <summary> Zwraca model o przekazanym w argumencie id. </summary>
         public static EmployeeModel GetById(int employee_id)
         {

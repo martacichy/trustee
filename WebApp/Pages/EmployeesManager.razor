@@ -27,17 +27,21 @@
             @for (int i = 0; i < length; i++)
             {
                 <tr>
-                    <th>@tablica[i].Employee_id</th>
-                    <th>@tablica[i].First_name</th>
-                    <th>@tablica[i].Last_name</th>
-                    <th>@tablica[i].Email</th>
-                    @if (tablica[i].If_manager == 1)
+                    <th>@ListToDisplayEmployees_m[i].Employee_id</th>
+                    <th>@ListToDisplayEmployees_m[i].First_name</th>
+                    <th>@ListToDisplayEmployees_m[i].Last_name</th>
+                    <th>@ListToDisplayEmployees_m[i].Email</th>
+                    @if (ListToDisplayEmployees_m[i].If_manager == 1)
                     {
                         <th>Kierownik</th>
                     }
-                    @if (tablica[i].If_manager == 0)
+                    @if (ListToDisplayEmployees_m[i].If_manager == 0)
                     {
                         <th>Pracownik</th>
+                    }
+                    @if (ListToDisplayEmployees_m[i].If_manager == 2)
+                    {
+                        <th>Szef</th>
                     }
 
                 </tr>
@@ -54,7 +58,7 @@
     /// <summary>
     /// Tworzymy liste, ktora przechowuje wszystkich pracownikow, zgodnych z ip firmy, by nastepnie ich wyswietlic w aplikacji
     /// </summary>
-    public static List<BackendLibrary.Models.EmployeeModel> tablica = BackendLibrary.DataAccess.EmployeeData.GetAllByCompanyId(1);
-    public int length = tablica.Count;
+    public static List<BackendLibrary.Models.EmployeeModel> ListToDisplayEmployees_m = BackendLibrary.DataAccess.EmployeeData.GetAllByCompanyId(WebApp.Program.company_id);
+    public int length = ListToDisplayEmployees_m.Count;
 
 }

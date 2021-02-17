@@ -59,5 +59,9 @@
         else if (WebApp.Program.if_manager == 1 || WebApp.Program.if_manager == 2) {
             NavigationManager.NavigateTo("/tasks-m");
         }
+
+        // sorki szyja, ze ci sie wpierdzielam w funkcje, ale jest jak jest :)
+        // uzyskujemy tutaj id firmy, z którą związany jest pracownik
+        WebApp.Program.company_id = BackendLibrary.DataAccess.EmployeeData.GetCompany_IdValue(StarshipLogin.Login, StarshipLogin.Password);
     }
 }

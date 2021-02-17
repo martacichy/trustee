@@ -28,9 +28,9 @@
             @for (int i = 0; i < length; i++)
             {
                 <tr>
-                    <th> @tablica[i].Name </th>
-                    <th> @tablica[i].Deadline </th>
-                    <th> @tablica[i].Status </th>
+                    <th> @ListToDisplayTasks_e[i].Name </th>
+                    <th> @ListToDisplayTasks_e[i].Deadline </th>
+                    <th> @ListToDisplayTasks_e[i].Status </th>
                 </tr>
             }
         </thead>
@@ -44,7 +44,7 @@
     /// <summary>
     /// Tworzymy liste, ktora przechowuje wszystkie taski zgodne z firmą pracownika, by je wyswietlic w aplikacji
     /// </summary>
-    public static List<BackendLibrary.Models.TaskModel> tablica = BackendLibrary.DataAccess.TaskData.GetAllByCompanyId(1);
-    public int length = tablica.Count;
+    public static List<BackendLibrary.Models.TaskModel> ListToDisplayTasks_e = BackendLibrary.DataAccess.TaskData.GetAllByCompanyId(WebApp.Program.company_id);
+    public int length = ListToDisplayTasks_e.Count;
     // company_id jest wpisywane na sztywno, jednak to należy poprawić, by pobierało od pracownika
 }
