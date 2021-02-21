@@ -87,7 +87,7 @@
                             </div>
                             <div class="form-group">
                                 <button type="submit" class="btn btn-block btn-info" data-dismiss="modal" @onclick="Zapisz">Zapisz</button>
-                                <SfToast @ref="ToastObj" Title="Dodano nowe zadanie!" Timeout=3000 Icon="e-meeting" Content="@ToastContent">
+                                <SfToast @ref="ToastObj" Title="Dodano nowe zadanie!" Timeout=3000 Content="@ToastContent">
                                     <ToastPosition X="Right"></ToastPosition>
                                 </SfToast>
                             </div>
@@ -107,7 +107,6 @@
 
     SfToast ToastObj;
     private string ToastContent { get; set; } = "Zadanie zostało pomyślnie dodane.";
-
 
     private BackendLibrary.Models.Validation.TaskValidation Task = new BackendLibrary.Models.Validation.TaskValidation();
 
@@ -144,4 +143,3 @@
     }
 
 }
-
