@@ -13,16 +13,16 @@
     <div>
         <br />
     </div>
-    <EditForm Model="StarshipLogin">
+    <EditForm Model="Log">
         <DataAnnotationsValidator />
         <div class="col-12 row">
-            <input class="form-control col-12" placeholder="email/id" @bind-value="StarshipLogin.Login" />
-            <ValidationMessage For="@(() => StarshipLogin.Login)" />
+            <input class="form-control col-12" placeholder="email/id" @bind-value="Log.Login" />
+            <ValidationMessage For="@(() => Log.Login)" />
         </div>
         <br />
         <div class="col-12 row">
-            <input type="password" class="form-control col-12" placeholder="hasło" @bind-value="StarshipLogin.Password" />
-            <ValidationMessage For="@(() => StarshipLogin.Password)" />
+            <input type="password" class="form-control col-12" placeholder="hasło" @bind-value="Log.Password" />
+            <ValidationMessage For="@(() => Log.Password)" />
         </div>
         <br />
         <div class="col-12 row">
@@ -39,11 +39,11 @@
 
 
 @code{
-    private BackendLibrary.Models.StarshipLogin StarshipLogin = new BackendLibrary.Models.StarshipLogin();
+    private BackendLibrary.Models.Validation.LoginValidation Log = new BackendLibrary.Models.Validation.LoginValidation();
     private void login() {
         WebApp.Program.if_manager = BackendLibrary.DataAccess.
             EmployeeData.
-            GetIfManagerValue(StarshipLogin.Login, StarshipLogin.Password);
+            GetIfManagerValue(Log.Login, Log.Password);
 
         if (WebApp.Program.if_manager == -1) {
             // tu jest zle haslo albo login trzeba to wyswietlic, potem ogarne :)
@@ -62,6 +62,6 @@
 
         // sorki szyja, ze ci sie wpierdzielam w funkcje, ale jest jak jest :)
         // uzyskujemy tutaj id firmy, z którą związany jest pracownik
-        WebApp.Program.company_id = BackendLibrary.DataAccess.EmployeeData.GetCompany_IdValue(StarshipLogin.Login, StarshipLogin.Password);
+        WebApp.Program.company_id = BackendLibrary.DataAccess.EmployeeData.GetCompany_IdValue(Log.Login, Log.Password);
     }
 }

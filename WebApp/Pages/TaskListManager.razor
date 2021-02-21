@@ -48,36 +48,36 @@
                     </div>
                     <div class="modal-body">
 
-                        <EditForm Model="@StarshipTask">
+                        <EditForm Model="@Task">
                             <DataAnnotationsValidator />
                             <div class="form-group">
                                 <label for="Tytuł" class="control-label" required>Tytuł</label>
-                                <input form="Tytuł" class="form-control" @bind-value="StarshipTask.name" />
-                                <ValidationMessage For="@(() => StarshipTask.name)" />
+                                <input form="Tytuł" class="form-control" @bind-value="Task.name" />
+                                <ValidationMessage For="@(() => Task.name)" />
                             </div>
                             <div class="form-group">
                                 <label for="Opis" class="control-label">Opis</label>
-                                <input for="Opis" class="form-control" @bind-value="StarshipTask.description" />
-                                <ValidationMessage For="@(() => StarshipTask.description)" />
+                                <input for="Opis" class="form-control" @bind-value="Task.description" />
+                                <ValidationMessage For="@(() => Task.description)" />
                             </div>
                             <div class="form-group">
                                 <label for="Starttime" class="control-label">Czas rozpoczęcia</label>
-                                <input for="Starttime" type="date" class="form-control" @bind-value="StarshipTask.start_time" />
-                                <ValidationMessage For="@(() => StarshipTask.start_time)" />
+                                <input for="Starttime" type="date" class="form-control" @bind-value="Task.start_time" />
+                                <ValidationMessage For="@(() => Task.start_time)" />
                             </div>
                             <div class="form-group">
                                 <label for="Deadline" class="control-label">Deadline</label>
-                                <input for="Deadline" type="date" class="form-control" @bind-value="StarshipTask.deadline" />
-                                <ValidationMessage For="@(() => StarshipTask.deadline)" />
+                                <input for="Deadline" type="date" class="form-control" @bind-value="Task.deadline" />
+                                <ValidationMessage For="@(() => Task.deadline)" />
                             </div>
                             <div class="form-group">
                                 <label for="Status" class="control-label">Status zadania</label>
-                                <input for="Status" class="form-control" @bind-value="StarshipTask.status" />
-                                <ValidationMessage For="@(() => StarshipTask.status)" />
+                                <input for="Status" class="form-control" @bind-value="Task.status" />
+                                <ValidationMessage For="@(() => Task.status)" />
                             </div>
                             <div class="form-group">
                                 <label for="IfAutoAssigned" class="control-label">Czy przydzielić automatycznie?</label>
-                                <input for="IfAutoAssigned" type="checkbox" class="form-control" @bind-value="StarshipTask.auto_assigned" />
+                                <input for="IfAutoAssigned" type="checkbox" class="form-control" @bind-value="Task.auto_assigned" />
                             </div>
 
                             <div class="form-group">
@@ -109,14 +109,14 @@
     private string ToastContent { get; set; } = "Zadanie zostało pomyślnie dodane.";
 
 
-    private BackendLibrary.Models.StarshipTask StarshipTask = new BackendLibrary.Models.StarshipTask();
+    private BackendLibrary.Models.Validation.TaskValidation Task = new BackendLibrary.Models.Validation.TaskValidation();
 
 
     /// <summary> Dodaje do bazy danych taska, ktory zostal nakreślony w gui aplikacji
     /// </summary>
     public void Zapisz()
     {
-        BackendLibrary.Models.TaskModel task1 = new BackendLibrary.Models.TaskModel(1, StarshipTask.name, StarshipTask.description, StarshipTask.start_time, StarshipTask.deadline, StarshipTask.status, StarshipTask.auto_assigned);
+        BackendLibrary.Models.TaskModel task1 = new BackendLibrary.Models.TaskModel(1, Task.name, Task.description, Task.start_time, Task.deadline, Task.status, Task.auto_assigned);
 
         BackendLibrary.DataAccess.TaskData.AddTask(task1);
         
