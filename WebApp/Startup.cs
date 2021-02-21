@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Syncfusion.Blazor;
 
 
 namespace WebApp
@@ -35,24 +36,26 @@ namespace WebApp
             services.AddRazorPages();
             services.AddServerSideBlazor();
 
-            // obiekty tworzone raz dla ca³ej aplikacji:
-            // services.AddSingleton<TaskModelData>();
-
-
-            // obiekty tworzone tylko, gdy s¹ potrzebne:
-
+            // Syncfusion support
+            services.AddSyncfusionBlazor();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+
+            //Register Syncfusion license
+            Syncfusion.Licensing.SyncfusionLicenseProvider.
+                RegisterLicense("NDAxMDgzQDMxMzgyZTM0MmUzMFpKemIzdHg0a005TWVMYUFIL2NoZXJhUGNwZlZDS1l2R2hmVFA3UGw2bW89");
+
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
             else
             {
-                //app.UseExceptionHandler("/Error");
+                app.UseExceptionHandler("/Error");
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
