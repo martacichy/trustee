@@ -44,7 +44,8 @@
     /// <summary>
     /// Tworzymy liste, ktora przechowuje wszystkie taski zgodne z firmą pracownika, by je wyswietlic w aplikacji
     /// </summary>
-    public static List<BackendLibrary.Models.TaskModel> ListToDisplayTasks_e = BackendLibrary.DataAccess.TaskData.GetAllByCompanyId(WebApp.Program.company_id);
+    public static List<BackendLibrary.Models.TaskModel> ListToDisplayTasks_e =
+        BackendLibrary.DataAccess.TaskData.GetAllByCompanyId(WebApp.Program.company_id);
     public int length = ListToDisplayTasks_e.Count;
     // company_id jest wpisywane na sztywno, jednak to należy poprawić, by pobierało od pracownika
 }
