@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 
-namespace BackendLibrary.Models
+namespace BackendLibrary.Models.Validation
 {
-    public class StarshipLogin
+    public class LoginValidation
     {
 
         [Required(ErrorMessage = "Wpisz login!")]

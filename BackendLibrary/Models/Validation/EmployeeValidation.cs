@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 
-namespace BackendLibrary.Models
+namespace BackendLibrary.Models.Validation
 {
     /// <summary>
     /// Klasa odpowiadająca za walidację danych, czyli ich poprawne wpisanie
     /// Można korzystać przy dowolnych formularzach, dodając odp zmienne i wymagania
     /// </summary>
-    public class StarshipEmployee
+    public class EmployeeValidation
     {
 
         [Required(ErrorMessage = "Pole 'Imię' jest obowiązkowe.")]

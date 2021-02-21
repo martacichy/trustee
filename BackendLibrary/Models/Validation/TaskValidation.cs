@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 
-namespace BackendLibrary.Models
+namespace BackendLibrary.Models.Validation
 {
-    public class StarshipTask
+    public class TaskValidation
     {
         [Required(ErrorMessage = "Pole 'Tytuł' jest obowiązkowe!")]
         [StringLength(30,
