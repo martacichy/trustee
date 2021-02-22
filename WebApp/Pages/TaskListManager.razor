@@ -120,8 +120,12 @@ else
     /// </summary>
     public void Zapisz()
     {
+
+
         BackendLibrary.Models.TaskModel task1 =
             new BackendLibrary.Models.TaskModel(1, Task.name, Task.description, Task.start_time, Task.deadline, Task.status, Task.auto_assigned);
+
+
 
         BackendLibrary.DataAccess.TaskData.AddTask(task1);
 

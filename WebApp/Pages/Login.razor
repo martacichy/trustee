@@ -27,7 +27,7 @@
         <br />
         <div class="col-12 row">
             <span class="col-12"></span>
-            <input type="submit" class="form-control col-6 btn btn-primary" @onclick="login" value="Zaloguj się" />
+            <input type="submit" class="form-control col-6 btn btn-primary" @onclick="LoginSubmit" value="Zaloguj się" />
             <a href="/signup" class="col-6">Rejestracja</a>
         </div>
         <br />
@@ -40,13 +40,13 @@
 
 @code{
     private BackendLibrary.Models.Validation.LoginValidation Log = new BackendLibrary.Models.Validation.LoginValidation();
-    private void login() {
+    private void LoginSubmit() {
         WebApp.Program.if_manager = BackendLibrary.DataAccess.
             EmployeeData.
             GetIfManagerValue(Log.Login, Log.Password);
 
         if (WebApp.Program.if_manager == -1) {
-            // tu jest zle haslo albo login trzeba to wyswietlic, potem ogarne :)
+            //TODO tu jest zle haslo albo login trzeba to wyswietlic, potem ogarne :)
 
         }
         // 0 jest dla zyklego pracownika
@@ -59,6 +59,8 @@
         else if (WebApp.Program.if_manager == 1 || WebApp.Program.if_manager == 2) {
             NavigationManager.NavigateTo("/tasks-m");
         }
+
+
 
         // sorki szyja, ze ci sie wpierdzielam w funkcje, ale jest jak jest :)
         // uzyskujemy tutaj id firmy, z którą związany jest pracownik

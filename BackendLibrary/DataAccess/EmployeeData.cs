@@ -5,37 +5,42 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace BackendLibrary.DataAccess {
+namespace BackendLibrary.DataAccess
+{
     /// <summary>
     ///  Klasa wysyłająca zapytania bazodanowe SQL dotyczące tabeli "Employee".
     /// </summary>
-    public class EmployeeData : SqlConnector {
-    
+    public class EmployeeData : SqlConnector
+    {
         /// <summary> Zwraca listę wszystkich pracownikow. </summary>
         public static List<EmployeeModel> GetAll()
         {
-            using (IDbConnection connection = new MySqlConnection(connectionString)) {
+            using (IDbConnection connection = new MySqlConnection(connectionString))
+            {
                 string sql = "SELECT * FROM database06.employee";
                 var data = connection.Query<EmployeeModel>(sql).ToList();
 
                 return data;
             }
         }
+
         /// <summary> Zwraca pole if_manager, jesli login i haslo nie pasuja zwraca -1. </summary>
-        public static int GetIfManagerValue(string login, string password) 
+        public static int GetIfManagerValue(string login, string password)
         {
             var parameters = new { Login = login, Password = password };
-            using (IDbConnection connection = new MySqlConnection(connectionString)) {
+            using (IDbConnection connection = new MySqlConnection(connectionString))
+            {
                 var sql = $"SELECT if_manager FROM database06.employee WHERE login = @Login and password = @Password";
-                try {
+                try
+                {
                     int if_manager = connection.QueryFirst<int>(sql, parameters);
-                    return if_manager;  
-                 } catch(Exception e) {
-                      return -1;
-                  }
+                    return if_manager;
+                }
+                catch (Exception e)
+                {
+                    return -1;
+                }
             }
         }
 
@@ -96,12 +101,12 @@ namespace BackendLibrary.DataAccess {
         /// <summary> Dodaje nowego pracownika. </summary>
         public static void AddEmployee(EmployeeModel newEmployee)
         {
-            using (IDbConnection connection = new MySqlConnection(connectionString)) {
-                
+            using (IDbConnection connection = new MySqlConnection(connectionString))
+            {
                 string sql = @"insert into database06.employee (Company_id, First_name, Last_name,
                             Email, If_manager, Login, Password) values (@Company_id, @First_name,
                             @Last_name, @Email, @If_manager, @Login, @Password)";
-                
+
                 connection.Execute(sql, newEmployee);
             }
         }
@@ -129,4 +134,3 @@ namespace BackendLibrary.DataAccess {
         }
     }
 }
-
