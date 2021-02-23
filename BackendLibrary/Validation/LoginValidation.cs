@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 
-namespace BackendLibrary.Models.Validation
+namespace BackendLibrary.Validation
 {
     public class LoginValidation
     {

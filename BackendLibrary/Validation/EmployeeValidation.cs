@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 
-namespace BackendLibrary.Models.Validation
+namespace BackendLibrary.Validation
 {
     /// <summary>
     /// Klasa odpowiadająca za walidację danych, czyli ich poprawne wpisanie

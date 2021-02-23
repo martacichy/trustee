@@ -101,19 +101,18 @@
 }
 else
 {
-    <h1>Nie masz dostępu do tej podstrony!</h1>
-    <h2>Zaloguj się na konto z odpowiednimi uprawnieniami.</h2>
+    <h2>Nie masz dostępu do tej podstrony!</h2>
+    <h3>Zaloguj się na konto z odpowiednimi uprawnieniami.</h3>
 }
 
 
 
 
 @code {
-
     SfToast ToastObj;
     private string ToastContent { get; set; } = "Zadanie zostało pomyślnie dodane.";
 
-    private BackendLibrary.Models.Validation.TaskValidation Task = new BackendLibrary.Models.Validation.TaskValidation();
+    private BackendLibrary.Validation.TaskValidation Task = new BackendLibrary.Validation.TaskValidation();
 
 
     /// <summary> Dodaje do bazy danych taska, ktory zostal nakreślony w gui aplikacji
@@ -135,7 +134,7 @@ else
     /// <summary>
     /// Tworzymy liste, ktora przechowuje wszystkie taski zgodne z firmą pracownika, by je wyswietlic w aplikacji
     /// </summary>
-    public static List<BackendLibrary.Models.TaskModel> ListToDisplayTasks_m = 
+    public static List<BackendLibrary.Models.TaskModel> ListToDisplayTasks_m =
         BackendLibrary.DataAccess.TaskData.GetAllByCompanyId(WebApp.Program.company_id);
     public int length = ListToDisplayTasks_m.Count;
     // company_id jest wpisywane na sztywno, jednak to należy poprawić, by pobierało od pracownika
