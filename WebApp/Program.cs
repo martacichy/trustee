@@ -13,10 +13,6 @@ namespace WebApp
 {
     public class Program
     {
-        //zmienna do rozrozniania typu pracownika (potrzebna do blokowania wyswietlania innych widoków)
-        public static int if_manager = -1;
-        // zmienna company_id wyciagnieta z tabeli Employee w celu rozpoznania firmy, z któr¹ zwiazany jest uzytkownik
-        public static int company_id = -1;
 
         public static void Main(string[] args)
         {

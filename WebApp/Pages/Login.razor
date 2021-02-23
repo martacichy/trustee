@@ -39,31 +39,30 @@
 
 
 @code{
+    
+    // tworzmy obiekt do przechowywania informacji o zalogowanym uzytkowniku
+    public static BackendLibrary.Models.EmployeeModel UserLoggedIn = new BackendLibrary.Models.EmployeeModel();
+
     private BackendLibrary.Models.Validation.LoginValidation Log = new BackendLibrary.Models.Validation.LoginValidation();
     private void LoginSubmit() {
-        WebApp.Program.if_manager = BackendLibrary.DataAccess.
-            EmployeeData.
-            GetIfManagerValue(Log.Login, Log.Password);
 
-        if (WebApp.Program.if_manager == -1) {
+        // tutaj nastepuje przypisanie wszystkich wartosci do obiektu UserLoggedIn, zgodnie z podanym loginem i haslem
+        BackendLibrary.Models.EmployeeModel.SaveUserData(UserLoggedIn, Log.Login, Log.Password);
+
+        if (UserLoggedIn.If_manager == -1) {
             //TODO tu jest zle haslo albo login trzeba to wyswietlic, potem ogarne :)
 
         }
         // 0 jest dla zyklego pracownika
-        else if (WebApp.Program.if_manager == 0) {
+        else if (UserLoggedIn.If_manager == 0) {
             NavigationManager.NavigateTo("/tasks-e");
         }
 
         // 1 jest dla managera a 2 dla bosa(proszę nie psuć mi koncepcji zajęć)
 
-        else if (WebApp.Program.if_manager == 1 || WebApp.Program.if_manager == 2) {
+        else if (UserLoggedIn.If_manager == 1 || UserLoggedIn.If_manager == 2) {
             NavigationManager.NavigateTo("/tasks-m");
         }
 
-
-
-        // sorki szyja, ze ci sie wpierdzielam w funkcje, ale jest jak jest :)
-        // uzyskujemy tutaj id firmy, z którą związany jest pracownik
-        WebApp.Program.company_id = BackendLibrary.DataAccess.EmployeeData.GetCompany_IdValue(Log.Login, Log.Password);
     }
 }

@@ -1,7 +1,7 @@
 ﻿@page "/employees-m"
 
 @*dostęp do podstrony tylko dla menadzera*@
-@if (WebApp.Program.if_manager == 1)
+@if (WebApp.Pages.Login.UserLoggedIn.If_manager == 1)
 {
     <h1>Pracownicy</h1>
     <div>
@@ -58,7 +58,7 @@
     /// <summary>
     /// Tworzymy liste, ktora przechowuje wszystkich pracownikow, zgodnych z ip firmy, by nastepnie ich wyswietlic w aplikacji
     /// </summary>
-    public static List<BackendLibrary.Models.EmployeeModel> ListToDisplayEmployees_m = BackendLibrary.DataAccess.EmployeeData.GetAllByCompanyId(WebApp.Program.company_id);
+    public static List<BackendLibrary.Models.EmployeeModel> ListToDisplayEmployees_m = BackendLibrary.DataAccess.EmployeeData.GetAllByCompanyId(WebApp.Pages.Login.UserLoggedIn.Company_id);
     public int length = ListToDisplayEmployees_m.Count;
 
 }

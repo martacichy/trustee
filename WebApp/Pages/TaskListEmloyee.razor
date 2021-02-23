@@ -1,7 +1,7 @@
 ﻿@page "/tasks-e"
 
 @*dostęp do podstrony tylko dla pracownika*@
-@if (WebApp.Program.if_manager == 0)
+@if (WebApp.Pages.Login.UserLoggedIn.If_manager == 0)
 {
     <h1>Zadania</h1>
 
@@ -45,7 +45,7 @@
     /// Tworzymy liste, ktora przechowuje wszystkie taski zgodne z firmą pracownika, by je wyswietlic w aplikacji
     /// </summary>
     public static List<BackendLibrary.Models.TaskModel> ListToDisplayTasks_e =
-        BackendLibrary.DataAccess.TaskData.GetAllByCompanyId(WebApp.Program.company_id);
+        BackendLibrary.DataAccess.TaskData.GetAllByCompanyId(WebApp.Pages.Login.UserLoggedIn.Company_id);
     public int length = ListToDisplayTasks_e.Count;
     // company_id jest wpisywane na sztywno, jednak to należy poprawić, by pobierało od pracownika
 }

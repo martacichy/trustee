@@ -10,7 +10,7 @@ namespace BackendLibrary.Models.Validation
 
         [Required(ErrorMessage = "Wpisz login!")]
         [StringLength(100,
-        ErrorMessage = "Login jest zbyt długi.")]
+        ErrorMessage = "Login jest zbyt długi.")]       
         public string Login { get; set; }
 
         [Required(ErrorMessage = "Wpisz hasło!")]
