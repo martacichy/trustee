@@ -43,7 +43,7 @@
     // tworzmy obiekt do przechowywania informacji o zalogowanym uzytkowniku
     public static BackendLibrary.Models.EmployeeModel UserLoggedIn = new BackendLibrary.Models.EmployeeModel();
 
-    private BackendLibrary.Models.Validation.LoginValidation Log = new BackendLibrary.Models.Validation.LoginValidation();
+    private BackendLibrary.Validation.LoginValidation Log = new BackendLibrary.Validation.LoginValidation();
     private void LoginSubmit() {
 
         // tutaj nastepuje przypisanie wszystkich wartosci do obiektu UserLoggedIn, zgodnie z podanym loginem i haslem
