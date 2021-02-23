@@ -25,131 +25,25 @@ namespace BackendLibrary.DataAccess
             }
         }
 
-        /// <summary> Zwraca pole if_manager, jesli login i haslo nie pasuja zwraca -1. </summary>
-        public static int GetIfManagerValue(string login, string password)
+        /// <summary> 
+        /// Zwraca pracownika. Jeśli hasło/login jest niepoprawny - zwraca obiekt z polem If_manager = -1.
+        /// </summary>
+        public static EmployeeModel LoginEmployee(string login, string password)
         {
-            var parameters = new { Login = login, Password = password };
             using (IDbConnection connection = new MySqlConnection(connectionString))
             {
-                var sql = $"SELECT if_manager FROM database06.employee WHERE login = @Login and password = @Password";
+                var sql = $"SELECT * FROM database06.employee WHERE login = '{login}' and password = '{password}'";
                 try
                 {
-                    int if_manager = connection.QueryFirst<int>(sql, parameters);
-                    return if_manager;
+                    var output = connection.Query<EmployeeModel>(sql).FirstOrDefault();
+                    return output;
                 }
                 catch (Exception)
                 {
-                    return -1;
-                }
-            }
-        }
+                    EmployeeModel errorEmployee = new EmployeeModel();
+                    errorEmployee.If_manager = -1;
 
-        /// <summary> zwraca pole company_id, jeśli login i haslo nie pasuja zwraca -1 </summary>
-        public static int GetCompany_IdValue(string login, string password)
-        {
-            var parameters = new { Login = login, Password = password };
-            using (IDbConnection connection = new MySqlConnection(connectionString))
-            {
-                var sql = $"SELECT company_id FROM database06.employee WHERE login = @Login and password = @Password";
-                try
-                {
-                    int company_id = connection.QueryFirst<int>(sql, parameters);
-                    return company_id;
-                }
-                catch (Exception)
-                {
-                    return -1;
-                }
-            }
-        }
-
-        /// <summary> zwraca imie pracownika, jesli login i haslo nie pasuja zwraca default_firstname </summary>
-        public static string GetFirstNameValue(string login, string password)
-        {
-            var parameters = new { Login = login, Password = password };
-            using (IDbConnection connection = new MySqlConnection(connectionString))
-            {
-                var sql = $"SELECT first_name FROM database06.employee WHERE login = @Login and password = @Password";
-                try
-                {
-                    string first_name = connection.QueryFirst<string>(sql, parameters);
-                    return first_name;
-                }
-                catch (Exception)
-                {
-                    return "forbidden_FirstName";
-                }
-            }
-        }
-        /// <summary> zwraca nazwisko pracownika, jesli login i haslo nie pasuja zwraca default_lastname </summary>
-        public static string GetLastNameValue(string login, string password)
-        {
-            var parameters = new { Login = login, Password = password };
-            using (IDbConnection connection = new MySqlConnection(connectionString))
-            {
-                var sql = $"SELECT last_name FROM database06.employee WHERE login = @Login and password = @Password";
-                try
-                {
-                    string last_name = connection.QueryFirst<string>(sql, parameters);
-                    return last_name;
-                }
-                catch (Exception)
-                {
-                    return "forbidden_LastName";
-                }
-            }
-        }
-        /// <summary> zrwaca mejl pracownika, jesli login i haslo sie nie zgadzaja zwraca default_mail </summary>
-        public static string GetEmailValue(string login, string password)
-        {
-            var parameters = new { Login = login, Password = password };
-            using (IDbConnection connection = new MySqlConnection(connectionString))
-            {
-                var sql = $"SELECT email FROM database06.employee WHERE login = @Login and password = @Password";
-                try
-                {
-                    string last_name = connection.QueryFirst<string>(sql, parameters);
-                    return last_name;
-                }
-                catch (Exception)
-                {
-                    return "forbidden_mail";
-                }
-            }
-        }
-
-        public static string GetLoginValue(string login, string password)
-        {
-            var parameters = new { Login = login, Password = password };
-            using (IDbConnection connection = new MySqlConnection(connectionString))
-            {
-                var sql = $"SELECT login FROM database06.employee WHERE login = @Login and password = @Password";
-                try
-                {
-                    string login_f = connection.QueryFirst<string>(sql, parameters);
-                    return login_f;
-                }
-                catch (Exception)
-                {
-                    return "forbidden_login";
-                }
-            }
-        }
-
-        public static string GetPasswordValue(string login, string password)
-        {
-            var parameters = new { Login = login, Password = password };
-            using (IDbConnection connection = new MySqlConnection(connectionString))
-            {
-                var sql = $"SELECT password FROM database06.employee WHERE login = @Login and password = @Password";
-                try
-                {
-                    string password_f = connection.QueryFirst<string>(sql, parameters);
-                    return password_f;
-                }
-                catch (Exception)
-                {
-                    return "forbidden_password";
+                    return errorEmployee;
                 }
             }
         }

@@ -43,16 +43,5 @@ namespace BackendLibrary.Models
 		}
 
 		public EmployeeModel() { }
-
-		public static void SaveUserData(EmployeeModel newEmployee, string login, string password)
-		{
-			newEmployee.Company_id = DataAccess.EmployeeData.GetCompany_IdValue(login, password);
-			newEmployee.If_manager = DataAccess.EmployeeData.GetIfManagerValue(login, password);
-			newEmployee.First_name = DataAccess.EmployeeData.GetFirstNameValue(login, password);
-			newEmployee.Last_name = DataAccess.EmployeeData.GetLastNameValue(login, password);
-			newEmployee.Email = DataAccess.EmployeeData.GetEmailValue(login, password);
-			newEmployee.Login = DataAccess.EmployeeData.GetLoginValue(login, password);
-			newEmployee.Password = DataAccess.EmployeeData.GetPasswordValue(login, password);
-		}
 	}
 }

@@ -39,27 +39,28 @@
 
 
 @code{
-    
+
     // tworzmy obiekt do przechowywania informacji o zalogowanym uzytkowniku
     public static BackendLibrary.Models.EmployeeModel UserLoggedIn = new BackendLibrary.Models.EmployeeModel();
 
     private BackendLibrary.Validation.LoginValidation Log = new BackendLibrary.Validation.LoginValidation();
-    private void LoginSubmit() {
 
+    private void LoginSubmit()
+    {
         // tutaj nastepuje przypisanie wszystkich wartosci do obiektu UserLoggedIn, zgodnie z podanym loginem i haslem
-        BackendLibrary.Models.EmployeeModel.SaveUserData(UserLoggedIn, Log.Login, Log.Password);
+        UserLoggedIn = BackendLibrary.DataAccess.EmployeeData.LoginEmployee(Log.Login, Log.Password);
 
         if (UserLoggedIn.If_manager == -1) {
             //TODO tu jest zle haslo albo login trzeba to wyswietlic, potem ogarne :)
 
         }
+
         // 0 jest dla zyklego pracownika
         else if (UserLoggedIn.If_manager == 0) {
             NavigationManager.NavigateTo("/tasks-e");
         }
 
-        // 1 jest dla managera a 2 dla bosa(proszę nie psuć mi koncepcji zajęć)
-
+        // 1 jest dla managera a 2 dla bosa
         else if (UserLoggedIn.If_manager == 1 || UserLoggedIn.If_manager == 2) {
             NavigationManager.NavigateTo("/tasks-m");
         }
