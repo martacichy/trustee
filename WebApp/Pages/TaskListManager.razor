@@ -101,19 +101,18 @@
 }
 else
 {
-    <h1>Nie masz dostępu do tej podstrony!</h1>
-    <h2>Zaloguj się na konto z odpowiednimi uprawnieniami.</h2>
+    <h2>Nie masz dostępu do tej podstrony!</h2>
+    <h3>Zaloguj się na konto z odpowiednimi uprawnieniami.</h3>
 }
 
 
 
 
 @code {
-
     SfToast ToastObj;
     private string ToastContent { get; set; } = "Zadanie zostało pomyślnie dodane.";
 
-    private BackendLibrary.Models.Validation.TaskValidation Task = new BackendLibrary.Models.Validation.TaskValidation();
+    private BackendLibrary.Validation.TaskValidation Task = new BackendLibrary.Validation.TaskValidation();
 
 
     /// <summary> Dodaje do bazy danych taska, ktory zostal nakreślony w gui aplikacji
