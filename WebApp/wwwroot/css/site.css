@@ -1,6 +1,51 @@
 @import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
 
 
+.e-kanban .header-template-wrap {
+    display: inline-flex;
+    font-size: 30px;
+    font-weight: 400;
+}
+
+    .e-kanban .header-template-wrap .header-icon {
+        font-family: "KanbanHeaderIcons";
+        margin-top: 3px;
+        width: 10%;
+    }
+
+    .e-kanban .header-template-wrap .header-text {
+        margin-left: 15px;
+    }
+
+.e-kanban .card-header {
+    padding-left: 12px;
+}
+
+.e-kanban .Rozpoczete::before {
+    content: "\e700";
+    color: #0251cc;
+    font-size: 16px;
+}
+
+.e-kanban .Wtoku::before {
+    content: "\e703";
+    color: #ea9713;
+    font-size: 16px;
+}
+
+.e-kanban .Anulowane::before {
+    content: "\e701";
+    color: #8e4399;
+    font-size: 16px;
+}
+
+.e-kanban .Zakonczone::before {
+    content: "\e702";
+    color: #63ba3c;
+    font-size: 16px;
+}
+
+
 
 .button1 {
     background-color: white;
@@ -9,13 +54,12 @@
 }
 
 html, body {
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; 
-    background-color: #26292C;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    background-color: #FFFCFF;
     color: #d6d5d5;
     display: flex;
     flex-direction: column;
     height: 100vh;
-   
 }
 
 a, .btn-link {
