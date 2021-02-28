@@ -52,17 +52,16 @@
 
         if (UserLoggedIn.If_manager == -1) {
             //TODO tu jest zle haslo albo login trzeba to wyswietlic, potem ogarne :)
-
         }
 
         // 0 jest dla zyklego pracownika
         else if (UserLoggedIn.If_manager == 0) {
-            NavigationManager.NavigateTo("/tasks-e");
+            NavigationManager.NavigateTo("/kanban");
         }
 
         // 1 jest dla managera a 2 dla bosa
         else if (UserLoggedIn.If_manager == 1 || UserLoggedIn.If_manager == 2) {
-            NavigationManager.NavigateTo("/tasks-m");
+            NavigationManager.NavigateTo("/kanban");
         }
 
     }

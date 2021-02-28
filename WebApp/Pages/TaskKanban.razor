@@ -1,0 +1,21 @@
+﻿@page "/kanban"
+@using Syncfusion.Blazor.Kanban
+<h3>Twoje zadania</h3>
+
+<SfKanban TValue="BackendLibrary.Models.TaskModel" KeyField="Status" DataSource="ListToDisplayTasks_Kanban">
+    <KanbanColumns>
+        <KanbanColumn HeaderText="Nierozpoczęte" KeyField="@(new List<string>() {"Zakonczone"})" TransitionColumns="@(new List<string>() {"Zakonczone"})"></KanbanColumn>
+        <KanbanColumn HeaderText="W toku" KeyField="@(new List<string>() {"W toku"})" TransitionColumns="@(new List<string>() {"W toku"})"></KanbanColumn>
+        <KanbanColumn HeaderText="Anulowane" KeyField="@(new List<string>() {"Anulowane"})" TransitionColumns="@(new List<string>() {"Anulowane"})"></KanbanColumn>
+        <KanbanColumn HeaderText="Zakończone" KeyField="@(new List<string>() {"Zakonczone"})" TransitionColumns="@(new List<string>() {"Zakonczone"})"></KanbanColumn>
+    </KanbanColumns>
+    <KanbanCardSettings HeaderField="Task_id" ContentField="Description"></KanbanCardSettings>
+</SfKanban>
+
+
+@code {
+
+    //póki co używamy metody, która wyświetla wszystkie zadania, należy to zmienić w przyszłości by pojawiały się taski danego pracownika
+    public static List<BackendLibrary.Models.TaskModel> ListToDisplayTasks_Kanban =
+        BackendLibrary.DataAccess.TaskData.GetAllByCompanyId(WebApp.Pages.Login.UserLoggedIn.Company_id);
+}

@@ -1,51 +1,17 @@
 @import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
 
-
-.e-kanban .header-template-wrap {
-    display: inline-flex;
-    font-size: 30px;
-    font-weight: 400;
+.e-kanban .e-kanban-table {
+    font-size: 20px;
+    font-family: Verdana;
+    
 }
 
-    .e-kanban .header-template-wrap .header-icon {
-        font-family: "KanbanHeaderIcons";
-        margin-top: 3px;
-        width: 10%;
-    }
-
-    .e-kanban .header-template-wrap .header-text {
-        margin-left: 15px;
-    }
-
-.e-kanban .card-header {
-    padding-left: 12px;
+.e-kanban .e-kanban-header .e-header-cells {
+    font-size: 24px;
+    background: #3da081;
+    color: #303030;
+    font-family: Verdana;
 }
-
-.e-kanban .Rozpoczete::before {
-    content: "\e700";
-    color: #0251cc;
-    font-size: 16px;
-}
-
-.e-kanban .Wtoku::before {
-    content: "\e703";
-    color: #ea9713;
-    font-size: 16px;
-}
-
-.e-kanban .Anulowane::before {
-    content: "\e701";
-    color: #8e4399;
-    font-size: 16px;
-}
-
-.e-kanban .Zakonczone::before {
-    content: "\e702";
-    color: #63ba3c;
-    font-size: 16px;
-}
-
-
 
 .button1 {
     background-color: white;
@@ -56,7 +22,7 @@
 html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
     background-color: #FFFCFF;
-    color: #d6d5d5;
+    color: #8a8a8a;
     display: flex;
     flex-direction: column;
     height: 100vh;
@@ -74,7 +40,8 @@ a, .btn-link {
 }
 
 th {
-    color: azure;
+    color: black;
+    font-weight: normal;
 }
 
 app {
@@ -94,7 +61,7 @@ app {
 }
 
     .main .top-row {
-        background-color: #1C1F21;
+        background-color: #545454;
         justify-content: flex-end;
     }
 
@@ -109,11 +76,11 @@ app {
         }
 
 .sidebar {
-    background-color: #131516;
+    background-color: #3da081;
 }
 
     .sidebar .top-row {
-        background-color: rgba(0,0,0,0.4);
+        background-color: #3da081;
     }
 
 
@@ -151,7 +118,7 @@ app {
         }
 
             .sidebar .nav-item a.active {
-                background-color: #555E62;
+                background-color: #2d7a62;
                 color: white;
             }
 
