@@ -1,41 +1,18 @@
-﻿@page "/tasks-m"
-@*dostęp do podstrony tylko dla menadzera i szefa*@
+﻿@page "/tasks"
+@*@inject Microsoft.AspNetCore.Components.NavigationManager UriHelper*@
+
+<h3>Wszystkie zadania</h3>
+
+@* wyświetlanie przycisku do tworzenia nowych zadań *@
 @if (WebApp.Pages.Login.UserLoggedIn.If_manager == 1 || WebApp.Pages.Login.UserLoggedIn.If_manager == 2)
 {
-    <h1>Zadania</h1>
-
     <div>
-        <div style="float:left">
-            <button class="btn btn-primary" @onclick="addNew">Dodaj zadanie</button>
-        </div>
-        <div style="float:right; width:40%;">
-            <div class="col-sm-6" style="float:left">
-                <input class="form-control" type="text" placeholder="Szukaj" />
-            </div>
-            <div>
-                <button type="submit" class="btn btn-default btn-info">Filtruj</button>
-            </div>
+        <div class="search" style="float: left;">
+            <button class="btn btn-primary" @onclick="AddNew">Dodaj zadanie</button>
         </div>
     </div>
-    <table class='table'>
-        <thead>
-            <tr>
-                <th>Tytuł</th>
-                <th>Deadline</th>
-                <th>Status</th>
-            </tr>
-            @for (int i = 0; i < length; i++)
-            {
-                <tr>
-                    <th> @ListToDisplayTasks_m[i].Name </th>
-                    <th> @ListToDisplayTasks_m[i].Deadline </th>
-                    <th> @ListToDisplayTasks_m[i].Status </th>
-                </tr>
-            }
 
-        </thead>
-    </table>
-    @if (isAdd)
+    @if (addButtonClicked)
     {
         <div class="modal" tabindex="-1" style="display:block" role="dialog">
             <div class="modal-dialog">
@@ -43,7 +20,7 @@
 
                     <div class="modal-header">
                         <h3 class="modal-title">Dodaj nowe zadanie</h3>
-                        <button type="button" class="close" @onclick="closeAdd">
+                        <button type="button" class="close" @onclick="CloseAdd">
                             <span aria-hidden="true">X</span>
                         </button>
                     </div>
@@ -53,7 +30,7 @@
                             <DataAnnotationsValidator />
                             <div class="form-group">
                                 <label for="Tytuł" class="control-label" required>Tytuł</label>
-                                <input form="Tytuł" class="form-control" @bind-value="Task.name" />
+                                <input for="Tytuł" class="form-control" @bind-value="Task.name" />
                                 <ValidationMessage For="@(() => Task.name)" />
                             </div>
                             <div class="form-group">
@@ -87,7 +64,7 @@
                                 <button class="btn btn-default btn-xs">Dodaj</button>
                             </div>
                             <div class="form-group">
-                                <button type="submit" class="btn btn-block btn-info" data-dismiss="modal" @onclick="Zapisz">Zapisz</button>
+                                <button type="submit" class="btn btn-block btn-info" data-dismiss="modal" @onclick="SaveTask">Zapisz</button>
                                 <SfToast @ref="ToastObj" Title="Dodano nowe zadanie!" Timeout=3000 Content="@ToastContent">
                                     <ToastPosition X="Right"></ToastPosition>
                                 </SfToast>
@@ -99,57 +76,88 @@
         </div>
     }
 }
-else
-{
-    <h2>Nie masz dostępu do tej podstrony!</h2>
-    <h3>Zaloguj się na konto z odpowiednimi uprawnieniami.</h3>
-}
 
+<div class="search" style="float: right; width: auto;">
+    <label >Szukaj:</label>
+    <input type="text" @bind-value="searchStr" @onkeyup="@SearchOnEnter" />
+</div>
+<br/><br/>
 
+<div>
+    <SfGrid @ref="DefaultGrid"
+            DataSource="TaskList"
+            AllowPaging="true"
+            AllowSorting="true"
+            AllowFiltering="true">
+        <GridSearchSettings IgnoreCase="true"></GridSearchSettings>
+        <GridFilterSettings EnableCaseSensitivity="false"></GridFilterSettings>
+        <GridPageSettings PageSize="12"></GridPageSettings>
+        <GridSelectionSettings CheckboxOnly="true" PersistSelection="true"></GridSelectionSettings>
+
+        <GridColumns>
+            <GridColumn Field=@nameof(TaskModel.Task_id) HeaderText="ID" TextAlign="TextAlign.Left" Width="50"></GridColumn>
+            <GridColumn Field=@nameof(TaskModel.Name) HeaderText="Nazwa" TextAlign="TextAlign.Left" Width="250"></GridColumn>
+            <GridColumn Field=@nameof(TaskModel.Status) HeaderText="Status" TextAlign="TextAlign.Left" Width="120"></GridColumn>
+            <GridColumn Field=@nameof(TaskModel.Start_time) HeaderText="Data rozpoczęcia" Format="d" Type="ColumnType.Date"
+                        TextAlign="TextAlign.Left" Width="120"></GridColumn>
+            <GridColumn Field=@nameof(TaskModel.Deadline) HeaderText="Deadline" Format="d" Type="ColumnType.Date"
+                        TextAlign="TextAlign.Left" Width="120"></GridColumn>
+        </GridColumns>
+
+    </SfGrid>
+</div>
+
+<style>
+    .search {
+        width: 200px;
+        display: inline-block;
+        white-space: nowrap;
+    }
+</style>
 
 
 @code {
     SfToast ToastObj;
+    private SfGrid<TaskModel> DefaultGrid;
+    private Boolean addButtonClicked;
+    private string searchStr;
     private string ToastContent { get; set; } = "Zadanie zostało pomyślnie dodane.";
-
     private BackendLibrary.Validation.TaskValidation Task = new BackendLibrary.Validation.TaskValidation();
+    public static List<BackendLibrary.Models.TaskModel> TaskList;
 
+    protected override void OnInitialized()
+    {
+        TaskList = BackendLibrary.DataAccess.TaskData.GetAllByCompanyId(WebApp.Pages.Login.UserLoggedIn.Company_id);
+        addButtonClicked = false;
+    }
 
     /// <summary> Dodaje do bazy danych taska, ktory zostal nakreślony w gui aplikacji
     /// </summary>
-    public void Zapisz()
+    public void SaveTask()
     {
+        // company_id jest wpisywane na sztywno, jednak to należy poprawić, by pobierało od pracownika
+        BackendLibrary.Models.TaskModel newTask =
+        new BackendLibrary.Models.TaskModel(1, Task.name, Task.description, Task.start_time, Task.deadline, Task.status, Task.auto_assigned);
 
-
-        BackendLibrary.Models.TaskModel task1 =
-            new BackendLibrary.Models.TaskModel(1, Task.name, Task.description, Task.start_time, Task.deadline, Task.status, Task.auto_assigned);
-
-
-
-        BackendLibrary.DataAccess.TaskData.AddTask(task1);
-
+        BackendLibrary.DataAccess.TaskData.AddTask(newTask);
         ToastObj.Show();
     }
 
-    /// <summary>
-    /// Tworzymy liste, ktora przechowuje wszystkie taski zgodne z firmą pracownika, by je wyswietlic w aplikacji
-    /// </summary>
-    public static List<BackendLibrary.Models.TaskModel> ListToDisplayTasks_m = 
-        BackendLibrary.DataAccess.TaskData.GetAllByCompanyId(WebApp.Pages.Login.UserLoggedIn.Company_id);
-    public int length = ListToDisplayTasks_m.Count;
-    // company_id jest wpisywane na sztywno, jednak to należy poprawić, by pobierało od pracownika
-
-
-    private Boolean isAdd;
-
-    private void addNew(MouseEventArgs e)
+    private void AddNew(MouseEventArgs e)
     {
-        isAdd = true;
+        addButtonClicked = true;
     }
 
-    private void closeAdd(MouseEventArgs e)
+    private void CloseAdd(MouseEventArgs e)
     {
-        isAdd = false;
+        addButtonClicked = false;
     }
 
+    private void SearchOnEnter(KeyboardEventArgs e)
+    {
+        if (e.Code == "Enter" || e.Code == "NumpadEnter")
+        {
+            this.DefaultGrid.Search(searchStr);
+        }
+    }
 }
