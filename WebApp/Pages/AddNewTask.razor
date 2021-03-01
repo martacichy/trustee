@@ -64,14 +64,14 @@
     /// </summary>
     public void SaveTask()
     {
-        // company_id jest wpisywane na sztywno, jednak to należy poprawić, by pobierało od pracownika
-        BackendLibrary.Models.TaskModel newTask =
-        new BackendLibrary.Models.TaskModel(1, Task.name, Task.description, Task.start_time, Task.deadline, Task.status, Task.auto_assigned);
-
-
-        SaveLabels();
-        BackendLibrary.DataAccess.TaskData.AddTask(newTask);
-        ToastObj.Show();
+        if(Task.name != null && Task.description != null && Task.status != null)
+        {
+            BackendLibrary.Models.TaskModel newTask =
+            new BackendLibrary.Models.TaskModel(WebApp.Pages.Login.UserLoggedIn.Company_id, Task.name, Task.description, Task.start_time, Task.deadline, Task.status, Task.auto_assigned);
+            SaveLabels();
+            BackendLibrary.DataAccess.TaskData.AddTask(newTask);
+            ToastObj.Show();
+        }
     }
 
     /// <summary>
