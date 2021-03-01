@@ -1,7 +1,8 @@
 ﻿@page "/add-task"
+@inject NavigationManager NavigationManager
 @using Syncfusion.Blazor.DropDowns
 @layout MainLayout
-
+@inject NavigationManager uriHelper;
 
 <EditForm Model="@Task">
     <DataAnnotationsValidator />
@@ -62,22 +63,22 @@
 
     /// <summary> Dodaje do bazy danych taska, ktory zostal nakreślony w gui aplikacji
     /// </summary>
-    public void SaveTask()
+    private void SaveTask()
     {
         // company_id jest wpisywane na sztywno, jednak to należy poprawić, by pobierało od pracownika
         BackendLibrary.Models.TaskModel newTask =
         new BackendLibrary.Models.TaskModel(1, Task.name, Task.description, Task.start_time, Task.deadline, Task.status, Task.auto_assigned);
 
-
         SaveLabels();
         BackendLibrary.DataAccess.TaskData.AddTask(newTask);
         ToastObj.Show();
+        uriHelper.NavigateTo(uriHelper.Uri, forceLoad: true);
     }
 
     /// <summary>
     /// zapisuje etykiety do bazy ktorych jeszcze nie ma w bazie. Trzeba jeszcze pobrać company_id, label_type_id i opis(czy w ogóle będzie opis etykiet? No chyba nie w prototypie)
     /// </summary>
-    public void SaveLabels()
+    private void SaveLabels()
     {
         for (int i = 0; i < selectedLabels.Length; i++)
         {
@@ -92,7 +93,7 @@
     /// <summary>
     /// Sprawdza czy etykieta jest juz w bazie danychy
     /// </summary>
-    public bool IsSelectedLabelsContainsInDbLabels(string label)
+    private bool IsSelectedLabelsContainsInDbLabels(string label)
     {
         for (int i = 0; i < labelsInDb.Count; i++)
         {
