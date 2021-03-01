@@ -12,6 +12,7 @@ namespace BackendLibrary.Models
 		public string Name { get; set; }
 		public string Description { get; set; }
 
+		public LabelModel() { }
 		public LabelModel(int label_id, int company_id, int label_type_id, string name, string description)
 		{
 			Label_id = label_id;

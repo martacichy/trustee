@@ -1,0 +1,121 @@
+﻿@page "/add-task"
+@using Syncfusion.Blazor.DropDowns
+@layout MainLayout
+
+
+<EditForm Model="@Task">
+    <DataAnnotationsValidator />
+    <div class="form-group">
+        <label for="Tytuł" class="control-label" required>Tytuł</label>
+        <input for="Tytuł" class="form-control" @bind-value="Task.name" />
+        <ValidationMessage For="@(() => Task.name)" />
+    </div>
+    <div class="form-group">
+        <label for="Opis" class="control-label">Opis</label>
+        <input for="Opis" class="form-control" @bind-value="Task.description" />
+        <ValidationMessage For="@(() => Task.description)" />
+    </div>
+    <div class="form-group">
+        <label for="Starttime" class="control-label">Czas rozpoczęcia</label>
+        <input for="Starttime" type="date" class="form-control" @bind-value="Task.start_time" />
+        <ValidationMessage For="@(() => Task.start_time)" />
+    </div>
+    <div class="form-group">
+        <label for="Deadline" class="control-label">Deadline</label>
+        <input for="Deadline" type="date" class="form-control" @bind-value="Task.deadline" />
+        <ValidationMessage For="@(() => Task.deadline)" />
+    </div>
+    <div class="form-group">
+        <label for="Status" class="control-label">Status zadania</label>
+        <input for="Status" class="form-control" @bind-value="Task.status" />
+        <ValidationMessage For="@(() => Task.status)" />
+    </div>
+    <div class="form-group">
+        <label for="IfAutoAssigned" class="control-label">Czy przydzielić automatycznie?</label>
+        <input for="IfAutoAssigned" type="checkbox" class="form-control" @bind-value="Task.auto_assigned" />
+    </div>
+
+    <div class="control_wrapper">
+        <label asp-for="etykiety" class="control-label">Etykiety</label>
+        <SfMultiSelect TValue="string[]" TItem="BackendLibrary.Models.LabelModel"
+                       @bind-Value="@selectedLabels"
+                       Placeholder="Szukaj..."
+                       DataSource="@labelsInDb" AllowFiltering="true" AllowCustomValue="true">
+            <MultiSelectFieldSettings Text="Name"> </MultiSelectFieldSettings>
+        </SfMultiSelect>
+    </div>
+
+    <div class="form-group">
+        <button type="submit" class="btn btn-block btn-info" data-dismiss="modal" @onclick="SaveTask">Zapisz</button>
+        <SfToast @ref="ToastObj" Title="Dodano nowe zadanie!" Timeout=3000 Content="@ToastContent">
+            <ToastPosition X="Right"></ToastPosition>
+        </SfToast>
+    </div>
+</EditForm>
+
+@code {
+    SfToast ToastObj;
+    private string ToastContent { get; set; } = "Zadanie zostało pomyślnie dodane.";
+    private BackendLibrary.Validation.TaskValidation Task = new BackendLibrary.Validation.TaskValidation();
+    private List<BackendLibrary.Models.LabelModel> labelsInDb = BackendLibrary.DataAccess.LabelData.GetAllLabels();
+    private string[] selectedLabels { get; set; } = new string[] { };
+
+    /// <summary> Dodaje do bazy danych taska, ktory zostal nakreślony w gui aplikacji
+    /// </summary>
+    public void SaveTask()
+    {
+        // company_id jest wpisywane na sztywno, jednak to należy poprawić, by pobierało od pracownika
+        BackendLibrary.Models.TaskModel newTask =
+        new BackendLibrary.Models.TaskModel(1, Task.name, Task.description, Task.start_time, Task.deadline, Task.status, Task.auto_assigned);
+
+
+        SaveLabels();
+        BackendLibrary.DataAccess.TaskData.AddTask(newTask);
+        ToastObj.Show();
+    }
+
+    /// <summary>
+    /// zapisuje etykiety do bazy ktorych jeszcze nie ma w bazie. Trzeba jeszcze pobrać company_id, label_type_id i opis(czy w ogóle będzie opis etykiet? No chyba nie w prototypie)
+    /// </summary>
+    public void SaveLabels()
+    {
+        for (int i = 0; i < selectedLabels.Length; i++)
+        {
+            if (!IsSelectedLabelsContainsInDbLabels(selectedLabels[i]))
+            {
+                BackendLibrary.Models.LabelModel label = new BackendLibrary.Models.LabelModel(1, 1, selectedLabels[i], "opis");
+                BackendLibrary.DataAccess.LabelData.AddLabel(label);
+            }
+        }
+    }
+
+    /// <summary>
+    /// Sprawdza czy etykieta jest juz w bazie danychy
+    /// </summary>
+    public bool IsSelectedLabelsContainsInDbLabels(string label)
+    {
+        for (int i = 0; i < labelsInDb.Count; i++)
+        {
+            if (label.Equals(labelsInDb[i].Name))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+}
+
+<style>
+    .control_wrapper {
+        width: 350px;
+        margin: 0 auto;
+        padding-top: 70px;
+        padding-bottom: 70px;
+    }
+
+    .form-group {
+        padding-top: 15px;
+        width: 350px;
+        margin: 0 auto;
+    }
+</style>
