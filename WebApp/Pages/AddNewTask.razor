@@ -83,8 +83,8 @@
         {
             if (!IsSelectedLabelsContainsInDbLabels(selectedLabels[i]))
             {
-                BackendLibrary.Models.LabelModel label = new BackendLibrary.Models.LabelModel(1, 1, selectedLabels[i], "opis");
-                BackendLibrary.DataAccess.LabelData.AddLabel(label);
+                BackendLibrary.Models.LabelModel label = new BackendLibrary.Models.LabelModel(selectedLabels[i]);
+                BackendLibrary.DataAccess.LabelData.AddLabelOnlyWithName(label);
             }
         }
     }

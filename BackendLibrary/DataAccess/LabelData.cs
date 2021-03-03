@@ -72,6 +72,19 @@ namespace BackendLibrary.DataAccess {
 
             }
         }
+        public static void AddLabelOnlyWithName(LabelModel newLabel)
+        {
+            using (IDbConnection connection = new MySqlConnection(connectionString))
+            {
+
+                string sql = @"insert into database06.label (Name)
+                            values (@Name)";
+
+                connection.Execute(sql, newLabel);
+
+            }
+        }
+
 
         /// <summary> Usuwa etykietę z bazy danych,
         /// usuwając wcześniej wiersze z innych tabel, gdzie zawarty jest dany klucz obcy z tabeli Label
