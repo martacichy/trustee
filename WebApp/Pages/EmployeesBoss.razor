@@ -1,5 +1,4 @@
 ﻿@page "/employees-b"
-
 @*dostęp do postrony tylko dla szefa*@
 @if (WebApp.Pages.Login.UserLoggedIn.If_manager == 2)
 {
@@ -30,19 +29,19 @@
             @for (int i = 0; i < length; i++)
             {
                 <tr>
-                    <th>@ListToDisplayEmployees_b[i].Employee_id</th>
-                    <th>@ListToDisplayEmployees_b[i].First_name</th>
-                    <th>@ListToDisplayEmployees_b[i].Last_name</th>
-                    <th>@ListToDisplayEmployees_b[i].Email</th>
-                    @if (ListToDisplayEmployees_b[i].If_manager == 1)
+                    <th>@EmployeeList[i].Employee_id</th>
+                    <th>@EmployeeList[i].First_name</th>
+                    <th>@EmployeeList[i].Last_name</th>
+                    <th>@EmployeeList[i].Email</th>
+                    @if (EmployeeList[i].If_manager == 1)
                     {
                         <th>Kierownik</th>
                     }
-                    @if (ListToDisplayEmployees_b[i].If_manager == 0)
+                    @if (EmployeeList[i].If_manager == 0)
                     {
                         <th>Pracownik</th>
                     }
-                    @if (ListToDisplayEmployees_b[i].If_manager == 2)
+                    @if (EmployeeList[i].If_manager == 2)
                     {
                         <th>Szef</th>
                     }
@@ -53,6 +52,7 @@
         </thead>
     </table>
 
+    @*dodawanie nowego pracownika*@
     @if (isAdd)
     {
         <div class="modal" tabindex="-1" style="display:block" role="dialog">
@@ -113,17 +113,20 @@
 
 
 @code {
-
-    private BackendLibrary.Validation.EmployeeValidation Employee = new BackendLibrary.Validation.EmployeeValidation();
-
-
+    /// <summary>
+    /// Strona wyświetlająca listę pracowników dla widoku menadżera/pracownika.
+    /// </summary>
+    public static List<BackendLibrary.Models.EmployeeModel> EmployeeList;
+    public int length;
+    private BackendLibrary.Validation.EmployeeValidation Employee;
     private Boolean isAdd;
 
-    /// <summary>
-    /// Tworzymy liste, ktora przechowuje wszystkich pracownikow, zgodnych z ip firmy, by nastepnie ich wyswietlic w aplikacji
-    /// </summary>
-    public static List<BackendLibrary.Models.EmployeeModel> ListToDisplayEmployees_b = BackendLibrary.DataAccess.EmployeeData.GetAllByCompanyId(WebApp.Pages.Login.UserLoggedIn.Company_id);
-    public int length = ListToDisplayEmployees_b.Count;
+    protected override void OnInitialized()
+    {
+        Employee = new BackendLibrary.Validation.EmployeeValidation();
+        EmployeeList = BackendLibrary.DataAccess.EmployeeData.GetAllByCompanyId(WebApp.Pages.Login.UserLoggedIn.Company_id);
+        length = EmployeeList.Count;
+    }
 
     private void addNew(MouseEventArgs e)
     {

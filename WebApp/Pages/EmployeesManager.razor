@@ -27,19 +27,19 @@
             @for (int i = 0; i < length; i++)
             {
                 <tr>
-                    <th>@ListToDisplayEmployees_m[i].Employee_id</th>
-                    <th>@ListToDisplayEmployees_m[i].First_name</th>
-                    <th>@ListToDisplayEmployees_m[i].Last_name</th>
-                    <th>@ListToDisplayEmployees_m[i].Email</th>
-                    @if (ListToDisplayEmployees_m[i].If_manager == 1)
+                    <th>@EmployeeList[i].Employee_id</th>
+                    <th>@EmployeeList[i].First_name</th>
+                    <th>@EmployeeList[i].Last_name</th>
+                    <th>@EmployeeList[i].Email</th>
+                    @if (EmployeeList[i].If_manager == 1)
                     {
                         <th>Kierownik</th>
                     }
-                    @if (ListToDisplayEmployees_m[i].If_manager == 0)
+                    @if (EmployeeList[i].If_manager == 0)
                     {
                         <th>Pracownik</th>
                     }
-                    @if (ListToDisplayEmployees_m[i].If_manager == 2)
+                    @if (EmployeeList[i].If_manager == 2)
                     {
                         <th>Szef</th>
                     }
@@ -56,9 +56,14 @@
 @code {
 
     /// <summary>
-    /// Tworzymy liste, ktora przechowuje wszystkich pracownikow, zgodnych z ip firmy, by nastepnie ich wyswietlic w aplikacji
+    /// Strona wyświetlająca listę pracowników dla widoku menadżera/pracownika.
     /// </summary>
-    public static List<BackendLibrary.Models.EmployeeModel> ListToDisplayEmployees_m = BackendLibrary.DataAccess.EmployeeData.GetAllByCompanyId(WebApp.Pages.Login.UserLoggedIn.Company_id);
-    public int length = ListToDisplayEmployees_m.Count;
+    public static List<BackendLibrary.Models.EmployeeModel> EmployeeList;
+    public int length;
 
+    protected override void OnInitialized()
+    {
+        EmployeeList = BackendLibrary.DataAccess.EmployeeData.GetAllByCompanyId(WebApp.Pages.Login.UserLoggedIn.Company_id);
+        length = EmployeeList.Count;
+    }
 }
