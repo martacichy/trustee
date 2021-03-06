@@ -1,69 +1,39 @@
 ﻿@page "/employees-m"
+@*dostęp do podstrony dla menadzera/pracownika*@
 
-@*dostęp do podstrony tylko dla menadzera*@
-@if (WebApp.Pages.Login.UserLoggedIn.If_manager == 1)
+@if (Login.UserLoggedIn.If_manager == 1 || Login.UserLoggedIn.If_manager == 0)
 {
     <h1>Pracownicy</h1>
-    <div>
-        <div style="float:right; width:40%;">
-            <div class="col-sm-6" style="float:left">
-                <input class="form-control" type="text" placeholder="Szukaj" />
-            </div>
-            <div>
-                <button type="submit" class="btn btn-default btn-info">Filtruj</button>
-            </div>
-        </div>
-    </div>
 
-    <table class='table'>
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Imię</th>
-                <th>Nazwisko</th>
-                <th>Email</th>
-                <th>Rodzaj pracownika</th>
-            </tr>
-            @for (int i = 0; i < length; i++)
-            {
-                <tr>
-                    <th>@EmployeeList[i].Employee_id</th>
-                    <th>@EmployeeList[i].First_name</th>
-                    <th>@EmployeeList[i].Last_name</th>
-                    <th>@EmployeeList[i].Email</th>
-                    @if (EmployeeList[i].If_manager == 1)
-                    {
-                        <th>Kierownik</th>
-                    }
-                    @if (EmployeeList[i].If_manager == 0)
-                    {
-                        <th>Pracownik</th>
-                    }
-                    @if (EmployeeList[i].If_manager == 2)
-                    {
-                        <th>Szef</th>
-                    }
-
-                </tr>
-
-            }
-        </thead>
-    </table>
-
+    //TODO - wybrać/przetestować opcje do ContextMenu
+    <SfGrid DataSource="EmployeeList"
+            AllowPaging="true"
+            AllowSorting="true"
+            AllowFiltering="false"
+            ContextMenuItems="@(new List<object>()
+            { "AutoFit", "AutoFitAll", "SortAscending", "SortDescending", "Copy"})">
+        <GridPageSettings PageSize="12"></GridPageSettings>
+        <GridColumns>
+            <GridColumn Field=@nameof(EmployeeModel.Employee_id) IsPrimaryKey="true" HeaderText="ID" TextAlign="TextAlign.Left" Width="50"></GridColumn>
+            <GridColumn Field=@nameof(EmployeeModel.First_name) HeaderText="Imię" TextAlign="TextAlign.Left" Width="80"></GridColumn>
+            <GridColumn Field=@nameof(EmployeeModel.Last_name) HeaderText="Nazwisko" TextAlign="TextAlign.Left" Width="120"></GridColumn>
+            <GridColumn Field=@nameof(EmployeeModel.Email) HeaderText="E-mail" TextAlign="TextAlign.Left" Width="120"></GridColumn>
+            <GridColumn Field=@nameof(EmployeeModel.UserType) HeaderText="Rodzaj" TextAlign="TextAlign.Left" Width="80"></GridColumn>
+        </GridColumns>
+    </SfGrid>
 }
-
 
 @code {
 
     /// <summary>
     /// Strona wyświetlająca listę pracowników dla widoku menadżera/pracownika.
     /// </summary>
-    public static List<BackendLibrary.Models.EmployeeModel> EmployeeList;
+    public static List<EmployeeModel> EmployeeList;
     public int length;
 
     protected override void OnInitialized()
     {
-        EmployeeList = BackendLibrary.DataAccess.EmployeeData.GetAllByCompanyId(WebApp.Pages.Login.UserLoggedIn.Company_id);
+        EmployeeList = EmployeeData.GetAllByCompanyId(WebApp.Pages.Login.UserLoggedIn.Company_id);
         length = EmployeeList.Count;
     }
 }

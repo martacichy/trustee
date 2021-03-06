@@ -1,31 +1,35 @@
 ﻿@page "/tasks"
 @inject NavigationManager NavigationManager
-@*@inject Microsoft.AspNetCore.Components.NavigationManager UriHelper*@
 
 <h3>Wszystkie zadania</h3>
 
 @* wyświetlanie przycisku do tworzenia nowych zadań *@
-@if (WebApp.Pages.Login.UserLoggedIn.If_manager == 1 || WebApp.Pages.Login.UserLoggedIn.If_manager == 2)
+@if (Login.UserLoggedIn.If_manager == 1 || Login.UserLoggedIn.If_manager == 2)
 {
     <div>
         <div class="search" style="float: left;">
             <button class="btn btn-primary" @onclick="AddNew">Dodaj zadanie</button>
         </div>
-    </div>  
+    </div>
 }
 
 <div class="search" style="float: right; width: auto;">
-    <label >Szukaj:</label>
+    <label>Szukaj:</label>
     <input type="text" @bind-value="searchStr" @onkeyup="@SearchOnEnter" />
 </div>
-<br/><br/>
+<br />
+<br />
 
 <div>
+    @*TODO - zaimplementować obsługę opcji z ContextMenu (głównie edit i delete)*@
     <SfGrid @ref="DefaultGrid"
             DataSource="TaskList"
             AllowPaging="true"
             AllowSorting="true"
-            AllowFiltering="true">
+            AllowFiltering="true"
+            ContextMenuItems="@(new List<object>()
+            { "AutoFit", "AutoFitAll", "Copy", "Edit", "Save", "Cancel"})">
+        >
         <GridSearchSettings IgnoreCase="true"></GridSearchSettings>
         <GridFilterSettings EnableCaseSensitivity="false"></GridFilterSettings>
         <GridPageSettings PageSize="12"></GridPageSettings>
@@ -57,11 +61,11 @@
     private SfGrid<TaskModel> DefaultGrid;
     private Boolean addButtonClicked;
     private string searchStr;
-    public static List<BackendLibrary.Models.TaskModel> TaskList;
+    public static List<TaskModel> TaskList;
 
     protected override void OnInitialized()
     {
-        TaskList = BackendLibrary.DataAccess.TaskData.GetAllByCompanyId(WebApp.Pages.Login.UserLoggedIn.Company_id);
+        TaskList = TaskData.GetAllByCompanyId(WebApp.Pages.Login.UserLoggedIn.Company_id);
         addButtonClicked = false;
     }
 
