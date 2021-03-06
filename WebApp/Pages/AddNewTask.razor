@@ -1,4 +1,5 @@
 ﻿@page "/add-task"
+
 @inject NavigationManager NavigationManager
 @using Syncfusion.Blazor.DropDowns
 @inject NavigationManager uriHelper;
@@ -60,7 +61,8 @@
     private List<BackendLibrary.Models.LabelModel> labelsInDb = BackendLibrary.DataAccess.LabelData.GetAllLabels();
     private string[] selectedLabels { get; set; } = new string[] { };
 
-    /// <summary> Dodaje do bazy danych taska, ktory zostal nakreślony w gui aplikacji
+    /// <summary>
+    /// Dodaje do bazy danych zadanie, które zostało nakreślone w gui aplikacji.
     /// </summary>
     private void SaveTask()
     {
@@ -75,8 +77,9 @@
     }
 
     /// <summary>
-    /// zapisuje etykiety do bazy ktorych jeszcze nie ma w bazie. Trzeba jeszcze pobrać company_id, label_type_id i opis(czy w ogóle będzie opis etykiet? No chyba nie w prototypie)
+    /// Zapisuje do bazy etykiety, których jeszcze nie ma w bazie.
     /// </summary>
+    //TODO - Trzeba jeszcze pobrać company_id, label_type_id i opis(czy w ogóle będzie opis etykiet? No chyba nie w prototypie)
     private void SaveLabels()
     {
         for (int i = 0; i < selectedLabels.Length; i++)
@@ -90,7 +93,7 @@
     }
 
     /// <summary>
-    /// Sprawdza czy etykieta jest juz w bazie danychy
+    /// Sprawdza czy etykieta jest już w bazie danych.
     /// </summary>
     private bool IsSelectedLabelsContainsInDbLabels(string label)
     {

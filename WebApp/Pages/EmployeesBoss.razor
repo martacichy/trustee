@@ -1,5 +1,6 @@
 ﻿@page "/employees-b"
 @*dostęp do postrony tylko dla szefa*@
+
 @if (Login.UserLoggedIn.If_manager == 2)
 {
     <h1>Pracownicy</h1>
