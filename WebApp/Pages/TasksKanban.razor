@@ -12,16 +12,16 @@
 
     <KanbanColumns>
         <KanbanColumn HeaderText="Nierozpoczęte" KeyField="@(new List<string>() { "Nierozpoczete" })"
-                      TransitionColumns="@(new List<string>() { "Nierozpoczete" })"></KanbanColumn>
+                      AllowToggle="true" AllowDrag="false"></KanbanColumn>
 
         <KanbanColumn HeaderText="W toku" KeyField="@(new List<string>() { "W toku" })"
-                      TransitionColumns="@(new List<string>() { "W toku" })"></KanbanColumn>
-
-        <KanbanColumn HeaderText="Anulowane" KeyField="@(new List<string>() { "Anulowane" })"
-                      TransitionColumns="@(new List<string>() { "Anulowane" })"></KanbanColumn>
+                      AllowToggle="true" AllowDrag="false"></KanbanColumn>
 
         <KanbanColumn HeaderText="Zakończone" KeyField="@(new List<string>() { "Zakonczone" })"
-                      TransitionColumns="@(new List<string>() { "Zakonczone" })"></KanbanColumn>
+                      AllowToggle="true" AllowDrag="false"></KanbanColumn>
+
+        <KanbanColumn HeaderText="Anulowane" KeyField="@(new List<string>() { "Anulowane" })"
+                      AllowToggle="true" IsExpanded="false" AllowDrag="false"></KanbanColumn>
     </KanbanColumns>
 </SfKanban>
 
@@ -31,14 +31,10 @@
 
     protected override void OnInitialized()
     {
-        /* // taski tylko zalogowanego pracownika
         AllTasks = TaskData.GetAllByCompanyId(WebApp.Pages.Login.UserLoggedIn.Company_id);
         MyTasks = EmployeeTaskData.GetAllLabelsByEmployeeId(WebApp.Pages.Login.UserLoggedIn.Employee_id);
 
         FilteredTasks = AllTasks.Where(x => MyTasks.Any(z => x.Task_id == z.Task_id)).ToList();
-        */
-
-        FilteredTasks = TaskData.GetAllByCompanyId(WebApp.Pages.Login.UserLoggedIn.Company_id);
     }
 
     private void OnDialogOpen(DialogOpenEventArgs<TaskModel> args)
@@ -50,4 +46,6 @@
     {
         // zapisanie modelu lub id taska i przejście do strony podglądu
     }
+
+    //TODO - obsługa DragStart i DragStop (<KanbanEvents/>)
 }
