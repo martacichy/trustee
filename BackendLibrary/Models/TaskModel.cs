@@ -40,6 +40,7 @@ namespace BackendLibrary.Models
             Status = status;
             Auto_assigned = auto_assigned;
         }
-        
+
+		public TaskModel() { }
     }
 }

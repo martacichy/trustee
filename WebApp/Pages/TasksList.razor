@@ -8,13 +8,20 @@
 @if (Login.UserLoggedIn.If_manager == 1 || Login.UserLoggedIn.If_manager == 2)
 {
     <div>
-        <div class="search" style="float: left;">
-            <button class="btn btn-primary" @onclick="AddNew">Dodaj zadanie</button>
+        <div class="actionBtn">
+            <button class="btn btn-primary" @onclick="AddTask">Dodaj zadanie</button>
+        </div>
+        <div class="actionBtn">
+            <button class="btn btn-primary" @onclick="EditTask">Edytuj wybrane zadanie</button>
+        </div>
+        <div class="actionBtn">
+            <button class="btn btn-primary" id="deleteBtn" @onclick="DeleteTask">Usuń wybrane zadanie</button>
         </div>
     </div>
+
 }
 
-<div class="search" style="float: right; width: auto;">
+<div class="actionBtn" style="float: right; width: auto;">
     <label>Szukaj:</label>
     <input type="text" @bind-value="searchStr" @onkeyup="@SearchOnEnter" />
 </div>
@@ -28,16 +35,18 @@
             AllowPaging="true"
             AllowSorting="true"
             AllowFiltering="true"
+            AllowSelection="true"
             ContextMenuItems="@(new List<object>()
-            { "AutoFit", "AutoFitAll", "Copy", "Edit", "Save", "Cancel"})">
-        >
+            { "AutoFit", "AutoFitAll", "SortDescending", "SortAscending"})">
+
         <GridSearchSettings IgnoreCase="true"></GridSearchSettings>
+        <GridSelectionSettings EnableToggle="true"></GridSelectionSettings>
+        <GridEvents RowSelected="RowSelectHandler" RowDeselected="RowDeselectHandler" TValue="TaskModel"></GridEvents>
         <GridFilterSettings EnableCaseSensitivity="false"></GridFilterSettings>
         <GridPageSettings PageSize="12"></GridPageSettings>
-        <GridSelectionSettings CheckboxOnly="true" PersistSelection="true"></GridSelectionSettings>
 
         <GridColumns>
-            <GridColumn Field=@nameof(TaskModel.Task_id) HeaderText="ID" TextAlign="TextAlign.Left" Width="50"></GridColumn>
+            <GridColumn Field=@nameof(TaskModel.Task_id) IsPrimaryKey="true" HeaderText="ID" TextAlign="TextAlign.Left" Width="50"></GridColumn>
             <GridColumn Field=@nameof(TaskModel.Name) HeaderText="Nazwa" TextAlign="TextAlign.Left" Width="250"></GridColumn>
             <GridColumn Field=@nameof(TaskModel.Status) HeaderText="Status" TextAlign="TextAlign.Left" Width="120"></GridColumn>
             <GridColumn Field=@nameof(TaskModel.Start_time) HeaderText="Data rozpoczęcia" Format="d" Type="ColumnType.Date"
@@ -45,29 +54,28 @@
             <GridColumn Field=@nameof(TaskModel.Deadline) HeaderText="Deadline" Format="d" Type="ColumnType.Date"
                         TextAlign="TextAlign.Left" Width="120"></GridColumn>
         </GridColumns>
-
     </SfGrid>
 </div>
 
-<style>
-    .search {
-        width: 200px;
-        display: inline-block;
-        white-space: nowrap;
-    }
-</style>
-
-
 @code {
     private SfGrid<TaskModel> DefaultGrid;
-    private Boolean addButtonClicked;
     private string searchStr;
-    public static List<TaskModel> TaskList;
+    private static List<TaskModel> TaskList;
+    public TaskModel SelectedTask;
 
     protected override void OnInitialized()
     {
         TaskList = TaskData.GetAllByCompanyId(WebApp.Pages.Login.UserLoggedIn.Company_id);
-        addButtonClicked = false;
+    }
+
+    public void RowSelectHandler(RowSelectEventArgs<TaskModel> args)
+    {
+        SelectedTask = args.Data;
+    }
+
+    public void RowDeselectHandler()
+    {
+        SelectedTask = null;
     }
 
     private void SearchOnEnter(KeyboardEventArgs e)
@@ -78,9 +86,42 @@
         }
     }
 
-    private void AddNew(MouseEventArgs e)
+    private void AddTask(MouseEventArgs e)
     {
         NavigationManager.NavigateTo("/add-task");
-        addButtonClicked = true;
+    }
+
+    private void EditTask(MouseEventArgs e)
+    {
+        if (SelectedTask != null)
+        {
+            //TODO - zmienic na /edit-task jak bedzie gotowa
+            NavigationManager.NavigateTo("/add-task");
+        }
+    }
+
+    private void DeleteTask(MouseEventArgs e)
+    {
+        if (SelectedTask != null)
+        {
+            //TODO - delete selected task
+        }
     }
 }
+
+<style>
+    .actionBtn {
+        margin-left: 10px;
+        display: inline-block;
+        float: left;
+    }
+
+    #deleteBtn {
+        background-color: #ff6363;
+        border-color: #ff6363;
+    }
+
+        #deleteBtn:hover {
+            border-color: #ff6363;
+        }
+</style>
