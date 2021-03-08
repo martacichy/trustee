@@ -1,7 +1,5 @@
 ﻿@page "/tasks"
 
-@inject NavigationManager NavigationManager
-
 <h3>Wszystkie zadania</h3>
 
 @* wyświetlanie przycisku do tworzenia nowych zadań *@
@@ -36,14 +34,17 @@
             AllowSorting="true"
             AllowFiltering="true"
             AllowSelection="true"
+            Locale="pl"
             ContextMenuItems="@(new List<object>()
             { "AutoFit", "AutoFitAll", "SortDescending", "SortAscending"})">
-
-        <GridSearchSettings IgnoreCase="true"></GridSearchSettings>
-        <GridSelectionSettings EnableToggle="true"></GridSelectionSettings>
-        <GridEvents RowSelected="RowSelectHandler" RowDeselected="RowDeselectHandler" TValue="TaskModel"></GridEvents>
         <GridFilterSettings EnableCaseSensitivity="false"></GridFilterSettings>
         <GridPageSettings PageSize="12"></GridPageSettings>
+        <GridSearchSettings IgnoreCase="true"></GridSearchSettings>
+        <GridSelectionSettings EnableToggle="true"></GridSelectionSettings>
+        <GridEvents TValue="TaskModel"
+                    RowSelected="RowSelectHandler"
+                    RowDeselected="RowDeselectHandler">
+        </GridEvents>
 
         <GridColumns>
             <GridColumn Field=@nameof(TaskModel.Task_id) IsPrimaryKey="true" HeaderText="ID" TextAlign="TextAlign.Left" Width="50"></GridColumn>

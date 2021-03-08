@@ -16,13 +16,17 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Syncfusion.Blazor" Version="18.4.0.44" />
-    <PackageReference Include="Syncfusion.Blazor.Themes" Version="18.4.0.44" />
+    <PackageReference Include="Syncfusion.Blazor" Version="18.4.0.46" />
+    <PackageReference Include="Syncfusion.Blazor.Themes" Version="18.4.0.46" />
     <PackageReference Include="System.Text.Json" Version="5.0.1" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\BackendLibrary\BackendLibrary.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Resources\" />
   </ItemGroup>
 
 </Project>

@@ -52,7 +52,7 @@ namespace BackendLibrary.DataAccess {
         {
             using (IDbConnection connection = new MySqlConnection(connectionString))
             {
-                string sql = $"SELECT * FROM database06.task where Company_id = {company_id}";
+                string sql = $"select * from database06.task where Company_id = {company_id}";
                 var data = connection.Query<TaskModel>(sql).ToList();
 
                 return data;
