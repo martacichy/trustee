@@ -1,17 +1,25 @@
 ﻿@inherits LayoutComponentBase
-
+@inject NavigationManager NavigationManager
 <div class="sidebar">
-        <NavMenu />
+    <NavMenu />
 </div>
 
 <div class="main">
-    <div class="top-row px-sm-4" style="height: 50px;">
+    <div class="top-row px-4">
+        <div style="">
+            <button href="/" class="btn btn-primary" onclick="@Logout">Wyloguj się</button>
+        </div>
         
-    </div>
-
-    <div class="content px-4">
-        @Body
+       @Body
     </div>
 </div>
 
+@code {
 
+    private void Logout(MouseEventArgs e)
+    {
+        NavigationManager.NavigateTo("/");
+        
+    }
+
+}

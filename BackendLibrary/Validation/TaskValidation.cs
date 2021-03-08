@@ -14,11 +14,14 @@ namespace BackendLibrary.Validation
 
         [Required(ErrorMessage = "Pole 'Opis' jest obowiązkowe!")]
         [StringLength(500,
-        ErrorMessage = "Pole 'Opis' nie może mieć więcej niż 30 znaków.")]
+        ErrorMessage = "Pole 'Opis' nie może mieć więcej niż 500 znaków.")]
         public string description { get; set; }
 
 
         public DateTime start_time { get; set; }
+
+
+        [DateDeadlineAttribute(ErrorMessage = "Deadline nie może być wcześniejszy niż dzisiaj.")]
         public DateTime deadline { get; set; }
         
         [Required(ErrorMessage = "Pole 'Status' jest obowiązkowe!")]
@@ -27,4 +30,12 @@ namespace BackendLibrary.Validation
         
         public int auto_assigned { get; set; }
     }
+    [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field | AttributeTargets.Parameter, AllowMultiple = false)]
+    public class DateDeadlineAttribute: ValidationAttribute {
+        public override bool IsValid(object value) {
+            return (DateTime)value >= DateTime.Today;
+        }
+    }
+
+   
 }

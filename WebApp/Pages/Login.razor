@@ -41,29 +41,51 @@
 
 @code{
 
-    // tworzmy obiekt do przechowywania informacji o zalogowanym uzytkowniku
-    public static BackendLibrary.Models.EmployeeModel UserLoggedIn = new BackendLibrary.Models.EmployeeModel();
+            SfToast ToastObj;
+            private string ToastContent { get; set; } = "Błędne dane logowania.";
 
-    private BackendLibrary.Validation.LoginValidation Log = new BackendLibrary.Validation.LoginValidation();
+            // tworzmy obiekt do przechowywania informacji o zalogowanym uzytkowniku
+            public static BackendLibrary.Models.EmployeeModel UserLoggedIn = new BackendLibrary.Models.EmployeeModel();
 
-    private void LoginSubmit()
+            private BackendLibrary.Validation.LoginValidation Log = new BackendLibrary.Validation.LoginValidation();
+
+            private void LoginSubmit()
+            {
+                // tutaj nastepuje przypisanie wszystkich wartosci do obiektu UserLoggedIn, zgodnie z podanym loginem i haslem
+                UserLoggedIn = BackendLibrary.DataAccess.EmployeeData.LoginEmployee(Log.Login, Log.Password);
+
+
+            
+           
+
+        if (Log.Login != null && Log.Password != null)
+        {
+            try
+            {
+                // 0 jest dla zyklego pracownika
+                if (UserLoggedIn.If_manager == 0)
+                {
+                    NavigationManager.NavigateTo("/kanban");
+                }
+
+                // 1 jest dla managera a 2 dla bosa
+                else if (UserLoggedIn.If_manager == 1 || UserLoggedIn.If_manager == 2)
+                {
+                    NavigationManager.NavigateTo("/kanban");
+                }
+            }
+
+            catch(Exception ex)
     {
-        // tutaj nastepuje przypisanie wszystkich wartosci do obiektu UserLoggedIn, zgodnie z podanym loginem i haslem
-        UserLoggedIn = BackendLibrary.DataAccess.EmployeeData.LoginEmployee(Log.Login, Log.Password);
+        Log.invalidData = true;
+        ToastObj.Show();
+    }
 
-        if (UserLoggedIn.If_manager == -1) {
-            //TODO tu jest zle haslo albo login trzeba to wyswietlic, potem ogarne :)
         }
+    }
 
-        // 0 jest dla zyklego pracownika
-        else if (UserLoggedIn.If_manager == 0) {
-            NavigationManager.NavigateTo("/kanban");
-        }
-
-        // 1 jest dla managera a 2 dla bosa
-        else if (UserLoggedIn.If_manager == 1 || UserLoggedIn.If_manager == 2) {
-            NavigationManager.NavigateTo("/kanban");
-        }
+    private void HandleValidSubmit()
+    {
 
     }
 }
