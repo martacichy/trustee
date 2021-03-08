@@ -6,20 +6,19 @@
 
 <div class="main">
     <div class="top-row px-4">
-        <div style="">
-            <button href="/" class="btn btn-primary" onclick="@Logout">Wyloguj się</button>
-        </div>
-        
-       @Body
+        <button class="btn btn-primary" @onclick="@Logout">Wyloguj się</button>
+    </div>
+    <div>
+        @Body
     </div>
 </div>
 
 @code {
 
-    private void Logout(MouseEventArgs e)
+    private void Logout()
     {
         NavigationManager.NavigateTo("/");
-        
+
     }
 
 }
