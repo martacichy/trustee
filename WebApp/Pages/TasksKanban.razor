@@ -1,6 +1,6 @@
 ﻿@page "/kanban"
 
-<h3>Twoje zadania</h3>
+<h3> Twoje zadania</h3>
 
 <SfKanban TValue="BackendLibrary.Models.TaskModel" KeyField="Status" DataSource="@FilteredTasks" Locale="pl">
     <KanbanCardSettings HeaderField="Task_id" ContentField="Description"></KanbanCardSettings>

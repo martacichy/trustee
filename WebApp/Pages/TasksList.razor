@@ -16,7 +16,6 @@
             <button class="btn btn-primary" id="deleteBtn" @onclick="DeleteTask">Usuń wybrane zadanie</button>
         </div>
     </div>
-
 }
 
 <div class="actionBtn" style="float: right; width: auto;">
@@ -38,7 +37,7 @@
             ContextMenuItems="@(new List<object>()
             { "AutoFit", "AutoFitAll", "SortDescending", "SortAscending"})">
         <GridFilterSettings EnableCaseSensitivity="false"></GridFilterSettings>
-        <GridPageSettings PageSize="12"></GridPageSettings>
+        <GridPageSettings PageSize="9"></GridPageSettings>
         <GridSearchSettings IgnoreCase="true"></GridSearchSettings>
         <GridSelectionSettings EnableToggle="true"></GridSelectionSettings>
         <GridEvents TValue="TaskModel"
