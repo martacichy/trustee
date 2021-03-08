@@ -1,0 +1,226 @@
+﻿@page "/task-details"
+@inject NavigationManager NavigationManager
+
+<h3>Szczegóły: </h3>
+
+@*@<div>
+        <div class="search" style="float: right;">
+            <button class="btn btn-primary" @onclick="Edit_name">Edytuj</button>
+        </div>
+    </div>
+*@
+
+@* wyswietlanie nazwy wybranego taska*@
+<div>
+    <SfGrid @ref="DefaultGrid1"
+            DataSource="Selected_Task"
+            AllowPaging="false"
+            AllowSorting="false"
+            AllowFiltering="false">
+        <GridSearchSettings IgnoreCase="true"></GridSearchSettings>
+        <GridFilterSettings EnableCaseSensitivity="false"></GridFilterSettings>
+        <GridPageSettings PageSize="12"></GridPageSettings>
+        <GridSelectionSettings CheckboxOnly="true" PersistSelection="true"></GridSelectionSettings>
+
+        <GridColumns>
+            <GridColumn Field=@nameof(TaskModel.Name) HeaderText="Nazwa" TextAlign="TextAlign.Center" Width="250"></GridColumn>
+        </GridColumns>
+
+    </SfGrid>
+</div>
+
+@* wyswietlanie opisu wybranego taska*@
+<div>
+    <SfGrid @ref="DefaultGrid1"
+            DataSource="Selected_Task"
+            AllowPaging="false"
+            AllowSorting="false"
+            AllowFiltering="false">
+        <GridSearchSettings IgnoreCase="true"></GridSearchSettings>
+        <GridFilterSettings EnableCaseSensitivity="false"></GridFilterSettings>
+        <GridPageSettings PageSize="12"></GridPageSettings>
+        <GridSelectionSettings CheckboxOnly="true" PersistSelection="true"></GridSelectionSettings>
+
+        <GridColumns>
+            <GridColumn Field=@nameof(TaskModel.Description) HeaderText="Opis" TextAlign="TextAlign.Center" Width="250"></GridColumn>
+        </GridColumns>
+
+    </SfGrid>
+</div>
+
+@* wyswietlanie daty rozpoczecia wybranego taska*@
+<div>
+    <SfGrid @ref="DefaultGrid1"
+            DataSource="Selected_Task"
+            AllowPaging="false"
+            AllowSorting="false"
+            AllowFiltering="false">
+        <GridSearchSettings IgnoreCase="true"></GridSearchSettings>
+        <GridFilterSettings EnableCaseSensitivity="false"></GridFilterSettings>
+        <GridPageSettings PageSize="12"></GridPageSettings>
+        <GridSelectionSettings CheckboxOnly="true" PersistSelection="true"></GridSelectionSettings>
+
+        <GridColumns>
+            <GridColumn Field=@nameof(TaskModel.Start_time) HeaderText="Data rozpoczęcia" TextAlign="TextAlign.Center" Width="250"></GridColumn>
+        </GridColumns>
+
+    </SfGrid>
+</div>
+
+@* wyswietlanie daty deadline'u wybranego taska*@
+<div>
+    <SfGrid @ref="DefaultGrid1"
+            DataSource="Selected_Task"
+            AllowPaging="false"
+            AllowSorting="false"
+            AllowFiltering="false">
+        <GridSearchSettings IgnoreCase="true"></GridSearchSettings>
+        <GridFilterSettings EnableCaseSensitivity="false"></GridFilterSettings>
+        <GridPageSettings PageSize="12"></GridPageSettings>
+        <GridSelectionSettings CheckboxOnly="true" PersistSelection="true"></GridSelectionSettings>
+
+        <GridColumns>
+            <GridColumn Field=@nameof(TaskModel.Deadline) HeaderText="Deadline" TextAlign="TextAlign.Center" Width="250"></GridColumn>
+        </GridColumns>
+
+    </SfGrid>
+</div>
+
+@* wyswietlanie statusu wykonania wybranego taska*@
+<div>
+    <SfGrid @ref="DefaultGrid1"
+            DataSource="Selected_Task"
+            AllowPaging="false"
+            AllowSorting="false"
+            AllowFiltering="false">
+        <GridSearchSettings IgnoreCase="true"></GridSearchSettings>
+        <GridFilterSettings EnableCaseSensitivity="false"></GridFilterSettings>
+        <GridPageSettings PageSize="12"></GridPageSettings>
+        <GridSelectionSettings CheckboxOnly="true" PersistSelection="true"></GridSelectionSettings>
+
+        <GridColumns>
+            <GridColumn Field=@nameof(TaskModel.Status) HeaderText="Status wykonania" TextAlign="TextAlign.Center" Width="250"></GridColumn>
+        </GridColumns>
+
+    </SfGrid>
+</div>
+
+
+@*<div>
+        <div class="search" style="float: right;">
+            <button class="btn btn-primary" @onclick="Edit_name">Edytuj</button>
+        </div>
+    </div>
+
+    <table class='table'>
+        <thead>
+            <tr>
+                <th>
+                    <font size="+1">
+                        <p style="text-align:center;"> Nazwa </p>
+                    </font>
+                </th>
+            </tr>
+            <tr>
+                <th>Tutaj dane z bazy</th>
+            </tr>
+        </thead>
+    </table>
+
+    <div>
+        <div class="search" style="float: right;">
+            <button class="btn btn-primary" @onclick="Edit_name">Edytuj</button>
+        </div>
+    </div>
+
+    <table class='table'>
+        <thead>
+            <tr>
+                <th>
+                    <font size="+1">
+                        <p style="text-align:center;"> Opis </p>
+                    </font>
+                </th>
+            </tr>
+            <tr>
+                <th>Tutaj dane z bazy</th>
+            </tr>
+        </thead>
+    </table>
+
+    <table class='table'>
+        <thead>
+            <tr>
+                <th>
+                    <font size="+1">
+                        <p style="text-align:center;"> Data rozpoczęcia </p>
+                    </font>
+                </th>
+            </tr>
+            <tr>
+                <th>Tutaj dane z bazy</th>
+            </tr>
+        </thead>
+    </table>
+
+    <table class='table'>
+        <thead>
+            <tr>
+                <th>
+                    <font size="+1">
+                        <p style="text-align:center;"> Deadline </p>
+                    </font>
+                </th>
+            </tr>
+            <tr>
+                <th>Tutaj dane z bazy</th>
+            </tr>
+        </thead>
+    </table>
+
+    <table class='table'>
+        <thead>
+            <tr>
+                <th>
+                    <font size="+1">
+                        <p style="text-align:center;"> Status wykonania </p>
+                    </font>
+                </th>
+            </tr>
+            <tr>
+                <th>Tutaj dane z bazy</th>
+            </tr>
+        </thead>
+    </table>
+
+*@
+
+
+@code {
+    private SfGrid<BackendLibrary.Models.TaskModel> DefaultGrid1;
+    public static List<BackendLibrary.Models.TaskModel> Selected_Task; // jednoelementowa lista, zawierajaca uprzednio wybrany task
+    private Boolean addButtonClicked;
+
+    //funkcje do przycisków, ktore maja byc odpowiedzialne za edytowanie poszczególnych rzeczy w zadaniu
+    private void Edit_name(MouseEventArgs e)
+    {
+        //cos
+    }
+    private void Edit_description(MouseEventArgs e)
+    {
+        //cos
+    }
+    private void Edit_starttime(MouseEventArgs e)
+    {
+        //cos
+    }
+    private void Edit_deadline(MouseEventArgs e)
+    {
+        //cos
+    }
+    private void Edit_status(MouseEventArgs e)
+    {
+        //cos
+    }
+
+}
