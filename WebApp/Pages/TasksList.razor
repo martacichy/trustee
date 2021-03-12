@@ -5,17 +5,20 @@
 @* wyświetlanie przycisku do tworzenia nowych zadań *@
 @if (Login.UserLoggedIn.If_manager == 1 || Login.UserLoggedIn.If_manager == 2)
 {
-    <div>
-        <div class="actionBtn">
-            <button class="btn btn-primary" @onclick="AddTask">Dodaj zadanie</button>
-        </div>
-        <div class="actionBtn">
-            <button class="btn btn-primary" @onclick="EditTask">Edytuj wybrane zadanie</button>
-        </div>
-        <div class="actionBtn">
-            <button class="btn btn-primary" id="deleteBtn" @onclick="DeleteTask">Usuń wybrane zadanie</button>
-        </div>
+<div>
+    <div class="actionBtn">
+        <button class="btn btn-primary" @onclick="AddTask">Dodaj zadanie</button>
     </div>
+    <div class="actionBtn">
+        <button class="btn btn-primary" @onclick="EditTask">Edytuj wybrane zadanie</button>
+    </div>
+    <div class="actionBtn">
+        <button class="btn btn-primary" id="deleteBtn" @onclick="DeleteTask">Usuń wybrane zadanie</button>
+    </div>
+    <div class="actionBtn">
+        <button class="btn btn-primary"@onclick="DisplayTaskDetails">Wyświetl szczegóły wybranego taska</button>
+    </div>
+</div>
 }
 
 <div class="actionBtn" style="float: right; width: auto;">
@@ -61,7 +64,7 @@
     private SfGrid<TaskModel> DefaultGrid;
     private string searchStr;
     private static List<TaskModel> TaskList;
-    public TaskModel SelectedTask;
+    public static TaskModel SelectedTask = new TaskModel();
 
     protected override void OnInitialized()
     {
@@ -107,21 +110,29 @@
             //TODO - delete selected task
         }
     }
+
+    private void DisplayTaskDetails(MouseEventArgs e)
+    {
+        if (SelectedTask != null)
+        {
+            NavigationManager.NavigateTo("/task-details");
+        }
+    }
 }
 
-<style>
-    .actionBtn {
-        margin-left: 10px;
-        display: inline-block;
-        float: left;
-    }
+    <style>
+        .actionBtn {
+            margin-left: 10px;
+            display: inline-block;
+            float: left;
+        }
 
-    #deleteBtn {
-        background-color: #ff6363;
-        border-color: #ff6363;
-    }
-
-        #deleteBtn:hover {
+        #deleteBtn {
+            background-color: #ff6363;
             border-color: #ff6363;
         }
-</style>
+
+            #deleteBtn:hover {
+                border-color: #ff6363;
+            }
+    </style>
