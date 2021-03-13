@@ -41,7 +41,18 @@ namespace BackendLibrary.DataAccess {
         {
             using (IDbConnection connection = new MySqlConnection(connectionString))
             {
-                string sql = "SELECT max(Label_id) from database06.label";
+                string sql = $"SELECT max(Label_id) from database06.label";
+                int id = connection.Query<int>(sql).First();
+
+                return id;
+            }
+        }
+
+        public static int GetIdByName(String name)
+        {
+            using (IDbConnection connection = new MySqlConnection(connectionString))
+            {           
+                string sql = $"SELECT Label_id from database06.label where name = '{name}'";
                 int id = connection.Query<int>(sql).First();
 
                 return id;

@@ -60,6 +60,8 @@
     private BackendLibrary.Validation.TaskValidation Task = new BackendLibrary.Validation.TaskValidation();
     private List<BackendLibrary.Models.LabelModel> labelsInDb = BackendLibrary.DataAccess.LabelData.GetAllLabels();
     private string[] selectedLabels { get; set; } = new string[] { };
+    private int lastTaskId;
+    private int labelIdByName;
 
     /// <summary>
     /// Dodaje do bazy danych zadanie, które zostało nakreślone w gui aplikacji.
@@ -72,6 +74,7 @@
             new BackendLibrary.Models.TaskModel(WebApp.Pages.Login.UserLoggedIn.Company_id, Task.name, Task.description, Task.start_time, Task.deadline, Task.status, Task.auto_assigned);
             SaveLabels();
             BackendLibrary.DataAccess.TaskData.AddTask(newTask);
+            SaveTaskLabel();
             ToastObj.Show();
         }
     }
@@ -105,6 +108,16 @@
             }
         }
         return false;
+    }
+
+    private void SaveTaskLabel()
+    {
+        lastTaskId = BackendLibrary.DataAccess.TaskData.GetMaxId();
+        for (int i = 0; i < selectedLabels.Length; i++) {
+            labelIdByName = BackendLibrary.DataAccess.LabelData.GetIdByName(selectedLabels[i]);
+            BackendLibrary.Models.TaskLabelModel taskLabel = new BackendLibrary.Models.TaskLabelModel(lastTaskId, labelIdByName);
+            BackendLibrary.DataAccess.TaskLabelData.AddTaskLabel(taskLabel);
+        }
     }
 }
 
