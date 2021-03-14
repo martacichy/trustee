@@ -83,13 +83,13 @@ namespace BackendLibrary.DataAccess {
 
             }
         }
-        public static void AddLabelOnlyWithName(LabelModel newLabel)
+        public static void AddLabelWithNameAndCompanyId(LabelModel newLabel)
         {
             using (IDbConnection connection = new MySqlConnection(connectionString))
             {
 
-                string sql = @"insert into database06.label (Name)
-                            values (@Name)";
+                string sql = @"insert into database06.label (Name, Company_Id)
+                            values (@Name, @Company_Id)";
 
                 connection.Execute(sql, newLabel);
 
