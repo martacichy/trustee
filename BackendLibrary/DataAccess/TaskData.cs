@@ -52,7 +52,7 @@ namespace BackendLibrary.DataAccess {
         {
             using (IDbConnection connection = new MySqlConnection(connectionString))
             {
-                string sql = "SELECT max(Task_id) from database06.task";
+                string sql = $"SELECT max(Task_id) from database06.task";
                 int id = connection.Query<int>(sql).First();
 
                 return id;

@@ -35,43 +35,81 @@
         <label for="IfAutoAssigned" class="control-label">Czy przydzielić automatycznie?</label>
         <input for="IfAutoAssigned" type="checkbox" class="form-control" @bind-value="Task.auto_assigned" />
     </div>
-
-    <div class="control_wrapper">
-        <label asp-for="etykiety" class="control-label">Etykiety</label>
-        <SfMultiSelect TValue="string[]" TItem="BackendLibrary.Models.LabelModel"
-                       @bind-Value="@selectedLabels"
-                       Placeholder="Szukaj..."
-                       DataSource="@labelsInDb" AllowFiltering="true" AllowCustomValue="true">
-            <MultiSelectFieldSettings Text="Name"> </MultiSelectFieldSettings>
-        </SfMultiSelect>
-    </div>
-
-    <div class="form-group">
-        <button type="submit" class="btn btn-block btn-info" data-dismiss="modal" @onclick="SaveTask">Zapisz</button>
-        <SfToast @ref="ToastObj" Title="Dodano nowe zadanie!" Timeout=3000 Content="@ToastContent">
-            <ToastPosition X="Right"></ToastPosition>
-        </SfToast>
-    </div>
 </EditForm>
+<div class="control_wrapper">
+    <label asp-for="etykiety" class="control-label">Etykiety</label>
+    <SfMultiSelect TValue="string[]" TItem="BackendLibrary.Models.LabelModel"
+                   @bind-Value="@selectedLabels"
+                   Placeholder="Szukaj..."
+                   DataSource="@labelsInDb" AllowFiltering="true" AllowCustomValue="true">
+        <MultiSelectFieldSettings Text="Name"> </MultiSelectFieldSettings>
+    </SfMultiSelect>
+</div>
+
+<div class="col-lg-12 control-section multiselect-height">
+    <div class="control-wrapper multi-select-parent">
+        <div class="padding-top">
+            <label asp-for="pracownicy" class="control-label">Pracownicy</label>
+            <SfMultiSelect TValue="int[]" TItem="BackendLibrary.Models.EmployeeModel"
+                           @bind-Value="@selectedEmployeesId"
+                           Placeholder="Wybierz..."
+                           DataSource="@employees" AllowFiltering="true">
+                <MultiSelectTemplates TItem="BackendLibrary.Models.EmployeeModel">
+                    <ItemTemplate>
+                        <div>
+                            <div class="ename">
+                                @((context as BackendLibrary.Models.EmployeeModel).First_name)
+                                @((context as BackendLibrary.Models.EmployeeModel).Last_name)
+                            </div>
+                        </div>
+                    </ItemTemplate>
+                    <ValueTemplate>
+                        <div class="multiselect-width">
+                            <div class="name">
+                                @((context as BackendLibrary.Models.EmployeeModel).First_name)
+                                @((context as BackendLibrary.Models.EmployeeModel).Last_name)
+                            </div>
+                        </div>
+                    </ValueTemplate>                   
+                </MultiSelectTemplates>
+                <MultiSelectFieldSettings  Text="First_name" Value="Employee_id"></MultiSelectFieldSettings>                
+            </SfMultiSelect>
+        </div>
+    </div>
+</div>
+
+<div class="form-group">
+    <button type="submit" class="btn btn-block btn-info" data-dismiss="modal" @onclick="SaveTask">Zapisz</button>
+    <SfToast @ref="ToastObj" Title="Dodano nowe zadanie!" Timeout=3000 Content="@ToastContent">
+        <ToastPosition X="Right"></ToastPosition>
+    </SfToast>
+</div>
+
 
 @code {
     SfToast ToastObj;
     private string ToastContent { get; set; } = "Zadanie zostało pomyślnie dodane.";
     private BackendLibrary.Validation.TaskValidation Task = new BackendLibrary.Validation.TaskValidation();
-    private List<BackendLibrary.Models.LabelModel> labelsInDb = BackendLibrary.DataAccess.LabelData.GetAllLabels();
+    private List<BackendLibrary.Models.LabelModel> labelsInDb = BackendLibrary.DataAccess.LabelData.GetAllByCompanyId(WebApp.Pages.Login.UserLoggedIn.Company_id);
+    private List<BackendLibrary.Models.EmployeeModel> employees = BackendLibrary.DataAccess.EmployeeData.GetAllByCompanyId(WebApp.Pages.Login.UserLoggedIn.Company_id);
     private string[] selectedLabels { get; set; } = new string[] { };
+    private int[] selectedEmployeesId = new int[] { };
+    private int lastTaskId;
+    private int labelIdByName;
 
     /// <summary>
     /// Dodaje do bazy danych zadanie, które zostało nakreślone w gui aplikacji.
     /// </summary>
     private void SaveTask()
     {
-        if(Task.name != null && Task.description != null && Task.status != null)
+        if (Task.name != null && Task.description != null && Task.status != null)
         {
             BackendLibrary.Models.TaskModel newTask =
             new BackendLibrary.Models.TaskModel(WebApp.Pages.Login.UserLoggedIn.Company_id, Task.name, Task.description, Task.start_time, Task.deadline, Task.status, Task.auto_assigned);
             SaveLabels();
             BackendLibrary.DataAccess.TaskData.AddTask(newTask);
+            SaveTaskLabel();
+            AddEmployeeToTask();
             ToastObj.Show();
         }
     }
@@ -79,15 +117,15 @@
     /// <summary>
     /// Zapisuje do bazy etykiety, których jeszcze nie ma w bazie.
     /// </summary>
-    //TODO - Trzeba jeszcze pobrać company_id, label_type_id i opis(czy w ogóle będzie opis etykiet? No chyba nie w prototypie)
+    //TODO - Trzeba jeszcze pobrać label_type_id i opis(czy w ogóle będzie opis etykiet? No chyba nie w prototypie)
     private void SaveLabels()
     {
         for (int i = 0; i < selectedLabels.Length; i++)
         {
             if (!IsSelectedLabelsContainsInDbLabels(selectedLabels[i]))
             {
-                BackendLibrary.Models.LabelModel label = new BackendLibrary.Models.LabelModel(selectedLabels[i]);
-                BackendLibrary.DataAccess.LabelData.AddLabelOnlyWithName(label);
+                BackendLibrary.Models.LabelModel label = new BackendLibrary.Models.LabelModel(selectedLabels[i], WebApp.Pages.Login.UserLoggedIn.Company_id);
+                BackendLibrary.DataAccess.LabelData.AddLabelWithNameAndCompanyId(label);
             }
         }
     }
@@ -106,8 +144,31 @@
         }
         return false;
     }
+    /// <summary>
+    /// Przypisuje etykiety do dodanego zadania
+    /// </summary>
+    private void SaveTaskLabel()
+    {
+        lastTaskId = BackendLibrary.DataAccess.TaskData.GetMaxId();
+        for (int i = 0; i < selectedLabels.Length; i++)
+        {
+            labelIdByName = BackendLibrary.DataAccess.LabelData.GetIdByName(selectedLabels[i]);
+            BackendLibrary.Models.TaskLabelModel taskLabel = new BackendLibrary.Models.TaskLabelModel(lastTaskId, labelIdByName);
+            BackendLibrary.DataAccess.TaskLabelData.AddTaskLabel(taskLabel);
+        }
+    }
+    /// <summary>
+    /// Przypisuje pracowników do dodanego zadania
+    /// </summary>
+    private void AddEmployeeToTask()
+    {
+        for (int i = 0; i < selectedEmployeesId.Length; i++)
+        {           
+            BackendLibrary.Models.EmployeeTaskModel employeeTask = new BackendLibrary.Models.EmployeeTaskModel(lastTaskId, selectedEmployeesId[i], Task.status);
+            BackendLibrary.DataAccess.EmployeeTaskData.AddEmployeeTask(employeeTask);
+        }
+    }
 }
-
 <style>
     .control_wrapper {
         width: 350px;
@@ -115,10 +176,14 @@
         padding-top: 70px;
         padding-bottom: 70px;
     }
-
     .form-group {
         padding-top: 15px;
         width: 350px;
         margin: 0 auto;
+    }
+    .control-wrapper.multi-select-parent {
+        margin: 0 auto;
+        width: 350px;     
+        padding-top: 15px;
     }
 </style>

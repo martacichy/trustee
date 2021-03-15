@@ -60,6 +60,17 @@ namespace BackendLibrary.DataAccess
             }
         }
 
+        public static int GetIdByEmail(String email)
+        {
+            using (IDbConnection connection = new MySqlConnection(connectionString))
+            {
+                string sql = $"SELECT Employee_id from database06.employee where email = '{email}'";
+                int id = connection.Query<int>(sql).First();
+
+                return id;
+            }
+        }
+
         /// <summary> Zwraca listę wszystkich pracownikow danej firmy. </summary>
         public static List<EmployeeModel> GetAllByCompanyId(int company_id)
         {
@@ -77,7 +88,7 @@ namespace BackendLibrary.DataAccess
         {
             using (IDbConnection connection = new MySqlConnection(connectionString))
             {
-                string sql = "SELECT max(employee_id) from database06.employee";
+                string sql = $"SELECT max(employee_id) from database06.employee";
                 int id = connection.Query<int>(sql).First();
 
                 return id;
