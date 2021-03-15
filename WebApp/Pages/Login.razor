@@ -54,27 +54,14 @@
 
         if (Log.Login != null && Log.Password != null)
         {
-            try
+            if (UserLoggedIn.If_manager != -1)
             {
-                // 0 jest dla zyklego pracownika
-                if (UserLoggedIn.If_manager == 0)
-                {
-                    NavigationManager.NavigateTo("/kanban");
-                }
-
-                // 1 jest dla managera a 2 dla bosa
-                else if (UserLoggedIn.If_manager == 1 || UserLoggedIn.If_manager == 2)
-                {
-                    NavigationManager.NavigateTo("/kanban");
-                }
+                NavigationManager.NavigateTo("/kanban");
             }
-
-            catch (Exception ex)
+            else
             {
-
                 ToastObj.Show();
             }
-
         }
     }
 

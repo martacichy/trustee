@@ -35,13 +35,12 @@ namespace BackendLibrary.DataAccess
                 var sql = $"SELECT * FROM database06.employee WHERE login = '{login}' and password = '{password}'";
                 try
                 {
-                    var output = connection.Query<EmployeeModel>(sql).FirstOrDefault();
+                    var output = connection.Query<EmployeeModel>(sql).First();
                     return output;
                 }
                 catch (Exception)
                 {
-                    EmployeeModel errorEmployee = new EmployeeModel();
-                    errorEmployee.If_manager = -1;
+                    EmployeeModel errorEmployee = new EmployeeModel(-1);
 
                     return errorEmployee;
                 }
