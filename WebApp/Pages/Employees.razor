@@ -55,13 +55,18 @@
     /// </summary>
     public static List<EmployeeModel> EmployeeList;
     public int length;
-    private BackendLibrary.Validation.EmployeeValidation Employee;
+    private EmployeeValidation Employee;
     private Boolean visibility { get; set; }
     string inputValue, errorMessage;
 
     protected override void OnInitialized()
     {
-        EmployeeList = EmployeeData.GetAllByCompanyId(WebApp.Pages.Login.UserLoggedIn.Company_id);
+        if (Login.UserLoggedIn.If_manager == -1)
+        {
+            NavigationManager.NavigateTo("/");
+        }
+
+        EmployeeList = EmployeeData.GetAllByCompanyId(Login.UserLoggedIn.Company_id);
         length = EmployeeList.Count;
         inputValue = "";
         errorMessage = "";
@@ -73,12 +78,22 @@
         visibility = true;
     }
 
+    /// <summary>
+    /// Próba dodania do firmy pracownika o przekazanym adresie e-mail.
+    /// </summary>
     private void submitAdd()
     {
-        if (inputValue != "")
-        {
-            //TODO - dodanie pracownika
+        Boolean success = false;
 
+        int employeeId = EmployeeData.GetIdByEmail(inputValue);
+
+        if (employeeId > 0)
+        {
+            success = EmployeeData.SetCompanyForEmployee(employeeId, Login.UserLoggedIn.Company_id);
+        }
+
+        if (success)
+        {
             visibility = false;
             errorMessage = "";
             inputValue = "";

@@ -10,6 +10,7 @@
         public int If_manager { get; set; }
         public string Login { get; set; }
         public string Password { get; set; }
+
         public string UserType
         {
             get
@@ -45,6 +46,11 @@
             If_manager = if_manager;
             Login = login;
             Password = password;
+        }
+
+        public EmployeeModel(int if_manager)
+        {
+            If_manager = if_manager;
         }
 
         public EmployeeModel()

@@ -68,6 +68,11 @@
 
     protected override void OnInitialized()
     {
+        if (Login.UserLoggedIn.If_manager == -1)
+        {
+            NavigationManager.NavigateTo("/");
+        }
+
         TaskList = TaskData.GetAllByCompanyId(WebApp.Pages.Login.UserLoggedIn.Company_id);
     }
 

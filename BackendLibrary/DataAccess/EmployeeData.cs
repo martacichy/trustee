@@ -35,16 +35,30 @@ namespace BackendLibrary.DataAccess
                 var sql = $"SELECT * FROM database06.employee WHERE login = '{login}' and password = '{password}'";
                 try
                 {
-                    var output = connection.Query<EmployeeModel>(sql).FirstOrDefault();
+                    var output = connection.Query<EmployeeModel>(sql).First();
                     return output;
                 }
                 catch (Exception)
                 {
-                    EmployeeModel errorEmployee = new EmployeeModel();
-                    errorEmployee.If_manager = -1;
+                    EmployeeModel errorEmployee = new EmployeeModel(-1);
 
                     return errorEmployee;
                 }
+            }
+        }
+
+        /// <summary> Przypisuje dane id firmy danemu pracownikowi. </summary>
+        public static Boolean SetCompanyForEmployee(int employeeId, int companyId)
+        {
+            using (IDbConnection connection = new MySqlConnection(connectionString))
+            {
+                string sql = $"UPDATE database06.employee SET company_id = {companyId} WHERE employee_id = {employeeId}";
+                int rowsAffected = connection.Execute(sql);
+
+                if (rowsAffected == 0)
+                    return false;
+                else
+                    return true;
             }
         }
 
@@ -60,12 +74,13 @@ namespace BackendLibrary.DataAccess
             }
         }
 
-        public static int GetIdByEmail(String email)
+        /// <summary> Zwraca id pracownika o podanym mailu. </summary>
+        public static int GetIdByEmail(string email)
         {
             using (IDbConnection connection = new MySqlConnection(connectionString))
             {
                 string sql = $"SELECT Employee_id from database06.employee where email = '{email}'";
-                int id = connection.Query<int>(sql).First();
+                int id = connection.Query<int>(sql).FirstOrDefault();
 
                 return id;
             }

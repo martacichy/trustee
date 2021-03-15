@@ -11,6 +11,14 @@ namespace BackendLibrary.Tests.Tests
     [Order(4)]
     public class EmployeeDataTests : BaseTestClass
     {
+        [Fact, Order(4)]
+        public async void GetIdByMailTest()
+        {
+            var output = await Task.Run(() => DataAccess.EmployeeData.GetIdByEmail("nieistniejący mail"));
+
+            Assert.True(output == 0);
+        }
+
         [Fact, Order(3)]
         public async void GetEmployeesShouldReturnList()
         {
