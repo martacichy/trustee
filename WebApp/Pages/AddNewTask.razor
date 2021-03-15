@@ -97,6 +97,11 @@
 
     protected override void OnInitialized()
     {
+        if (Login.UserLoggedIn.If_manager == -1)
+        {
+            NavigationManager.NavigateTo("/");
+        }
+
         Task = new BackendLibrary.Validation.TaskValidation();
         labelsInDb = BackendLibrary.DataAccess.LabelData.GetAllByCompanyId(Login.UserLoggedIn.Company_id);
         employees = BackendLibrary.DataAccess.EmployeeData.GetAllByCompanyId(Login.UserLoggedIn.Company_id);

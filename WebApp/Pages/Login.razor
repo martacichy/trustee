@@ -41,18 +41,19 @@
             <ToastPosition X="Center"></ToastPosition>
         </SfToast>
     </div>
-
 </center>
 
 @code{
 
     SfToast ToastObj;
     private string ToastContent { get; set; } = "Błędne dane logowania.";
-
-    // tworzmy obiekt do przechowywania informacji o zalogowanym uzytkowniku
     public static BackendLibrary.Models.EmployeeModel UserLoggedIn = new BackendLibrary.Models.EmployeeModel();
-
     private BackendLibrary.Validation.LoginValidation Log = new BackendLibrary.Validation.LoginValidation();
+
+    protected override void OnInitialized()
+    {
+
+    }
 
     private void LoginSubmit()
     {

@@ -194,6 +194,11 @@
 
     protected override void OnInitialized()
     {
+        if (Login.UserLoggedIn.If_manager == -1)
+        {
+            NavigationManager.NavigateTo("/");
+        }
+
         ListOfTasks = TaskData.GetByIdList(WebApp.Pages.TasksList.SelectedTask.Task_id);
     }
 

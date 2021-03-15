@@ -31,6 +31,11 @@
 
     protected override void OnInitialized()
     {
+        if (Login.UserLoggedIn.If_manager == -1)
+        {
+            NavigationManager.NavigateTo("/");
+        }
+
         AllTasks = TaskData.GetAllByCompanyId(WebApp.Pages.Login.UserLoggedIn.Company_id);
         MyTasks = EmployeeTaskData.GetAllLabelsByEmployeeId(WebApp.Pages.Login.UserLoggedIn.Employee_id);
 

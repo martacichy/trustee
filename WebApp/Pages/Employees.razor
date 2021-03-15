@@ -50,9 +50,9 @@
 </SfGrid>
 
 @code {
-        /// <summary>
-        /// Strona wyświetlająca listę pracowników dla widoku menadżera/pracownika.
-        /// </summary>
+    /// <summary>
+    /// Strona wyświetlająca listę pracowników dla widoku menadżera/pracownika.
+    /// </summary>
     public static List<EmployeeModel> EmployeeList;
     public int length;
     private EmployeeValidation Employee;
@@ -61,6 +61,11 @@
 
     protected override void OnInitialized()
     {
+        if (Login.UserLoggedIn.If_manager == -1)
+        {
+            NavigationManager.NavigateTo("/");
+        }
+
         EmployeeList = EmployeeData.GetAllByCompanyId(Login.UserLoggedIn.Company_id);
         length = EmployeeList.Count;
         inputValue = "";

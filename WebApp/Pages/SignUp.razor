@@ -31,4 +31,13 @@
 <br />
 
 
+@code {
 
+    protected override void OnInitialized()
+    {
+        if (Login.UserLoggedIn.If_manager == -1)
+        {
+            NavigationManager.NavigateTo("/");
+        }
+    }
+}

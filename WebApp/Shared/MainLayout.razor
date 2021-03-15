@@ -15,10 +15,16 @@
 
 @code {
 
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        Pages.Login.UserLoggedIn.If_manager = -1;
+    }
+
     private void Logout()
     {
         NavigationManager.NavigateTo("/");
-
+        Pages.Login.UserLoggedIn.If_manager = -1;
     }
 
 }

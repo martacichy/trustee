@@ -1,7 +1,6 @@
 ﻿@page "/Edit-task"
 
 @inject NavigationManager NavigationManager
-@using Syncfusion.Blazor.DropDowns
 @inject NavigationManager uriHelper;
 
 <EditForm Model="@Task">
@@ -51,6 +50,11 @@
 
     protected override void OnInitialized()
     {
+        if (Login.UserLoggedIn.If_manager == -1)
+        {
+            NavigationManager.NavigateTo("/");
+        }
+
         Task = new BackendLibrary.Validation.TaskValidation();
     }
 
