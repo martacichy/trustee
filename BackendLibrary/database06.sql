@@ -47,6 +47,7 @@ CREATE TABLE IF NOT EXISTS `database06`.`Employee` (
   `password` VARCHAR(100) NULL,
   PRIMARY KEY (`employee_id`),
   UNIQUE INDEX `employee_id_UNIQUE` (`employee_id` ASC) VISIBLE,
+  UNIQUE KEY unique_email (`email` ASC) VISIBLE,
   INDEX `company_id_idx` (`company_id` ASC) VISIBLE,
   CONSTRAINT `company_id_employee`
     FOREIGN KEY (`company_id`)
