@@ -35,6 +35,13 @@
             <span class="col-12"></span>
         </div>
     </EditForm>
+
+    <div class="form-group">
+        <SfToast @ref="ToastObj" Title="Błędne dane logowania!" Timeout=2000 Content="@ToastContent">
+            <ToastPosition X="Center"></ToastPosition>
+        </SfToast>
+    </div>
+
 </center>
 
 @code{
