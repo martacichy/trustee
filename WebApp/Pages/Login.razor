@@ -47,7 +47,7 @@
 
     SfToast ToastObj;
     private string ToastContent { get; set; } = "Błędne dane logowania.";
-    public static BackendLibrary.Models.EmployeeModel UserLoggedIn = new BackendLibrary.Models.EmployeeModel();
+    public static BackendLibrary.Models.EmployeeModel UserLoggedIn = new BackendLibrary.Models.EmployeeModel() { If_manager = -1 };
     private BackendLibrary.Validation.LoginValidation Log = new BackendLibrary.Validation.LoginValidation();
 
     protected override void OnInitialized()
