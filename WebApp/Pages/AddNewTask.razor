@@ -50,8 +50,8 @@
     <div class="control-wrapper multi-select-parent">
         <div class="padding-top">
             <label asp-for="pracownicy" class="control-label">Pracownicy</label>
-            <SfMultiSelect TValue="string[]" TItem="BackendLibrary.Models.EmployeeModel"
-                           @bind-Value="@selectedEmployeesEmail"
+            <SfMultiSelect TValue="int[]" TItem="BackendLibrary.Models.EmployeeModel"
+                           @bind-Value="@selectedEmployeesId"
                            Placeholder="Wybierz..."
                            DataSource="@employees" AllowFiltering="true">
                 <MultiSelectTemplates TItem="BackendLibrary.Models.EmployeeModel">
@@ -72,7 +72,7 @@
                         </div>
                     </ValueTemplate>                   
                 </MultiSelectTemplates>
-                <MultiSelectFieldSettings  Value="Email"></MultiSelectFieldSettings>                
+                <MultiSelectFieldSettings  Text="First_name" Value="Employee_id"></MultiSelectFieldSettings>                
             </SfMultiSelect>
         </div>
     </div>
@@ -93,11 +93,9 @@
     private List<BackendLibrary.Models.LabelModel> labelsInDb = BackendLibrary.DataAccess.LabelData.GetAllByCompanyId(WebApp.Pages.Login.UserLoggedIn.Company_id);
     private List<BackendLibrary.Models.EmployeeModel> employees = BackendLibrary.DataAccess.EmployeeData.GetAllByCompanyId(WebApp.Pages.Login.UserLoggedIn.Company_id);
     private string[] selectedLabels { get; set; } = new string[] { };
-    //private List<BackendLibrary.Models.EmployeeModel> selectedEmployees = new List<BackendLibrary.Models.EmployeeModel>();
-    private string[] selectedEmployeesEmail = new string[] { };
+    private int[] selectedEmployeesId = new int[] { };
     private int lastTaskId;
     private int labelIdByName;
-    private int employeeId;
 
     /// <summary>
     /// Dodaje do bazy danych zadanie, które zostało nakreślone w gui aplikacji.
@@ -119,7 +117,7 @@
     /// <summary>
     /// Zapisuje do bazy etykiety, których jeszcze nie ma w bazie.
     /// </summary>
-    //TODO - Trzeba jeszcze pobrać company_id, label_type_id i opis(czy w ogóle będzie opis etykiet? No chyba nie w prototypie)
+    //TODO - Trzeba jeszcze pobrać label_type_id i opis(czy w ogóle będzie opis etykiet? No chyba nie w prototypie)
     private void SaveLabels()
     {
         for (int i = 0; i < selectedLabels.Length; i++)
@@ -164,11 +162,9 @@
     /// </summary>
     private void AddEmployeeToTask()
     {
-        for (int i = 0; i < selectedEmployeesEmail.Length; i++)
-        {
-            //labelIdByName = BackendLibrary.DataAccess.LabelData.GetIdByName(selectedLabels[i]);
-            employeeId = BackendLibrary.DataAccess.EmployeeData.GetIdByEmail(selectedEmployeesEmail[i]);
-            BackendLibrary.Models.EmployeeTaskModel employeeTask = new BackendLibrary.Models.EmployeeTaskModel(lastTaskId, employeeId, Task.status);
+        for (int i = 0; i < selectedEmployeesId.Length; i++)
+        {           
+            BackendLibrary.Models.EmployeeTaskModel employeeTask = new BackendLibrary.Models.EmployeeTaskModel(lastTaskId, selectedEmployeesId[i], Task.status);
             BackendLibrary.DataAccess.EmployeeTaskData.AddEmployeeTask(employeeTask);
         }
     }
