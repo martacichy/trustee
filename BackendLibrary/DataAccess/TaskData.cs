@@ -35,6 +35,18 @@ namespace BackendLibrary.DataAccess {
             }
         }
 
+        /// <summary> Zwraca jednoelementowa liste, zawierajaca jeden task, zgodny z przekazanym ID, funkcja stworzona specjalnie do szczegolow zadania </summary>
+        public static List<TaskModel> GetByIdList(int task_id)
+        {
+            using (IDbConnection connection = new MySqlConnection(connectionString))
+            {
+                string sql = $"SELECT * FROM database06.task WHERE Task_id = {task_id}";
+                var data = connection.Query<TaskModel>(sql).ToList();
+
+                return data;
+            }
+        }
+
         /// <summary> Zwraca autowygenerowane Id w ostatnio wykonanym insercie.</summary>
         public static int GetMaxId()
         {
@@ -79,6 +91,18 @@ namespace BackendLibrary.DataAccess {
                             values (@Company_id, @Name, @Description, @Start_time, @Deadline, @Status, @Auto_assigned)";
 
                 connection.Execute(sql, newTask);
+            }
+        }
+
+        /// <summary> Aktualizuje wybranego taska o nowe wartosci. </summary>
+        public static void UpdateTask(TaskModel updatedTask)
+        {
+            using (IDbConnection connection = new MySqlConnection(connectionString))
+            {
+                string sql = @"UPDATE database06.task SET Name = @Name, Description = @Description, Start_time = @Start_time, Deadline = @Deadline, Status = @Status, Auto_assigned = @Auto_assigned
+                    WHERE task_id = @Task_id";
+
+                connection.Execute(sql, updatedTask);
             }
         }
 

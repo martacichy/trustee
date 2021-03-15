@@ -1,239 +1,209 @@
 ﻿@page "/task-details"
 @inject NavigationManager NavigationManager
 
-<h3>Szczegóły: </h3>
+<h3>Szczegóły:</h3>
 
-@*@<div>
-        <div class="search" style="float: right;">
-            <button class="btn btn-primary" @onclick="Edit_name">Edytuj</button>
+<div class="col-lg-12 control-section">
+    <div class="control_wrapper">
+        <div class="pane1">
+            <div id="pane-heading">Komentarze/Szczegóły/Etykiety</div>
+            <SfSplitter CssClass="out-splitter" Height="600px" Width="100%" SeparatorSize="4">
+                <SplitterPanes>
+                    <SplitterPane Size="25%" Min="60px">
+                        <ContentTemplate>
+                            <div class='splitter-default-content'><div>Tutaj maja byc komentarze</div></div>
+                        </ContentTemplate>
+                    </SplitterPane>
+                    <SplitterPane Size="50%" Min="60px">
+                        <ContentTemplate>
+                            <div class='splitter-default-content'>
+                                <div>
+                                    <div>
+                                        @if (Login.UserLoggedIn.If_manager == 1 || Login.UserLoggedIn.If_manager == 2)
+                                        {
+                                            <div class="actionBtn">
+                                                <button class="btn btn-primary" @onclick="EditTask">Edytuj</button>
+                                            </div>
+                                        }
+                                        <br />
+                                        <br />
+                                        @* wysietlanie nazwy wybranego taska*@
+                                        <div>
+                                            <SfGrid @ref="DefaultGrid1"
+                                                    DataSource="ListOfTasks"
+                                                    AllowPaging="false"
+                                                    AllowSorting="false"
+                                                    AllowFiltering="false">
+                                                <GridSearchSettings IgnoreCase="true"></GridSearchSettings>
+                                                <GridFilterSettings EnableCaseSensitivity="false"></GridFilterSettings>
+                                                <GridPageSettings PageSize="12"></GridPageSettings>
+                                                <GridSelectionSettings CheckboxOnly="true" PersistSelection="true"></GridSelectionSettings>
+
+                                                <GridColumns>
+                                                    <GridColumn Field=@nameof(TaskModel.Name) HeaderText="Nazwa" TextAlign="TextAlign.Center" Width="250"></GridColumn>
+                                                </GridColumns>
+
+                                            </SfGrid>
+                                        </div>
+
+                                        @* wyswietlanie opisu wybranego taska*@
+                                        <div>
+                                            <SfGrid @ref="DefaultGrid1"
+                                                    DataSource="ListOfTasks"
+                                                    AllowPaging="false"
+                                                    AllowSorting="false"
+                                                    AllowFiltering="false">
+                                                <GridSearchSettings IgnoreCase="true"></GridSearchSettings>
+                                                <GridFilterSettings EnableCaseSensitivity="false"></GridFilterSettings>
+                                                <GridPageSettings PageSize="12"></GridPageSettings>
+                                                <GridSelectionSettings CheckboxOnly="true" PersistSelection="true"></GridSelectionSettings>
+
+                                                <GridColumns>
+                                                    <GridColumn Field=@nameof(TaskModel.Description) HeaderText="Opis" TextAlign="TextAlign.Center" Width="250"></GridColumn>
+                                                </GridColumns>
+
+                                            </SfGrid>
+                                        </div>
+
+                                        @* wyswietlanie daty rozpoczecia wybranego taska*@
+                                        <div>
+                                            <SfGrid @ref="DefaultGrid1"
+                                                    DataSource="ListOfTasks"
+                                                    AllowPaging="false"
+                                                    AllowSorting="false"
+                                                    AllowFiltering="false">
+                                                <GridSearchSettings IgnoreCase="true"></GridSearchSettings>
+                                                <GridFilterSettings EnableCaseSensitivity="false"></GridFilterSettings>
+                                                <GridPageSettings PageSize="12"></GridPageSettings>
+                                                <GridSelectionSettings CheckboxOnly="true" PersistSelection="true"></GridSelectionSettings>
+
+                                                <GridColumns>
+                                                    <GridColumn Field=@nameof(TaskModel.Start_time) HeaderText="Data rozpoczęcia" TextAlign="TextAlign.Center" Width="250"></GridColumn>
+                                                </GridColumns>
+
+                                            </SfGrid>
+                                        </div>
+
+                                        @* wyswietlanie daty deadline'u wybranego taska*@
+                                        <div>
+                                            <SfGrid @ref="DefaultGrid1"
+                                                    DataSource="ListOfTasks"
+                                                    AllowPaging="false"
+                                                    AllowSorting="false"
+                                                    AllowFiltering="false">
+                                                <GridSearchSettings IgnoreCase="true"></GridSearchSettings>
+                                                <GridFilterSettings EnableCaseSensitivity="false"></GridFilterSettings>
+                                                <GridPageSettings PageSize="12"></GridPageSettings>
+                                                <GridSelectionSettings CheckboxOnly="true" PersistSelection="true"></GridSelectionSettings>
+
+                                                <GridColumns>
+                                                    <GridColumn Field=@nameof(TaskModel.Deadline) HeaderText="Deadline" TextAlign="TextAlign.Center" Width="250"></GridColumn>
+                                                </GridColumns>
+
+                                            </SfGrid>
+                                        </div>
+
+                                        @* wyswietlanie statusu wykonania wybranego taska*@
+                                        <div>
+                                            <SfGrid @ref="DefaultGrid1"
+                                                    DataSource="ListOfTasks"
+                                                    AllowPaging="false"
+                                                    AllowSorting="false"
+                                                    AllowFiltering="false">
+                                                <GridSearchSettings IgnoreCase="true"></GridSearchSettings>
+                                                <GridFilterSettings EnableCaseSensitivity="false"></GridFilterSettings>
+                                                <GridPageSettings PageSize="12"></GridPageSettings>
+                                                <GridSelectionSettings CheckboxOnly="true" PersistSelection="true"></GridSelectionSettings>
+
+                                                <GridColumns>
+                                                    <GridColumn Field=@nameof(TaskModel.Status) HeaderText="Status wykonania" TextAlign="TextAlign.Center" Width="250"></GridColumn>
+                                                </GridColumns>
+
+                                            </SfGrid>
+                                        </div>
+
+
+                                    </div>
+                                </div>
+                            </div>
+                        </ContentTemplate>
+                    </SplitterPane>
+                    <SplitterPane Size="25%" Min="60px">
+                        <ContentTemplate>
+                            <div class='splitter-default-content'><div>Tutaj maja byc etykiety</div></div>
+                        </ContentTemplate>
+                    </SplitterPane>
+                </SplitterPanes>
+            </SfSplitter>
         </div>
     </div>
-*@
-
-@* wyswietlanie nazwy wybranego taska*@
-
-<div class="col-lg-6 control-section">
-    <div>
-        <SfGrid @ref="DefaultGrid1"
-                DataSource="ListOfTasks"
-                AllowPaging="false"
-                AllowSorting="false"
-                AllowFiltering="false">
-            <GridSearchSettings IgnoreCase="true"></GridSearchSettings>
-            <GridFilterSettings EnableCaseSensitivity="false"></GridFilterSettings>
-            <GridPageSettings PageSize="12"></GridPageSettings>
-            <GridSelectionSettings CheckboxOnly="true" PersistSelection="true"></GridSelectionSettings>
-
-            <GridColumns>
-                <GridColumn Field=@nameof(TaskModel.Name) HeaderText="Nazwa" TextAlign="TextAlign.Center" Width="250"></GridColumn>
-            </GridColumns>
-
-        </SfGrid>
-    </div>
-
-    @* wyswietlanie opisu wybranego taska*@
-    <div>
-        <SfGrid @ref="DefaultGrid1"
-                DataSource="ListOfTasks"
-                AllowPaging="false"
-                AllowSorting="false"
-                AllowFiltering="false">
-            <GridSearchSettings IgnoreCase="true"></GridSearchSettings>
-            <GridFilterSettings EnableCaseSensitivity="false"></GridFilterSettings>
-            <GridPageSettings PageSize="12"></GridPageSettings>
-            <GridSelectionSettings CheckboxOnly="true" PersistSelection="true"></GridSelectionSettings>
-
-            <GridColumns>
-                <GridColumn Field=@nameof(TaskModel.Description) HeaderText="Opis" TextAlign="TextAlign.Center" Width="250"></GridColumn>
-            </GridColumns>
-
-        </SfGrid>
-    </div>
-
-    @* wyswietlanie daty rozpoczecia wybranego taska*@
-    <div>
-        <SfGrid @ref="DefaultGrid1"
-                DataSource="ListOfTasks"
-                AllowPaging="false"
-                AllowSorting="false"
-                AllowFiltering="false">
-            <GridSearchSettings IgnoreCase="true"></GridSearchSettings>
-            <GridFilterSettings EnableCaseSensitivity="false"></GridFilterSettings>
-            <GridPageSettings PageSize="12"></GridPageSettings>
-            <GridSelectionSettings CheckboxOnly="true" PersistSelection="true"></GridSelectionSettings>
-
-            <GridColumns>
-                <GridColumn Field=@nameof(TaskModel.Start_time) HeaderText="Data rozpoczęcia" TextAlign="TextAlign.Center" Width="250"></GridColumn>
-            </GridColumns>
-
-        </SfGrid>
-    </div>
-
-    @* wyswietlanie daty deadline'u wybranego taska*@
-    <div>
-        <SfGrid @ref="DefaultGrid1"
-                DataSource="ListOfTasks"
-                AllowPaging="false"
-                AllowSorting="false"
-                AllowFiltering="false">
-            <GridSearchSettings IgnoreCase="true"></GridSearchSettings>
-            <GridFilterSettings EnableCaseSensitivity="false"></GridFilterSettings>
-            <GridPageSettings PageSize="12"></GridPageSettings>
-            <GridSelectionSettings CheckboxOnly="true" PersistSelection="true"></GridSelectionSettings>
-
-            <GridColumns>
-                <GridColumn Field=@nameof(TaskModel.Deadline) HeaderText="Deadline" TextAlign="TextAlign.Center" Width="250"></GridColumn>
-            </GridColumns>
-
-        </SfGrid>
-    </div>
-
-    @* wyswietlanie statusu wykonania wybranego taska*@
-    <div>
-        <SfGrid @ref="DefaultGrid1"
-                DataSource="ListOfTasks"
-                AllowPaging="false"
-                AllowSorting="false"
-                AllowFiltering="false">
-            <GridSearchSettings IgnoreCase="true"></GridSearchSettings>
-            <GridFilterSettings EnableCaseSensitivity="false"></GridFilterSettings>
-            <GridPageSettings PageSize="12"></GridPageSettings>
-            <GridSelectionSettings CheckboxOnly="true" PersistSelection="true"></GridSelectionSettings>
-
-            <GridColumns>
-                <GridColumn Field=@nameof(TaskModel.Status) HeaderText="Status wykonania" TextAlign="TextAlign.Center" Width="250"></GridColumn>
-            </GridColumns>
-
-        </SfGrid>
-    </div>
-
 </div>
 
+<style>
+    .actionBtn {
+        margin-left: 10px;
+        display: inline-block;
+        float: right;
+    }
 
+    #panetext {
+        font-size: 11px;
+    }
+
+    #pane-heading {
+        font-size: 14px;
+        margin-bottom: 4px;
+    }
+
+    .pane1 {
+        margin: 20px auto;
+        max-width: 1400px;
+    }
+
+    .real_content {
+        font-size: 11px;
+        margin: 20px auto;
+        max-width: 1200px;
+        text-align: center;
+        align-items: center;
+        justify-content: center;
+        display: grid;
+        height: 100%;
+    }
+
+    .control-section {
+        min-height: 1200px;
+        margin-bottom: 15px;
+        margin-top: 10px;
+    }
+
+    .out-splitter .e-pane, .in-splitter .e-pane {
+        text-align: center;
+        align-items: center;
+        justify-content: center;
+        display: grid;
+        height: 100%;
+    }
+</style>
 
 @code {
-
     private SfGrid<BackendLibrary.Models.TaskModel> DefaultGrid1;
     public static List<BackendLibrary.Models.TaskModel> ListOfTasks = new List<BackendLibrary.Models.TaskModel>(); // jednoelementowa lista, zawierajaca uprzednio wybrany task
     private Boolean addButtonClicked;
 
+
     protected override void OnInitialized()
     {
-        ListOfTasks.Clear();
-        ListOfTasks.Add(WebApp.Pages.TasksList.SelectedTask);
+        ListOfTasks = TaskData.GetByIdList(WebApp.Pages.TasksList.SelectedTask.Task_id);
 
     }
 
-    //funkcje do przycisków, ktore maja byc odpowiedzialne za edytowanie poszczególnych rzeczy w zadaniu
-    private void Edit_name(MouseEventArgs e)
+    private void EditTask(MouseEventArgs e)
     {
-        //cos
-    }
-    private void Edit_description(MouseEventArgs e)
-    {
-        //cos
-    }
-    private void Edit_starttime(MouseEventArgs e)
-    {
-        //cos
-    }
-    private void Edit_deadline(MouseEventArgs e)
-    {
-        //cos
-    }
-    private void Edit_status(MouseEventArgs e)
-    {
-        //cos
+        if (WebApp.Pages.TasksList.SelectedTask != null)
+        {
+            NavigationManager.NavigateTo("/edit-task");
+        }
     }
 
 }
-
-
-    @*<div>
-            <div class="search" style="float: right;">
-                <button class="btn btn-primary" @onclick="Edit_name">Edytuj</button>
-            </div>
-        </div>
-
-        <table class='table'>
-            <thead>
-                <tr>
-                    <th>
-                        <font size="+1">
-                            <p style="text-align:center;"> Nazwa </p>
-                        </font>
-                    </th>
-                </tr>
-                <tr>
-                    <th>Tutaj dane z bazy</th>
-                </tr>
-            </thead>
-        </table>
-
-        <div>
-            <div class="search" style="float: right;">
-                <button class="btn btn-primary" @onclick="Edit_name">Edytuj</button>
-            </div>
-        </div>
-
-        <table class='table'>
-            <thead>
-                <tr>
-                    <th>
-                        <font size="+1">
-                            <p style="text-align:center;"> Opis </p>
-                        </font>
-                    </th>
-                </tr>
-                <tr>
-                    <th>Tutaj dane z bazy</th>
-                </tr>
-            </thead>
-        </table>
-
-        <table class='table'>
-            <thead>
-                <tr>
-                    <th>
-                        <font size="+1">
-                            <p style="text-align:center;"> Data rozpoczęcia </p>
-                        </font>
-                    </th>
-                </tr>
-                <tr>
-                    <th>Tutaj dane z bazy</th>
-                </tr>
-            </thead>
-        </table>
-
-        <table class='table'>
-            <thead>
-                <tr>
-                    <th>
-                        <font size="+1">
-                            <p style="text-align:center;"> Deadline </p>
-                        </font>
-                    </th>
-                </tr>
-                <tr>
-                    <th>Tutaj dane z bazy</th>
-                </tr>
-            </thead>
-        </table>
-
-        <table class='table'>
-            <thead>
-                <tr>
-                    <th>
-                        <font size="+1">
-                            <p style="text-align:center;"> Status wykonania </p>
-                        </font>
-                    </th>
-                </tr>
-                <tr>
-                    <th>Tutaj dane z bazy</th>
-                </tr>
-            </thead>
-        </table>
-
-    *@
