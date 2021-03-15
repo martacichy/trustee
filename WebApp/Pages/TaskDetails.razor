@@ -188,14 +188,13 @@
 
 @code {
     private SfGrid<BackendLibrary.Models.TaskModel> DefaultGrid1;
-    public static List<BackendLibrary.Models.TaskModel> ListOfTasks = new List<BackendLibrary.Models.TaskModel>(); // jednoelementowa lista, zawierajaca uprzednio wybrany task
+    public static List<BackendLibrary.Models.TaskModel> ListOfTasks;
     private Boolean addButtonClicked;
 
 
     protected override void OnInitialized()
     {
         ListOfTasks = TaskData.GetByIdList(WebApp.Pages.TasksList.SelectedTask.Task_id);
-
     }
 
     private void EditTask(MouseEventArgs e)

@@ -1,4 +1,4 @@
-﻿@page "/Edit-task" 
+﻿@page "/Edit-task"
 
 @inject NavigationManager NavigationManager
 @using Syncfusion.Blazor.DropDowns
@@ -47,7 +47,12 @@
 @code {
     SfToast ToastObj;
     private string ToastContent { get; set; } = "Zadanie zostało zaktualizowane.";
-    private BackendLibrary.Validation.TaskValidation Task = new BackendLibrary.Validation.TaskValidation();
+    private BackendLibrary.Validation.TaskValidation Task;
+
+    protected override void OnInitialized()
+    {
+        Task = new BackendLibrary.Validation.TaskValidation();
+    }
 
     /// <summary>
     /// Aktualizuje w bazie danych zadanie, które zostało nakreślone w gui aplikacji.

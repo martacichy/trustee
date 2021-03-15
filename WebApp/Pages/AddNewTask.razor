@@ -1,7 +1,6 @@
 ﻿@page "/add-task"
 
 @inject NavigationManager NavigationManager
-@using Syncfusion.Blazor.DropDowns
 @inject NavigationManager uriHelper;
 
 <EditForm Model="@Task">
@@ -70,9 +69,9 @@
                                 @((context as BackendLibrary.Models.EmployeeModel).Last_name)
                             </div>
                         </div>
-                    </ValueTemplate>                   
+                    </ValueTemplate>
                 </MultiSelectTemplates>
-                <MultiSelectFieldSettings  Text="First_name" Value="Employee_id"></MultiSelectFieldSettings>                
+                <MultiSelectFieldSettings Text="First_name" Value="Employee_id"></MultiSelectFieldSettings>
             </SfMultiSelect>
         </div>
     </div>
@@ -85,17 +84,23 @@
     </SfToast>
 </div>
 
-
 @code {
     SfToast ToastObj;
     private string ToastContent { get; set; } = "Zadanie zostało pomyślnie dodane.";
-    private BackendLibrary.Validation.TaskValidation Task = new BackendLibrary.Validation.TaskValidation();
-    private List<BackendLibrary.Models.LabelModel> labelsInDb = BackendLibrary.DataAccess.LabelData.GetAllByCompanyId(WebApp.Pages.Login.UserLoggedIn.Company_id);
-    private List<BackendLibrary.Models.EmployeeModel> employees = BackendLibrary.DataAccess.EmployeeData.GetAllByCompanyId(WebApp.Pages.Login.UserLoggedIn.Company_id);
+    private BackendLibrary.Validation.TaskValidation Task;
+    private List<BackendLibrary.Models.LabelModel> labelsInDb;
+    private List<BackendLibrary.Models.EmployeeModel> employees;
     private string[] selectedLabels { get; set; } = new string[] { };
     private int[] selectedEmployeesId = new int[] { };
     private int lastTaskId;
     private int labelIdByName;
+
+    protected override void OnInitialized()
+    {
+        Task = new BackendLibrary.Validation.TaskValidation();
+        labelsInDb = BackendLibrary.DataAccess.LabelData.GetAllByCompanyId(Login.UserLoggedIn.Company_id);
+        employees = BackendLibrary.DataAccess.EmployeeData.GetAllByCompanyId(Login.UserLoggedIn.Company_id);
+    }
 
     /// <summary>
     /// Dodaje do bazy danych zadanie, które zostało nakreślone w gui aplikacji.
@@ -163,12 +168,13 @@
     private void AddEmployeeToTask()
     {
         for (int i = 0; i < selectedEmployeesId.Length; i++)
-        {           
+        {
             BackendLibrary.Models.EmployeeTaskModel employeeTask = new BackendLibrary.Models.EmployeeTaskModel(lastTaskId, selectedEmployeesId[i], Task.status);
             BackendLibrary.DataAccess.EmployeeTaskData.AddEmployeeTask(employeeTask);
         }
     }
 }
+
 <style>
     .control_wrapper {
         width: 350px;
@@ -176,14 +182,16 @@
         padding-top: 70px;
         padding-bottom: 70px;
     }
+
     .form-group {
         padding-top: 15px;
         width: 350px;
         margin: 0 auto;
     }
+
     .control-wrapper.multi-select-parent {
         margin: 0 auto;
-        width: 350px;     
+        width: 350px;
         padding-top: 15px;
     }
 </style>

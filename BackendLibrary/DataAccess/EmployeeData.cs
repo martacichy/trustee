@@ -48,6 +48,21 @@ namespace BackendLibrary.DataAccess
             }
         }
 
+        /// <summary> Przypisuje dane id firmy danemu pracownikowi. </summary>
+        public static Boolean SetCompanyForEmployee(int employeeId, int companyId)
+        {
+            using (IDbConnection connection = new MySqlConnection(connectionString))
+            {
+                string sql = $"UPDATE database06.employee SET company_id = {companyId} WHERE employee_id = {employeeId}";
+                int rowsAffected = connection.Execute(sql);
+
+                if (rowsAffected == 0)
+                    return false;
+                else
+                    return true;
+            }
+        }
+
         /// <summary> Zwraca model o przekazanym w argumencie id. </summary>
         public static EmployeeModel GetById(int employee_id)
         {
@@ -60,12 +75,13 @@ namespace BackendLibrary.DataAccess
             }
         }
 
-        public static int GetIdByEmail(String email)
+        /// <summary> Zwraca id pracownika o podanym mailu. </summary>
+        public static int GetIdByEmail(string email)
         {
             using (IDbConnection connection = new MySqlConnection(connectionString))
             {
                 string sql = $"SELECT Employee_id from database06.employee where email = '{email}'";
-                int id = connection.Query<int>(sql).First();
+                int id = connection.Query<int>(sql).FirstOrDefault();
 
                 return id;
             }
