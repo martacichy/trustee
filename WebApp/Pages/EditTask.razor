@@ -51,8 +51,18 @@
     SfToast FailedObj;
     private string ToastContent { get; set; } = "Zadanie zaktualizowane pomyslnie!";
     private string FailedContent { get; set; } = "Brak zmian w zadaniu!";
-    private BackendLibrary.Validation.EditTaskValidation Task = new BackendLibrary.Validation.EditTaskValidation();
+    private BackendLibrary.Validation.EditTaskValidation Task;
     DateTime defaultDate = new DateTime(0001, 1, 1, 0, 0, 0);
+
+    protected override void OnInitialized()
+    {
+        if (Login.UserLoggedIn.If_manager == -1)
+        {
+            NavigationManager.NavigateTo("/");
+        }
+
+        Task = new BackendLibrary.Validation.EditTaskValidation();
+    }
 
     /// <summary>
     /// Aktualizuje w bazie danych zadanie, które zostało nakreślone w gui aplikacji.
@@ -106,7 +116,7 @@
         ClearTask(); //czysci pola obiektu task
 
     }
-    
+
     private void ClearTask()
     {
         Task.name = null;
