@@ -3,7 +3,7 @@
 <h3> Twoje zadania</h3>
 
 <SfKanban TValue="BackendLibrary.Models.TaskModel" KeyField="Status" DataSource="@FilteredTasks" Locale="pl">
-    <KanbanCardSettings HeaderField="Task_id" ContentField="Description"></KanbanCardSettings>
+    <KanbanCardSettings HeaderField="Task_id" ContentField="Name"></KanbanCardSettings>
     <KanbanSwimlaneSettings AllowDragAndDrop="false"></KanbanSwimlaneSettings>
     <KanbanEvents TValue="TaskModel"
                   DialogOpen="@OnDialogOpen"

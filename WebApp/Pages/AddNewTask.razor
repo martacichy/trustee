@@ -111,12 +111,14 @@
         employees = BackendLibrary.DataAccess.EmployeeData.GetAllByCompanyId(Login.UserLoggedIn.Company_id);
     }
 
+
     /// <summary>
     /// Dodaje do bazy danych zadanie, które zostało nakreślone w gui aplikacji.
     /// </summary>
     private void SaveTask()
     {
-        if (Task.name != null && Task.description != null && Task.status != null && Task.deadline >= DateTime.Today && Task.start_time >= DateTime.Today)
+        DateTime defaultDateTime = new DateTime(1900, 1, 1, 0, 0, 0);
+        if (Task.name != null && Task.description != null && Task.status != null && Task.deadline >= DateTime.Today && Task.start_time >= defaultDateTime)
         {
             BackendLibrary.Models.TaskModel newTask =
             new BackendLibrary.Models.TaskModel(WebApp.Pages.Login.UserLoggedIn.Company_id, Task.name, Task.description, Task.start_time, Task.deadline, Task.status, Task.auto_assigned);
@@ -125,12 +127,11 @@
             SaveTaskLabel();
             AddEmployeeToTask();
             SuccessTask.Show();
-        }
-        else
-        {
+            uriHelper.NavigateTo(uriHelper.Uri, forceLoad: true);
 
         }
     }
+
 
     /// <summary>
     /// Zapisuje do bazy etykiety, których jeszcze nie ma w bazie.
