@@ -34,58 +34,62 @@
         <label for="IfAutoAssigned" class="control-label">Czy przydzielić automatycznie?</label>
         <input for="IfAutoAssigned" type="checkbox" class="form-control" @bind-value="Task.auto_assigned" />
     </div>
-</EditForm>
-<div class="control_wrapper">
-    <label asp-for="etykiety" class="control-label">Etykiety</label>
-    <SfMultiSelect TValue="string[]" TItem="BackendLibrary.Models.LabelModel"
-                   @bind-Value="@selectedLabels"
-                   Placeholder="Szukaj..."
-                   DataSource="@labelsInDb" AllowFiltering="true" AllowCustomValue="true">
-        <MultiSelectFieldSettings Text="Name"> </MultiSelectFieldSettings>
-    </SfMultiSelect>
-</div>
 
-<div class="col-lg-12 control-section multiselect-height">
-    <div class="control-wrapper multi-select-parent">
-        <div class="padding-top">
-            <label asp-for="pracownicy" class="control-label">Pracownicy</label>
-            <SfMultiSelect TValue="int[]" TItem="BackendLibrary.Models.EmployeeModel"
-                           @bind-Value="@selectedEmployeesId"
-                           Placeholder="Wybierz..."
-                           DataSource="@employees" AllowFiltering="true">
-                <MultiSelectTemplates TItem="BackendLibrary.Models.EmployeeModel">
-                    <ItemTemplate>
-                        <div>
-                            <div class="ename">
-                                @((context as BackendLibrary.Models.EmployeeModel).First_name)
-                                @((context as BackendLibrary.Models.EmployeeModel).Last_name)
+    <div class="control_wrapper">
+        <label asp-for="etykiety" class="control-label">Etykiety</label>
+        <SfMultiSelect TValue="string[]" TItem="BackendLibrary.Models.LabelModel"
+                       @bind-Value="@selectedLabels"
+                       Placeholder="Szukaj..."
+                       DataSource="@labelsInDb" AllowFiltering="true" AllowCustomValue="true">
+            <MultiSelectFieldSettings Text="Name"> </MultiSelectFieldSettings>
+        </SfMultiSelect>
+    </div>
+
+    <div class="col-lg-12 control-section multiselect-height">
+        <div class="control-wrapper multi-select-parent">
+            <div class="padding-top">
+                <label asp-for="pracownicy" class="control-label">Pracownicy</label>
+                <SfMultiSelect TValue="int[]" TItem="BackendLibrary.Models.EmployeeModel"
+                               @bind-Value="@selectedEmployeesId"
+                               Placeholder="Wybierz..."
+                               DataSource="@employees" AllowFiltering="true">
+                    <MultiSelectTemplates TItem="BackendLibrary.Models.EmployeeModel">
+                        <!-- Zmieniony Context z default na "SelectedEmployee" aby mogła działać walidacja -->
+                        <ItemTemplate Context="SelectedEmployee">
+                            <div>
+                                <div class="ename">
+                                    @((SelectedEmployee as BackendLibrary.Models.EmployeeModel).First_name)
+                                    @((SelectedEmployee as BackendLibrary.Models.EmployeeModel).Last_name)
+                                </div>
                             </div>
-                        </div>
-                    </ItemTemplate>
-                    <ValueTemplate>
-                        <div class="multiselect-width">
-                            <div class="name">
-                                @((context as BackendLibrary.Models.EmployeeModel).First_name)
-                                @((context as BackendLibrary.Models.EmployeeModel).Last_name)
+                        </ItemTemplate>
+                        <ValueTemplate Context="SelectedEmployee">
+                            <div class="multiselect-width">
+                                <div class="name">
+                                    @((SelectedEmployee as BackendLibrary.Models.EmployeeModel).First_name)
+                                    @((SelectedEmployee as BackendLibrary.Models.EmployeeModel).Last_name)
+                                </div>
                             </div>
-                        </div>
-                    </ValueTemplate>
-                </MultiSelectTemplates>
-                <MultiSelectFieldSettings Text="First_name" Value="Employee_id"></MultiSelectFieldSettings>
-            </SfMultiSelect>
+                        </ValueTemplate>
+                    </MultiSelectTemplates>
+                    <MultiSelectFieldSettings Text="First_name" Value="Employee_id"></MultiSelectFieldSettings>
+                </SfMultiSelect>
+            </div>
         </div>
     </div>
-</div>
 
-<div class="form-group">
-    <button type="submit" class="btn btn-block btn-info" data-dismiss="modal" @onclick="SaveTask">Zapisz</button>
-    <SfToast @ref="ToastObj" Title="Dodano nowe zadanie!" Timeout=3000 Content="@ToastContent">
-        <ToastPosition X="Right"></ToastPosition>
-    </SfToast>
-</div>
+    <div class="form-group">
+        <button type="submit" class="btn btn-block btn-info" data-dismiss="modal" @onclick="SaveTask">Zapisz</button>
+        <SfToast @ref="SuccessTask" Title="Dodano nowe zadanie!" Timeout=3000 Content="@ToastContent">
+            <ToastPosition X="Right"></ToastPosition>
+        </SfToast>
+    </div>
+</EditForm>
+
+
 
 @code {
-    SfToast ToastObj;
+    SfToast SuccessTask;
     private string ToastContent { get; set; } = "Zadanie zostało pomyślnie dodane.";
     private BackendLibrary.Validation.TaskValidation Task;
     private List<BackendLibrary.Models.LabelModel> labelsInDb;
@@ -112,7 +116,7 @@
     /// </summary>
     private void SaveTask()
     {
-        if (Task.name != null && Task.description != null && Task.status != null)
+        if (Task.name != null && Task.description != null && Task.status != null && Task.deadline >= DateTime.Today && Task.start_time >= DateTime.Today)
         {
             BackendLibrary.Models.TaskModel newTask =
             new BackendLibrary.Models.TaskModel(WebApp.Pages.Login.UserLoggedIn.Company_id, Task.name, Task.description, Task.start_time, Task.deadline, Task.status, Task.auto_assigned);
@@ -120,7 +124,11 @@
             BackendLibrary.DataAccess.TaskData.AddTask(newTask);
             SaveTaskLabel();
             AddEmployeeToTask();
-            ToastObj.Show();
+            SuccessTask.Show();
+        }
+        else
+        {
+
         }
     }
 

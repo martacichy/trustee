@@ -14,7 +14,7 @@ using Syncfusion.Blazor;
 using System.Globalization;
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Localization;
-using WebApp.Shared;
+
 
 namespace WebApp
 {

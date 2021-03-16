@@ -10,13 +10,13 @@
         <button class="btn btn-primary" @onclick="AddTask">Dodaj zadanie</button>
     </div>
     <div class="actionBtn">
-        <button class="btn btn-primary" @onclick="EditTask">Edytuj wybrane zadanie</button>
+        <button class="btn btn-primary" @onclick="EditTask">Edytuj zadanie</button>
     </div>
     <div class="actionBtn">
-        <button class="btn btn-primary" id="deleteBtn" @onclick="DeleteTask">Usuń wybrane zadanie</button>
+        <button class="btn btn-primary" id="deleteBtn" @onclick="DeleteTask">Usuń zadanie</button>
     </div>
     <div class="actionBtn">
-        <button class="btn btn-primary"@onclick="DisplayTaskDetails">Wyświetl szczegóły wybranego taska</button>
+        <button class="btn btn-primary"@onclick="DisplayTaskDetails">Szczegóły</button>
     </div>
 </div>
 }
@@ -58,9 +58,15 @@
                         TextAlign="TextAlign.Left" Width="120"></GridColumn>
         </GridColumns>
     </SfGrid>
+    <div class="form-group">
+        <SfToast @ref="NoSelectedTask" Title="Wybierz zadanie!" Timeout=2000>
+            <ToastPosition X="Center"></ToastPosition>
+        </SfToast>
+    </div>
 </div>
 
 @code {
+    SfToast NoSelectedTask;
     private SfGrid<TaskModel> DefaultGrid;
     private string searchStr;
     private static List<TaskModel> TaskList;
@@ -104,7 +110,11 @@
         if (SelectedTask != null)
         {
             //TODO - zmienic na /task-details jak bedzie gotowa
-            NavigationManager.NavigateTo("/add-task");
+            NavigationManager.NavigateTo("/task-details");
+        }
+        else
+        {
+            NoSelectedTask.Show();
         }
     }
 
@@ -114,6 +124,10 @@
         {
             //TODO - delete selected task
         }
+        else
+        {
+            NoSelectedTask.Show();
+        }
     }
 
     private void DisplayTaskDetails(MouseEventArgs e)
@@ -121,6 +135,10 @@
         if (SelectedTask != null)
         {
             NavigationManager.NavigateTo("/task-details");
+        }
+        else
+        {
+            NoSelectedTask.Show();
         }
     }
 }

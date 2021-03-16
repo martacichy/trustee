@@ -7,25 +7,24 @@ namespace BackendLibrary.Validation
 {
     public class TaskValidation
     {
-        [Required(ErrorMessage = "Pole 'Tytuł' jest obowiązkowe!")]
+        [Required(ErrorMessage = "To pole jest obowiązkowe!")]
         [StringLength(30,
-        ErrorMessage = "Pole 'Tytuł' nie może mieć więcej niż 30 znaków.")]
+        ErrorMessage = "To pole nie może mieć więcej niż 30 znaków.")]
         public string name { get; set; }
 
-        [Required(ErrorMessage = "Pole 'Opis' jest obowiązkowe!")]
+        [Required(ErrorMessage = "To pole jest obowiązkowe!")]
         [StringLength(500,
-        ErrorMessage = "Pole 'Opis' nie może mieć więcej niż 500 znaków.")]
+        ErrorMessage = "To pole nie może mieć więcej niż 500 znaków.")]
         public string description { get; set; }
 
-
+        [DefaultDateAttribute(ErrorMessage = "Wprowadź poprawną datę.")]
         public DateTime start_time { get; set; }
-
 
         [DateDeadlineAttribute(ErrorMessage = "Deadline nie może być wcześniejszy niż dzisiaj.")]
         public DateTime deadline { get; set; }
         
-        [Required(ErrorMessage = "Pole 'Status' jest obowiązkowe!")]
-        [StringLength(50, ErrorMessage = "Pole 'Status' nie może mieć więcej niż 50 znaków.")]
+        [Required(ErrorMessage = "To pole jest obowiązkowe!")]
+        [StringLength(50, ErrorMessage = "To pole nie może mieć więcej niż 50 znaków.")]
         public string status { get; set; }
         
         public int auto_assigned { get; set; }
@@ -37,5 +36,13 @@ namespace BackendLibrary.Validation
         }
     }
 
-   
+    [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field | AttributeTargets.Parameter, AllowMultiple = false)]
+    public class DefaultDateAttribute : ValidationAttribute
+    {
+        public override bool IsValid(object value)
+        {
+            DateTime defaultDateTime = new DateTime(1900, 1, 1, 0, 0, 0);
+            return (DateTime)value >= defaultDateTime;
+        }
+    }
 }
