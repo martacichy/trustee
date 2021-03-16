@@ -204,3 +204,27 @@ ENGINE = InnoDB;
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
+
+
+-- -----------------------------------------------------
+-- Table `database06`.`Comment`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `database06`.`comment` ;
+
+CREATE TABLE IF NOT EXISTS `database06`.`comment` (
+  `comment_id` int NOT NULL AUTO_INCREMENT,
+  `task_id` int NOT NULL,
+  `employee_id` int NOT NULL,
+  `date` datetime NOT NULL,
+  `description` varchar(1000) DEFAULT NULL,
+  PRIMARY KEY (`comment_id`),
+  UNIQUE KEY `comment_id_UNIQUE` (`comment_id`),
+  KEY `employee_id_idx` (`employee_id`),
+  KEY `task_id_idx` (`task_id`),
+  CONSTRAINT `employee_id_comment`
+    FOREIGN KEY (`employee_id`)
+    REFERENCES `database06`.`Employee` (`employee_id`),
+  CONSTRAINT `task_id_comment`
+  FOREIGN KEY (`task_id`)
+  REFERENCES `database06`.`Task` (`task_id`))
+  ENGINE = InnoDB;
