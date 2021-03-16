@@ -83,6 +83,7 @@ namespace BackendLibrary.DataAccess {
 
             }
         }
+
         public static void AddLabelWithNameAndCompanyId(LabelModel newLabel)
         {
             using (IDbConnection connection = new MySqlConnection(connectionString))
@@ -96,6 +97,17 @@ namespace BackendLibrary.DataAccess {
             }
         }
 
+        /// <summary> Aktualizuje daną etykietę </summary>
+        public static void UpdateLabel(LabelModel updatedLabel)
+        {
+            using (IDbConnection connection = new MySqlConnection(connectionString))
+            {
+                string sql = @"UPDATE database06.label SET Name = @Name, Description = @Description
+                    WHERE label_id = @label_id";
+
+                connection.Execute(sql, updatedLabel);
+            }
+        }
 
         /// <summary> Usuwa etykietę z bazy danych,
         /// usuwając wcześniej wiersze z innych tabel, gdzie zawarty jest dany klucz obcy z tabeli Label
