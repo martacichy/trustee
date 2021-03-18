@@ -50,8 +50,11 @@
     // tworzmy obiekt do przechowywania informacji o zalogowanym uzytkowniku
     public static BackendLibrary.Models.EmployeeModel UserLoggedIn = new BackendLibrary.Models.EmployeeModel();
 
+    // tworzymy obiekt do przechowywania informacji o zespole do ktorego przypisany jest zalogowany pracownik
+    public static BackendLibrary.Models.CompanyModel UserCompany = new BackendLibrary.Models.CompanyModel();
+
     private BackendLibrary.Validation.LoginValidation Log = new BackendLibrary.Validation.LoginValidation();
-    
+
 
     private void LoginSubmit()
     {
@@ -60,15 +63,17 @@
 
         if (Log.Login != null && Log.Password != null)
         {
-               if (UserLoggedIn.If_manager != -1)
-                {
-                    NavigationManager.NavigateTo("/kanban");
-                }
+            if (UserLoggedIn.If_manager != -1)
+            {
+                // przypisanie informacji dotyczacych zespolu pracownika
+                UserCompany = BackendLibrary.DataAccess.CompanyData.GetById(UserLoggedIn.Company_id);
+                NavigationManager.NavigateTo("/kanban");
+            }
 
-                else
-                {
-                    InvalidLogin.Show();
-                }
+            else
+            {
+                InvalidLogin.Show();
+            }
 
         }
     }

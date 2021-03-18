@@ -30,5 +30,10 @@ namespace BackendLibrary.Models
             Login = login;
             Password = password;
         }
+
+        public CompanyModel()
+        {
+
+        }
     }
 }
