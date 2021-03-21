@@ -23,8 +23,9 @@ namespace BackendLibrary.Tests.Tests
         public async void AddTaskTest()
         {
             int company_id = await Task.Run(() => DataAccess.CompanyData.GetMaxId());
+            int project_id = await Task.Run(() => DataAccess.ProjectData.GetMaxId());
             TaskModel task = new TaskModel(company_id, "TaskNumberOne", "Task number one description",
-                new DateTime(2016, 11, 23), new DateTime(2021, 11, 23), "status", 1);
+                new DateTime(2016, 11, 23), new DateTime(2021, 11, 23), "status", 1, project_id);
 
             await Task.Run(() => DataAccess.TaskData.AddTask(task));
         }

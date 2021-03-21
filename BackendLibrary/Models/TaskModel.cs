@@ -14,9 +14,10 @@ namespace BackendLibrary.Models
 		public DateTime Deadline { get; set; }
 		public string Status { get; set; }
 		public int Auto_assigned { get; set; }
+		public int Project_id { get; set; }
 
-		public TaskModel(int task_id, int company_id, string name, string description,
-			DateTime start_time, DateTime deadline, string status, int auto_assigned)
+		public TaskModel(int task_id, int company_id, string name, string description, DateTime start_time,
+			DateTime deadline, string status, int auto_assigned, int project_id)
 		{
 			Task_id = task_id;
 			Company_id = company_id;
@@ -26,10 +27,11 @@ namespace BackendLibrary.Models
 			Deadline = deadline;
 			Status = status;
 			Auto_assigned = auto_assigned;
+			Project_id = project_id;
 		}
 
-        public TaskModel(int company_id, string name, string description,
-			DateTime start_time, DateTime deadline, string status, int auto_assigned)
+        public TaskModel(int company_id, string name, string description, DateTime start_time,
+			DateTime deadline, string status, int auto_assigned, int project_id)
 		{
 
             Company_id = company_id;
@@ -39,7 +41,8 @@ namespace BackendLibrary.Models
             Deadline = deadline;
             Status = status;
             Auto_assigned = auto_assigned;
-        }
+			Project_id = project_id;
+		}
 
 		public TaskModel() { }
     }

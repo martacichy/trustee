@@ -25,7 +25,10 @@ namespace BackendLibrary.Validation
         public string status { get; set; }
 
         public int auto_assigned { get; set; }
+
+        public int project_id { get; set; }
     }
+
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field | AttributeTargets.Parameter, AllowMultiple = false)]
     public class DateDeadlineAttributeEdit : ValidationAttribute
     {
@@ -34,6 +37,4 @@ namespace BackendLibrary.Validation
             return (DateTime)value >= DateTime.Today;
         }
     }
-
-
 }
