@@ -36,12 +36,13 @@
             NavigationManager.NavigateTo("/");
         }
 
-        AllTasks = TaskData.GetAllByCompanyId(WebApp.Pages.Login.UserLoggedIn.Company_id);
-        MyTasks = EmployeeTaskData.GetAllLabelsByEmployeeId(WebApp.Pages.Login.UserLoggedIn.Employee_id);
+        AllTasks = TaskData.GetAllByCompanyId(Login.UserLoggedIn.Company_id);
+        MyTasks = EmployeeTaskData.GetAllTasksByEmployeeId(Login.UserLoggedIn.Employee_id);
 
         FilteredTasks = AllTasks.Where(x => MyTasks.Any(z => x.Task_id == z.Task_id)).ToList();
     }
 
+    // anuluje otwieranie podgladu - do zmiany jak bedzie gotowe okno szczegółów
     private void OnDialogOpen(DialogOpenEventArgs<TaskModel> args)
     {
         args.Cancel = true;
@@ -49,8 +50,8 @@
 
     private void OnCardClicked(CardClickEventArgs<TaskModel> args)
     {
-        // zapisanie modelu lub id taska i przejście do strony podglądu
+        // odczytanie modelu lub id taska i pokazanie okna podglądu
     }
 
-    //TODO - obsługa DragStart i DragStop (<KanbanEvents/>)
+    //TODO - obsługa DragStart i DragStop (<KanbanEvents />)
 }

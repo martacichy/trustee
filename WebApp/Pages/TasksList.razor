@@ -5,20 +5,17 @@
 @* wyświetlanie przycisku do tworzenia nowych zadań *@
 @if (Login.UserLoggedIn.If_manager == 1 || Login.UserLoggedIn.If_manager == 2)
 {
-<div>
-    <div class="actionBtn">
-        <button class="btn btn-primary" @onclick="AddTask">Dodaj zadanie</button>
+    <div>
+        <div class="actionBtn">
+            <button class="btn btn-primary" @onclick="AddTask">Dodaj zadanie</button>
+        </div>
+        <div class="actionBtn">
+            <button class="btn btn-primary" @onclick="EditTask">Edytuj zadanie</button>
+        </div>
+        <div class="actionBtn">
+            <button class="btn btn-primary" id="deleteBtn" @onclick="DeleteTask">Usuń zadanie</button>
+        </div>
     </div>
-    <div class="actionBtn">
-        <button class="btn btn-primary" @onclick="EditTask">Edytuj zadanie</button>
-    </div>
-    <div class="actionBtn">
-        <button class="btn btn-primary" id="deleteBtn" @onclick="DeleteTask">Usuń zadanie</button>
-    </div>
-    <div class="actionBtn">
-        <button class="btn btn-primary"@onclick="DisplayTaskDetails">Szczegóły</button>
-    </div>
-</div>
 }
 
 <div class="actionBtn" style="float: right; width: auto;">
@@ -45,7 +42,10 @@
         <GridSelectionSettings EnableToggle="true"></GridSelectionSettings>
         <GridEvents TValue="TaskModel"
                     RowSelected="RowSelectHandler"
-                    RowDeselected="RowDeselectHandler">
+                    RowDeselected="RowDeselectHandler"
+                    OnRecordDoubleClick="DisplayTaskDetails"
+                    OnRecordClick="ExpandTaskDetails"
+                    >
         </GridEvents>
 
         <GridColumns>
@@ -58,6 +58,7 @@
                         TextAlign="TextAlign.Left" Width="120"></GridColumn>
         </GridColumns>
     </SfGrid>
+
     <div class="form-group">
         <SfToast @ref="NoSelectedTask" Title="Wybierz zadanie!" Timeout=2000>
             <ToastPosition X="Center"></ToastPosition>
@@ -70,7 +71,7 @@
     private SfGrid<TaskModel> DefaultGrid;
     private string searchStr;
     private static List<TaskModel> TaskList;
-    public static TaskModel SelectedTask = new TaskModel();
+    public static TaskModel SelectedTask;
 
     protected override void OnInitialized()
     {
@@ -79,7 +80,9 @@
             NavigationManager.NavigateTo("/");
         }
 
-        TaskList = TaskData.GetAllByCompanyId(WebApp.Pages.Login.UserLoggedIn.Company_id);
+        SelectedTask = new TaskModel();
+
+        TaskList = TaskData.GetAllByCompanyId(Pages.Login.UserLoggedIn.Company_id);
     }
 
     public void RowSelectHandler(RowSelectEventArgs<TaskModel> args)
@@ -109,7 +112,6 @@
     {
         if (SelectedTask != null)
         {
-            //TODO - zmienic na /task-details jak bedzie gotowa
             NavigationManager.NavigateTo("/task-details");
         }
         else
@@ -130,35 +132,41 @@
         }
     }
 
-    private void DisplayTaskDetails(MouseEventArgs e)
+    private void DisplayTaskDetails(RecordDoubleClickEventArgs<TaskModel> args)
     {
+        SelectedTask = args.RowData;
+
         if (SelectedTask != null)
         {
             NavigationManager.NavigateTo("/task-details");
         }
-        else
+    }
+
+    // TODO - testowe zachowanie - do poprawy LUB usuniecia i rozwijania szczegółów w inny sposób
+    private void ExpandTaskDetails(RecordClickEventArgs<TaskModel> args)
+    {
+        SelectedTask = args.RowData;
+
+        if (SelectedTask != null)
         {
-            NoSelectedTask.Show();
+            // NavigationManager.NavigateTo("/task-details");
         }
     }
 }
 
-    <style>
-        .actionBtn {
+<style>
+    .actionBtn {
+        margin-left: 10px;
+        display: inline-block;
+        float: left;
+    }
 
-            margin-left: 10px;
-            display: inline-block;
-            float: left;
-        }
+    #deleteBtn {
+        background-color: #ff6363;
+        border-color: #ff6363;
+    }
 
-        #deleteBtn {
-
-            background-color: #ff6363;
+        #deleteBtn:hover {
             border-color: #ff6363;
         }
-
-            #deleteBtn:hover {
-                border-color: #ff6363;
-            }
-
-    </style>
+</style>
