@@ -88,18 +88,11 @@ DROP TABLE IF EXISTS `database06`.`Label` ;
 CREATE TABLE IF NOT EXISTS `database06`.`Label` (
   `label_id` INT NOT NULL AUTO_INCREMENT,
   `company_id` INT NULL DEFAULT NULL,
-  `project_id` INT NULL DEFAULT NULL,
   `name` VARCHAR(30) NOT NULL,
   `description` VARCHAR(500) NULL DEFAULT NULL,
   PRIMARY KEY (`label_id`),
   UNIQUE INDEX `label_id_UNIQUE` (`label_id` ASC) VISIBLE,
   INDEX `company_id_idx` (`company_id` ASC) VISIBLE,
-  INDEX `project_id_idx` (`project_id` ASC) VISIBLE,
-  CONSTRAINT `project_id`
-    FOREIGN KEY (`project_id`)
-    REFERENCES `database06`.`Project` (`project_id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
   CONSTRAINT `company_id_label`
     FOREIGN KEY (`company_id`)
     REFERENCES `database06`.`Company` (`company_id`)
@@ -146,12 +139,19 @@ CREATE TABLE IF NOT EXISTS `database06`.`Task` (
   `deadline` DATETIME NULL DEFAULT NULL,
   `status` VARCHAR(50) NOT NULL DEFAULT 'not started',
   `auto_assigned` INT NOT NULL DEFAULT 1,
+  `project_id` INT NULL DEFAULT NULL,
   PRIMARY KEY (`task_id`, `company_id`),
   UNIQUE INDEX `task_id_UNIQUE` (`task_id` ASC) VISIBLE,
   INDEX `company_id_task_idx` (`company_id` ASC) VISIBLE,
+  INDEX `project_id_idx` (`project_id` ASC) VISIBLE,
   CONSTRAINT `company_id_task`
     FOREIGN KEY (`company_id`)
     REFERENCES `database06`.`Company` (`company_id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `project_id`
+    FOREIGN KEY (`project_id`)
+    REFERENCES `database06`.`Project` (`project_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
