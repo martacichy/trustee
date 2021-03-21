@@ -76,12 +76,11 @@ namespace BackendLibrary.DataAccess
         }
 
         /// <summary> Zwraca listę wszystkich tasków danego pracownika. </summary>
-        /// TODO Do poprawy
         public static List<TaskModel> GetAllByEmployeeId(int employee_id)
         {
             using (IDbConnection connection = new MySqlConnection(connectionString))
             {
-                string sql = $"SELECT company_id,  FROM database06.task JOIN database06.employeetask WHERE employeetask.Employee_id = {employee_id}";
+                string sql = $"SELECT company_id  FROM database06.task JOIN database06.employeetask WHERE employeetask.Employee_id = {employee_id}";
                 var data = connection.Query<TaskModel>(sql).ToList();
 
                 return data;

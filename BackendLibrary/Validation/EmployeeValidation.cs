@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Text;
-using System.Text.RegularExpressions;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace BackendLibrary.Validation
 {
@@ -12,8 +8,6 @@ namespace BackendLibrary.Validation
     /// </summary>
     public class EmployeeValidation
     {
-
-        
         [Required(ErrorMessage = "Pole 'Imię' jest obowiązkowe.")]
         [StringLength(50,
         ErrorMessage = "To pole nie może mieć więcej niż 50 znaków.")]
@@ -26,7 +20,7 @@ namespace BackendLibrary.Validation
 
         [StringLength(50,
         ErrorMessage = "To pole nie może mieć więcej niż 50 znaków.")]
-        [EmailAddress(ErrorMessage ="Wpisz poprawny email.")]
+        [EmailAddress(ErrorMessage = "Wpisz poprawny email.")]
         public string email { get; set; }
 
         public bool ifmanager { get; set; }

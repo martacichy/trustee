@@ -1,16 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Text;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace BackendLibrary.Validation
 {
     public class LoginValidation
     {
-
         [Required(ErrorMessage = "Wpisz login!")]
         [StringLength(100,
-        ErrorMessage = "Login jest zbyt długi.")]       
+        ErrorMessage = "Login jest zbyt długi.")]
         public string Login { get; set; }
 
         [Required(ErrorMessage = "Wpisz hasło!")]

@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Text;
 
 namespace BackendLibrary.Validation
 {
@@ -22,18 +20,21 @@ namespace BackendLibrary.Validation
 
         [DateDeadlineAttribute(ErrorMessage = "Deadline nie może być wcześniejszy niż dzisiaj.")]
         public DateTime deadline { get; set; }
-        
+
         [Required(ErrorMessage = "To pole jest obowiązkowe!")]
         [StringLength(50, ErrorMessage = "To pole nie może mieć więcej niż 50 znaków.")]
         public string status { get; set; }
-        
+
         public int auto_assigned { get; set; }
 
         public int project_id { get; set; }
     }
+
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field | AttributeTargets.Parameter, AllowMultiple = false)]
-    public class DateDeadlineAttribute: ValidationAttribute {
-        public override bool IsValid(object value) {
+    public class DateDeadlineAttribute : ValidationAttribute
+    {
+        public override bool IsValid(object value)
+        {
             return (DateTime)value >= DateTime.Today;
         }
     }

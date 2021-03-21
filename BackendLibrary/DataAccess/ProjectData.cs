@@ -1,18 +1,17 @@
 ﻿using BackendLibrary.Models;
 using Dapper;
 using MySql.Data.MySqlClient;
-using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Text;
 
-namespace BackendLibrary.DataAccess {
+namespace BackendLibrary.DataAccess
+{
     /// <summary>
     ///  Klasa wysyłająca zapytania bazodanowe SQL dotyczące tabeli "LabelType".
     /// </summary>
-    public class ProjectData : SqlConnector {
-
+    public class ProjectData : SqlConnector
+    {
         /// <summary> Zwraca listę wszystkich typów etykiet. </summary>
         public static List<ProjectModel> GetAll()
         {
@@ -30,7 +29,7 @@ namespace BackendLibrary.DataAccess {
         {
             using (IDbConnection connection = new MySqlConnection(connectionString))
             {
-                string sql = $"SELECT * FROM database06.project WHERE Label_type_id = {project_id}";
+                string sql = $"SELECT * FROM database06.project WHERE project_id = {project_id}";
                 var data = connection.Query<ProjectModel>(sql).FirstOrDefault();
 
                 return data;
@@ -62,14 +61,14 @@ namespace BackendLibrary.DataAccess {
         }
 
         /// <summary> Dodaje nowy typ etykiety </summary>
-        public static void AddProject(ProjectModel newProject) {
-            using (IDbConnection connection = new MySqlConnection(connectionString)) {
-
+        public static void AddProject(ProjectModel newProject)
+        {
+            using (IDbConnection connection = new MySqlConnection(connectionString))
+            {
                 string sql = @"insert into database06.project (Project_id, Name)
                             values (@Project_id, @Name)";
 
                 connection.Execute(sql, newProject);
-
             }
         }
 
@@ -80,7 +79,6 @@ namespace BackendLibrary.DataAccess {
         {
             using (IDbConnection connection = new MySqlConnection(connectionString))
             {
-
                 string sql = $"update database06.task set project_id = NULL where project_id = {project_id}";
                 connection.Execute(sql);
 

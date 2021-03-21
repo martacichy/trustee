@@ -1,10 +1,8 @@
 @import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
 
-
 .e-kanban .e-kanban-table {
     font-size: 20px;
     font-family: Verdana;
-    
 }
 
 .e-kanban .e-kanban-header .e-header-cells {
@@ -76,12 +74,9 @@ app {
             text-overflow: ellipsis;
         }
 
-
-
 .content {
     padding-top: 1.1rem;
 }
-
 
 .valid.modified:not([type=checkbox]) {
     outline: 1px solid #26b050;
@@ -142,8 +137,6 @@ app {
         padding-left: 2rem !important;
         padding-right: 1.5rem !important;
     }
-
-
 }
 
 .my-custom-scrollbar {
@@ -155,7 +148,6 @@ app {
 .table-wrapper-scroll-y {
     display: block;
 }
-
 
 .validation-message {
     font: Verdana;

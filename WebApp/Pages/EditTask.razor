@@ -70,44 +70,50 @@
     private void UpdateTask()
     {
         bool if_updated = false; // sprawdza, czy uzytkownik wyedytowal cokolwiek w zadaniu true/false
-        // poniższe ify sprawdzaja, czy pole do edycji zawiera cos nowego, po czym przypisuje wartosci do Selected_Task oraz zmienia if_updated na true
+                                 // poniższe ify sprawdzaja, czy pole do edycji zawiera cos nowego, po czym przypisuje wartosci do Selected_Task oraz zmienia if_updated na true
         if (Task.name != null)
         {
-            WebApp.Pages.TasksList.SelectedTask.Name = Task.name;
+            Pages.TasksList.SelectedTask.Name = Task.name;
             if_updated = true;
         }
+
         if (Task.description != null)
         {
-            WebApp.Pages.TasksList.SelectedTask.Description = Task.description;
+            Pages.TasksList.SelectedTask.Description = Task.description;
             if_updated = true;
         }
+
         if (Task.status != null)
         {
-            WebApp.Pages.TasksList.SelectedTask.Status = Task.status;
+            Pages.TasksList.SelectedTask.Status = Task.status;
             if_updated = true;
         }
+
         if ((DateTime.Compare(Task.start_time, defaultDate)) != 0)
         {
-            WebApp.Pages.TasksList.SelectedTask.Start_time = Task.start_time;
+            Pages.TasksList.SelectedTask.Start_time = Task.start_time;
             if_updated = true;
         }
+
         if ((DateTime.Compare(Task.deadline, defaultDate)) != 0)
         {
-            WebApp.Pages.TasksList.SelectedTask.Deadline = Task.deadline;
+            Pages.TasksList.SelectedTask.Deadline = Task.deadline;
             if_updated = true;
         }
-        if(WebApp.Pages.TasksList.SelectedTask.Auto_assigned != Task.auto_assigned)
+
+        if (Pages.TasksList.SelectedTask.Auto_assigned != Task.auto_assigned)
         {
-            WebApp.Pages.TasksList.SelectedTask.Auto_assigned = Task.auto_assigned;
+            Pages.TasksList.SelectedTask.Auto_assigned = Task.auto_assigned;
             if_updated = true;
         }
 
         if (if_updated == true) //sprawdza czy uzytkownik wyedytowal cos w zadaniu, jesli tak, updatuje wartosci w database oraz wystwietla stosowna informacje
         {
             BackendLibrary.Models.TaskModel updatedTask =
-            new BackendLibrary.Models.TaskModel(WebApp.Pages.TasksList.SelectedTask.Task_id, WebApp.Pages.TasksList.SelectedTask.Company_id,
-            WebApp.Pages.TasksList.SelectedTask.Name, WebApp.Pages.TasksList.SelectedTask.Description, WebApp.Pages.TasksList.SelectedTask.Start_time,
-            WebApp.Pages.TasksList.SelectedTask.Deadline, WebApp.Pages.TasksList.SelectedTask.Status, WebApp.Pages.TasksList.SelectedTask.Auto_assigned);
+            new BackendLibrary.Models.TaskModel(TasksList.SelectedTask.Task_id, TasksList.SelectedTask.Company_id,
+            TasksList.SelectedTask.Name, TasksList.SelectedTask.Description, TasksList.SelectedTask.Start_time,
+            TasksList.SelectedTask.Deadline, TasksList.SelectedTask.Status, TasksList.SelectedTask.Auto_assigned, TasksList.SelectedTask.Project_id);
+
             BackendLibrary.DataAccess.TaskData.UpdateTask(updatedTask);
 
             ToastObj.Show();

@@ -42,7 +42,6 @@
                                                 <GridColumns>
                                                     <GridColumn Field=@nameof(TaskModel.Name) HeaderText="Nazwa" TextAlign="TextAlign.Center" Width="250"></GridColumn>
                                                 </GridColumns>
-
                                             </SfGrid>
                                         </div>
 
@@ -61,7 +60,6 @@
                                                 <GridColumns>
                                                     <GridColumn Field=@nameof(TaskModel.Description) HeaderText="Opis" TextAlign="TextAlign.Center" Width="250"></GridColumn>
                                                 </GridColumns>
-
                                             </SfGrid>
                                         </div>
 
@@ -80,7 +78,6 @@
                                                 <GridColumns>
                                                     <GridColumn Field=@nameof(TaskModel.Start_time) HeaderText="Data rozpoczęcia" TextAlign="TextAlign.Center" Width="250"></GridColumn>
                                                 </GridColumns>
-
                                             </SfGrid>
                                         </div>
 
@@ -99,7 +96,6 @@
                                                 <GridColumns>
                                                     <GridColumn Field=@nameof(TaskModel.Deadline) HeaderText="Deadline" TextAlign="TextAlign.Center" Width="250"></GridColumn>
                                                 </GridColumns>
-
                                             </SfGrid>
                                         </div>
 
@@ -118,11 +114,8 @@
                                                 <GridColumns>
                                                     <GridColumn Field=@nameof(TaskModel.Status) HeaderText="Status wykonania" TextAlign="TextAlign.Center" Width="250"></GridColumn>
                                                 </GridColumns>
-
                                             </SfGrid>
                                         </div>
-
-
                                     </div>
                                 </div>
                             </div>
@@ -144,7 +137,6 @@
         margin-left: 10px;
         display: inline-block;
         float: right;
-
     }
 
     #panetext {
@@ -192,7 +184,6 @@
     public static List<BackendLibrary.Models.TaskModel> ListOfTasks;
     private Boolean addButtonClicked;
 
-
     protected override void OnInitialized()
     {
         if (Login.UserLoggedIn.If_manager == -1)
@@ -200,12 +191,12 @@
             NavigationManager.NavigateTo("/");
         }
 
-        ListOfTasks = TaskData.GetByIdList(WebApp.Pages.TasksList.SelectedTask.Task_id);
+        ListOfTasks = TaskData.GetByIdList(Pages.TasksList.SelectedTask.Task_id);
     }
 
     private void EditTask(MouseEventArgs e)
     {
-        if (WebApp.Pages.TasksList.SelectedTask != null)
+        if (Pages.TasksList.SelectedTask != null)
         {
             NavigationManager.NavigateTo("/edit-task");
         }

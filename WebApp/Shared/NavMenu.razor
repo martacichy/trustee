@@ -3,56 +3,54 @@
 @using Syncfusion.Blazor.Buttons
 @inherits LayoutComponentBase
 
-
 <div class="col-lg-12 col-sm-12 col-md-12">
     <div id="wrapper">
-            <SfSidebar Width="220px" DockSize="72px" EnableDock="true" Position="SidebarPosition.Left" @ref="Sidebar" HtmlAttributes="@HtmlAttribute" @bind-IsOpen="SidebarToggle">
-                <ChildContent>
-                    <div class="dock">
-                        <ul>
-                            <li class="sidebar-item" id="toggle" @onclick="@Toggle">
-                                <span class="e-icons expand"></span>
-                                <span class="e-text" title="menu">Menu</span>
-                            </li>
-                            <li class="sidebar-item">
-                                <NavLink class="nav-link" href="kanban" Match="NavLinkMatch.All">
-                                    <span class="e-icons home"></span>
-                                    <span class="e-text" title="home">Twoje zadania</span>
-                                </NavLink>
-                            </li>
-                            <li class="sidebar-item">
-                                <NavLink class="nav-link" href="tasks" Match="NavLinkMatch.All">
-                                    <span class="e-icons info"></span>
-                                    <span class="e-text" title="info">Wszystkie zadania</span>
-                                </NavLink>
-                            </li>
-                            <li class="sidebar-item">
-                                <NavLink class="nav-link" href="employees" Match="NavLinkMatch.All">
-                                    <span class="e-icons profile"></span>
-                                    <span class="e-text" title="profile">Pracownicy</span>
-                                </NavLink>
-                            </li>
-                            <li class="sidebar-item">
-                                <NavLink class="nav-link" href="profile" Match="NavLinkMatch.All">
-                                    <span class="e-icons profile"></span>
-                                    <span class="e-text" title="profile">Twój profil</span>
-                                </NavLink>
-                            </li>
-                            <li class="sidebar-item">
-                                <span class="e-icons settings"></span>
-                                <span class="e-text" title="settings" @onclick="@Logout">Wyloguj się</span>
-                            </li>
-                        </ul>
-                    </div>
-                </ChildContent>
-            </SfSidebar>
-            <!-- end of sidebar element -->
-            <!-- main content declaration -->
-            <div id="main-content container-fluid col-md-12">
-
-            </div>
+        <SfSidebar Width="220px" DockSize="72px" EnableDock="true" Position="SidebarPosition.Left" @ref="Sidebar" HtmlAttributes="@HtmlAttribute" @bind-IsOpen="SidebarToggle">
+            <ChildContent>
+                <div class="dock">
+                    <ul>
+                        <li class="sidebar-item" id="toggle" @onclick="@Toggle">
+                            <span class="e-icons expand"></span>
+                            <span class="e-text" title="menu">Menu</span>
+                        </li>
+                        <li class="sidebar-item">
+                            <NavLink class="nav-link" href="kanban" Match="NavLinkMatch.All">
+                                <span class="e-icons home"></span>
+                                <span class="e-text" title="home">Twoje zadania</span>
+                            </NavLink>
+                        </li>
+                        <li class="sidebar-item">
+                            <NavLink class="nav-link" href="tasks" Match="NavLinkMatch.All">
+                                <span class="e-icons info"></span>
+                                <span class="e-text" title="info">Wszystkie zadania</span>
+                            </NavLink>
+                        </li>
+                        <li class="sidebar-item">
+                            <NavLink class="nav-link" href="employees" Match="NavLinkMatch.All">
+                                <span class="e-icons profile"></span>
+                                <span class="e-text" title="profile">Pracownicy</span>
+                            </NavLink>
+                        </li>
+                        <li class="sidebar-item">
+                            <NavLink class="nav-link" href="profile" Match="NavLinkMatch.All">
+                                <span class="e-icons profile"></span>
+                                <span class="e-text" title="profile">Twój profil</span>
+                            </NavLink>
+                        </li>
+                        <li class="sidebar-item">
+                            <span class="e-icons settings"></span>
+                            <span class="e-text" title="settings" @onclick="@Logout">Wyloguj się</span>
+                        </li>
+                    </ul>
+                </div>
+            </ChildContent>
+        </SfSidebar>
+        <!-- end of sidebar element -->
+        <!-- main content declaration -->
+        <div id="main-content container-fluid col-md-12">
         </div>
     </div>
+</div>
 @code {
     SfSidebar Sidebar;
     public string Leftbtn = "Left";
@@ -63,7 +61,7 @@
         SidebarToggle = !SidebarToggle;
     }
     Dictionary<string, object> HtmlAttribute = new Dictionary<string, object>()
-    {
+{
         {"class", "dockSidebar" }
     };
 
@@ -78,6 +76,7 @@
         height: 40px;
         color: black;
     }
+
     .title {
         text-align: center;
         font-size: 20px;

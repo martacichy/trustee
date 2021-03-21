@@ -1,17 +1,4 @@
-﻿using Dapper;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Options;
-using MySql.Data.MySqlClient;
-using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-
-namespace BackendLibrary.DataAccess
+﻿namespace BackendLibrary.DataAccess
 {
     /// <summary>
     /// Klasa przetrzymująca dane połączenia z bazą danych.

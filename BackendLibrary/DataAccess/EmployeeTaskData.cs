@@ -1,12 +1,9 @@
 ﻿using BackendLibrary.Models;
 using Dapper;
 using MySql.Data.MySqlClient;
-using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BackendLibrary.DataAccess
 {
@@ -16,7 +13,7 @@ namespace BackendLibrary.DataAccess
     public class EmployeeTaskData : SqlConnector
     {
         /// <summary> Zwraca listę wszystkich zadań danego pracownika. </summary>
-        public static List<EmployeeTaskModel> GetAllLabelsByEmployeeId(int employeeId)
+        public static List<EmployeeTaskModel> GetAllTasksByEmployeeId(int employeeId)
         {
             using (IDbConnection connection = new MySqlConnection(connectionString))
             {

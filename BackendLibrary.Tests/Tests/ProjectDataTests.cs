@@ -1,7 +1,5 @@
-﻿using System;
+﻿using BackendLibrary.Models;
 using System.Collections.Generic;
-using System.Text;
-using BackendLibrary.Models;
 using System.Threading.Tasks;
 using Xunit;
 using XUnitPriorityOrderer;
@@ -23,9 +21,9 @@ namespace BackendLibrary.Tests.Tests
         public async void AddProjectTest()
         {
             int company_id = await Task.Run(() => DataAccess.CompanyData.GetMaxId());
-            ProjectModel labelType = new ProjectModel(company_id, "projekt testowy");
+            ProjectModel project = new ProjectModel(company_id, "projekt testowy");
 
-            await Task.Run(() => DataAccess.ProjectData.AddLabelType(labelType));
+            await Task.Run(() => DataAccess.ProjectData.AddProject(project));
         }
 
         [Fact, Order(2)]
