@@ -14,25 +14,25 @@
                             <span class="e-text" title="menu">Menu</span>
                         </li>
                         <li class="sidebar-item">
-                            <NavLink class="nav-link" href="kanban" Match="NavLinkMatch.All">
+                            <NavLink class="e-icons" href="kanban" Match="NavLinkMatch.All">
                                 <span class="e-icons home"></span>
                                 <span class="e-text" title="home">Twoje zadania</span>
                             </NavLink>
                         </li>
                         <li class="sidebar-item">
-                            <NavLink class="nav-link" href="tasks" Match="NavLinkMatch.All">
+                            <NavLink class="e-icons" href="tasks" Match="NavLinkMatch.All">
                                 <span class="e-icons info"></span>
                                 <span class="e-text" title="info">Wszystkie zadania</span>
                             </NavLink>
                         </li>
                         <li class="sidebar-item">
-                            <NavLink class="nav-link" href="employees" Match="NavLinkMatch.All">
+                            <NavLink class="e-icons" href="employees" Match="NavLinkMatch.All">
                                 <span class="e-icons profile"></span>
                                 <span class="e-text" title="profile">Pracownicy</span>
                             </NavLink>
                         </li>
                         <li class="sidebar-item">
-                            <NavLink class="nav-link" href="profile" Match="NavLinkMatch.All">
+                            <NavLink class="e-icons" href="profile" Match="NavLinkMatch.All">
                                 <span class="e-icons profile"></span>
                                 <span class="e-text" title="profile">Twój profil</span>
                             </NavLink>
@@ -72,6 +72,9 @@
     }
 }
 <style>
+    .e-icons {
+      text-decoration: none;
+    }
     .header-section {
         height: 40px;
         color: black;
@@ -113,8 +116,13 @@
         transform: translateX(0%);
     }
 
+    .dockSidebar {
+        text-decoration: none;
+        font-family: 'Josefin Sans', sans-serif;
+    }
+
     .dockSidebar .e-icons::before {
-        font-size: 25px;
+        font-size: 30px;
         align-items: flex-start;
     }
     /* dockbar icon Style */
@@ -179,15 +187,16 @@
     }
 
     .e-open .e-text {
+        font-family: 'Josefin Sans', sans-serif;
+        color: white;
         overflow: hidden;
         text-overflow: ellipsis;
         line-height: 23px;
-        font-size: 15px;
+        font-size: 18px;
     }
 
     .sidebar-item {
         text-align: center;
-        border-bottom: 1px solid rgba(229, 229, 229, 0.54);
     }
 
     .e-sidebar.e-open .sidebar-item {

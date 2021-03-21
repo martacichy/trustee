@@ -1,15 +1,16 @@
 @import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
+@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans&display=swap');
 
 .e-kanban .e-kanban-table {
     font-size: 20px;
-    font-family: Verdana;
+    font-family: 'Josefin Sans', sans-serif;
 }
 
 .e-kanban .e-kanban-header .e-header-cells {
     font-size: 24px;
     background: #3da081;
     color: #303030;
-    font-family: Verdana;
+    font-family: 'Josefin Sans', sans-serif;
 }
 
 .button1 {
@@ -19,7 +20,7 @@
 }
 
 html, body {
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-family: 'Josefin Sans', sans-serif;
     background-color: #FFFCFF;
     color: #8a8a8a;
     display: flex;
@@ -28,15 +29,37 @@ html, body {
 }
 
 a, .btn-link {
-    color: #d6d5d5;
+    color: white;
     font-size: 16px;
 }
 
 .btn-primary {
-    color: #253237;
+    color: whitesmoke;
     background-color: #3da081;
     border-color: #3da081;
 }
+
+    .btn-primary:hover {
+        font-size: 18px;
+        color: whitesmoke;
+        background-color: #399679;
+    }
+
+.actionBtn {
+    margin-left: 10px;
+    display: inline-block;
+    float: left;
+}
+
+#deleteBtn {
+    background-color: #ff6363;
+    border-color: #ff6363;
+}
+
+    #deleteBtn:hover {
+        border-color: #de5757;
+        background-color: #de5757;
+    }
 
 th {
     color: black;
@@ -150,7 +173,7 @@ app {
 }
 
 .validation-message {
-    font: Verdana;
+    font-family: 'Josefin Sans', sans-serif;
     color: #E3170A;
     font-size: 13px;
     font-weight: bold;
