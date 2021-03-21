@@ -5,6 +5,9 @@ SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
 
 -- -----------------------------------------------------
+-- Schema default_schema
+-- -----------------------------------------------------
+-- -----------------------------------------------------
 -- Schema database06
 -- -----------------------------------------------------
 DROP SCHEMA IF EXISTS `database06` ;
@@ -23,9 +26,9 @@ DROP TABLE IF EXISTS `database06`.`Company` ;
 CREATE TABLE IF NOT EXISTS `database06`.`Company` (
   `company_id` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(100) NOT NULL,
-  `creation_date` DATE NULL,
-  `login` VARCHAR(100) NULL,
-  `password` VARCHAR(100) NULL,
+  `creation_date` DATE NULL DEFAULT NULL,
+  `login` VARCHAR(100) NULL DEFAULT NULL,
+  `password` VARCHAR(100) NULL DEFAULT NULL,
   PRIMARY KEY (`company_id`),
   UNIQUE INDEX `company_id_UNIQUE` (`company_id` ASC) VISIBLE)
 ENGINE = InnoDB;
@@ -38,16 +41,16 @@ DROP TABLE IF EXISTS `database06`.`Employee` ;
 
 CREATE TABLE IF NOT EXISTS `database06`.`Employee` (
   `employee_id` INT NOT NULL AUTO_INCREMENT,
-  `company_id` INT NULL,
+  `company_id` INT NULL DEFAULT NULL,
   `first_name` VARCHAR(50) NOT NULL,
   `last_name` VARCHAR(50) NOT NULL,
-  `email` VARCHAR(100) NULL,
+  `email` VARCHAR(100) NULL DEFAULT NULL,
   `if_manager` INT NOT NULL DEFAULT 0,
-  `login` VARCHAR(100) NULL,
-  `password` VARCHAR(100) NULL,
+  `login` VARCHAR(100) NULL DEFAULT NULL,
+  `password` VARCHAR(100) NULL DEFAULT NULL,
   PRIMARY KEY (`employee_id`),
   UNIQUE INDEX `employee_id_UNIQUE` (`employee_id` ASC) VISIBLE,
-  UNIQUE KEY unique_email (`email` ASC) VISIBLE,
+  UNIQUE INDEX `unique_email` (`email` ASC) VISIBLE,
   INDEX `company_id_idx` (`company_id` ASC) VISIBLE,
   CONSTRAINT `company_id_employee`
     FOREIGN KEY (`company_id`)
@@ -58,16 +61,16 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `database06`.`LabelType`
+-- Table `database06`.`Project`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `database06`.`LabelType` ;
+DROP TABLE IF EXISTS `database06`.`Project` ;
 
-CREATE TABLE IF NOT EXISTS `database06`.`LabelType` (
-  `label_type_id` INT NOT NULL AUTO_INCREMENT,
-  `company_id` INT NULL,
+CREATE TABLE IF NOT EXISTS `database06`.`Project` (
+  `project_id` INT NOT NULL AUTO_INCREMENT,
+  `company_id` INT NULL DEFAULT NULL,
   `name` VARCHAR(50) NOT NULL DEFAULT '<niepodpisany rodzaj etykiety>',
-  PRIMARY KEY (`label_type_id`),
-  UNIQUE INDEX `label_type_id_UNIQUE` (`label_type_id` ASC) VISIBLE,
+  PRIMARY KEY (`project_id`),
+  UNIQUE INDEX `project_id_UNIQUE` (`project_id` ASC) VISIBLE,
   INDEX `company_id_labeltype_idx` (`company_id` ASC) VISIBLE,
   CONSTRAINT `company_id_labeltype`
     FOREIGN KEY (`company_id`)
@@ -84,17 +87,17 @@ DROP TABLE IF EXISTS `database06`.`Label` ;
 
 CREATE TABLE IF NOT EXISTS `database06`.`Label` (
   `label_id` INT NOT NULL AUTO_INCREMENT,
-  `company_id` INT NULL,
-  `label_type_id` INT NULL,
+  `company_id` INT NULL DEFAULT NULL,
+  `project_id` INT NULL DEFAULT NULL,
   `name` VARCHAR(30) NOT NULL,
-  `description` VARCHAR(500) NULL,
+  `description` VARCHAR(500) NULL DEFAULT NULL,
   PRIMARY KEY (`label_id`),
   UNIQUE INDEX `label_id_UNIQUE` (`label_id` ASC) VISIBLE,
-  INDEX `label_type_id_idx` (`label_type_id` ASC) VISIBLE,
   INDEX `company_id_idx` (`company_id` ASC) VISIBLE,
-  CONSTRAINT `label_type_id`
-    FOREIGN KEY (`label_type_id`)
-    REFERENCES `database06`.`LabelType` (`label_type_id`)
+  INDEX `project_id_idx` (`project_id` ASC) VISIBLE,
+  CONSTRAINT `project_id`
+    FOREIGN KEY (`project_id`)
+    REFERENCES `database06`.`Project` (`project_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `company_id_label`
@@ -138,9 +141,9 @@ CREATE TABLE IF NOT EXISTS `database06`.`Task` (
   `task_id` INT NOT NULL AUTO_INCREMENT,
   `company_id` INT NOT NULL,
   `name` VARCHAR(50) NOT NULL DEFAULT '<niepodpisane zadanie>',
-  `description` VARCHAR(1000) NULL,
-  `start_time` DATETIME NULL,
-  `deadline` DATETIME NULL,
+  `description` VARCHAR(1000) NULL DEFAULT NULL,
+  `start_time` DATETIME NULL DEFAULT NULL,
+  `deadline` DATETIME NULL DEFAULT NULL,
   `status` VARCHAR(50) NOT NULL DEFAULT 'not started',
   `auto_assigned` INT NOT NULL DEFAULT 1,
   PRIMARY KEY (`task_id`, `company_id`),
@@ -165,6 +168,7 @@ CREATE TABLE IF NOT EXISTS `database06`.`EmployeeTask` (
   `status` VARCHAR(50) NOT NULL DEFAULT 'not started',
   PRIMARY KEY (`employee_id`, `task_id`),
   INDEX `employee_id_task_idx` (`employee_id` ASC) VISIBLE,
+  INDEX `task_id` (`task_id` ASC) VISIBLE,
   CONSTRAINT `task_id`
     FOREIGN KEY (`task_id`)
     REFERENCES `database06`.`Task` (`task_id`)
@@ -188,6 +192,7 @@ CREATE TABLE IF NOT EXISTS `database06`.`TaskLabel` (
   `label_id` INT NOT NULL,
   PRIMARY KEY (`label_id`, `task_id`),
   INDEX `label_id_task_idx` (`label_id` ASC) VISIBLE,
+  INDEX `task_id_FK` (`task_id` ASC) VISIBLE,
   CONSTRAINT `task_id_FK`
     FOREIGN KEY (`task_id`)
     REFERENCES `database06`.`Task` (`task_id`)
@@ -201,30 +206,30 @@ CREATE TABLE IF NOT EXISTS `database06`.`TaskLabel` (
 ENGINE = InnoDB;
 
 
-SET SQL_MODE=@OLD_SQL_MODE;
-SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
-SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
-
-
 -- -----------------------------------------------------
 -- Table `database06`.`Comment`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `database06`.`comment` ;
+DROP TABLE IF EXISTS `database06`.`Comment` ;
 
-CREATE TABLE IF NOT EXISTS `database06`.`comment` (
-  `comment_id` int NOT NULL AUTO_INCREMENT,
-  `task_id` int NOT NULL,
-  `employee_id` int NOT NULL,
-  `date` datetime NOT NULL,
-  `description` varchar(1000) DEFAULT NULL,
+CREATE TABLE IF NOT EXISTS `database06`.`Comment` (
+  `comment_id` INT NOT NULL AUTO_INCREMENT,
+  `task_id` INT NOT NULL,
+  `employee_id` INT NOT NULL,
+  `date` DATETIME NULL,
+  `description` VARCHAR(1000) NULL DEFAULT NULL,
   PRIMARY KEY (`comment_id`),
-  UNIQUE KEY `comment_id_UNIQUE` (`comment_id`),
-  KEY `employee_id_idx` (`employee_id`),
-  KEY `task_id_idx` (`task_id`),
+  UNIQUE INDEX `comment_id_UNIQUE` (`comment_id` ASC) VISIBLE,
+  INDEX `employee_id_idx` (`employee_id` ASC) VISIBLE,
+  INDEX `task_id_idx` (`task_id` ASC) VISIBLE,
   CONSTRAINT `employee_id_comment`
     FOREIGN KEY (`employee_id`)
     REFERENCES `database06`.`Employee` (`employee_id`),
   CONSTRAINT `task_id_comment`
-  FOREIGN KEY (`task_id`)
-  REFERENCES `database06`.`Task` (`task_id`))
-  ENGINE = InnoDB;
+    FOREIGN KEY (`task_id`)
+    REFERENCES `database06`.`Task` (`task_id`))
+ENGINE = InnoDB;
+
+
+SET SQL_MODE=@OLD_SQL_MODE;
+SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
+SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
