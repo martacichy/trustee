@@ -78,7 +78,7 @@ namespace BackendLibrary.DataAccess
             using (IDbConnection connection = new MySqlConnection(connectionString))
             {
                 string sql;
-                if (newLabel.Description.Length > 0)
+                if (!String.IsNullOrEmpty(newLabel.Description))
                 {
                     sql = @"insert into database06.label (Company_id, Name, Description)
                             values (@Company_id, @Name, @Description)";

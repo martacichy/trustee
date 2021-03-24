@@ -29,7 +29,7 @@ namespace BackendLibrary.Validation
 
         public int project_id { get; set; }
 
-        [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "Dodając etykiete możesz używać tylko liter!")]
+        [RegularExpression(@"^[a-zA-Z0-9]+$", ErrorMessage = "Dodając etykiete możesz używać tylko liter i cyfr!")]
         public string SelectedLabel { get; set; }
     }
 

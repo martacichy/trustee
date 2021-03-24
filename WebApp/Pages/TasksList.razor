@@ -360,7 +360,7 @@
     private int labelIdByName;
     private string mergedSelectedLabels;
     private bool isMergedLabelsMatchToPattern;
-    private string pattern = @"^[a-zA-Z]+$";
+    private string pattern = @"^[a-zA-Z0-9]+$";
     private Boolean VisibilityAdd { get; set; }
 
 
@@ -508,6 +508,7 @@
                 AddEmployeeToTask();
                 SuccessTask.Show();
                 uriHelper.NavigateTo(uriHelper.Uri, forceLoad: true);
+                VisibilityAdd = false;
             }
         }
     }
