@@ -1,8 +1,5 @@
 ﻿@page "/tasks"
 
-@inject NavigationManager NavigationManager
-@inject NavigationManager uriHelper;
-
 <h3>Wszystkie zadania</h3>
 
 @* wyświetlanie przycisku do tworzenia nowych zadań *@
@@ -385,9 +382,7 @@
         }
 
         SelectedTask = new TaskModel();
-
         TaskList = TaskData.GetAllByCompanyId(Pages.Login.UserLoggedIn.Company_id);
-
         TaskAdd = new BackendLibrary.Validation.TaskValidation();
         TaskEdit = new BackendLibrary.Validation.EditTaskValidation();
         labelsInDb = BackendLibrary.DataAccess.LabelData.GetAllByCompanyId(Login.UserLoggedIn.Company_id);
