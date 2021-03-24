@@ -31,11 +31,9 @@
                                 <span class="e-text" title="profile">Pracownicy</span>
                             </NavLink>
                         </li>
-                        <li class="sidebar-item">
-                            <NavLink class="e-icons" href="profile" Match="NavLinkMatch.All">
-                                <span class="e-icons profile"></span>
-                                <span class="e-text" title="profile">Twój profil</span>
-                            </NavLink>
+                        <li class="sidebar-item" @onclick="@ShowProfile">
+                            <span class="e-icons profile"></span>
+                            <span class="e-text" title="profile">Twój profil</span>
                         </li>
                         <li class="sidebar-item">
                             <span class="e-icons settings"></span>
@@ -51,8 +49,47 @@
         </div>
     </div>
 </div>
+
+@* okno z profilem *@
+<SfDialog @bind-Visible="@Visibility" Width="500px" IsModal="true" ShowCloseIcon="true">
+    <DialogTemplates>
+        <Content>
+                            <div class="card user-card-full">
+                                <div class="row m-l-0 m-r-0">
+                                    <div class="col-sm-4 bg-c-lite-green user-profile">
+                                        <div class="card-block text-center text-white">
+                                            <div class="m-b-25"> <img src="https://instashow.pl/wp-content/uploads/2021/01/IMG_20210113_005503-e1610496115673-1024x813.jpg" style="width:80px; height:80px"> </div>
+                                            <h6 class="f-w-600">@Login.UserLoggedIn.First_name @Login.UserLoggedIn.Last_name</h6>
+                                            <p>@Login.UserLoggedIn.UserType</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-8">
+                                        <div class="card-block">
+                                            <h6 class="m-b-20 p-b-5 b-b-default f-w-600">Informacje</h6>
+                                            <div class="row">
+                                                <div class="col-sm-6">
+                                                    <p class="m-b-10 f-w-600">Email</p>
+                                                    <h6 class="text-muted f-w-400">@Login.UserLoggedIn.Email</h6>
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <p class="m-b-10 f-w-600">Zespół</p>
+                                                    <h6 class="text-muted f-w-400">@Login.UserCompany.Name</h6>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+        </Content>
+    </DialogTemplates>
+    <DialogEvents Closed="@DialogClosed"></DialogEvents>
+    <DialogAnimationSettings Effect="DialogEffect.Fade"></DialogAnimationSettings>
+</SfDialog>
+
+
 @code {
     SfSidebar Sidebar;
+    private Boolean Visibility { get; set; }
     public string Leftbtn = "Left";
     private SidebarPosition Position { get; set; }
     public bool SidebarToggle = false;
@@ -70,11 +107,22 @@
         NavigationManager.NavigateTo("/");
         Pages.Login.UserLoggedIn.If_manager = -1;
     }
+
+    private void ShowProfile()
+    {
+        Visibility = true;
+    }
+
+    private void DialogClosed(CloseEventArgs args)
+    {
+        Visibility = false;
+    }
 }
 <style>
     .e-icons {
-      text-decoration: none;
+        text-decoration: none;
     }
+
     .header-section {
         height: 40px;
         color: black;
@@ -121,26 +169,26 @@
         font-family: 'Josefin Sans', sans-serif;
     }
 
-    .dockSidebar .e-icons::before {
-        font-size: 30px;
-        align-items: flex-start;
-    }
-    /* dockbar icon Style */
-    .dockSidebar .home::before {
-        content: '\e102';
-    }
+        .dockSidebar .e-icons::before {
+            font-size: 30px;
+            align-items: flex-start;
+        }
+        /* dockbar icon Style */
+        .dockSidebar .home::before {
+            content: '\e102';
+        }
 
-    .dockSidebar .profile::before {
-        content: '\e10c';
-    }
+        .dockSidebar .profile::before {
+            content: '\e10c';
+        }
 
-    .dockSidebar .info::before {
-        content: '\e11b';
-    }
+        .dockSidebar .info::before {
+            content: '\e11b';
+        }
 
-    .dockSidebar .settings::before {
-        content: '\e10b';
-    }
+        .dockSidebar .settings::before {
+            content: '\e10b';
+        }
 
     .e-sidebar .expand::before,
     .e-sidebar.e-right.e-open .expand::before {
@@ -284,4 +332,127 @@
     /* end of newTab support */
     /* custom code end */
     /* end of sidebar styles */
+
+
+    /* Czy to wszystko jest tu potrzebne? */
+    /* Nie a co? */
+    img {
+        border-radius: 50%;
+    }
+
+    .padding {
+        padding: 3rem !important;
+        position: absolute;
+        left: 25%;
+        right: 5%;
+    }
+
+    .user-card-full {
+        overflow: hidden
+    }
+
+    .card {
+        border-radius: 5px;
+        -webkit-box-shadow: 0 1px 20px 0 rgba(69, 90, 100, 0.08);
+        box-shadow: 0 1px 20px 0 rgba(69, 90, 100, 0.08);
+        border: none;
+    }
+
+    .m-r-0 {
+        margin-right: 0px
+    }
+
+    .m-l-0 {
+        margin-left: 0px
+    }
+
+    .user-card-full .user-profile {
+        border-radius: 5px 0 0 5px
+    }
+
+    .bg-c-lite-green {
+        background: -webkit-gradient(linear, left top, right top, from(#1FB98B), to(#1FB98B));
+        background: linear-gradient(to right, #1FB98B, #1FB98B)
+    }
+
+    .user-profile {
+        padding: 20px 0
+    }
+
+    .card-block {
+        padding: 1.25rem
+    }
+
+    .m-b-25 {
+        margin-bottom: 25px
+    }
+
+    .img-radius {
+        border-radius: 5px
+    }
+
+    h6 {
+        font-size: 14px
+    }
+
+    .card .card-block p {
+        line-height: 25px
+    }
+
+    .card-block {
+        padding: 1.25rem
+    }
+
+    .b-b-default {
+        border-bottom: 1px solid #e0e0e0
+    }
+
+    .m-b-20 {
+        margin-bottom: 20px
+    }
+
+    .p-b-5 {
+        padding-bottom: 5px !important
+    }
+
+    .card .card-block p {
+        line-height: 25px
+    }
+
+    .m-b-10 {
+        margin-bottom: 10px
+    }
+
+    .text-muted {
+        color: #919aa3 !important
+    }
+
+    .b-b-default {
+        border-bottom: 1px solid #e0e0e0
+    }
+
+    .f-w-600 {
+        font-weight: 600
+    }
+
+    .m-b-20 {
+        margin-bottom: 20px
+    }
+
+    .m-t-40 {
+        margin-top: 20px
+    }
+
+    .p-b-5 {
+        padding-bottom: 5px !important
+    }
+
+    .m-b-10 {
+        margin-bottom: 10px
+    }
+
+    .m-t-40 {
+        margin-top: 20px
+    }
 </style>
+

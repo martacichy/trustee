@@ -1,5 +1,8 @@
 ﻿@page "/tasks"
 
+@inject NavigationManager NavigationManager
+@inject NavigationManager uriHelper;
+
 <h3>Wszystkie zadania</h3>
 
 @* wyświetlanie przycisku do tworzenia nowych zadań *@
@@ -7,13 +10,13 @@
 {
     <div>
         <div class="actionBtn">
-            <button class="btn btn-primary" @onclick="AddTask">Dodaj zadanie</button>
+            <Sfbutton class="btn btn-primary" @onclick="AddTask">Dodaj zadanie</Sfbutton>
         </div>
         <div class="actionBtn">
-            <button class="btn btn-primary" @onclick="EditTask">Edytuj zadanie</button>
+            <Sfbutton class="btn btn-primary" @onclick="EditTask">Edytuj zadanie</Sfbutton>
         </div>
         <div class="actionBtn">
-            <button class="btn btn-primary" id="deleteBtn" @onclick="DeleteTask">Usuń zadanie</button>
+            <Sfbutton class="btn btn-primary" id="deleteBtn" @onclick="DeleteTask">Usuń zadanie</Sfbutton>
         </div>
     </div>
 }
@@ -44,8 +47,7 @@
                     RowSelected="RowSelectHandler"
                     RowDeselected="RowDeselectHandler"
                     OnRecordDoubleClick="DisplayTaskDetails"
-                    OnRecordClick="ExpandTaskDetails"
-                    >
+                    OnRecordClick="ExpandTaskDetails">
         </GridEvents>
 
         <GridColumns>
@@ -64,6 +66,281 @@
             <ToastPosition X="Center"></ToastPosition>
         </SfToast>
     </div>
+
+    @* okno dodawania nowego zadania*@
+    <SfDialog @bind-Visible="@VisibilityAdd" Header="Nowe zadanie" Width="500px" IsModal="true" ShowCloseIcon="true">
+        <DialogTemplates>
+            <Content>
+                <EditForm Model="@TaskAdd">
+                    <DataAnnotationsValidator />
+                    <div class="form-group">
+                        <label for="Tytuł" class="control-label" required>Tytuł</label>
+                        <input for="Tytuł" class="form-control" @bind-value="TaskAdd.name" />
+                        <ValidationMessage For="@(() => TaskAdd.name)" />
+                    </div>
+                    <div class="form-group">
+                        <label for="Opis" class="control-label">Opis</label>
+                        <input for="Opis" class="form-control" @bind-value="TaskAdd.description" />
+                        <ValidationMessage For="@(() => TaskAdd.description)" />
+                    </div>
+                    <div class="form-group">
+                        <label for="Starttime" class="control-label">Czas rozpoczęcia</label>
+                        <input for="Starttime" type="date" class="form-control" @bind-value="TaskAdd.start_time" />
+                        <ValidationMessage For="@(() => TaskAdd.start_time)" />
+                    </div>
+                    <div class="form-group">
+                        <label for="Deadline" class="control-label">Deadline</label>
+                        <input for="Deadline" type="date" class="form-control" @bind-value="TaskAdd.deadline" />
+                        <ValidationMessage For="@(() => TaskAdd.deadline)" />
+                    </div>
+                    <div class="form-group">
+                        <label for="Status" class="control-label">Status zadania</label>
+                        <input for="Status" class="form-control" @bind-value="TaskAdd.status" />
+                        <ValidationMessage For="@(() => TaskAdd.status)" />
+                    </div>
+                    <div class="form-group">
+                        <label for="IfAutoAssigned" class="control-label">Czy przydzielić automatycznie?</label>
+                        <input for="IfAutoAssigned" type="checkbox" class="form-control" @bind-value="TaskAdd.auto_assigned" />
+                    </div>
+
+                    <div class="control_wrapper">
+                        <label asp-for="etykiety" class="control-label">Etykiety</label>
+                        <SfMultiSelect TValue="string[]" TItem="BackendLibrary.Models.LabelModel"
+                                       @bind-Value="@selectedLabels"
+                                       Placeholder="Szukaj..."
+                                       DataSource="@labelsInDb" AllowFiltering="true" AllowCustomValue="true">
+                            <MultiSelectFieldSettings Text="Name"> </MultiSelectFieldSettings>
+                        </SfMultiSelect>
+                    </div>
+
+                    <div class="col-lg-12 control-section multiselect-height">
+                        <div class="control-wrapper multi-select-parent">
+                            <div class="padding-top">
+                                <label asp-for="pracownicy" class="control-label">Pracownicy</label>
+                                <SfMultiSelect TValue="int[]" TItem="BackendLibrary.Models.EmployeeModel"
+                                               @bind-Value="@selectedEmployeesId"
+                                               Placeholder="Wybierz..."
+                                               DataSource="@employees" AllowFiltering="true">
+                                    <MultiSelectTemplates TItem="BackendLibrary.Models.EmployeeModel">
+                                        <!-- Zmieniony Context z default na "SelectedEmployee" aby mogła działać walidacja -->
+                                        <ItemTemplate Context="SelectedEmployee">
+                                            <div>
+                                                <div class="ename">
+                                                    @((SelectedEmployee as BackendLibrary.Models.EmployeeModel).First_name)
+                                                    @((SelectedEmployee as BackendLibrary.Models.EmployeeModel).Last_name)
+                                                </div>
+                                            </div>
+                                        </ItemTemplate>
+                                        <ValueTemplate Context="SelectedEmployee">
+                                            <div class="multiselect-width">
+                                                <div class="name">
+                                                    @((SelectedEmployee as BackendLibrary.Models.EmployeeModel).First_name)
+                                                    @((SelectedEmployee as BackendLibrary.Models.EmployeeModel).Last_name)
+                                                </div>
+                                            </div>
+                                        </ValueTemplate>
+                                    </MultiSelectTemplates>
+                                    <MultiSelectFieldSettings Text="First_name" Value="Employee_id"></MultiSelectFieldSettings>
+                                </SfMultiSelect>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary" data-dismiss="modal" @onclick="SaveTask">Zapisz</button>
+                        <SfToast @ref="SuccessTask" Title="Dodano nowe zadanie!" Timeout=3000 Content="@ToastContentAdd">
+                            <ToastPosition X="Right"></ToastPosition>
+                        </SfToast>
+                    </div>
+                </EditForm>
+            </Content>
+        </DialogTemplates>
+        <DialogEvents Closed="@DialogClosed"></DialogEvents>
+        <DialogAnimationSettings Effect="DialogEffect.Fade"></DialogAnimationSettings>
+    </SfDialog>
+
+    @* okno szczegolow zadania *@
+    <SfDialog @bind-Visible="@VisibilityDetails" Header="Szczegóły zadania" Width="1500px" IsModal="true" ShowCloseIcon="true">
+        <DialogTemplates>
+            <Content>
+                <SfSplitter CssClass="out-splitter" Height="600px" Width="100%" SeparatorSize="4">
+                    <SplitterPanes>
+                        <SplitterPane Size="25%" Min="60px">
+                            <ContentTemplate>
+                                <div class='splitter-default-content'><div>Tutaj maja byc komentarze</div></div>
+                            </ContentTemplate>
+                        </SplitterPane>
+                        <SplitterPane Size="50%" Min="60px">
+                            <ContentTemplate>
+                                <div class='splitter-default-content'>
+                                    <div>
+                                        <div>
+                                            @if (Login.UserLoggedIn.If_manager == 1 || Login.UserLoggedIn.If_manager == 2)
+                                            {
+                                                <div class="actionBtn">
+                                                    <button class="btn btn-primary" @onclick="EditTask">Edytuj</button>
+                                                </div>
+                                            }
+                                            <br />
+                                            <br />
+                                            @* wysietlanie nazwy wybranego taska*@
+                                            <div>
+                                                <SfGrid @ref="DefaultGrid1"
+                                                        DataSource="ListOfTasks"
+                                                        AllowPaging="false"
+                                                        AllowSorting="false"
+                                                        AllowFiltering="false">
+                                                    <GridSearchSettings IgnoreCase="true"></GridSearchSettings>
+                                                    <GridFilterSettings EnableCaseSensitivity="false"></GridFilterSettings>
+                                                    <GridPageSettings PageSize="12"></GridPageSettings>
+                                                    <GridSelectionSettings CheckboxOnly="true" PersistSelection="true"></GridSelectionSettings>
+
+                                                    <GridColumns>
+                                                        <GridColumn Field=@nameof(TaskModel.Name) HeaderText="Nazwa" TextAlign="TextAlign.Center" Width="250"></GridColumn>
+                                                    </GridColumns>
+                                                </SfGrid>
+                                            </div>
+
+                                            @* wyswietlanie opisu wybranego taska*@
+                                            <div>
+                                                <SfGrid @ref="DefaultGrid1"
+                                                        DataSource="ListOfTasks"
+                                                        AllowPaging="false"
+                                                        AllowSorting="false"
+                                                        AllowFiltering="false">
+                                                    <GridSearchSettings IgnoreCase="true"></GridSearchSettings>
+                                                    <GridFilterSettings EnableCaseSensitivity="false"></GridFilterSettings>
+                                                    <GridPageSettings PageSize="12"></GridPageSettings>
+                                                    <GridSelectionSettings CheckboxOnly="true" PersistSelection="true"></GridSelectionSettings>
+
+                                                    <GridColumns>
+                                                        <GridColumn Field=@nameof(TaskModel.Description) HeaderText="Opis" TextAlign="TextAlign.Center" Width="250"></GridColumn>
+                                                    </GridColumns>
+                                                </SfGrid>
+                                            </div>
+
+                                            @* wyswietlanie daty rozpoczecia wybranego taska*@
+                                            <div>
+                                                <SfGrid @ref="DefaultGrid1"
+                                                        DataSource="ListOfTasks"
+                                                        AllowPaging="false"
+                                                        AllowSorting="false"
+                                                        AllowFiltering="false">
+                                                    <GridSearchSettings IgnoreCase="true"></GridSearchSettings>
+                                                    <GridFilterSettings EnableCaseSensitivity="false"></GridFilterSettings>
+                                                    <GridPageSettings PageSize="12"></GridPageSettings>
+                                                    <GridSelectionSettings CheckboxOnly="true" PersistSelection="true"></GridSelectionSettings>
+
+                                                    <GridColumns>
+                                                        <GridColumn Field=@nameof(TaskModel.Start_time) HeaderText="Data rozpoczęcia" TextAlign="TextAlign.Center" Width="250"></GridColumn>
+                                                    </GridColumns>
+                                                </SfGrid>
+                                            </div>
+
+                                            @* wyswietlanie daty deadline'u wybranego taska*@
+                                            <div>
+                                                <SfGrid @ref="DefaultGrid1"
+                                                        DataSource="ListOfTasks"
+                                                        AllowPaging="false"
+                                                        AllowSorting="false"
+                                                        AllowFiltering="false">
+                                                    <GridSearchSettings IgnoreCase="true"></GridSearchSettings>
+                                                    <GridFilterSettings EnableCaseSensitivity="false"></GridFilterSettings>
+                                                    <GridPageSettings PageSize="12"></GridPageSettings>
+                                                    <GridSelectionSettings CheckboxOnly="true" PersistSelection="true"></GridSelectionSettings>
+
+                                                    <GridColumns>
+                                                        <GridColumn Field=@nameof(TaskModel.Deadline) HeaderText="Deadline" TextAlign="TextAlign.Center" Width="250"></GridColumn>
+                                                    </GridColumns>
+                                                </SfGrid>
+                                            </div>
+
+                                            @* wyswietlanie statusu wykonania wybranego taska*@
+                                            <div>
+                                                <SfGrid @ref="DefaultGrid1"
+                                                        DataSource="ListOfTasks"
+                                                        AllowPaging="false"
+                                                        AllowSorting="false"
+                                                        AllowFiltering="false">
+                                                    <GridSearchSettings IgnoreCase="true"></GridSearchSettings>
+                                                    <GridFilterSettings EnableCaseSensitivity="false"></GridFilterSettings>
+                                                    <GridPageSettings PageSize="12"></GridPageSettings>
+                                                    <GridSelectionSettings CheckboxOnly="true" PersistSelection="true"></GridSelectionSettings>
+
+                                                    <GridColumns>
+                                                        <GridColumn Field=@nameof(TaskModel.Status) HeaderText="Status wykonania" TextAlign="TextAlign.Center" Width="250"></GridColumn>
+                                                    </GridColumns>
+                                                </SfGrid>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </ContentTemplate>
+                        </SplitterPane>
+                        <SplitterPane Size="25%" Min="60px">
+                            <ContentTemplate>
+                                <div class='splitter-default-content'><div>Tutaj maja byc etykiety</div></div>
+                            </ContentTemplate>
+                        </SplitterPane>
+                    </SplitterPanes>
+                </SfSplitter>
+            </Content>
+        </DialogTemplates>
+        <DialogEvents Closed="@DialogClosed"></DialogEvents>
+        <DialogAnimationSettings Effect="DialogEffect.Fade"></DialogAnimationSettings>
+    </SfDialog>
+
+    @* okno edycji zadania *@
+    <SfDialog @bind-Visible="@VisibilityEdit" Header="Edytuj zadanie" Width="500px" IsModal="true" ShowCloseIcon="true">
+        <DialogTemplates>
+            <Content>
+                <EditForm Model="@TaskEdit">
+                    <DataAnnotationsValidator />
+                    <div class="form-group">
+                        <label for="Tytuł" class="control-label" required>Tytuł</label>
+                        <input for="Tytuł" class="form-control" @bind-value="TaskEdit.name" />
+                        <ValidationMessage For="@(() => TaskEdit.name)" />
+                    </div>
+                    <div class="form-group">
+                        <label for="Opis" class="control-label">Opis</label>
+                        <input for="Opis" class="form-control" @bind-value="TaskEdit.description" />
+                        <ValidationMessage For="@(() => TaskEdit.description)" />
+                    </div>
+                    <div class="form-group">
+                        <label for="Starttime" class="control-label">Czas rozpoczęcia</label>
+                        <input for="Starttime" type="date" class="form-control" @bind-value="TaskEdit.start_time" />
+                        <ValidationMessage For="@(() => TaskEdit.start_time)" />
+                    </div>
+                    <div class="form-group">
+                        <label for="Deadline" class="control-label">Deadline</label>
+                        <input for="Deadline" type="date" class="form-control" @bind-value="TaskEdit.deadline" />
+                        <ValidationMessage For="@(() => TaskEdit.deadline)" />
+                    </div>
+                    <div class="form-group">
+                        <label for="Status" class="control-label">Status zadania</label>
+                        <input for="Status" class="form-control" @bind-value="TaskEdit.status" />
+                        <ValidationMessage For="@(() => TaskEdit.status)" />
+                    </div>
+                    <div class="form-group">
+                        <label for="IfAutoAssigned" class="control-label">Czy przydzielić automatycznie?</label>
+                        <input for="IfAutoAssigned" type="checkbox" class="form-control" @bind-value="TaskEdit.auto_assigned" />
+                    </div>
+
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-block btn-info" data-dismiss="modal" @onclick="UpdateTask">Zapisz</button>
+                        <SfToast @ref="ToastObj" Title="Zadanie zaktualizowane pomyslnie!" Timeout=3000 Content="@ToastContentEdit">
+                            <ToastPosition X="Right"></ToastPosition>
+                        </SfToast>
+                        <SfToast @ref="FailedObj" Title="Brak zmian w zadaniu!" Timeout=3000 Content="@FailedContent">
+                            <ToastPosition X="Right"></ToastPosition>
+                        </SfToast>
+                    </div>
+                </EditForm>
+            </Content>
+        </DialogTemplates>
+        <DialogEvents Closed="@DialogEditClosed"></DialogEvents>
+        <DialogAnimationSettings Effect="DialogEffect.Fade"></DialogAnimationSettings>
+    </SfDialog>
 </div>
 
 @code {
@@ -72,6 +349,33 @@
     private string searchStr;
     private static List<TaskModel> TaskList;
     public static TaskModel SelectedTask;
+
+    // Zmienne z AddNewTask
+    SfToast SuccessTask;
+    private string ToastContentAdd { get; set; } = "Zadanie zostało pomyślnie dodane.";
+    private BackendLibrary.Validation.TaskValidation TaskAdd;
+    private List<BackendLibrary.Models.LabelModel> labelsInDb;
+    private List<BackendLibrary.Models.EmployeeModel> employees;
+    private string[] selectedLabels { get; set; } = new string[] { };
+    private int[] selectedEmployeesId = new int[] { };
+    private int lastTaskId;
+    private int labelIdByName;
+    private Boolean VisibilityAdd { get; set; }
+
+    // Zmienne z EditTask
+    SfToast ToastObj;
+    SfToast FailedObj;
+    private string ToastContentEdit { get; set; } = "Zadanie zaktualizowane pomyslnie!";
+    private string FailedContent { get; set; } = "Brak zmian w zadaniu!";
+    private BackendLibrary.Validation.EditTaskValidation TaskEdit;
+    DateTime defaultDate = new DateTime(0001, 1, 1, 0, 0, 0);
+    private Boolean VisibilityEdit { get; set; }
+
+    // Zmienne z TaskDetails
+    private SfGrid<BackendLibrary.Models.TaskModel> DefaultGrid1;
+    public static List<BackendLibrary.Models.TaskModel> ListOfTasks;
+    private Boolean addButtonClicked;
+    private Boolean VisibilityDetails { get; set; }
 
     protected override void OnInitialized()
     {
@@ -83,6 +387,12 @@
         SelectedTask = new TaskModel();
 
         TaskList = TaskData.GetAllByCompanyId(Pages.Login.UserLoggedIn.Company_id);
+
+        TaskAdd = new BackendLibrary.Validation.TaskValidation();
+        TaskEdit = new BackendLibrary.Validation.EditTaskValidation();
+        labelsInDb = BackendLibrary.DataAccess.LabelData.GetAllByCompanyId(Login.UserLoggedIn.Company_id);
+        employees = BackendLibrary.DataAccess.EmployeeData.GetAllByCompanyId(Login.UserLoggedIn.Company_id);
+
     }
 
     public void RowSelectHandler(RowSelectEventArgs<TaskModel> args)
@@ -105,14 +415,20 @@
 
     private void AddTask(MouseEventArgs e)
     {
-        NavigationManager.NavigateTo("/add-task");
+        VisibilityAdd = true;
     }
 
     private void EditTask(MouseEventArgs e)
     {
         if (SelectedTask != null)
         {
-            NavigationManager.NavigateTo("/task-details");
+            TaskEdit.name = SelectedTask.Name;
+            TaskEdit.description = SelectedTask.Description;
+            TaskEdit.start_time = SelectedTask.Start_time;
+            TaskEdit.deadline = SelectedTask.Deadline;
+            TaskEdit.status = SelectedTask.Status;
+            TaskEdit.auto_assigned = SelectedTask.Auto_assigned;
+            VisibilityEdit = true;
         }
         else
         {
@@ -138,7 +454,8 @@
 
         if (SelectedTask != null)
         {
-            NavigationManager.NavigateTo("/task-details");
+            ListOfTasks = TaskData.GetByIdList(Pages.TasksList.SelectedTask.Task_id);
+            VisibilityDetails = true;
         }
     }
 
@@ -152,4 +469,203 @@
             // NavigationManager.NavigateTo("/task-details");
         }
     }
+
+    /// <summary>
+    /// Powraca do listy zadan po zamknieciu okna
+    /// </summary>
+    private void DialogClosed(CloseEventArgs args)
+    {
+        VisibilityAdd = false;
+        VisibilityDetails = false;
+    }
+
+    private void DialogEditClosed(CloseEventArgs args)
+    {
+        VisibilityEdit = false;
+        ClearTask();
+    }
+
+    /// <summary>
+    /// Dodaje do bazy danych zadanie, które zostało nakreślone w gui aplikacji.
+    /// </summary>
+    private void SaveTask()
+    {
+        DateTime defaultDateTime = new DateTime(1900, 1, 1, 0, 0, 0);
+        if (TaskAdd.name != null && TaskAdd.description != null && TaskAdd.status != null
+            && TaskAdd.deadline >= DateTime.Today && TaskAdd.start_time >= defaultDateTime)
+        {
+            BackendLibrary.Models.TaskModel newTask = new BackendLibrary.Models.TaskModel
+                (WebApp.Pages.Login.UserLoggedIn.Company_id, TaskAdd.name,
+                TaskAdd.description, TaskAdd.start_time, TaskAdd.deadline, TaskAdd.status, TaskAdd.auto_assigned, -1);
+
+            SaveLabels();
+            BackendLibrary.DataAccess.TaskData.AddTask(newTask);
+            SaveTaskLabel();
+            AddEmployeeToTask();
+            SuccessTask.Show();
+            uriHelper.NavigateTo(uriHelper.Uri, forceLoad: true);
+            VisibilityAdd = false;
+
+        }
+    }
+
+    /// <summary>
+    /// Zapisuje do bazy etykiety, których jeszcze nie ma w bazie.
+    /// </summary>
+    //TODO - Trzeba jeszcze pobrać project_id i opis(czy w ogóle będzie opis etykiet? No chyba nie w prototypie)
+    private void SaveLabels()
+    {
+        for (int i = 0; i < selectedLabels.Length; i++)
+        {
+            if (!IsSelectedLabelsContainsInDbLabels(selectedLabels[i]))
+            {
+                BackendLibrary.Models.LabelModel label = new BackendLibrary.Models.LabelModel
+                    (selectedLabels[i], WebApp.Pages.Login.UserLoggedIn.Company_id);
+
+                BackendLibrary.DataAccess.LabelData.AddLabel(label);
+            }
+        }
+    }
+
+    /// <summary>
+    /// Sprawdza czy etykieta jest już w bazie danych.
+    /// </summary>
+    private bool IsSelectedLabelsContainsInDbLabels(string label)
+    {
+        for (int i = 0; i < labelsInDb.Count; i++)
+        {
+            if (label.Equals(labelsInDb[i].Name))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+    /// <summary>
+    /// Przypisuje etykiety do dodanego zadania
+    /// </summary>
+    private void SaveTaskLabel()
+    {
+        lastTaskId = BackendLibrary.DataAccess.TaskData.GetMaxId();
+        for (int i = 0; i < selectedLabels.Length; i++)
+        {
+            labelIdByName = BackendLibrary.DataAccess.LabelData.GetIdByName(selectedLabels[i]);
+            BackendLibrary.Models.TaskLabelModel taskLabel = new BackendLibrary.Models.TaskLabelModel(lastTaskId, labelIdByName);
+            BackendLibrary.DataAccess.TaskLabelData.AddTaskLabel(taskLabel);
+        }
+    }
+    /// <summary>
+    /// Przypisuje pracowników do dodanego zadania
+    /// </summary>
+    private void AddEmployeeToTask()
+    {
+        for (int i = 0; i < selectedEmployeesId.Length; i++)
+        {
+            BackendLibrary.Models.EmployeeTaskModel employeeTask = new BackendLibrary.Models.EmployeeTaskModel(lastTaskId, selectedEmployeesId[i], TaskAdd.status);
+            BackendLibrary.DataAccess.EmployeeTaskData.AddEmployeeTask(employeeTask);
+        }
+    }
+
+    /// <summary>
+    /// Aktualizuje w bazie danych zadanie, które zostało nakreślone w gui aplikacji.
+    /// </summary>
+    private void UpdateTask()
+    {
+        bool if_updated = false; // sprawdza, czy uzytkownik wyedytowal cokolwiek w zadaniu true/false
+                                 // poniższe ify sprawdzaja, czy pole do edycji zawiera cos nowego, po czym przypisuje wartosci do Selected_Task oraz zmienia if_updated na true
+        if (TaskEdit.name != null && SelectedTask.Name != TaskEdit.name)
+        {
+            SelectedTask.Name = TaskEdit.name;
+            if_updated = true;
+        }
+
+        if (TaskEdit.description != null && SelectedTask.Description != TaskEdit.description)
+        {
+            SelectedTask.Description = TaskEdit.description;
+            if_updated = true;
+        }
+
+        if (TaskEdit.status != null && SelectedTask.Status != TaskEdit.status)
+        {
+            SelectedTask.Status = TaskEdit.status;
+            if_updated = true;
+        }
+
+        if ((DateTime.Compare(TaskEdit.start_time, defaultDate)) != 0 && SelectedTask.Start_time != TaskEdit.start_time)
+        {
+            SelectedTask.Start_time = TaskEdit.start_time;
+            if_updated = true;
+        }
+
+        if ((DateTime.Compare(TaskEdit.deadline, defaultDate)) != 0 && SelectedTask.Deadline != TaskEdit.deadline)
+        {
+            SelectedTask.Deadline = TaskEdit.deadline;
+            if_updated = true;
+        }
+
+        if (SelectedTask.Auto_assigned != TaskEdit.auto_assigned)
+        {
+            SelectedTask.Auto_assigned = TaskEdit.auto_assigned;
+            if_updated = true;
+        }
+
+        if (if_updated == true) //sprawdza czy uzytkownik wyedytowal cos w zadaniu, jesli tak, updatuje wartosci w database oraz wystwietla stosowna informacje
+        {
+            BackendLibrary.Models.TaskModel updatedTask =
+            new BackendLibrary.Models.TaskModel(TasksList.SelectedTask.Task_id, TasksList.SelectedTask.Company_id,
+            TasksList.SelectedTask.Name, TasksList.SelectedTask.Description, TasksList.SelectedTask.Start_time,
+            TasksList.SelectedTask.Deadline, TasksList.SelectedTask.Status, TasksList.SelectedTask.Auto_assigned, TasksList.SelectedTask.Project_id);
+
+            BackendLibrary.DataAccess.TaskData.UpdateTask(updatedTask);
+
+            ToastObj.Show();
+            VisibilityEdit = false;
+            uriHelper.NavigateTo(uriHelper.Uri, forceLoad: true);
+            ClearTask(); //czysci pola obiektu task
+        }
+
+        else
+        {
+            FailedObj.Show(); //wyswietla na ekran informacje o braku zmian w zadaniu
+        }
+
+    }
+
+    private void ClearTask()
+    {
+        TaskEdit.name = null;
+        TaskEdit.description = null;
+        TaskEdit.start_time = defaultDate;
+        TaskEdit.deadline = defaultDate;
+        TaskEdit.status = null;
+        TaskEdit.auto_assigned = 0;
+    }
 }
+
+
+<style>
+    .control_wrapper {
+        width: 350px;
+        margin: 0 auto;
+        padding-top: 70px;
+        padding-bottom: 70px;
+    }
+
+    .form-group {
+        padding-top: 15px;
+        width: 350px;
+        margin: 0 auto;
+    }
+
+    .control-wrapper.multi-select-parent {
+        margin: 0 auto;
+        width: 350px;
+        padding-top: 15px;
+    }
+
+    .form-group {
+        padding-top: 15px;
+        width: 350px;
+        margin: 0 auto;
+    }
+</style>
