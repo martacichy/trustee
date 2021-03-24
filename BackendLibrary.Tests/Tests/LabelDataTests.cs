@@ -1,7 +1,5 @@
 ﻿using BackendLibrary.Models;
-using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 using XUnitPriorityOrderer;
@@ -11,7 +9,7 @@ namespace BackendLibrary.Tests.Tests
     [Order(3)]
     public class LabelDataTests
     {
-        [Fact, Order(3)]    
+        [Fact, Order(3)]
         public async void GetLabelsShouldReturnList()
         {
             var output = await Task.Run(() => DataAccess.LabelData.GetAllLabels());
@@ -23,7 +21,7 @@ namespace BackendLibrary.Tests.Tests
         public async void AddLabelTest()
         {
             int company_id = await Task.Run(() => DataAccess.CompanyData.GetMaxId());
-            LabelModel label = new LabelModel(company_id, 1, "testowa etykieta", "Opis etykiety");
+            LabelModel label = new LabelModel(company_id, "testowa etykieta", "Opis etykiety");
 
             await Task.Run(() => DataAccess.LabelData.AddLabel(label));
         }

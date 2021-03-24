@@ -1,11 +1,9 @@
 ﻿using BackendLibrary.Models;
 using Dapper;
 using MySql.Data.MySqlClient;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Data;
-using System.Text;
+using System.Linq;
 
 namespace BackendLibrary.DataAccess
 {
@@ -14,7 +12,7 @@ namespace BackendLibrary.DataAccess
     /// </summary>
     public class EmployeeLabelData : SqlConnector
     {
-        /// <summary> Zwraca listę wszystkich etykiet danego pracownika 
+        /// <summary> Zwraca listę wszystkich etykiet danego pracownika
         /// (szukając po id pracownika). </summary>
         public static List<EmployeeLabelModel> GetAllLabelsByEmployeeId(int employeeId)
         {

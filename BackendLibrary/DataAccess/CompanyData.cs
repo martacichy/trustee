@@ -1,15 +1,9 @@
 ﻿using BackendLibrary.Models;
 using Dapper;
 using MySql.Data.MySqlClient;
-using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Data;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 
 namespace BackendLibrary.DataAccess
 {
@@ -26,7 +20,7 @@ namespace BackendLibrary.DataAccess
                 string sql = "SELECT * FROM database06.company";
                 var data = connection.Query<CompanyModel>(sql).ToList();
 
-                return data; 
+                return data;
             }
         }
 
@@ -73,12 +67,12 @@ namespace BackendLibrary.DataAccess
         {
             using (IDbConnection connection = new MySqlConnection(connectionString))
             {
-                var labeltypes = LabelTypeData.GetAllByCompanyId(company_id);
+                var labeltypes = ProjectData.GetAllByCompanyId(company_id);
                 var labels = LabelData.GetAllByCompanyId(company_id);
                 var tasks = TaskData.GetAllByCompanyId(company_id);
                 var employees = EmployeeData.GetAllByCompanyId(company_id);
 
-                foreach (var item in labeltypes) { LabelTypeData.DeleteLabelType(item.Label_type_id); }
+                foreach (var item in labeltypes) { ProjectData.DeleteProject(item.Project_id); }
                 foreach (var item in labels) { LabelData.DeleteLabel(item.Label_id); }
                 foreach (var item in tasks) { TaskData.DeleteTask(item.Task_id); }
                 foreach (var item in employees) { EmployeeData.DeleteEmployee(item.Employee_id); }

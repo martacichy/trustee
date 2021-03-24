@@ -1,7 +1,6 @@
-﻿using System;
+﻿using BackendLibrary.Models;
+using System;
 using System.Collections.Generic;
-using System.Text;
-using BackendLibrary.Models;
 using System.Threading.Tasks;
 using Xunit;
 using XUnitPriorityOrderer;
@@ -16,7 +15,7 @@ namespace BackendLibrary.Tests.Tests
         {
             var output = await Task.Run(() => DataAccess.CompanyData.GetAll());
 
-            Assert.IsType<List<CompanyModel>> (output);
+            Assert.IsType<List<CompanyModel>>(output);
         }
 
         [Fact, Order(1)]

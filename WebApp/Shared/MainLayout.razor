@@ -5,9 +5,6 @@
 </div>
 
 <div class="main">
-    <div class="top-row px-4">
-        <button class="btn btn-primary" @onclick="@Logout">Wyloguj się</button>
-    </div>
     <div>
         @Body
     </div>
@@ -18,12 +15,6 @@
     protected override void OnInitialized()
     {
         base.OnInitialized();
-    }
-
-    private void Logout()
-    {
-        NavigationManager.NavigateTo("/");
-        Pages.Login.UserLoggedIn.If_manager = -1;
     }
 
 }

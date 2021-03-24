@@ -25,7 +25,7 @@ namespace BackendLibrary.DataAccess
             }
         }
 
-        /// <summary> 
+        /// <summary>
         /// Zwraca pracownika. Jeśli hasło/login jest niepoprawny - zwraca obiekt z polem If_manager = -1.
         /// </summary>
         public static EmployeeModel LoginEmployee(string login, string password)
@@ -144,7 +144,5 @@ namespace BackendLibrary.DataAccess
                 return RowsAffected;
             }
         }
-            
-
     }
 }

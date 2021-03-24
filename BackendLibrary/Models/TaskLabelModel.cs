@@ -1,18 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace BackendLibrary.Models
+﻿namespace BackendLibrary.Models
 {
     public class TaskLabelModel
-	{
-		public int Task_id { get; set; }
-		public int Label_id { get; set; }
+    {
+        public int Task_id { get; set; }
+        public int Label_id { get; set; }
 
-		public TaskLabelModel(int task_id, int label_id)
-		{
-			Task_id = task_id;
-			Label_id = label_id;
-		}
-	}
+        public TaskLabelModel(int task_id, int label_id)
+        {
+            Task_id = task_id;
+            Label_id = label_id;
+        }
+    }
 }

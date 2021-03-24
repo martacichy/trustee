@@ -35,9 +35,8 @@
             <span class="col-12"></span>
         </div>
     </EditForm>
-
     <div class="form-group">
-        <SfToast @ref="ToastObj" Title="Błędne dane logowania!" Timeout=2000 Content="@ToastContent">
+        <SfToast @ref="InvalidLogin" Title="Błędne dane logowania!" Timeout=2000 Content="@ToastContent">
             <ToastPosition X="Center"></ToastPosition>
         </SfToast>
     </div>
@@ -45,15 +44,16 @@
 
 @code{
 
-    SfToast ToastObj;
-    private string ToastContent { get; set; } = "Błędne dane logowania.";
-    public static BackendLibrary.Models.EmployeeModel UserLoggedIn = new BackendLibrary.Models.EmployeeModel() { If_manager = -1 };
+    SfToast InvalidLogin;
+    private string ToastContent { get; set; } = "Wprowadzono niepoprawny login lub hasło!";
+
+    // tworzmy obiekt do przechowywania informacji o zalogowanym uzytkowniku
+    public static BackendLibrary.Models.EmployeeModel UserLoggedIn = new BackendLibrary.Models.EmployeeModel();
+
+    // tworzymy obiekt do przechowywania informacji o zespole do ktorego przypisany jest zalogowany pracownik
+    public static BackendLibrary.Models.CompanyModel UserCompany = new BackendLibrary.Models.CompanyModel();
+
     private BackendLibrary.Validation.LoginValidation Log = new BackendLibrary.Validation.LoginValidation();
-
-    protected override void OnInitialized()
-    {
-
-    }
 
     private void LoginSubmit()
     {
@@ -64,12 +64,16 @@
         {
             if (UserLoggedIn.If_manager != -1)
             {
+                // przypisanie informacji dotyczacych zespolu pracownika
+                UserCompany = BackendLibrary.DataAccess.CompanyData.GetById(UserLoggedIn.Company_id);
                 NavigationManager.NavigateTo("/kanban");
             }
+
             else
             {
-                ToastObj.Show();
+                InvalidLogin.Show();
             }
+
         }
     }
 

@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Text;
 
 namespace BackendLibrary.Models
 {
@@ -29,6 +25,10 @@ namespace BackendLibrary.Models
             Creation_date = creation_date;
             Login = login;
             Password = password;
+        }
+
+        public CompanyModel()
+        {
         }
     }
 }

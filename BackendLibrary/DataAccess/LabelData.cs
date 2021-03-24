@@ -5,18 +5,19 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Text;
 
-namespace BackendLibrary.DataAccess {
+namespace BackendLibrary.DataAccess
+{
     /// <summary>
     ///  Klasa wysyłająca zapytania bazodanowe SQL dotyczące tabeli "Label".
     /// </summary>
-    public class LabelData : SqlConnector {
-
+    public class LabelData : SqlConnector
+    {
         /// <summary> Zwraca listę wszystkich etykiet. </summary>
         public static List<LabelModel> GetAllLabels()
         {
-            using (IDbConnection connection = new MySqlConnection(connectionString)) {
+            using (IDbConnection connection = new MySqlConnection(connectionString))
+            {
                 string sql = "SELECT * FROM database06.label";
                 var data = connection.Query<LabelModel>(sql).ToList();
 
@@ -51,7 +52,7 @@ namespace BackendLibrary.DataAccess {
         public static int GetIdByName(String name)
         {
             using (IDbConnection connection = new MySqlConnection(connectionString))
-            {           
+            {
                 string sql = $"SELECT Label_id from database06.label where name = '{name}'";
                 int id = connection.Query<int>(sql).First();
 
@@ -72,28 +73,23 @@ namespace BackendLibrary.DataAccess {
         }
 
         /// <summary> Dodaje nową etykietę </summary>
-        public static void AddLabel(LabelModel newLabel) {
-            using (IDbConnection connection = new MySqlConnection(connectionString))
-            {
-
-                string sql = @"insert into database06.label (Company_id, Label_type_id, Name, Description)
-                            values (@Company_id, @Label_type_id, @Name, @Description)";
-
-                connection.Execute(sql, newLabel);
-
-            }
-        }
-
-        public static void AddLabelWithNameAndCompanyId(LabelModel newLabel)
+        public static void AddLabel(LabelModel newLabel)
         {
             using (IDbConnection connection = new MySqlConnection(connectionString))
             {
-
-                string sql = @"insert into database06.label (Name, Company_Id)
-                            values (@Name, @Company_Id)";
+                string sql;
+                if (!String.IsNullOrEmpty(newLabel.Description))
+                {
+                    sql = @"insert into database06.label (Company_id, Name, Description)
+                            values (@Company_id, @Name, @Description)";
+                }
+                else 
+                {
+                    sql = @"insert into database06.label (Company_id, Name)
+                            values (@Company_id, @Name)";
+                }
 
                 connection.Execute(sql, newLabel);
-
             }
         }
 

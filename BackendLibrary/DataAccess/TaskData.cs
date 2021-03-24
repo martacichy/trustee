@@ -1,21 +1,22 @@
 ﻿using BackendLibrary.Models;
 using Dapper;
 using MySql.Data.MySqlClient;
-using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Text;
 
-namespace BackendLibrary.DataAccess {
+namespace BackendLibrary.DataAccess
+{
     /// <summary>
     ///  Klasa wysyłająca zapytania bazodanowe SQL dotyczące tabeli "task".
     /// </summary>
-    public class TaskData : SqlConnector { 
-
+    public class TaskData : SqlConnector
+    {
         /// <summary> Zwraca listę wszystkich tasków. </summary>
-        public static List<TaskModel> GetAllTasks() {
-            using (IDbConnection connection = new MySqlConnection(connectionString)) {
+        public static List<TaskModel> GetAllTasks()
+        {
+            using (IDbConnection connection = new MySqlConnection(connectionString))
+            {
                 string sql = "SELECT * FROM database06.task";
                 var data = connection.Query<TaskModel>(sql).ToList();
 
@@ -35,7 +36,10 @@ namespace BackendLibrary.DataAccess {
             }
         }
 
-        /// <summary> Zwraca jednoelementowa liste, zawierajaca jeden task, zgodny z przekazanym ID, funkcja stworzona specjalnie do szczegolow zadania </summary>
+        /// <summary>
+        /// Zwraca jednoelementowa liste, zawierajaca jeden task, zgodny z przekazanym ID,
+        /// funkcja stworzona specjalnie do szczegolow zadania.
+        /// </summary>
         public static List<TaskModel> GetByIdList(int task_id)
         {
             using (IDbConnection connection = new MySqlConnection(connectionString))
@@ -72,12 +76,11 @@ namespace BackendLibrary.DataAccess {
         }
 
         /// <summary> Zwraca listę wszystkich tasków danego pracownika. </summary>
-        /// TODO Do poprawy
         public static List<TaskModel> GetAllByEmployeeId(int employee_id)
         {
             using (IDbConnection connection = new MySqlConnection(connectionString))
             {
-                string sql = $"SELECT company_id,  FROM database06.task JOIN database06.employeetask WHERE employeetask.Employee_id = {employee_id}";
+                string sql = $"SELECT company_id  FROM database06.task JOIN database06.employeetask WHERE employeetask.Employee_id = {employee_id}";
                 var data = connection.Query<TaskModel>(sql).ToList();
 
                 return data;
@@ -85,10 +88,21 @@ namespace BackendLibrary.DataAccess {
         }
 
         /// <summary> Dodaje nowego taska. </summary>
-        public static void AddTask(TaskModel newTask) {
-            using (IDbConnection connection = new MySqlConnection(connectionString)) {
-                string sql = @"insert into database06.task (Company_id, Name, Description, Start_time, Deadline, Status, Auto_assigned)
+        public static void AddTask(TaskModel newTask)
+        {
+            using (IDbConnection connection = new MySqlConnection(connectionString))
+            {
+                string sql;
+                if (newTask.Project_id >= 0)
+                {
+                    sql = @"insert into database06.task (Company_id, Name, Description, Start_time, Deadline, Status, Auto_assigned, Project_id)
+                            values (@Company_id, @Name, @Description, @Start_time, @Deadline, @Status, @Auto_assigned, @Project_id)";
+                }
+                else // gdy zadanie nie ma przypisanego projektu, pole project_id < 0
+                {
+                    sql = @"insert into database06.task (Company_id, Name, Description, Start_time, Deadline, Status, Auto_assigned)
                             values (@Company_id, @Name, @Description, @Start_time, @Deadline, @Status, @Auto_assigned)";
+                }
 
                 connection.Execute(sql, newTask);
             }
@@ -99,8 +113,18 @@ namespace BackendLibrary.DataAccess {
         {
             using (IDbConnection connection = new MySqlConnection(connectionString))
             {
-                string sql = @"UPDATE database06.task SET Name = @Name, Description = @Description, Start_time = @Start_time, Deadline = @Deadline, Status = @Status, Auto_assigned = @Auto_assigned
-                    WHERE task_id = @Task_id";
+                string sql;
+                if (updatedTask.Project_id >= 0)
+                {
+                    sql = @"UPDATE database06.task SET Name = @Name, Description = @Description, Start_time = @Start_time,
+                            Deadline = @Deadline, Status = @Status, Auto_assigned = @Auto_assigned, Project_id = @Project_id
+                            WHERE task_id = @Task_id";
+                }
+                else // gdy zadanie nie ma przypisanego projektu, pole project_id < 0
+                {
+                    sql = @"UPDATE database06.task SET Name = @Name, Description = @Description, Start_time = @Start_time,
+                            Deadline = @Deadline, Status = @Status, Auto_assigned = @Auto_assigned WHERE task_id = @Task_id";
+                }
 
                 connection.Execute(sql, updatedTask);
             }
@@ -127,6 +151,5 @@ namespace BackendLibrary.DataAccess {
                 return RowsAffected;
             }
         }
-
     }
 }

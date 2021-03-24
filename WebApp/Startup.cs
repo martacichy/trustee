@@ -1,20 +1,9 @@
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Syncfusion.Blazor;
-using System.Globalization;
-using Microsoft.Extensions.Options;
-using Microsoft.AspNetCore.Localization;
-using WebApp.Shared;
 
 namespace WebApp
 {
@@ -35,6 +24,7 @@ namespace WebApp
             services.AddControllers();
 
             #region Localization
+
             // Set the resx file folder path to access
             services.AddLocalization(options => options.ResourcesPath = "Resources");
             services.AddSyncfusionBlazor();
@@ -53,7 +43,9 @@ namespace WebApp
                 options.SupportedCultures = supportedCultures;
                 options.SupportedUICultures = supportedCultures;
             });
-            #endregion
+
+            #endregion Localization
+
             */
 
             services.AddMvc();
@@ -74,7 +66,6 @@ namespace WebApp
             //Register Syncfusion license
             Syncfusion.Licensing.SyncfusionLicenseProvider.
                 RegisterLicense("NDAxMDgzQDMxMzgyZTM0MmUzMFpKemIzdHg0a005TWVMYUFIL2NoZXJhUGNwZlZDS1l2R2hmVFA3UGw2bW89");
-
 
             if (env.IsDevelopment())
             {

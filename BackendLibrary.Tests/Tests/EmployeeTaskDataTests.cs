@@ -1,7 +1,5 @@
-﻿using System;
+﻿using BackendLibrary.Models;
 using System.Collections.Generic;
-using System.Text;
-using BackendLibrary.Models;
 using System.Threading.Tasks;
 using Xunit;
 using XUnitPriorityOrderer;
