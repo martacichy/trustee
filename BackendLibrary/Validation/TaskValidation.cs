@@ -28,6 +28,9 @@ namespace BackendLibrary.Validation
         public int auto_assigned { get; set; }
 
         public int project_id { get; set; }
+
+        [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "Dodając etykiete możesz używać tylko liter!")]
+        public string SelectedLabel { get; set; }
     }
 
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field | AttributeTargets.Parameter, AllowMultiple = false)]

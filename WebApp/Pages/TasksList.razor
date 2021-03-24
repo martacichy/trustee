@@ -108,6 +108,7 @@
                                        DataSource="@labelsInDb" AllowFiltering="true" AllowCustomValue="true">
                             <MultiSelectFieldSettings Text="Name"> </MultiSelectFieldSettings>
                         </SfMultiSelect>
+                        <ValidationMessage For="@(() => TaskAdd.SelectedLabel)" />
                     </div>
 
                     <div class="col-lg-12 control-section multiselect-height">
@@ -357,7 +358,11 @@
     private int[] selectedEmployeesId = new int[] { };
     private int lastTaskId;
     private int labelIdByName;
+    private string mergedSelectedLabels;
+    private bool isMergedLabelsMatchToPattern;
+    private string pattern = @"^[a-zA-Z]+$";
     private Boolean VisibilityAdd { get; set; }
+
 
     // Zmienne z EditTask
     SfToast ToastObj;
@@ -493,15 +498,33 @@
                 (WebApp.Pages.Login.UserLoggedIn.Company_id, TaskAdd.name,
                 TaskAdd.description, TaskAdd.start_time, TaskAdd.deadline, TaskAdd.status, TaskAdd.auto_assigned, -1);
 
-            SaveLabels();
-            BackendLibrary.DataAccess.TaskData.AddTask(newTask);
-            SaveTaskLabel();
-            AddEmployeeToTask();
-            SuccessTask.Show();
-            uriHelper.NavigateTo(uriHelper.Uri, forceLoad: true);
-            VisibilityAdd = false;
+            MergeSelectedLabels();
 
+            if (isMergedLabelsMatchToPattern)
+            {
+                SaveLabels();
+                BackendLibrary.DataAccess.TaskData.AddTask(newTask);
+                SaveTaskLabel();
+                AddEmployeeToTask();
+                SuccessTask.Show();
+                uriHelper.NavigateTo(uriHelper.Uri, forceLoad: true);
+            }
         }
+    }
+
+    /// <summary>
+    /// Walidacja dla etykiet. Scala wybrane etykiety w jednego stringa i porównuje czy całość pasuje do wzorca.
+    /// </summary>
+
+    private void MergeSelectedLabels()
+    {
+        mergedSelectedLabels = "";
+        for (int i = 0; i < selectedLabels.Length; i++)
+        {
+            mergedSelectedLabels += selectedLabels[i];
+        }
+        TaskAdd.SelectedLabel = mergedSelectedLabels;
+        isMergedLabelsMatchToPattern = Regex.IsMatch(mergedSelectedLabels, pattern);
     }
 
     /// <summary>
