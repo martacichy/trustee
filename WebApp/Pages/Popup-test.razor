@@ -1,0 +1,74 @@
+﻿@page "/popup-test"
+
+<div id="target">
+    <SfButton @onclick="@OpenDialog">Open Dialog</SfButton>
+
+    <SfDialog Target="#target" Width="250px" AllowDragging="true" IsModal="true" ShowCloseIcon="true" @bind-Visible="@IsVisible">
+        <DialogTemplates>
+            <Header>
+                <div id="template" class="e-icon-settings">Details</div>
+            </Header>
+            <Content> This is a Dialog with drag enabled </Content>
+        </DialogTemplates>
+        <DialogButtons>
+            <DialogButton Content="OK" IsPrimary="true" OnClick="@CloseDialog" />
+            <DialogButton Content="Cancel" OnClick="@CloseDialog" />
+        </DialogButtons>
+    </SfDialog>
+</div>
+
+@code {
+    private bool IsVisible { get; set; } = false;
+
+    private void OpenDialog()
+    {
+        this.IsVisible = true;
+    }
+
+    private void CloseDialog()
+    {
+        this.IsVisible = false;
+    }
+}
+
+
+<style>
+    #target 
+    {
+        min-height: 1000px;
+        height: 100%;
+    }
+
+    .e-dialog .e-dlg-header-content {
+        background-color: #3da081;
+    }
+
+    e-dialog .e-dlg-header-content .e-btn.e-dlg-closeicon-btn {
+        top: 5px;
+        left: -11px;
+    }
+
+    .e-dialog .e-dlg-header {
+        position: relative;
+    }
+
+    #template 
+    {
+        display: inline-block;
+        padding: 0px 10px;
+        vertical-align: middle;
+        height: 40px;
+        line-height: 40px;
+    }
+
+    e-icon-settings.e-icons {
+        float: left;
+        position: relative;
+        left: 14%;
+        top: -33px;
+    }
+
+    .e-dlg-header .e-icon-settings, .e-icon-btn {
+        color: #fff;
+    }
+</style>
