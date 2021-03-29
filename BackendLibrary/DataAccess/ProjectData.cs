@@ -1,6 +1,7 @@
 ﻿using BackendLibrary.Models;
 using Dapper;
 using MySql.Data.MySqlClient;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -33,6 +34,17 @@ namespace BackendLibrary.DataAccess
                 var data = connection.Query<ProjectModel>(sql).FirstOrDefault();
 
                 return data;
+            }
+        }
+
+        public static int GetIdByName(String name)
+        {
+            using (IDbConnection connection = new MySqlConnection(connectionString))
+            {
+                string sql = $"SELECT project_id from database06.project WHERE name = '{name}'";
+                int id = connection.Query<int>(sql).First();
+
+                return id;
             }
         }
 

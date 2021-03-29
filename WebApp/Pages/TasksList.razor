@@ -66,7 +66,7 @@
     </div>
 
     @* okno dodawania nowego zadania*@
-    <SfDialog @bind-Visible="@VisibilityAdd" Header="Nowe zadanie" Width="500px" IsModal="true" ShowCloseIcon="true">
+    <SfDialog @bind-Visible="@VisibilityAdd" AllowDragging="true" Header="Nowe zadanie" Width="500px" IsModal="true" ShowCloseIcon="true">
         <DialogTemplates>
             <Content>
                 <EditForm Model="@TaskAdd">
@@ -101,25 +101,33 @@
                         <input for="IfAutoAssigned" type="checkbox" class="form-control" @bind-value="TaskAdd.auto_assigned" />
                     </div>
 
-                    <div class="control_wrapper">
-                        <label asp-for="etykiety" class="control-label">Etykiety</label>
-                        <SfMultiSelect TValue="string[]" TItem="BackendLibrary.Models.LabelModel"
-                                       @bind-Value="@selectedLabels"
-                                       Placeholder="Szukaj..."
-                                       DataSource="@labelsInDb" AllowFiltering="true" AllowCustomValue="true">
-                            <MultiSelectFieldSettings Text="Name"> </MultiSelectFieldSettings>
-                        </SfMultiSelect>
-                        <ValidationMessage For="@(() => TaskAdd.SelectedLabel)" />
+                    <div class="col-lg-12 control-section multiselect-height">
+                        <div class="control-wrapper multi-select-parent">
+                            <div class="padding-top">
+                                <label asp-for="etykiety" class="control-label">Etykiety</label>
+                                <SfMultiSelect TValue="string[]" TItem="BackendLibrary.Models.LabelModel"
+                                               @bind-Value="@selectedLabels"
+                                               Placeholder="Szukaj..."
+                                               DataSource="@labelsInDb" AllowFiltering="true" AllowCustomValue="true">
+                                    <MultiSelectFieldSettings Text="Name"> </MultiSelectFieldSettings>
+                                </SfMultiSelect>
+                                <ValidationMessage For="@(() => TaskAdd.SelectedLabel)" />
+                            </div>
+                        </div>
                     </div>
 
-                    <div class="control_wrapper">
-                        <label asp-for="projekt" class="control-label">Projekt</label>
-                        <SfMultiSelect TValue="string" TItem="BackendLibrary.Models.ProjectModel"
-                                        @bind-Value="@selectedProject"
-                                        Placeholder="Szukaj..."
-                                        DataSource="@projectsInDb" AllowFiltering="true" AllowCustomValue="true">
-                            <MultiSelectFieldSettings Text="Name"></MultiSelectFieldSettings>
-                        </SfMultiSelect>
+                    <div class="col-lg-12 control-section multiselect-height">
+                        <div class="control-wrapper multi-select-parent">
+                            <div class="padding-top">
+                                <label asp-for="projekt" class="control-label">Projekt</label>
+                                <SfMultiSelect TValue="string" TItem="BackendLibrary.Models.ProjectModel"
+                                               @bind-Value="@selectedProject"
+                                               Placeholder="Szukaj..."
+                                               DataSource="@projectsInDb" AllowFiltering="true" AllowCustomValue="true">
+                                    <MultiSelectFieldSettings Text="Name"></MultiSelectFieldSettings>
+                                </SfMultiSelect>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="col-lg-12 control-section multiselect-height">
@@ -169,7 +177,7 @@
     </SfDialog>
 
     @* okno szczegolow zadania *@
-    <SfDialog @bind-Visible="@VisibilityDetails" AllowDragging="true" Width="700px" IsModal="true" ShowCloseIcon="true">
+    <SfDialog @bind-Visible="@VisibilityDetails" AllowDragging="true" Width="500px" IsModal="true" ShowCloseIcon="true">
         <DialogTemplates>
             <Content>
                 <EditForm Model="@TaskEdit">
@@ -203,16 +211,34 @@
                         <label for="IfAutoAssigned" class="control-label">Czy przydzielić automatycznie?</label>
                         <input for="IfAutoAssigned" type="checkbox" class="form-control" @bind-value="TaskEdit.auto_assigned" />
                     </div>
-                    
-                    <div class="control_wrapper">
-                        <label asp-for="etykiety" class="control-label">Etykiety</label>
-                        <SfMultiSelect TValue="string[]" TItem="BackendLibrary.Models.LabelModel"
-                                       @bind-Value="@nameoflabels"
-                                       Placeholder="Szukaj..."
-                                       DataSource="@labelsInDb" AllowFiltering="true" AllowCustomValue="true">
-                            <MultiSelectFieldSettings Text="Name"> </MultiSelectFieldSettings>
-                        </SfMultiSelect>
-                        <ValidationMessage For="@(() => TaskAdd.SelectedLabel)" />
+
+                    <div class="col-lg-12 control-section multiselect-height">
+                        <div class="control-wrapper multi-select-parent">
+                            <div class="padding-top">
+                                <label asp-for="etykiety" class="control-label">Etykiety</label>
+                                <SfMultiSelect TValue="string[]" TItem="BackendLibrary.Models.LabelModel"
+                                               @bind-Value="@nameoflabels"
+                                               Placeholder="Szukaj..."
+                                               DataSource="@labelsInDb" AllowFiltering="true" AllowCustomValue="true">
+                                    <MultiSelectFieldSettings Text="Name"> </MultiSelectFieldSettings>
+                                </SfMultiSelect>
+                                <ValidationMessage For="@(() => TaskAdd.SelectedLabel)" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-12 control-section multiselect-height">
+                        <div class="control-wrapper multi-select-parent">
+                            <div class="padding-top">
+                                <label asp-for="projekt" class="control-label">Projekt</label>
+                                <SfMultiSelect TValue="string" TItem="BackendLibrary.Models.ProjectModel"
+                                               @bind-Value="@nameofProject"
+                                               Placeholder="Szukaj..."
+                                               DataSource="@projectsInDb" AllowFiltering="true" AllowCustomValue="true">
+                                    <MultiSelectFieldSettings Text="Name"></MultiSelectFieldSettings>
+                                </SfMultiSelect>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="col-lg-12 control-section multiselect-height">
@@ -309,6 +335,7 @@
     private string[] nameoflabels { get; set; } = new string[] { };
     public static List<BackendLibrary.Models.EmployeeTaskModel> ListofEmployeesId;
     private int[] nameofEmployees { get; set; } = new int[] { };
+    private string nameofProject;
 
     protected override void OnInitialized()
     {
@@ -396,9 +423,14 @@
             ListofEmployeesId = EmployeeTaskData.GetAllEmployeesByTaskId(Pages.TasksList.SelectedTask.Task_id);
             this.nameofEmployees = new int[ListofEmployeesId.Count];
 
+            //nazwa projektu do ktorego przypisane jest zadanie
+            if (ProjectData.GetById(Pages.TasksList.SelectedTask.Project_id) != null)
+                nameofProject = ProjectData.GetById(Pages.TasksList.SelectedTask.Project_id).Name;
+            else
+                nameofProject = null;
 
             // w ponizszych pętlach następuje przypisanie odpowiednich etykiet oraz pracownikow do tablicy, w celu wyswietlenia ich w task-details
-            for(int i=0; i<ListofLabelsId.Count; i++)
+            for (int i=0; i<ListofLabelsId.Count; i++)
             {
                 nameoflabels[i] = LabelData.GetById(ListofLabelsId[i].Label_id).Name;
             }
@@ -419,6 +451,7 @@
             TaskEdit.deadline = SelectedTask.Deadline;
             TaskEdit.status = SelectedTask.Status;
             TaskEdit.auto_assigned = SelectedTask.Auto_assigned;
+            TaskEdit.project_id = SelectedTask.Project_id;
             VisibilityDetails = true;
         }
         else
@@ -463,7 +496,8 @@
         if (TaskAdd.name != null && TaskAdd.description != null && TaskAdd.status != null
             && TaskAdd.deadline >= DateTime.Today && TaskAdd.start_time >= defaultDateTime)
         {
-            if (TaskAdd.project_id == null)
+            // zapisywanie zadania z okreslonym projektem lub bez
+            if (selectedProject == null)
             {
                 newTask = new BackendLibrary.Models.TaskModel
                 (WebApp.Pages.Login.UserLoggedIn.Company_id, TaskAdd.name,
@@ -471,6 +505,8 @@
             }
             else
             {
+                SaveProject();
+                TaskAdd.project_id = BackendLibrary.DataAccess.ProjectData.GetIdByName(selectedProject);
                 newTask = new BackendLibrary.Models.TaskModel
                 (WebApp.Pages.Login.UserLoggedIn.Company_id, TaskAdd.name,
                 TaskAdd.description, TaskAdd.start_time, TaskAdd.deadline, TaskAdd.status, TaskAdd.auto_assigned, TaskAdd.project_id);
@@ -522,8 +558,14 @@
                 BackendLibrary.DataAccess.LabelData.AddLabel(label);
             }
         }
+    }
 
-        if (!IsSelectedProjectContainsInDbProjects(selectedProject) && selectedProject != null)
+    /// <summary>
+    /// Zapisuje do bazy projekt, jesli jeszcze nie ma go w bazie.
+    /// </summary>
+    private void SaveProject()
+    {
+        if (!IsSelectedProjectContainsInDbProjects(selectedProject))
         {
             BackendLibrary.Models.ProjectModel project = new BackendLibrary.Models.ProjectModel
                 (Login.UserLoggedIn.Company_id, selectedProject);
@@ -552,21 +594,15 @@
     /// </summary>
     private bool IsSelectedProjectContainsInDbProjects(string project)
     {
-        if (project == null)
+        for (int i = 0; i < projectsInDb.Count; i++)
         {
-            return false;
-        }
-        else
-        {
-            for (int i = 0; i < projectsInDb.Count; i++)
+            if (project.Equals(projectsInDb[i].Name))
             {
-                if (project.Equals(projectsInDb[i].Name))
-                {
-                    return true;
-                }
+                return true;
             }
-            return false;
         }
+        return false;
+
     }
 
     /// <summary>
