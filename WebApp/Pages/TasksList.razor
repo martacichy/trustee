@@ -112,6 +112,16 @@
                         <ValidationMessage For="@(() => TaskAdd.SelectedLabel)" />
                     </div>
 
+                    <div class="control_wrapper">
+                        <label asp-for="projekt" class="control-label">Projekt</label>
+                        <SfMultiSelect TValue="string" TItem="BackendLibrary.Models.ProjectModel"
+                                        @bind-Value="@selectedProject"
+                                        Placeholder="Szukaj..."
+                                        DataSource="@projectsInDb" AllowFiltering="true" AllowCustomValue="true">
+                            <MultiSelectFieldSettings Text="Name"></MultiSelectFieldSettings>
+                        </SfMultiSelect>
+                    </div>
+
                     <div class="col-lg-12 control-section multiselect-height">
                         <div class="control-wrapper multi-select-parent">
                             <div class="padding-top">
@@ -355,8 +365,10 @@
     private BackendLibrary.Validation.TaskValidation TaskAdd;
     private List<BackendLibrary.Models.LabelModel> labelsInDb;
     private List<BackendLibrary.Models.EmployeeModel> employees;
+    private List<BackendLibrary.Models.ProjectModel> projectsInDb;
     private string[] selectedLabels { get; set; } = new string[] { };
     private int[] selectedEmployeesId = new int[] { };
+    private string selectedProject;
     private int lastTaskId;
     private int labelIdByName;
     private string mergedSelectedLabels;
@@ -393,7 +405,7 @@
         TaskEdit = new BackendLibrary.Validation.EditTaskValidation();
         labelsInDb = BackendLibrary.DataAccess.LabelData.GetAllByCompanyId(Login.UserLoggedIn.Company_id);
         employees = BackendLibrary.DataAccess.EmployeeData.GetAllByCompanyId(Login.UserLoggedIn.Company_id);
-
+        projectsInDb = BackendLibrary.DataAccess.ProjectData.GetAllByCompanyId(Login.UserLoggedIn.Company_id);
     }
 
     public void RowSelectHandler(RowSelectEventArgs<TaskModel> args)
@@ -429,6 +441,7 @@
             TaskEdit.deadline = SelectedTask.Deadline;
             TaskEdit.status = SelectedTask.Status;
             TaskEdit.auto_assigned = SelectedTask.Auto_assigned;
+            TaskEdit.project_id = SelectedTask.Project_id;
             VisibilityEdit = true;
         }
         else
@@ -492,12 +505,22 @@
     private void SaveTask()
     {
         DateTime defaultDateTime = new DateTime(1900, 1, 1, 0, 0, 0);
+        BackendLibrary.Models.TaskModel newTask;
         if (TaskAdd.name != null && TaskAdd.description != null && TaskAdd.status != null
             && TaskAdd.deadline >= DateTime.Today && TaskAdd.start_time >= defaultDateTime)
         {
-            BackendLibrary.Models.TaskModel newTask = new BackendLibrary.Models.TaskModel
+            if (TaskAdd.project_id == null)
+            {
+                newTask = new BackendLibrary.Models.TaskModel
                 (WebApp.Pages.Login.UserLoggedIn.Company_id, TaskAdd.name,
                 TaskAdd.description, TaskAdd.start_time, TaskAdd.deadline, TaskAdd.status, TaskAdd.auto_assigned, -1);
+            }
+            else
+            {
+                newTask = new BackendLibrary.Models.TaskModel
+                (WebApp.Pages.Login.UserLoggedIn.Company_id, TaskAdd.name,
+                TaskAdd.description, TaskAdd.start_time, TaskAdd.deadline, TaskAdd.status, TaskAdd.auto_assigned, TaskAdd.project_id);
+            }
 
             MergeSelectedLabels();
 
@@ -532,7 +555,7 @@
     /// <summary>
     /// Zapisuje do bazy etykiety, których jeszcze nie ma w bazie.
     /// </summary>
-    //TODO - Trzeba jeszcze pobrać project_id i opis(czy w ogóle będzie opis etykiet? No chyba nie w prototypie)
+    //TODO - Trzeba jeszcze pobrac opis(czy w ogóle będzie opis etykiet? No chyba nie w prototypie)
     private void SaveLabels()
     {
         for (int i = 0; i < selectedLabels.Length; i++)
@@ -544,6 +567,14 @@
 
                 BackendLibrary.DataAccess.LabelData.AddLabel(label);
             }
+        }
+
+        if (!IsSelectedProjectContainsInDbProjects(selectedProject))
+        {
+            BackendLibrary.Models.ProjectModel project = new BackendLibrary.Models.ProjectModel
+                (Login.UserLoggedIn.Company_id, selectedProject);
+
+            BackendLibrary.DataAccess.ProjectData.AddProject(project);
         }
     }
 
@@ -561,6 +592,22 @@
         }
         return false;
     }
+
+    /// <summary>
+    /// Sprawdza czy projekt juz istnieje w bazie
+    /// </summary>
+    private bool IsSelectedProjectContainsInDbProjects(string project)
+    {
+        for (int i = 0; i < projectsInDb.Count; i++)
+        {
+            if (project.Equals(projectsInDb[i].Name))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
     /// <summary>
     /// Przypisuje etykiety do dodanego zadania
     /// </summary>
