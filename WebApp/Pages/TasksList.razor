@@ -123,7 +123,7 @@
                                 <SfMultiSelect TValue="string" TItem="BackendLibrary.Models.ProjectModel"
                                                @bind-Value="@selectedProject"
                                                Placeholder="Szukaj..."
-                                               DataSource="@projectsInDb" AllowFiltering="true" AllowCustomValue="true">
+                                               DataSource="@projectsInDb" AllowFiltering="true" AllowCustomValue="true" MaximumSelectionLength=1>
                                     <MultiSelectFieldSettings Text="Name"></MultiSelectFieldSettings>
                                 </SfMultiSelect>
                             </div>
@@ -234,7 +234,7 @@
                                 <SfMultiSelect TValue="string" TItem="BackendLibrary.Models.ProjectModel"
                                                @bind-Value="@nameofProject"
                                                Placeholder="Szukaj..."
-                                               DataSource="@projectsInDb" AllowFiltering="true" AllowCustomValue="true">
+                                               DataSource="@projectsInDb" AllowFiltering="true" AllowCustomValue="true" MaximumSelectionLength=1>
                                     <MultiSelectFieldSettings Text="Name"></MultiSelectFieldSettings>
                                 </SfMultiSelect>
                             </div>

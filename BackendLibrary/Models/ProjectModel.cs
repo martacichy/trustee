@@ -18,5 +18,6 @@
             Company_id = company_id;
             Name = name;
         }
+        public ProjectModel(){}
     }
 }
