@@ -523,7 +523,7 @@
             }
         }
 
-        if (!IsSelectedProjectContainsInDbProjects(selectedProject))
+        if (!IsSelectedProjectContainsInDbProjects(selectedProject) && selectedProject != null)
         {
             BackendLibrary.Models.ProjectModel project = new BackendLibrary.Models.ProjectModel
                 (Login.UserLoggedIn.Company_id, selectedProject);
@@ -552,14 +552,21 @@
     /// </summary>
     private bool IsSelectedProjectContainsInDbProjects(string project)
     {
-        for (int i = 0; i < projectsInDb.Count; i++)
+        if (project == null)
         {
-            if (project.Equals(projectsInDb[i].Name))
-            {
-                return true;
-            }
+            return false;
         }
-        return false;
+        else
+        {
+            for (int i = 0; i < projectsInDb.Count; i++)
+            {
+                if (project.Equals(projectsInDb[i].Name))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 
     /// <summary>
