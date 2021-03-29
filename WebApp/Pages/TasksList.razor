@@ -264,57 +264,6 @@
         <DialogAnimationSettings Effect="DialogEffect.Fade"></DialogAnimationSettings>
     </SfDialog>
 
-    @* okno edycji zadania *@
-    <SfDialog @bind-Visible="@VisibilityEdit" Header="Edytuj zadanie" Width="500px" IsModal="true" ShowCloseIcon="true">
-        <DialogTemplates>
-            <Content>
-                <EditForm Model="@TaskEdit">
-                    <DataAnnotationsValidator />
-                    <div class="form-group">
-                        <label for="Tytuł" class="control-label" required>Tytuł</label>
-                        <input for="Tytuł" class="form-control" @bind-value="TaskEdit.name" />
-                        <ValidationMessage For="@(() => TaskEdit.name)" />
-                    </div>
-                    <div class="form-group">
-                        <label for="Opis" class="control-label">Opis</label>
-                        <input for="Opis" class="form-control" @bind-value="TaskEdit.description" />
-                        <ValidationMessage For="@(() => TaskEdit.description)" />
-                    </div>
-                    <div class="form-group">
-                        <label for="Starttime" class="control-label">Czas rozpoczęcia</label>
-                        <input for="Starttime" type="date" class="form-control" @bind-value="TaskEdit.start_time" />
-                        <ValidationMessage For="@(() => TaskEdit.start_time)" />
-                    </div>
-                    <div class="form-group">
-                        <label for="Deadline" class="control-label">Deadline</label>
-                        <input for="Deadline" type="date" class="form-control" @bind-value="TaskEdit.deadline" />
-                        <ValidationMessage For="@(() => TaskEdit.deadline)" />
-                    </div>
-                    <div class="form-group">
-                        <label for="Status" class="control-label">Status zadania</label>
-                        <input for="Status" class="form-control" @bind-value="TaskEdit.status" />
-                        <ValidationMessage For="@(() => TaskEdit.status)" />
-                    </div>
-                    <div class="form-group">
-                        <label for="IfAutoAssigned" class="control-label">Czy przydzielić automatycznie?</label>
-                        <input for="IfAutoAssigned" type="checkbox" class="form-control" @bind-value="TaskEdit.auto_assigned" />
-                    </div>
-
-                    <div class="form-group">
-                        <button type="submit" class="btn btn-block btn-info" data-dismiss="modal" @onclick="UpdateTask">Zapisz</button>
-                        <SfToast @ref="ToastObj" Title="Zadanie zaktualizowane pomyslnie!" Timeout=3000 Content="@ToastContentEdit">
-                            <ToastPosition X="Right"></ToastPosition>
-                        </SfToast>
-                        <SfToast @ref="FailedObj" Title="Brak zmian w zadaniu!" Timeout=3000 Content="@FailedContent">
-                            <ToastPosition X="Right"></ToastPosition>
-                        </SfToast>
-                    </div>
-                </EditForm>
-            </Content>
-        </DialogTemplates>
-        <DialogEvents Closed="@DialogEditClosed"></DialogEvents>
-        <DialogAnimationSettings Effect="DialogEffect.Fade"></DialogAnimationSettings>
-    </SfDialog>
 </div>
 
 @code {
