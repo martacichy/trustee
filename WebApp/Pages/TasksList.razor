@@ -91,10 +91,20 @@
                         <input for="Deadline" type="date" class="form-control" @bind-value="TaskAdd.deadline" />
                         <ValidationMessage For="@(() => TaskAdd.deadline)" />
                     </div>
-                    <div class="form-group">
-                        <label for="Status" class="control-label">Status zadania</label>
-                        <input for="Status" class="form-control" @bind-value="TaskAdd.status" />
-                        <ValidationMessage For="@(() => TaskAdd.status)" />
+                    <div class="col-lg-12 control-section multiselect-height">
+                        <div class="control-wrapper multi-select-parent">
+                            <div class="padding-top">
+                                <label asp-for="Status" class="control-label">Status</label>
+                                <SfMultiSelect TValue="string" TItem="string"
+                                               @bind-Value="@TaskAdd.status"
+                                               Placeholder="Szukaj..."
+                                               DataSource="@status" AllowFiltering="true"
+                                               MaximumSelectionLength=1>
+                                    <MultiSelectFieldSettings Text="status"> </MultiSelectFieldSettings>
+                                </SfMultiSelect>
+                                <ValidationMessage For="@(() => TaskAdd.status)" />
+                            </div>
+                        </div>
                     </div>
                     <div class="form-group">
                         <label for="IfAutoAssigned" class="control-label">Czy przydzielić automatycznie?</label>
@@ -202,10 +212,21 @@
                         <input for="Deadline" type="date" class="form-control" @bind-value="TaskEdit.deadline" readonly=@readOnly />
                         <ValidationMessage For="@(() => TaskEdit.deadline)" />
                     </div>
-                    <div class="form-group">
-                        <label for="Status" class="control-label">Status zadania</label>
-                        <input for="Status" class="form-control" @bind-value="TaskEdit.status" readonly=@readOnly />
-                        <ValidationMessage For="@(() => TaskEdit.status)" />
+                    <div class="col-lg-12 control-section multiselect-height">
+                        <div class="control-wrapper multi-select-parent">
+                            <div class="padding-top">
+                                <label asp-for="Status" class="control-label">Status</label>
+                                <SfMultiSelect TValue="string" TItem="string"
+                                               @bind-Value="@TaskEdit.status"
+                                               Placeholder="Szukaj..."
+                                               Enabled=@Enabled
+                                               DataSource="@status" AllowFiltering="true"
+                                               MaximumSelectionLength=1>
+                                    <MultiSelectFieldSettings Text="status"> </MultiSelectFieldSettings>
+                                </SfMultiSelect>
+                                <ValidationMessage For="@(() => TaskAdd.status)" />
+                            </div>
+                        </div>
                     </div>
                     <div class="form-group">
                         <label for="IfAutoAssigned" class="control-label" hidden=@readOnly>Czy przydzielić automatycznie? </label>
@@ -304,6 +325,7 @@
     public static TaskModel SelectedTask;
     private bool readOnly = false;
     private bool Enabled = true;
+    private List<String> status = new List<String>(new string[] { "Nierozpoczęte", "W toku", "Zakończone", "Anulowane" });
 
 
     // Zmienne z AddNewTask
