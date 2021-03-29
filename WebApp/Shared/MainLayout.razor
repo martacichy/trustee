@@ -1,10 +1,11 @@
 ﻿@inherits LayoutComponentBase
 @inject NavigationManager NavigationManager
-<div class="sidebar">
-    <NavMenu />
-</div>
 
 <div class="main">
+    <NavMenu />
+</div>
+<div class="head">
+
     <div>
         @Body
     </div>
@@ -18,3 +19,27 @@
     }
 
 }
+<style>
+
+    .topnav {
+        background-color: #333;
+    }
+
+        .topnav a {
+            float: right;
+            color: #f2f2f2;
+            text-align: center;
+            text-decoration: none;
+            font-size: 17px;
+        }
+
+            .topnav a:hover {
+                background-color: #ddd;
+                color: black;
+            }
+
+            .topnav a.active {
+                background-color: #4CAF50;
+                color: white;
+            }
+</style>

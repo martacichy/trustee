@@ -1,53 +1,56 @@
 ﻿@page "/employees"
 @*dostęp do postrony tylko dla szefa*@
 
-<h3>Pracownicy</h3>
+<div class="header">
+    <h3>Pracownicy</h3>
+</div>
 
-@if (Login.UserLoggedIn.If_manager == 2)
-{
-    <div>
-        <div style="float:left">
-            <button class="btn btn-primary" @onclick="onBtnClick">Nowy pracownik</button>
+
+    @if (Login.UserLoggedIn.If_manager == 2)
+    {
+        <div>
+            <div style="float:left">
+                <button class="btn btn-primary" @onclick="onBtnClick">Nowy pracownik</button>
+            </div>
         </div>
-    </div>
 
-    <SfDialog @bind-Visible="@visibility" IsModal="true" Target="#target" Width="500px" ShowCloseIcon="true">
-        <DialogEvents OnOverlayClick="@overlayClick" OnClose="@closeDialog"></DialogEvents>
-        <DialogAnimationSettings Effect="DialogEffect.Zoom"></DialogAnimationSettings>
-        <DialogTemplates>
-            <Header>
-                Dodawanie nowego pracownika
-            </Header>
-            <Content>
-                <p>Wprowadź adres e-mail przypisany do pracownika, którego chcesz dodać.</p>
-                <input type="email" @bind-value="@inputValue" name="Required" class="e-input" style="width: 415px;">
-                <label style="color: indianred">@errorMessage</label>
-            </Content>
-        </DialogTemplates>
-        <DialogButtons>
-            <DialogButton Content="Dodaj" IsPrimary="true" OnClick="@submitAdd" />
-        </DialogButtons>
-    </SfDialog>
+        <SfDialog @bind-Visible="@visibility" IsModal="true" Target="#target" Width="500px" ShowCloseIcon="true">
+            <DialogEvents OnOverlayClick="@overlayClick" OnClose="@closeDialog"></DialogEvents>
+            <DialogAnimationSettings Effect="DialogEffect.Zoom"></DialogAnimationSettings>
+            <DialogTemplates>
+                <Header>
+                    Dodawanie nowego pracownika
+                </Header>
+                <Content>
+                    <p>Wprowadź adres e-mail przypisany do pracownika, którego chcesz dodać.</p>
+                    <input type="email" @bind-value="@inputValue" name="Required" class="e-input" style="width: 415px;">
+                    <label style="color: indianred">@errorMessage</label>
+                </Content>
+            </DialogTemplates>
+            <DialogButtons>
+                <DialogButton Content="Dodaj" IsPrimary="true" OnClick="@submitAdd" />
+            </DialogButtons>
+        </SfDialog>
 
-    <br />
-    <br />
-}
-
-<SfGrid DataSource="EmployeeList"
-        AllowPaging="true"
-        AllowSorting="true"
-        AllowFiltering="false"
-        ContextMenuItems="@(new List<object>()
+        <br />
+        <br />
+    }
+    
+    <SfGrid DataSource="EmployeeList"
+            AllowPaging="true"
+            AllowSorting="true"
+            AllowFiltering="false"
+            ContextMenuItems="@(new List<object>()
             { "AutoFit", "AutoFitAll", "SortAscending", "SortDescending", "Copy"})">
-    <GridPageSettings PageSize="12"></GridPageSettings>
-    <GridColumns>
-        <GridColumn Field=@nameof(EmployeeModel.Employee_id) IsPrimaryKey="true" HeaderText="ID" TextAlign="TextAlign.Left" Width="50"></GridColumn>
-        <GridColumn Field=@nameof(EmployeeModel.First_name) HeaderText="Imię" TextAlign="TextAlign.Left" Width="80"></GridColumn>
-        <GridColumn Field=@nameof(EmployeeModel.Last_name) HeaderText="Nazwisko" TextAlign="TextAlign.Left" Width="120"></GridColumn>
-        <GridColumn Field=@nameof(EmployeeModel.Email) HeaderText="E-mail" TextAlign="TextAlign.Left" Width="120"></GridColumn>
-        <GridColumn Field=@nameof(EmployeeModel.UserType) HeaderText="Rodzaj" TextAlign="TextAlign.Left" Width="80"></GridColumn>
-    </GridColumns>
-</SfGrid>
+        <GridPageSettings PageSize="12"></GridPageSettings>
+        <GridColumns>
+            <GridColumn Field=@nameof(EmployeeModel.Employee_id) IsPrimaryKey="true" HeaderText="ID" TextAlign="TextAlign.Left" Width="50"></GridColumn>
+            <GridColumn Field=@nameof(EmployeeModel.First_name) HeaderText="Imię" TextAlign="TextAlign.Left" Width="80"></GridColumn>
+            <GridColumn Field=@nameof(EmployeeModel.Last_name) HeaderText="Nazwisko" TextAlign="TextAlign.Left" Width="120"></GridColumn>
+            <GridColumn Field=@nameof(EmployeeModel.Email) HeaderText="E-mail" TextAlign="TextAlign.Left" Width="120"></GridColumn>
+            <GridColumn Field=@nameof(EmployeeModel.UserType) HeaderText="Rodzaj" TextAlign="TextAlign.Left" Width="80"></GridColumn>
+        </GridColumns>
+    </SfGrid>
 
 @code {
     /// <summary>

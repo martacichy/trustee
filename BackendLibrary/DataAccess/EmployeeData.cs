@@ -134,6 +134,10 @@ namespace BackendLibrary.DataAccess
 
                 connection.Execute(sql);
 
+                sql = $"delete from database06.comment Where employee_id = {employee_id}";
+
+                connection.Execute(sql);
+
                 sql = $"delete from database06.employeelabel Where employee_id = {employee_id}";
 
                 connection.Execute(sql);

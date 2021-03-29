@@ -137,7 +137,11 @@ namespace BackendLibrary.DataAccess
         {
             using (IDbConnection connection = new MySqlConnection(connectionString))
             {
-                string sql = $"delete from database06.employeetask Where task_id = {task_id}";
+                string sql = $"delete from database06.comment Where task_id = {task_id}";
+
+                connection.Execute(sql);
+
+                sql = $"delete from database06.employeetask Where task_id = {task_id}";
 
                 connection.Execute(sql);
 

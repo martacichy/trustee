@@ -1,7 +1,8 @@
 ﻿@page "/tasks"
 
-<h3>Wszystkie zadania</h3>
-
+<div class="header">
+    <h3>Lista wszystkich zadań</h3>
+</div>
 @* wyświetlanie przycisku do tworzenia nowych zadań *@
 @if (Login.UserLoggedIn.If_manager == 1 || Login.UserLoggedIn.If_manager == 2)
 {

@@ -3,456 +3,469 @@
 @using Syncfusion.Blazor.Buttons
 @inherits LayoutComponentBase
 
-<div class="col-lg-12 col-sm-12 col-md-12">
-    <div id="wrapper">
-        <SfSidebar Width="220px" DockSize="72px" EnableDock="true" Position="SidebarPosition.Left" @ref="Sidebar" HtmlAttributes="@HtmlAttribute" @bind-IsOpen="SidebarToggle">
-            <ChildContent>
-                <div class="dock">
-                    <ul>
-                        <li class="sidebar-item" id="toggle" @onclick="@Toggle">
-                            <span class="e-icons expand"></span>
-                            <span class="e-text" title="menu">Menu</span>
-                        </li>
-                        <li class="sidebar-item">
-                            <NavLink class="e-icons" href="kanban" Match="NavLinkMatch.All">
-                                <span class="e-icons home"></span>
-                                <span class="e-text" title="home">Twoje zadania</span>
-                            </NavLink>
-                        </li>
-                        <li class="sidebar-item">
-                            <NavLink class="e-icons" href="tasks" Match="NavLinkMatch.All">
-                                <span class="e-icons info"></span>
-                                <span class="e-text" title="info">Wszystkie zadania</span>
-                            </NavLink>
-                        </li>
-                        <li class="sidebar-item">
-                            <NavLink class="e-icons" href="employees" Match="NavLinkMatch.All">
+
+    <div class="col-lg-12 col-sm-12 col-md-12">
+        <div id="wrapper">
+            <SfSidebar Width="220px" DockSize="72px" EnableDock="true" Position="SidebarPosition.Left" @ref="Sidebar" HtmlAttributes="@HtmlAttribute" @bind-IsOpen="SidebarToggle">
+                <ChildContent>
+                    <div class="dock">
+                        <ul>
+                            <li class="sidebar-item" id="toggle" @onclick="@Toggle">
+                                <span class="e-icons expand"></span>
+                                <span class="e-text" title="menu">Menu</span>
+                            </li>
+                            <li class="sidebar-item" @onclick="@ShowMyTasks">
+                                    <span class="e-icons home"></span>
+                                    <span class="e-text" title="home">Twoje zadania</span>
+                            </li>
+                            <li class="sidebar-item" @onclick="@ShowAllTasks">
+                                    <span class="e-icons info"></span>
+                                    <span class="e-text" title="info">Wszystkie zadania</span>
+                            </li>
+                            <li class="sidebar-item" @onclick="@ShowPersons">
+                                    <span class="e-icons profile"></span>
+                                    <span class="e-text" title="profile">Pracownicy</span>
+                            </li>
+                            <li class="sidebar-item" @onclick="@ShowProfile">
                                 <span class="e-icons profile"></span>
-                                <span class="e-text" title="profile">Pracownicy</span>
-                            </NavLink>
-                        </li>
-                        <li class="sidebar-item" @onclick="@ShowProfile">
-                            <span class="e-icons profile"></span>
-                            <span class="e-text" title="profile">Twój profil</span>
-                        </li>
-                        <li class="sidebar-item">
-                            <span class="e-icons settings"></span>
-                            <span class="e-text" title="settings" @onclick="@Logout">Wyloguj się</span>
-                        </li>
-                    </ul>
-                </div>
-            </ChildContent>
-        </SfSidebar>
-        <!-- end of sidebar element -->
-        <!-- main content declaration -->
-        <div id="main-content container-fluid col-md-12">
+                                <span class="e-text" title="profile">Twój profil</span>
+                            </li>
+                            <li class="sidebar-item">
+                                <span class="e-icons settings"></span>
+                                <span class="e-text" title="settings" @onclick="@Logout">Wyloguj się</span>
+                            </li>
+                        </ul>
+                    </div>
+                </ChildContent>
+            </SfSidebar>
+            <!-- end of sidebar element -->
+            <!-- main content declaration -->
+            <div id="main-content container-fluid col-md-12">
+            </div>
         </div>
     </div>
-</div>
 
-@* okno z profilem *@
-<SfDialog @bind-Visible="@Visibility" Width="500px" IsModal="true" ShowCloseIcon="true">
-    <DialogTemplates>
-        <Content>
-                            <div class="card user-card-full">
-                                <div class="row m-l-0 m-r-0">
-                                    <div class="col-sm-4 bg-c-lite-green user-profile">
-                                        <div class="card-block text-center text-white">
-                                            <div class="m-b-25"> <img src="https://instashow.pl/wp-content/uploads/2021/01/IMG_20210113_005503-e1610496115673-1024x813.jpg" style="width:80px; height:80px"> </div>
-                                            <h6 class="f-w-600">@Login.UserLoggedIn.First_name @Login.UserLoggedIn.Last_name</h6>
-                                            <p>@Login.UserLoggedIn.UserType</p>
-                                        </div>
+    @* okno z profilem *@
+    <SfDialog @bind-Visible="@Visibility" Width="500px" IsModal="true" ShowCloseIcon="true">
+        <DialogTemplates>
+            <Content>
+                <div class="card user-card-full">
+                    <div class="row m-l-0 m-r-0">
+                        <div class="col-sm-4 bg-c-lite-green user-profile">
+                            <div class="card-block text-center text-white">
+                                <div class="m-b-25"> <img src="https://instashow.pl/wp-content/uploads/2021/01/IMG_20210113_005503-e1610496115673-1024x813.jpg" style="width:80px; height:80px"> </div>
+                                <h6 class="f-w-600">@Login.UserLoggedIn.First_name @Login.UserLoggedIn.Last_name</h6>
+                                <p>@Login.UserLoggedIn.UserType</p>
+                            </div>
+                        </div>
+                        <div class="col-sm-8">
+                            <div class="card-block">
+                                <h6 class="m-b-20 p-b-5 b-b-default f-w-600">Informacje</h6>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <p class="m-b-10 f-w-600">Email</p>
+                                        <h6 class="text-muted f-w-400">@Login.UserLoggedIn.Email</h6>
                                     </div>
-                                    <div class="col-sm-8">
-                                        <div class="card-block">
-                                            <h6 class="m-b-20 p-b-5 b-b-default f-w-600">Informacje</h6>
-                                            <div class="row">
-                                                <div class="col-sm-6">
-                                                    <p class="m-b-10 f-w-600">Email</p>
-                                                    <h6 class="text-muted f-w-400">@Login.UserLoggedIn.Email</h6>
-                                                </div>
-                                                <div class="col-sm-6">
-                                                    <p class="m-b-10 f-w-600">Firma</p>
-                                                    <h6 class="text-muted f-w-400">@Login.UserCompany.Name</h6>
-                                                </div>
-                                            </div>
-                                        </div>
+                                    <div class="col-sm-6">
+                                        <p class="m-b-10 f-w-600">Firma</p>
+                                        <h6 class="text-muted f-w-400">@Login.UserCompany.Name</h6>
                                     </div>
                                 </div>
                             </div>
-        </Content>
-    </DialogTemplates>
-    <DialogEvents Closed="@DialogClosed"></DialogEvents>
-    <DialogAnimationSettings Effect="DialogEffect.Fade"></DialogAnimationSettings>
-</SfDialog>
+                        </div>
+                    </div>
+                </div>
+            </Content>
+        </DialogTemplates>
+        <DialogEvents Closed="@DialogClosed"></DialogEvents>
+        <DialogAnimationSettings Effect="DialogEffect.Fade"></DialogAnimationSettings>
+    </SfDialog>
 
 
-@code {
-    SfSidebar Sidebar;
-    private Boolean Visibility { get; set; }
-    public string Leftbtn = "Left";
-    private SidebarPosition Position { get; set; }
-    public bool SidebarToggle = false;
-    public void Toggle()
-    {
-        SidebarToggle = !SidebarToggle;
-    }
-    Dictionary<string, object> HtmlAttribute = new Dictionary<string, object>()
+    @code {
+        SfSidebar Sidebar;
+        private Boolean Visibility { get; set; }
+        public string Leftbtn = "Left";
+        private SidebarPosition Position { get; set; }
+        public bool SidebarToggle = false;
+        public void Toggle()
+        {
+            SidebarToggle = !SidebarToggle;
+        }
+        Dictionary<string, object> HtmlAttribute = new Dictionary<string, object>()
 {
         {"class", "dockSidebar" }
     };
 
-    private void Logout()
-    {
-        NavigationManager.NavigateTo("/");
-        Pages.Login.UserLoggedIn.If_manager = -1;
-    }
-
-    private void ShowProfile()
-    {
-        Visibility = true;
-    }
-
-    private void DialogClosed(CloseEventArgs args)
-    {
-        Visibility = false;
-    }
-}
-<style>
-    .e-icons {
-        text-decoration: none;
-    }
-
-    .header-section {
-        height: 40px;
-        color: black;
-    }
-
-    .title {
-        text-align: center;
-        font-size: 20px;
-        padding: 15px;
-    }
-
-    .sub-title {
-        text-align: center;
-        font-size: 16px;
-        padding: 10px;
-    }
-
-    #wrapper .sub-title .column {
-        display: inline-block;
-        padding: 10px;
-    }
-    /* custom code start */
-    .center {
-        text-align: center;
-        display: none;
-        font-size: 13px;
-        font-weight: 400;
-        margin-top: 20px;
-    }
-
-    .sb-content-tab .center {
-        display: block;
-    }
-    /* custom code end */
-    /* end of content area styles */
-    /* Sidebar styles */
-    .dockSidebar.e-sidebar.e-right.e-close {
-        visibility: visible;
-        transform: translateX(0%);
-    }
-
-    .dockSidebar {
-        text-decoration: none;
-        font-family: 'Josefin Sans', sans-serif;
-    }
-
-        .dockSidebar .e-icons::before {
-            font-size: 30px;
-            align-items: flex-start;
-        }
-        /* dockbar icon Style */
-        .dockSidebar .home::before {
-            content: '\e102';
+        private void Logout()
+        {
+            NavigationManager.NavigateTo("/");
+            Pages.Login.UserLoggedIn.If_manager = -1;
         }
 
-        .dockSidebar .profile::before {
-            content: '\e10c';
+        private void ShowAllTasks()
+        {
+            NavigationManager.NavigateTo("/tasks");
         }
 
-        .dockSidebar .info::before {
-            content: '\e11b';
+        private void ShowMyTasks()
+        {
+            NavigationManager.NavigateTo("/kanban");
+        }
+        private void ShowPersons()
+        {
+            NavigationManager.NavigateTo("/employees");
         }
 
-        .dockSidebar .settings::before {
-            content: '\e10b';
+        private void ShowProfile()
+        {
+            Visibility = true;
         }
 
-    .e-sidebar .expand::before,
-    .e-sidebar.e-right.e-open .expand::before {
-        content: '\e10f';
+        private void DialogClosed(CloseEventArgs args)
+        {
+            Visibility = false;
+        }
     }
+    <style>
 
-    .e-sidebar.e-open .expand::before,
-    .e-sidebar.e-right .expand::before {
-        content: '\e10e';
-    }
-    /* end of dockbar icon Style */
-    .dockSidebar.e-close .sidebar-item {
-        padding: 5px 20px;
-    }
+        .e-icons {
+            text-decoration: none;
+        }
 
-    .dockSidebar.e-dock.e-close span.e-text {
-        display: none;
-    }
+        /*
+        .header-section {
+            height: 40px;
+            color: black;
+        }
+        */
+        
 
-    .dockSidebar.e-dock.e-open span.e-text {
-        display: inline-block;
-    }
+        .title {
+            text-align: center;
+            font-size: 20px;
+            padding: 15px;
+        }
 
-    .dockSidebar li {
-        list-style-type: none;
-        cursor: pointer;
-    }
+        .sub-title {
+            text-align: center;
+            font-size: 16px;
+            padding: 10px;
+        }
 
-    .dockSidebar ul {
-        padding: 0px;
-    }
+        #wrapper .sub-title .column {
+            display: inline-block;
+            /* padding: 10px; */
+        }
+        /* custom code start */
+        .center {
+            text-align: center;
+            display: none;
+            font-size: 13px;
+            font-weight: 400;
+            /* margin-top: 20px; */
+        }
 
-    .dockSidebar.e-sidebar ul li:hover span {
-        color: white
-    }
+        .sb-content-tab .center {
+            display: block;
+        }
+        /* custom code end */
+        /* end of content area styles */
+        /* Sidebar styles */
+        .dockSidebar.e-sidebar.e-right.e-close {
+            visibility: visible;
+            transform: translateX(0%);
+        }
 
-    .dockSidebar span.e-icons {
-        color: white;
-        line-height: 2
-    }
+        .dockSidebar {
+            text-decoration: none;
+            font-family: 'Josefin Sans', sans-serif;
+        }
 
-    .e-open .e-icons {
-        margin-right: 16px;
-    }
+            .dockSidebar .e-icons::before {
+                font-size: 30px;
+                align-items: flex-start;
+            }
+            /* dockbar icon Style */
+            .dockSidebar .home::before {
+                content: '\e102';
+            }
 
-    .e-open .e-text {
-        font-family: 'Josefin Sans', sans-serif;
-        color: white;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        line-height: 23px;
-        font-size: 18px;
-    }
+            .dockSidebar .profile::before {
+                content: '\e10c';
+            }
 
-    .sidebar-item {
-        text-align: center;
-    }
+            .dockSidebar .info::before {
+                content: '\e11b';
+            }
 
-    .e-sidebar.e-open .sidebar-item {
-        text-align: left;
-        padding-left: 15px;
-        color: white;
-    }
+            .dockSidebar .settings::before {
+                content: '\e10b';
+            }
 
-    .dockSidebar.e-sidebar {
-        background: #3da081;
-        overflow: hidden;
-    }
-    /* custom generated icons styles */
-    @@font-face {
-        font-family: 'e-icons';
-        src: url(data:application/x-font-ttf;charset=utf-8;base64,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) format('truetype');
-        font-weight: normal;
-        font-style: normal;
-    }
-    /* end of custom generated icons styles */
-    /* custom code start */
-    .sf-new .sb-header,
-    .sf-new .sb-bread-crumb,
-    .sf-new #action-description,
-    .sf-new .sb-action-description,
-    .sf-new .e-tab-header,
-    .sf-new .description-section,
-    .sf-new #description-section,
-    .sf-new #description,
-    .sf-new #navigation-btn,
-    .sf-new .sb-toolbar-splitter,
-    .sf-new .sb-footer, .sf-new #left-sidebar, .sb-component-name {
-        display: none
-    }
+        .e-sidebar .expand::before,
+        .e-sidebar.e-right.e-open .expand::before {
+            content: '\e10f';
+        }
 
-    .sf-new .sb-right-pane.e-view {
-        margin-left: 0px !important;
-    }
+        .e-sidebar.e-open .expand::before,
+        .e-sidebar.e-right .expand::before {
+            content: '\e10e';
+        }
+        /* end of dockbar icon Style */
+        .dockSidebar.e-close .sidebar-item {
+            /* padding: 5px 20px; */
+        }
 
-    .sb-action-description.sb-rightpane-padding {
-        padding-bottom: 0;
-    }
+        .dockSidebar.e-dock.e-close span.e-text {
+            display: none;
+        }
 
-    .description-section {
-        padding-top: 0;
-    }
+        .dockSidebar.e-dock.e-open span.e-text {
+            display: inline-block;
+        }
 
-    #sb-content-header {
-        display: none
-    }
+        .dockSidebar li {
+            list-style-type: none;
+            cursor: pointer;
+        }
 
-    #content-tab.sb-content-tab {
-        height: 100% !important;
-    }
+        .dockSidebar ul {
+            padding: 0px;
+        }
 
-    .sf-new .container-fluid,
-    .sf-new .container-fluid .control-section,
-    #sidebar-section, description-section sb-rightpane-padding {
-        padding: 0;
-    }
+        .dockSidebar.e-sidebar ul li:hover span {
+            color: white
+        }
 
-    .sb-component-name.sb-rightpane-padding {
-        margin-top: -56px;
-    }
+        .dockSidebar span.e-icons {
+            color: white;
+            line-height: 2
+        }
 
-    .sb-right-pane.e-view {
-        left: 0;
-        padding-left: 0;
-        padding-right: 0;
-        top: 0;
-        overflow-y: hidden;
-    }
+        .e-open .e-icons {
+            margin-right: 16px;
+        }
 
-    .sb-desktop-wrapper {
-        height: 100%;
-    }
+        .e-open .e-text {
+            font-family: 'Josefin Sans', sans-serif;
+            color: white;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            line-height: 23px;
+            font-size: 18px;
+        }
 
-    .sb-component-name h1 {
-        padding-top: 0;
-    }
+        .sidebar-item {
+            text-align: center;
+        }
 
-    .sf-new .sb-content.e-view {
-        top: 0;
-    }
-    /* end of newTab support */
-    /* custom code end */
-    /* end of sidebar styles */
+        .e-sidebar.e-open .sidebar-item {
+            text-align: left;
+            padding-left: 15px;
+            color: white;
+        }
+
+        .dockSidebar.e-sidebar {
+            background: #3da081;
+            overflow: hidden;
+        }
+        /* custom generated icons styles */
+        @@font-face {
+            font-family: 'e-icons';
+            src: url(data:application/x-font-ttf;charset=utf-8;base64,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) format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+        /* end of custom generated icons styles */
+        /* custom code start */
+        .sf-new .sb-header,
+        .sf-new .sb-bread-crumb,
+        .sf-new #action-description,
+        .sf-new .sb-action-description,
+        .sf-new .e-tab-header,
+        .sf-new .description-section,
+        .sf-new #description-section,
+        .sf-new #description,
+        .sf-new #navigation-btn,
+        .sf-new .sb-toolbar-splitter,
+        .sf-new .sb-footer, .sf-new #left-sidebar, .sb-component-name {
+            display: none
+        }
+
+        .sf-new .sb-right-pane.e-view {
+            margin-left: 0px !important;
+        }
+
+        .sb-action-description.sb-rightpane-padding {
+            padding-bottom: 0;
+        }
+
+        .description-section {
+            padding-top: 0;
+        }
+
+        #sb-content-header {
+            display: none
+        }
+
+        #content-tab.sb-content-tab {
+            height: 100% !important;
+        }
+
+        .sf-new .container-fluid,
+        .sf-new .container-fluid .control-section,
+        #sidebar-section, description-section sb-rightpane-padding {
+            padding: 0;
+        }
+
+        .sb-component-name.sb-rightpane-padding {
+            margin-top: -56px;
+        }
+
+        .sb-right-pane.e-view {
+            left: 0;
+            padding-left: 0;
+            padding-right: 0;
+            top: 0;
+            overflow-y: hidden;
+        }
+
+        .sb-desktop-wrapper {
+            height: 100%;
+        }
+
+        .sb-component-name h1 {
+            padding-top: 0;
+        }
+
+        .sf-new .sb-content.e-view {
+            top: 0;
+        }
+        /* end of newTab support */
+        /* custom code end */
+        /* end of sidebar styles */
 
 
-    /* Czy to wszystko jest tu potrzebne? */
-    /* Nie a co? */
-    img {
-        border-radius: 50%;
-    }
+        /* Czy to wszystko jest tu potrzebne? */
+        /* Nie a co? */
+        img {
+            border-radius: 50%;
+        }
 
-    .padding {
-        padding: 3rem !important;
-        position: absolute;
-        left: 25%;
-        right: 5%;
-    }
+        .padding {
+            padding: 3rem !important;
+            position: absolute;
+            left: 25%;
+            right: 5%;
+        }
 
-    .user-card-full {
-        overflow: hidden
-    }
+        .user-card-full {
+            overflow: hidden
+        }
 
-    .card {
-        border-radius: 5px;
-        -webkit-box-shadow: 0 1px 20px 0 rgba(69, 90, 100, 0.08);
-        box-shadow: 0 1px 20px 0 rgba(69, 90, 100, 0.08);
-        border: none;
-    }
+        .card {
+            border-radius: 5px;
+            -webkit-box-shadow: 0 1px 20px 0 rgba(69, 90, 100, 0.08);
+            box-shadow: 0 1px 20px 0 rgba(69, 90, 100, 0.08);
+            border: none;
+        }
 
-    .m-r-0 {
-        margin-right: 0px
-    }
+        .m-r-0 {
+            margin-right: 0px
+        }
 
-    .m-l-0 {
-        margin-left: 0px
-    }
+        .m-l-0 {
+            margin-left: 0px
+        }
 
-    .user-card-full .user-profile {
-        border-radius: 5px 0 0 5px
-    }
+        .user-card-full .user-profile {
+            border-radius: 5px 0 0 5px
+        }
 
-    .bg-c-lite-green {
-        background: -webkit-gradient(linear, left top, right top, from(#1FB98B), to(#1FB98B));
-        background: linear-gradient(to right, #1FB98B, #1FB98B)
-    }
+        .bg-c-lite-green {
+            background: -webkit-gradient(linear, left top, right top, from(#1FB98B), to(#1FB98B));
+            background: linear-gradient(to right, #1FB98B, #1FB98B)
+        }
 
-    .user-profile {
-        padding: 20px 0
-    }
+        .user-profile {
+            padding: 20px 0
+        }
 
-    .card-block {
-        padding: 1.25rem
-    }
+        .card-block {
+            padding: 1.25rem
+        }
 
-    .m-b-25 {
-        margin-bottom: 25px
-    }
+        .m-b-25 {
+            margin-bottom: 25px
+        }
 
-    .img-radius {
-        border-radius: 5px
-    }
+        .img-radius {
+            border-radius: 5px
+        }
 
-    h6 {
-        font-size: 14px
-    }
+        h6 {
+            font-size: 14px
+        }
 
-    .card .card-block p {
-        line-height: 25px
-    }
+        .card .card-block p {
+            line-height: 25px
+        }
 
-    .card-block {
-        padding: 1.25rem
-    }
+        .card-block {
+            padding: 1.25rem
+        }
 
-    .b-b-default {
-        border-bottom: 1px solid #e0e0e0
-    }
+        .b-b-default {
+            border-bottom: 1px solid #e0e0e0
+        }
 
-    .m-b-20 {
-        margin-bottom: 20px
-    }
+        .m-b-20 {
+            margin-bottom: 20px
+        }
 
-    .p-b-5 {
-        padding-bottom: 5px !important
-    }
+        .p-b-5 {
+            padding-bottom: 5px !important
+        }
 
-    .card .card-block p {
-        line-height: 25px
-    }
+        .card .card-block p {
+            line-height: 25px
+        }
 
-    .m-b-10 {
-        margin-bottom: 10px
-    }
+        .m-b-10 {
+            margin-bottom: 10px
+        }
 
-    .text-muted {
-        color: #919aa3 !important
-    }
+        .text-muted {
+            color: #919aa3 !important
+        }
 
-    .b-b-default {
-        border-bottom: 1px solid #e0e0e0
-    }
+        .b-b-default {
+            border-bottom: 1px solid #e0e0e0
+        }
 
-    .f-w-600 {
-        font-weight: 600
-    }
+        .f-w-600 {
+            font-weight: 600
+        }
 
-    .m-b-20 {
-        margin-bottom: 20px
-    }
+        .m-b-20 {
+            margin-bottom: 20px
+        }
 
-    .m-t-40 {
-        margin-top: 20px
-    }
+        .m-t-40 {
+            margin-top: 20px
+        }
 
-    .p-b-5 {
-        padding-bottom: 5px !important
-    }
+        .p-b-5 {
+            padding-bottom: 5px !important
+        }
 
-    .m-b-10 {
-        margin-bottom: 10px
-    }
+        .m-b-10 {
+            margin-bottom: 10px
+        }
 
-    .m-t-40 {
-        margin-top: 20px
-    }
-</style>
+        .m-t-40 {
+            margin-top: 20px
+        }
+    </style>
 
