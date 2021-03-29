@@ -505,7 +505,7 @@
             }
             else
             {
-                SaveProject();
+                SaveProject(selectedProject);
                 TaskAdd.project_id = BackendLibrary.DataAccess.ProjectData.GetIdByName(selectedProject);
                 newTask = new BackendLibrary.Models.TaskModel
                 (WebApp.Pages.Login.UserLoggedIn.Company_id, TaskAdd.name,
@@ -516,7 +516,7 @@
 
             if (isMergedLabelsMatchToPattern)
             {
-                SaveLabels();
+                SaveLabels(selectedLabels);
                 BackendLibrary.DataAccess.TaskData.AddTask(newTask);
                 SaveTaskLabel();
                 AddEmployeeToTask();
@@ -546,16 +546,16 @@
     /// Zapisuje do bazy etykiety, których jeszcze nie ma w bazie.
     /// </summary>
     //TODO - Trzeba jeszcze pobrac opis(czy w ogóle będzie opis etykiet? No chyba nie w prototypie)
-    private void SaveLabels()
+    private void SaveLabels(string[] labels)
     {
-        for (int i = 0; i < selectedLabels.Length; i++)
+        for (int i = 0; i < labels.Length; i++)
         {
-            if (!IsSelectedLabelsContainsInDbLabels(selectedLabels[i]))
+            if (!IsSelectedLabelsContainsInDbLabels(labels[i]))
             {
-                BackendLibrary.Models.LabelModel label = new BackendLibrary.Models.LabelModel
-                    (selectedLabels[i], WebApp.Pages.Login.UserLoggedIn.Company_id);
+                BackendLibrary.Models.LabelModel new_label = new BackendLibrary.Models.LabelModel
+                    (labels[i], WebApp.Pages.Login.UserLoggedIn.Company_id);
 
-                BackendLibrary.DataAccess.LabelData.AddLabel(label);
+                BackendLibrary.DataAccess.LabelData.AddLabel(new_label);
             }
         }
     }
@@ -563,14 +563,14 @@
     /// <summary>
     /// Zapisuje do bazy projekt, jesli jeszcze nie ma go w bazie.
     /// </summary>
-    private void SaveProject()
+    private void SaveProject(string project)
     {
-        if (!IsSelectedProjectContainsInDbProjects(selectedProject))
+        if (!IsSelectedProjectContainsInDbProjects(project))
         {
-            BackendLibrary.Models.ProjectModel project = new BackendLibrary.Models.ProjectModel
-                (Login.UserLoggedIn.Company_id, selectedProject);
+            BackendLibrary.Models.ProjectModel new_project = new BackendLibrary.Models.ProjectModel
+                (Login.UserLoggedIn.Company_id, project);
 
-            BackendLibrary.DataAccess.ProjectData.AddProject(project);
+            BackendLibrary.DataAccess.ProjectData.AddProject(new_project);
         }
     }
 
@@ -631,6 +631,41 @@
     }
 
     /// <summary>
+    /// Zmienia pracowników danego zadania na nowych
+    /// </summary>
+    private void EditEmployeeToTask()
+    {
+        for (int i = 0; i < ListofEmployeesId.Count; i++)
+        {
+            BackendLibrary.DataAccess.EmployeeTaskData.DeleteEmployeeTask(ListofEmployeesId[i].Employee_id, ListofEmployeesId[i].Task_id);
+        }
+        for (int i = 0; i < nameofEmployees.Length; i++)
+        {
+            BackendLibrary.Models.EmployeeTaskModel employeeTask = new BackendLibrary.Models.EmployeeTaskModel(SelectedTask.Task_id, nameofEmployees[i], SelectedTask.Status);
+            BackendLibrary.DataAccess.EmployeeTaskData.AddEmployeeTask(employeeTask);
+        }
+    }
+
+    /// <summary>
+    /// Zmienia etykiety danego zadania na nowe
+    /// </summary>
+    private void EditTaskLabel()
+    {
+        for (int i = 0; i < ListofLabelsId.Count; i++)
+        {
+            BackendLibrary.DataAccess.TaskLabelData.DeleteTaskLabel(ListofLabelsId[i].Task_id, ListofLabelsId[i].Label_id);
+        }
+
+        for (int i = 0; i < nameoflabels.Length; i++)
+        {
+            labelIdByName = BackendLibrary.DataAccess.LabelData.GetIdByName(nameoflabels[i]);
+            BackendLibrary.Models.TaskLabelModel taskLabel = new BackendLibrary.Models.TaskLabelModel
+                (SelectedTask.Task_id, labelIdByName);
+            BackendLibrary.DataAccess.TaskLabelData.AddTaskLabel(taskLabel);
+        }
+    }
+
+    /// <summary>
     /// Aktualizuje w bazie danych zadanie, które zostało nakreślone w gui aplikacji.
     /// </summary>
     private void UpdateTask()
@@ -673,15 +708,38 @@
             if_updated = true;
         }
 
+        if (SelectedTask.Project_id != TaskEdit.project_id)
+        {
+            SelectedTask.Project_id = TaskEdit.project_id;
+            if_updated = true;
+        }
+
         if (if_updated == true) //sprawdza czy uzytkownik wyedytowal cos w zadaniu, jesli tak, updatuje wartosci w database oraz wystwietla stosowna informacje
         {
-            BackendLibrary.Models.TaskModel updatedTask =
-            new BackendLibrary.Models.TaskModel(TasksList.SelectedTask.Task_id, TasksList.SelectedTask.Company_id,
-            TasksList.SelectedTask.Name, TasksList.SelectedTask.Description, TasksList.SelectedTask.Start_time,
-            TasksList.SelectedTask.Deadline, TasksList.SelectedTask.Status, TasksList.SelectedTask.Auto_assigned, TasksList.SelectedTask.Project_id);
+            BackendLibrary.Models.TaskModel updatedTask;
+            if (nameofProject == null)
+            {
+                updatedTask = new BackendLibrary.Models.TaskModel
+                (TasksList.SelectedTask.Task_id, TasksList.SelectedTask.Company_id,
+                TasksList.SelectedTask.Name, TasksList.SelectedTask.Description, TasksList.SelectedTask.Start_time,
+                TasksList.SelectedTask.Deadline, TasksList.SelectedTask.Status, TasksList.SelectedTask.Auto_assigned,
+                -1);
+            }
+            else
+            {
+                SaveProject(nameofProject);
+                SelectedTask.Project_id = BackendLibrary.DataAccess.ProjectData.GetIdByName(nameofProject);
+                updatedTask = new BackendLibrary.Models.TaskModel
+                (TasksList.SelectedTask.Task_id, TasksList.SelectedTask.Company_id,
+                TasksList.SelectedTask.Name, TasksList.SelectedTask.Description, TasksList.SelectedTask.Start_time,
+                TasksList.SelectedTask.Deadline, TasksList.SelectedTask.Status, TasksList.SelectedTask.Auto_assigned,
+                TasksList.SelectedTask.Project_id);
+            }
 
+            SaveLabels(nameoflabels);
             BackendLibrary.DataAccess.TaskData.UpdateTask(updatedTask);
-
+            EditTaskLabel();
+            EditEmployeeToTask();
             ToastObj.Show();
             VisibilityEdit = false;
             uriHelper.NavigateTo(uriHelper.Uri, forceLoad: true);
@@ -703,6 +761,7 @@
         TaskEdit.deadline = defaultDate;
         TaskEdit.status = null;
         TaskEdit.auto_assigned = 0;
+        TaskEdit.project_id = -1;
     }
 }
 
