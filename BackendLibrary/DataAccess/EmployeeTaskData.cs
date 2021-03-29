@@ -23,6 +23,19 @@ namespace BackendLibrary.DataAccess
                 return data;
             }
         }
+        /// <summary> Zwraca wszystkie id pracowników przypisanych do danego zadania. </summary>
+        public static List<EmployeeTaskModel> GetAllEmployeesByTaskId(int taskId)
+        {
+            using (IDbConnection connection = new MySqlConnection(connectionString))
+            {
+                string sql = $"SELECT * FROM database06.employeetask WHERE task_id = {taskId}";
+                var data = connection.Query<EmployeeTaskModel>(sql).ToList();
+
+                return data;
+            }
+        }
+
+
 
         /// <summary> Przypisuje zadanie pracownikowi. </summary>
         public static int AddEmployeeTask(EmployeeTaskModel newEmpTask)
