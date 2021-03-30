@@ -123,7 +123,8 @@ namespace BackendLibrary.DataAccess
                 else // gdy zadanie nie ma przypisanego projektu, pole project_id < 0
                 {
                     sql = @"UPDATE database06.task SET Name = @Name, Description = @Description, Start_time = @Start_time,
-                            Deadline = @Deadline, Status = @Status, Auto_assigned = @Auto_assigned WHERE task_id = @Task_id";
+                            Deadline = @Deadline, Status = @Status, Auto_assigned = @Auto_assigned, Project_id = null
+                            WHERE task_id = @Task_id";
                 }
 
                 connection.Execute(sql, updatedTask);
