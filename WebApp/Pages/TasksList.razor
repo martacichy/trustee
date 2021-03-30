@@ -327,7 +327,7 @@
 </div>
 
 @code {
-    SfToast NoSelectedTask;
+        SfToast NoSelectedTask;
     private SfGrid<TaskModel> DefaultGrid;
     private string searchStr;
     private static List<TaskModel> TaskList;
@@ -351,7 +351,7 @@
     private int labelIdByName;
     private string mergedSelectedLabels;
     private bool isMergedLabelsMatchToPattern;
-    private string pattern = @"^[a-zA-Z0-9]+$";
+    private string pattern = @"^[a-zA-Z0-9]*$";
     private Boolean VisibilityAdd { get; set; }
     private bool isChecked = false;
     public bool EnableProjectDropDown = false;
@@ -613,12 +613,16 @@
     private void MergeSelectedLabels()
     {
         mergedSelectedLabels = "";
-        for (int i = 0; i < selectedLabels.Length; i++)
+        if (selectedLabels != null)
         {
-            mergedSelectedLabels += selectedLabels[i];
+            for (int i = 0; i < selectedLabels.Length; i++)
+            {
+                mergedSelectedLabels += selectedLabels[i];
+            }
         }
         TaskAdd.SelectedLabel = mergedSelectedLabels;
         isMergedLabelsMatchToPattern = Regex.IsMatch(mergedSelectedLabels, pattern);
+
     }
 
     /// <summary>
@@ -627,14 +631,17 @@
     //TODO - Trzeba jeszcze pobrac opis(czy w ogóle będzie opis etykiet? No chyba nie w prototypie)
     private void SaveLabels(string[] labels)
     {
-        for (int i = 0; i < labels.Length; i++)
+        if (labels != null)
         {
-            if (!IsSelectedLabelsContainsInDbLabels(labels[i]))
+            for (int i = 0; i < labels.Length; i++)
             {
-                BackendLibrary.Models.LabelModel new_label = new BackendLibrary.Models.LabelModel
-                    (labels[i], WebApp.Pages.Login.UserLoggedIn.Company_id);
+                if (!IsSelectedLabelsContainsInDbLabels(labels[i]))
+                {
+                    BackendLibrary.Models.LabelModel new_label = new BackendLibrary.Models.LabelModel
+                        (labels[i], WebApp.Pages.Login.UserLoggedIn.Company_id);
 
-                BackendLibrary.DataAccess.LabelData.AddLabel(new_label);
+                    BackendLibrary.DataAccess.LabelData.AddLabel(new_label);
+                }
             }
         }
     }
@@ -660,11 +667,14 @@
     private void SaveTaskLabel()
     {
         lastTaskId = BackendLibrary.DataAccess.TaskData.GetMaxId();
-        for (int i = 0; i < selectedLabels.Length; i++)
+        if (selectedLabels != null)
         {
-            labelIdByName = BackendLibrary.DataAccess.LabelData.GetIdByName(selectedLabels[i]);
-            BackendLibrary.Models.TaskLabelModel taskLabel = new BackendLibrary.Models.TaskLabelModel(lastTaskId, labelIdByName);
-            BackendLibrary.DataAccess.TaskLabelData.AddTaskLabel(taskLabel);
+            for (int i = 0; i < selectedLabels.Length; i++)
+            {
+                labelIdByName = BackendLibrary.DataAccess.LabelData.GetIdByName(selectedLabels[i]);
+                BackendLibrary.Models.TaskLabelModel taskLabel = new BackendLibrary.Models.TaskLabelModel(lastTaskId, labelIdByName);
+                BackendLibrary.DataAccess.TaskLabelData.AddTaskLabel(taskLabel);
+            }
         }
     }
     /// <summary>
