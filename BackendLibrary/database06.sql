@@ -241,12 +241,12 @@ CREATE TABLE IF NOT EXISTS `database06`.`EmployeeProject` (
   PRIMARY KEY (`employee_id`, `project_id`),
   INDEX `employee_id_task_idx` (`employee_id` ASC) VISIBLE,
   INDEX `project_id_idx` (`project_id` ASC) VISIBLE,
-  CONSTRAINT `project_id`
+  CONSTRAINT `project_id_in_emppro`
     FOREIGN KEY (`project_id`)
     REFERENCES `database06`.`Project` (`project_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `employee_id`
+  CONSTRAINT `employee_id_in_emppro`
     FOREIGN KEY (`employee_id`)
     REFERENCES `database06`.`Employee` (`employee_id`)
     ON DELETE NO ACTION
