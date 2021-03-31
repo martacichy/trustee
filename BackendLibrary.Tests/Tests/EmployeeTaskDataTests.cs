@@ -12,7 +12,7 @@ namespace BackendLibrary.Tests.Tests
         [Fact, Order(2)]
         public async void GetEmployeesShouldReturnList()
         {
-            var output = await Task.Run(() => DataAccess.EmployeeTaskData.GetAllLabelsByEmployeeId(1));
+            var output = await Task.Run(() => DataAccess.EmployeeTaskData.GetAllTasksByEmployeeId(1));
 
             Assert.IsType<List<EmployeeTaskModel>>(output);
         }

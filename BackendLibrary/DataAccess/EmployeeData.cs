@@ -74,6 +74,21 @@ namespace BackendLibrary.DataAccess
             }
         }
 
+        /// <summary>
+        /// Zwraca jednoelementowa liste, zawierajaca jednego pracownika, zgodnie z przekazanym ID,
+        /// funkcja stworzona specjalnie do edycji pracownika.
+        /// </summary>
+        public static List<EmployeeModel> GetByIdList(int employee_id)
+        {
+            using (IDbConnection connection = new MySqlConnection(connectionString))
+            {
+                string sql = $"SELECT * FROM database06.employee WHERE employee_id = {employee_id}";
+                var data = connection.Query<EmployeeModel>(sql).ToList();
+
+                return data;
+            }
+        }
+
         /// <summary> Zwraca id pracownika o podanym mailu. </summary>
         public static int GetIdByEmail(string email)
         {
