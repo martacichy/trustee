@@ -1,4 +1,5 @@
 ﻿@page "/tasks"
+<link href="css/popups.css" rel="stylesheet" />
 
 <div class="header">
     <h3>Lista wszystkich zadań</h3>
@@ -66,7 +67,7 @@
     </div>
 
     @* okno dodawania nowego zadania*@
-    <SfDialog @bind-Visible="@VisibilityAdd" AllowDragging="true" Header="Nowe zadanie" Width="500px" IsModal="true" ShowCloseIcon="true">
+    <SfDialog @bind-Visible="@VisibilityAdd" Header="Nowe zadanie" Width="500px" IsModal="true" ShowCloseIcon="true">
         <DialogTemplates>
             <Content>
                 <EditForm Model="@TaskAdd">
@@ -148,26 +149,26 @@
                         <div class="control-wrapper multi-select-parent">
                             <div class="padding-top">
                                 <label asp-for="pracownicy" class="control-label">Pracownicy</label>
-                                <SfMultiSelect TValue="int[]" TItem="BackendLibrary.Models.EmployeeModel"
+                                <SfMultiSelect TValue="int[]" TItem="EmployeeModel"
                                                @bind-Value="@selectedEmployeesId"
                                                Placeholder="Wybierz..."
                                                DataSource="@employees" AllowFiltering="true"
                                                Mode="@VisualMode.Box">
-                                    <MultiSelectTemplates TItem="BackendLibrary.Models.EmployeeModel">
+                                    <MultiSelectTemplates TItem="EmployeeModel">
                                         <!-- Zmieniony Context z default na "SelectedEmployee" aby mogła działać walidacja -->
                                         <ItemTemplate Context="SelectedEmployee">
                                             <div>
                                                 <div class="ename">
-                                                    @((SelectedEmployee as BackendLibrary.Models.EmployeeModel).First_name)
-                                                    @((SelectedEmployee as BackendLibrary.Models.EmployeeModel).Last_name)
+                                                    @((SelectedEmployee as EmployeeModel).First_name)
+                                                    @((SelectedEmployee as EmployeeModel).Last_name)
                                                 </div>
                                             </div>
                                         </ItemTemplate>
                                         <ValueTemplate Context="SelectedEmployee">
                                             <div class="multiselect-width">
                                                 <div class="name">
-                                                    @((SelectedEmployee as BackendLibrary.Models.EmployeeModel).First_name)
-                                                    @((SelectedEmployee as BackendLibrary.Models.EmployeeModel).Last_name)
+                                                    @((SelectedEmployee as EmployeeModel).First_name)
+                                                    @((SelectedEmployee as EmployeeModel).Last_name)
                                                 </div>
                                             </div>
                                         </ValueTemplate>
@@ -340,10 +341,10 @@
     // Zmienne z AddNewTask
     SfToast SuccessTask;
     private string ToastContentAdd { get; set; } = "Zadanie zostało pomyślnie dodane.";
-    private BackendLibrary.Validation.TaskValidation TaskAdd;
-    private List<BackendLibrary.Models.LabelModel> labelsInDb;
-    private List<BackendLibrary.Models.EmployeeModel> employees;
-    private List<BackendLibrary.Models.ProjectModel> projectsInDb;
+    private TaskValidation TaskAdd;
+    private List<LabelModel> labelsInDb;
+    private List<EmployeeModel> employees;
+    private List<ProjectModel> projectsInDb;
     private string[] selectedLabels { get; set; } = new string[] { };
     private int[] selectedEmployeesId = new int[] { };
     private string selectedProject;
@@ -362,19 +363,19 @@
     SfToast FailedObj;
     private string ToastContentEdit { get; set; } = "Zadanie zaktualizowane pomyslnie!";
     private string FailedContent { get; set; } = "Brak zmian w zadaniu!";
-    private BackendLibrary.Validation.TaskValidation TaskEdit;
+    private TaskValidation TaskEdit;
     DateTime defaultDate = new DateTime(0001, 1, 1, 0, 0, 0);
     private Boolean VisibilityEdit { get; set; }
 
     // Zmienne z TaskDetails
-    private SfGrid<BackendLibrary.Models.TaskModel> DefaultGrid1;
-    public static List<BackendLibrary.Models.TaskModel> ListOfTasks;
+    private SfGrid<TaskModel> DefaultGrid1;
+    public static List<TaskModel> ListOfTasks;
     private Boolean addButtonClicked;
     private Boolean VisibilityDetails { get; set; }
-    public static List<BackendLibrary.Models.TaskLabelModel> ListofLabelsId;
+    public static List<TaskLabelModel> ListofLabelsId;
     private string[] nameoflabels { get; set; } = new string[] { };
     private string[] oldlabels { get; set; } = new string[] { };
-    public static List<BackendLibrary.Models.EmployeeTaskModel> ListofEmployeesId;
+    public static List<EmployeeTaskModel> ListofEmployeesId;
     private int[] nameofEmployees { get; set; } = new int[] { };
     private int[] oldEmployees { get; set; } = new int[] { };
     private string nameofProject;
@@ -677,6 +678,7 @@
             }
         }
     }
+
     /// <summary>
     /// Przypisuje pracowników do dodanego zadania
     /// </summary>
@@ -877,8 +879,6 @@
 
         if (if_updated == true) //sprawdza czy uzytkownik wyedytowal cos w zadaniu, jesli tak, updatuje wartosci w database oraz wystwietla stosowna informacje
         {
-
-
             BackendLibrary.Models.TaskModel updatedTask;
             if (nameofProject == null)
             {
@@ -899,6 +899,7 @@
             }
 
             MergeSelectedLabels(TaskEdit, nameoflabels);
+
             if (isMergedLabelsMatchToPattern)
             {
                 if (nameoflabels != null)
@@ -934,100 +935,3 @@
 }
 
 
-<style>
-    .control_wrapper {
-        width: 350px;
-        margin: 0 auto;
-        padding-top: 70px;
-        padding-bottom: 70px;
-    }
-
-    .form-group {
-        padding-top: 15px;
-        width: 350px;
-        margin: 0 auto;
-    }
-
-    .control-wrapper.multi-select-parent {
-        margin: 0 auto;
-        width: 350px;
-        padding-top: 15px;
-    }
-
-    .form-group {
-        padding-top: 15px;
-        width: 350px;
-        margin: 0 auto;
-    }
-
-    /* moje style - PatrykM*/
-    #target {
-        min-height: 1000px;
-        height: 100%;
-    }
-
-    .e-dialog .e-dlg-header-content {
-        background-color: #3da081;
-    }
-
-    e-dialog .e-dlg-header-content .e-btn.e-dlg-closeicon-btn {
-        top: 5px;
-        left: -11px;
-    }
-
-    .e-dialog .e-dlg-header {
-        position: relative;
-    }
-
-    #template {
-        display: inline-block;
-        padding: 0px 10px;
-        vertical-align: middle;
-        height: 30px;
-        line-height: 20px;
-    }
-
-    .oneline {
-        text-align: left;
-        font-size: 20px;
-        display: inline-block;
-    }
-
-    e-icon-settings.e-icons {
-        float: left;
-        position: relative;
-        left: 14%;
-        top: -33px;
-    }
-
-    .e-dlg-header .e-icon-settings, .e-icon-btn {
-        color: #fff;
-    }
-    .assignment{
-        float: right;
-        font-size: 15px;
-        display: inline-block;
-    }
-
-    .group1 {
-        float: left;
-        text-align: left;
-        font-size: 20px;
-        height: 35px;
-        width: 650px;
-        border: 2px solid green;
-        padding: 4px 4px;
-        margin: 5px;
-        overflow: hidden;
-    }
-    .group2 {
-        padding-top: 15px;
-        width: 350px;
-        max-height: 300px;
-        margin: 0 auto;
-        word-wrap: break-word;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-    /* koniec moich styli, elo*/
-</style>
