@@ -68,7 +68,7 @@ DROP TABLE IF EXISTS `database06`.`Project` ;
 CREATE TABLE IF NOT EXISTS `database06`.`Project` (
   `project_id` INT NOT NULL AUTO_INCREMENT,
   `company_id` INT NULL DEFAULT NULL,
-  `name` VARCHAR(50) NOT NULL DEFAULT '<niepodpisany rodzaj etykiety>',
+  `name` VARCHAR(200) NOT NULL DEFAULT '<projekt bez nazwy>',
   PRIMARY KEY (`project_id`),
   UNIQUE INDEX `project_id_UNIQUE` (`project_id` ASC) VISIBLE,
   INDEX `company_id_labeltype_idx` (`company_id` ASC) VISIBLE,
@@ -165,7 +165,7 @@ DROP TABLE IF EXISTS `database06`.`EmployeeTask` ;
 CREATE TABLE IF NOT EXISTS `database06`.`EmployeeTask` (
   `task_id` INT NOT NULL,
   `employee_id` INT NOT NULL,
-  `status` VARCHAR(50) NOT NULL DEFAULT 'not started',
+  `status` VARCHAR(50) NULL DEFAULT NULL,
   PRIMARY KEY (`employee_id`, `task_id`),
   INDEX `employee_id_task_idx` (`employee_id` ASC) VISIBLE,
   INDEX `task_id` (`task_id` ASC) VISIBLE,
@@ -227,6 +227,30 @@ CREATE TABLE IF NOT EXISTS `database06`.`Comment` (
   CONSTRAINT `task_id_comment`
     FOREIGN KEY (`task_id`)
     REFERENCES `database06`.`Task` (`task_id`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `database06`.`EmployeeProject`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `database06`.`EmployeeProject` ;
+
+CREATE TABLE IF NOT EXISTS `database06`.`EmployeeProject` (
+  `project_id` INT NOT NULL,
+  `employee_id` INT NOT NULL,
+  PRIMARY KEY (`employee_id`, `project_id`),
+  INDEX `employee_id_task_idx` (`employee_id` ASC) VISIBLE,
+  INDEX `project_id_idx` (`project_id` ASC) VISIBLE,
+  CONSTRAINT `project_id_in_emppro`
+    FOREIGN KEY (`project_id`)
+    REFERENCES `database06`.`Project` (`project_id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `employee_id_in_emppro`
+    FOREIGN KEY (`employee_id`)
+    REFERENCES `database06`.`Employee` (`employee_id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 

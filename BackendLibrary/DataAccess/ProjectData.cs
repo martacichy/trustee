@@ -60,7 +60,7 @@ namespace BackendLibrary.DataAccess
             }
         }
 
-        /// <summary> Zwraca listę wszystkich typów etykiet danej firmy. </summary>
+        /// <summary> Zwraca listę wszystkich projektów danej firmy. </summary>
         public static List<ProjectModel> GetAllByCompanyId(int company_id)
         {
             using (IDbConnection connection = new MySqlConnection(connectionString))
