@@ -230,6 +230,30 @@ CREATE TABLE IF NOT EXISTS `database06`.`Comment` (
 ENGINE = InnoDB;
 
 
+-- -----------------------------------------------------
+-- Table `database06`.`EmployeeProject`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `database06`.`EmployeeProject` ;
+
+CREATE TABLE IF NOT EXISTS `database06`.`EmployeeProject` (
+  `project_id` INT NOT NULL,
+  `employee_id` INT NOT NULL,
+  PRIMARY KEY (`employee_id`, `project_id`),
+  INDEX `employee_id_task_idx` (`employee_id` ASC) VISIBLE,
+  INDEX `project_id_idx` (`project_id` ASC) VISIBLE,
+  CONSTRAINT `project_id`
+    FOREIGN KEY (`project_id`)
+    REFERENCES `database06`.`Project` (`project_id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `employee_id`
+    FOREIGN KEY (`employee_id`)
+    REFERENCES `database06`.`Employee` (`employee_id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
