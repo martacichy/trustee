@@ -1,5 +1,4 @@
 ﻿@page "/employees"
-@*dostęp do postrony tylko dla szefa*@
 
 <div class="header">
     <h3>Pracownicy</h3>
@@ -54,10 +53,9 @@
 
 @code {
     /// <summary>
-    /// Strona wyświetlająca listę pracowników dla widoku menadżera/pracownika.
+    /// Strona wyświetlająca listę pracowników.
     /// </summary>
     public static List<EmployeeModel> EmployeeList;
-    public int length;
     private EmployeeValidation Employee;
     private Boolean visibility { get; set; }
     string inputValue, errorMessage;
@@ -70,7 +68,6 @@
         }
 
         EmployeeList = EmployeeData.GetAllByCompanyId(Login.UserLoggedIn.Company_id);
-        length = EmployeeList.Count;
         inputValue = "";
         errorMessage = "";
         visibility = false;

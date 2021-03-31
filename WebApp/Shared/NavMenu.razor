@@ -1,6 +1,5 @@
 ﻿@page "/sidebar/sidebar-dock"
 @using Syncfusion.Blazor.Navigations
-@using Syncfusion.Blazor.Buttons
 @inherits LayoutComponentBase
 
 
@@ -15,16 +14,20 @@
                                 <span class="e-text" title="menu">Menu</span>
                             </li>
                             <li class="sidebar-item" @onclick="@ShowMyTasks">
-                                    <span class="e-icons home"></span>
-                                    <span class="e-text" title="home">Twoje zadania</span>
+                                <span class="e-icons home"></span>
+                                <span class="e-text" title="home">Twoje zadania</span>
                             </li>
                             <li class="sidebar-item" @onclick="@ShowAllTasks">
-                                    <span class="e-icons info"></span>
-                                    <span class="e-text" title="info">Wszystkie zadania</span>
+                                <span class="e-icons info"></span>
+                                <span class="e-text" title="info">Wszystkie zadania</span>
+                            </li>
+                            <li class="sidebar-item" @onclick="@ShowProjects">
+                                <span class="e-icons info"></span>
+                                <span class="e-text" title="profile">Projekty</span>
                             </li>
                             <li class="sidebar-item" @onclick="@ShowPersons">
-                                    <span class="e-icons profile"></span>
-                                    <span class="e-text" title="profile">Pracownicy</span>
+                                <span class="e-icons profile"></span>
+                                <span class="e-text" title="profile">Pracownicy</span>
                             </li>
                             <li class="sidebar-item" @onclick="@ShowProfile">
                                 <span class="e-icons profile"></span>
@@ -112,9 +115,16 @@
         {
             NavigationManager.NavigateTo("/kanban");
         }
+
         private void ShowPersons()
         {
             NavigationManager.NavigateTo("/employees");
+        }
+
+        
+        private void ShowProjects()
+        {
+            NavigationManager.NavigateTo("/projects");
         }
 
         private void ShowProfile()

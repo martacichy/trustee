@@ -68,7 +68,7 @@ DROP TABLE IF EXISTS `database06`.`Project` ;
 CREATE TABLE IF NOT EXISTS `database06`.`Project` (
   `project_id` INT NOT NULL AUTO_INCREMENT,
   `company_id` INT NULL DEFAULT NULL,
-  `name` VARCHAR(50) NOT NULL DEFAULT '<projekt bez nazwy>',
+  `name` VARCHAR(200) NOT NULL DEFAULT '<projekt bez nazwy>',
   PRIMARY KEY (`project_id`),
   UNIQUE INDEX `project_id_UNIQUE` (`project_id` ASC) VISIBLE,
   INDEX `company_id_labeltype_idx` (`company_id` ASC) VISIBLE,

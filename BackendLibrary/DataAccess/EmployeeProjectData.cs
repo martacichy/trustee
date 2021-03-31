@@ -10,7 +10,7 @@ namespace BackendLibrary.DataAccess
     /// <summary>
     ///  Klasa wysyłająca zapytania bazodanowe SQL dotyczące tabeli "EmployeeProject".
     /// </summary>
-    public class EmployeeProjectModel : SqlConnector
+    public class EmployeeProjectData : SqlConnector
     {
         /// <summary> Zwraca listę wszystkich projektów danego pracownika
         /// (szukając po id pracownika). </summary>
