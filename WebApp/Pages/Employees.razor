@@ -1,19 +1,17 @@
-﻿
-@page "/employees"
+﻿@page "/employees"
 <div class="header">
     <h3>Pracownicy</h3>
 </div>
-
     @if (Login.UserLoggedIn.If_manager == 2)
     {
-        <div>
-            <div style="float:left">
-                <button class="btn btn-primary" @onclick="AddEmployee">Nowy pracownik</button>
-            </div>
-            <div style="float:left">
-                <button class="btn btn-primary" @onclick="EditEmployee">Edytuj</button>
-            </div>
-        </div>
+<div>
+    <div class="actionBtn">
+        <Sfbutton class="btn btn-primary" @onclick="AddEmployee">Nowy pracownik</Sfbutton>
+    </div>
+    <div  class="actionBtn">
+        <Sfbutton class="btn btn-primary" @onclick="EditEmployee">Edytuj</Sfbutton>
+    </div>
+</div>
         <div class="form-group">
             <SfToast @ref="NoSelectedEmployee" Title="Wybierz pracownika!" Timeout=2000>
                 <ToastPosition X="Center"></ToastPosition>
@@ -25,18 +23,12 @@
                     Edycja uprawnień
                 </Header>
                 <Content>
+                    <div class="form-group">
+                        <label for="Imie" class="employeelabel">@SelectedEmployee.First_name</label>
+                        <label for="Nazwisko" class="employeelabel">@SelectedEmployee.Last_name</label>
+                    </div>
                     <EditForm Model="@EmployeeEdit">
                         <DataAnnotationsValidator />
-                        <div class="form-group">
-                            <label for="Imie" class="control-label">Imie</label>
-                            <input for="Imie" class="form-control" @bind-value="EmployeeEdit.firstname" readonly=@readOnly />
-                            <ValidationMessage For="@(() => EmployeeEdit.firstname)" />
-                        </div>
-                        <div class="form-group">
-                            <label for="Nazwisko" class="control-label">Nazwisko</label>
-                            <input for="Nazwisko" class="form-control" @bind-value="EmployeeEdit.lastname" readonly=@readOnly />
-                            <ValidationMessage For="@(() => EmployeeEdit.lastname)" />
-                        </div>
                         <div class="col-lg-12 control-section multiselect-height">
                             <div class="control-wrapper multi-select-parent">
                                 <div class="padding-top">
@@ -157,8 +149,7 @@
     private SfGrid<EmployeeModel> DefaultGrid;
     private string searchStr;
 
-    // Zmienne z EditTask
-    private List<String> rola = new List<String>(new string[] { "Pracownik", "Manager", "Szef" });
+    private List<String> rola = new List<String>(new string[] { "Pracownik", "Kierownik", "Szef" });
     SfToast ToastObj;
     SfToast FailedObj;
     private string ToastContentEdit { get; set; } = "Dane zaktualizowane pomyslnie!";
@@ -167,11 +158,15 @@
     DateTime defaultDate = new DateTime(0001, 1, 1, 0, 0, 0);
     private Boolean VisibilityEdit { get; set; }
     private string[] nameoflabels { get; set; } = new string[] { };
+    private string[] oldlabels { get; set; } = new string[] { };
     private string nameofProject;
     public static List<BackendLibrary.Models.EmployeeModel> ListOfEmployee;
     public static List<BackendLibrary.Models.EmployeeTaskModel> ListofEmployeesId;
     private int[] nameofEmployees { get; set; } = new int[] { };
-    public static List<BackendLibrary.Models.TaskLabelModel> ListofLabelsId;
+    public static List<BackendLibrary.Models.EmployeeLabelModel> ListofLabelsId;
+    private bool isChecked = false;
+    public bool EnableProjectDropDown = false;
+    //public static List<BackendLibrary.Models.TaskLabelModel> ListofLabelsId;
 
     private List<BackendLibrary.Models.LabelModel> labelsInDb;
     private List<BackendLibrary.Models.ProjectModel> projectsInDb;
@@ -207,14 +202,11 @@
         visibility = false;
     }
 
-
-
     private void AddEmployee()
     {
         visibility = true;
 
     }
-
 
     private void EditEmployee()
     {
@@ -258,24 +250,48 @@
         {
             ListOfEmployee = EmployeeData.GetByIdList(Pages.Employees.SelectedEmployee.Employee_id); //jednoelementowa lista zawierająca wybranego pracownika
 
+
             //tutaj przechowywane są id etykiet, nastepnie odpowiednie etykiety wpisane do tablicy
-            //todo pobranie etykiet polaczonych z pracownikiem
+            ListofLabelsId = EmployeeLabelData.GetAllLabelsByEmployeeId(Pages.Employees.SelectedEmployee.Employee_id);
+            this.nameoflabels = new string[ListofLabelsId.Count];
+            this.oldlabels = new string[ListofLabelsId.Count];
 
-
-            //nazwa projektu do ktorego przypisany jest pracownik
-            if (ProjectData.GetById(Pages.Employees.SelectedEmployee.Employee_id) != null)
+            //nazwa projektu do ktorego przypisane jest zadanie
+            if (ProjectData.GetById(Pages.TasksList.SelectedTask.Project_id) != null)
+            {
                 nameofProject = ProjectData.GetById(Pages.TasksList.SelectedTask.Project_id).Name;
+                isChecked = true;
+                EnableProjectDropDown = true;
+            }
+
             else
+            {
                 nameofProject = null;
+                isChecked = false;
+                EnableProjectDropDown = false;
+            }
 
-            // w ponizszych pętlach następuje przypisanie odpowiednich etykiet do tablicy, w celu wyswietlenia ich w edycji
-            //for (int i = 0; i < ListofLabelsId.Count; i++)
-           // {
-                //nameoflabels[i] = LabelData.GetById(ListofLabelsId[i].Label_id).Name;
-           // }
 
+            // w ponizszych pętlach następuje przypisanie odpowiednich etykiet oraz pracownikow do tablicy, w celu wyswietlenia ich w task-details
+            for (int i = 0; i < ListofLabelsId.Count; i++)
+            {
+                nameoflabels[i] = LabelData.GetById(ListofLabelsId[i].Label_id).Name;
+                oldlabels[i] = LabelData.GetById(ListofLabelsId[i].Label_id).Name;
+            }
 
         }
+
+        if (SelectedEmployee != null)
+        {
+            EmployeeEdit.role = SelectedEmployee.UserType;
+
+            VisibilityEdit = true;
+        }
+        else
+        {
+            NoSelectedEmployee.Show();
+        }
+
     }
 
     /// <summary>

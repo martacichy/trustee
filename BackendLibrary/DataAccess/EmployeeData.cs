@@ -163,5 +163,17 @@ namespace BackendLibrary.DataAccess
                 return RowsAffected;
             }
         }
+
+
+        /// <summary> Aktualizuje wybranego pracownika o nowe wartosci. </summary>
+        public static void UpdateEmployee(EmployeeModel updatedEmployee)
+        {
+            using (IDbConnection connection = new MySqlConnection(connectionString))
+            {
+                string sql;
+
+               // connection.Execute(sql, updatedEmployee);
+            }
+        }
     }
 }
