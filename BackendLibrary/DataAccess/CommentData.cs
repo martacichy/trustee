@@ -36,6 +36,18 @@ namespace BackendLibrary.DataAccess
             }
         }
 
+        /// <summary> Listuje wszystkie komentarze dotycz¹ce zadania o wybranym id </summary>
+        public static List<CommentModel> GetAllByTaskId(int task_id)
+        {
+            using (IDbConnection connection = new MySqlConnection(connectionString))
+            {
+                string sql = $"select * from database06.comment where Task_id = {task_id}";
+                var data = connection.Query<CommentModel>(sql).ToList();
+
+                return data;
+            }
+        }
+
         /// <summary> Dodaje nowy komentarz. </summary>
         public static void AddComment(CommentModel newComment)
         {
