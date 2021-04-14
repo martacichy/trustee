@@ -331,9 +331,9 @@
                 </SfGrid>
 
                 <EditForm Model="Comment">
-                    <div class="form-group">
-                        <label for="Dodaj komentarz:" class="control-label" required>Dodaj komentarz:</label>
-                        <input for="Dodaj komentarz:" class="form-control" @bind-value="@Comment.Description">
+                    <div class="form-group" style="display:flex; flex-direction: row; justify-content: center; align-items: center">
+                        <label for="Comment" class="control-label" required>Dodaj komentarz:</label>
+                        <input for="Comment" class="form-control" @bind-value="@Comment.Description">
                             <button class="button-addc" type="submit" data-dismiss="modal" @onclick="AddNewComment" hidden=@readOnly>Dodaj</button>
                         </input>
                     </div>
@@ -991,18 +991,3 @@
         TaskEdit.auto_assigned = 0;
     }
 }
-
-
-<style>
-    .button-addc {
-        background-color: #3da081;
-        border-radius: 7px;
-        display: inline-block;
-        cursor: pointer;
-        color: #ffffff;
-        font-size: 13px;
-        padding: 8px 20px;
-        text-decoration: none;
-        text-shadow: 0px 1px 0px #2f6627;
-    }
-</style>

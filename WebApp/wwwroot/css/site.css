@@ -177,3 +177,9 @@ app {
     margin-right: 0px;
     margin-bottom: 10px;
 }
+
+.control-label {
+    font-size: 13px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    
+}
