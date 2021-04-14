@@ -196,14 +196,14 @@
     </SfDialog>
 
     @* okno szczegolow zadania *@
-    <SfDialog @bind-Visible="@VisibilityDetails" AllowDragging="true" Width="500px" IsModal="true" ShowCloseIcon="true">
+    <SfDialog @bind-Visible="@VisibilityDetails" AllowDragging="true" Width="800px" Height="800px" IsModal="true" ShowCloseIcon="true">
         <DialogTemplates>
             <Content>
                 <EditForm Model="@TaskEdit">
                     <DataAnnotationsValidator />
                     <div class="form-group">
                         <label for="Tytuł" class="control-label" required>Tytuł</label>
-                        <input for="Tytuł" class="form-control" @bind-value="TaskEdit.name" readonly=@readOnly/>
+                        <input for="Tytuł" class="form-control" @bind-value="TaskEdit.name" readonly=@readOnly />
                         <ValidationMessage For="@(() => TaskEdit.name)" />
                     </div>
                     <div class="form-group">
@@ -226,10 +226,10 @@
                             <div class="padding-top">
                                 <label asp-for="Status" class="control-label">Status</label>
                                 <SfDropDownList TValue="string" TItem="string"
-                                               @bind-Value="@TaskEdit.status"
-                                               Placeholder="Szukaj..."
-                                               Enabled=@Enabled
-                                               DataSource="@status" AllowFiltering="true">
+                                                @bind-Value="@TaskEdit.status"
+                                                Placeholder="Szukaj..."
+                                                Enabled=@Enabled
+                                                DataSource="@status" AllowFiltering="true">
                                     <DropDownListFieldSettings Text="status"> </DropDownListFieldSettings>
                                 </SfDropDownList>
                                 <ValidationMessage For="@(() => TaskEdit.status)" />
@@ -238,7 +238,7 @@
                     </div>
                     <div class="form-group">
                         <label for="IfAutoAssigned" class="control-label" hidden=@readOnly>Czy przydzielić automatycznie? </label>
-                        <input for="IfAutoAssigned" type="checkbox" class="form-control" @bind-value="TaskEdit.auto_assigned" hidden=@readOnly/>
+                        <input for="IfAutoAssigned" type="checkbox" class="form-control" @bind-value="TaskEdit.auto_assigned" hidden=@readOnly />
                     </div>
 
                     <div class="col-lg-12 control-section multiselect-height">
@@ -251,7 +251,7 @@
                                                Placeholder="Szukaj..."
                                                DataSource="@labelsInDb" AllowFiltering="true" AllowCustomValue="true"
                                                Mode="@VisualMode.Box">
-                                    <MultiSelectFieldSettings Text="Name"  >  </MultiSelectFieldSettings>
+                                    <MultiSelectFieldSettings Text="Name">  </MultiSelectFieldSettings>
                                 </SfMultiSelect>
                                 <ValidationMessage For="@(() => TaskEdit.SelectedLabel)" />
                             </div>
@@ -266,11 +266,10 @@
                                     <SfSwitch @bind-Checked="@isChecked" @onchange="@OnChangeButton"></SfSwitch>
                                 </label>
                                 <SfDropDownList TValue="string" TItem="BackendLibrary.Models.ProjectModel"
-                                               @bind-Value="@nameofProject"
-                                               Enabled="@EnableProjectDropDown"
-                                               
-                                               Placeholder="Szukaj..."
-                                               DataSource="@projectsInDb" AllowFiltering="true">
+                                                @bind-Value="@nameofProject"
+                                                Enabled="@EnableProjectDropDown"
+                                                Placeholder="Szukaj..."
+                                                DataSource="@projectsInDb" AllowFiltering="true">
                                     <DropDownListFieldSettings Text="Name"></DropDownListFieldSettings>
                                 </SfDropDownList>
                             </div>
@@ -311,17 +310,49 @@
                             </div>
                         </div>
                     </div>
+                </EditForm>
 
+                <div class="form-group">
+                    <button type="submit" class="btn btn-block btn-info" data-dismiss="modal" @onclick="UpdateTask" hidden=@readOnly>Zapisz</button>
+                    <SfToast @ref="ToastObj" Title="Zadanie zaktualizowane pomyslnie!" Timeout=3000 Content="@ToastContentEdit">
+                        <ToastPosition X="Right"></ToastPosition>
+                    </SfToast>
+                    <SfToast @ref="FailedObj" Title="Brak zmian w zadaniu!" Timeout=3000 Content="@FailedContent">
+                        <ToastPosition X="Right"></ToastPosition>
+                    </SfToast>
+                </div>
+
+                <EditForm Model="Comment">
                     <div class="form-group">
-                        <button type="submit" class="btn btn-block btn-info" data-dismiss="modal" @onclick="UpdateTask"  hidden =@readOnly >Zapisz</button>
-                        <SfToast @ref="ToastObj" Title="Zadanie zaktualizowane pomyslnie!" Timeout=3000 Content="@ToastContentEdit">
-                            <ToastPosition X="Right"></ToastPosition>
-                        </SfToast>
-                        <SfToast @ref="FailedObj" Title="Brak zmian w zadaniu!" Timeout=3000 Content="@FailedContent">
-                            <ToastPosition X="Right"></ToastPosition>
-                        </SfToast>
+                        <label for="Dodaj komentarz:" class="control-label" required>Dodaj komentarz:</label>
+                        <input for="Dodaj komentarz:" class="form-control" @bind-value="@Comment.Description" />
+
                     </div>
                 </EditForm>
+
+                <div class="form-group">
+                    <button type="submit" class="btn btn-block btn-info" data-dismiss="modal" @onclick="AddNewComment" hidden=@readOnly>Dodaj</button>
+                </div>
+
+                <SfGrid @ref="DefaultGridComments"
+                        DataSource="CommentsList"
+                        AllowPaging="true"
+                        Locale="pl"
+                        ContextMenuItems="@(new List<object>()
+            { "AutoFit", "AutoFitAll", "SortDescending", "SortAscending"})">
+                    <GridFilterSettings EnableCaseSensitivity="false"></GridFilterSettings>
+                    <GridPageSettings PageSize="9"></GridPageSettings>
+                    <GridSearchSettings IgnoreCase="true"></GridSearchSettings>
+                    <GridSelectionSettings EnableToggle="true"></GridSelectionSettings>
+
+                    <GridColumns>
+                        <GridColumn Field=@nameof(CommentModel.Employee_id) IsPrimaryKey="true" HeaderText="ID pracownika" TextAlign="TextAlign.Left" Width="50"></GridColumn>
+                        <GridColumn Field=@nameof(CommentModel.Description) HeaderText="Komentarz" TextAlign="TextAlign.Left" Width="250"></GridColumn>
+                        <GridColumn Field=@nameof(CommentModel.Date) HeaderText="Data" Format="d" Type="ColumnType.Date" TextAlign="TextAlign.Left" Width="120"></GridColumn>
+
+                    </GridColumns>
+                </SfGrid>
+
             </Content>
         </DialogTemplates>
         <DialogEvents Closed="@DialogEditClosed"></DialogEvents>
@@ -382,6 +413,11 @@
     private int[] nameofEmployees { get; set; } = new int[] { };
     private int[] oldEmployees { get; set; } = new int[] { };
     private string nameofProject;
+    BackendLibrary.Models.CommentModel Comment;
+    private SfGrid<CommentModel> DefaultGridComments;
+    private static List<CommentModel> CommentsList;
+
+
 
     /// <summary>
     /// Toggle Button od projektow (zmiana stanu)
@@ -420,6 +456,9 @@
         labelsInDb = BackendLibrary.DataAccess.LabelData.GetAllByCompanyId(Login.UserLoggedIn.Company_id);
         employees = BackendLibrary.DataAccess.EmployeeData.GetAllByCompanyId(Login.UserLoggedIn.Company_id);
         projectsInDb = BackendLibrary.DataAccess.ProjectData.GetAllByCompanyId(Login.UserLoggedIn.Company_id);
+        Comment = new BackendLibrary.Models.CommentModel();
+
+
     }
 
     public void RowSelectHandler(RowSelectEventArgs<TaskModel> args)
@@ -479,6 +518,7 @@
     private void DisplayTaskDetails(RecordDoubleClickEventArgs<TaskModel> args)
     {
         SelectedTask = args.RowData;
+        CommentsList = BackendLibrary.DataAccess.CommentData.GetAllByTaskId(SelectedTask.Task_id);
 
         if (SelectedTask != null)
         {
@@ -738,6 +778,21 @@
     }
 
     /// <summary>
+    /// Dodaje nowy komentarz dotyczący wybranego zadania do bazy danych
+    /// </summary>
+    private void AddNewComment()
+    {
+        if (Comment.Description != null)
+        {
+            BackendLibrary.Models.CommentModel CommentAdd = new BackendLibrary.Models.CommentModel(SelectedTask.Task_id, Login.UserLoggedIn.Employee_id, DateTime.Now, Comment.Description);
+
+            BackendLibrary.DataAccess.CommentData.AddComment(CommentAdd);
+            CommentsList.Add(CommentAdd);
+        }
+        DefaultGridComments.Refresh();
+    }
+
+    /// <summary>
     /// Sprawdza czy w edycji zmieniono pracownika
     /// </summary>
     private bool IsEmployeesChanged(int employee)
@@ -880,6 +935,8 @@
         }
 
 
+
+
         if (if_updated == true) //sprawdza czy uzytkownik wyedytowal cos w zadaniu, jesli tak, updatuje wartosci w database oraz wystwietla stosowna informacje
         {
             BackendLibrary.Models.TaskModel updatedTask;
@@ -917,6 +974,9 @@
                 uriHelper.NavigateTo(uriHelper.Uri, forceLoad: true);
                 ClearTask(); //czysci pola obiektu task
             }
+
+
+
         }
 
         else

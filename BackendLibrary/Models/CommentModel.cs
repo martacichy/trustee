@@ -8,7 +8,7 @@ namespace BackendLibrary.Models
         public int Task_id { get; set; }
         public int Employee_id { get; set; }
         public DateTime Date { get; set; }
-        public string Descritpion { get; set; }
+        public string Description { get; set; }
 
         public CommentModel(int comment_id, int task_id, int employee_id, DateTime date, string description)
         {
@@ -16,7 +16,7 @@ namespace BackendLibrary.Models
             Task_id = task_id;
             Employee_id = employee_id;
             Date = date;
-            Descritpion = description;
+            Description = description;
         }
 
         public CommentModel(int comment_id, int task_id, int employee_id)
@@ -24,6 +24,18 @@ namespace BackendLibrary.Models
             Comment_id = comment_id;
             Task_id = task_id;
             Employee_id = employee_id;
+        }
+
+        public CommentModel(int task_id, int employee_id, DateTime date, string description)
+        {
+            Task_id = task_id;
+            Employee_id = employee_id;
+            Date = date;
+            Description = description;
+        }
+        public CommentModel()
+        {
+
         }
 
     }
