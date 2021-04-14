@@ -311,28 +311,6 @@
                     </div>
                 </EditForm>
 
-                <div class="form-group">
-                    <button type="submit" class="btn btn-block btn-info" data-dismiss="modal" @onclick="UpdateTask" hidden=@readOnly>Zapisz</button>
-                    <SfToast @ref="ToastObj" Title="Zadanie zaktualizowane pomyslnie!" Timeout=3000 Content="@ToastContentEdit">
-                        <ToastPosition X="Right"></ToastPosition>
-                    </SfToast>
-                    <SfToast @ref="FailedObj" Title="Brak zmian w zadaniu!" Timeout=3000 Content="@FailedContent">
-                        <ToastPosition X="Right"></ToastPosition>
-                    </SfToast>
-                </div>
-
-                <EditForm Model="Comment">
-                    <div class="form-group">
-                        <label for="Dodaj komentarz:" class="control-label" required>Dodaj komentarz:</label>
-                        <input for="Dodaj komentarz:" class="form-control" @bind-value="@Comment.Description" />
-
-                    </div>
-                </EditForm>
-
-                <div class="form-group">
-                    <button type="submit" class="btn btn-block btn-info" data-dismiss="modal" @onclick="AddNewComment" hidden=@readOnly>Dodaj</button>
-                </div>
-
                 <SfGrid @ref="DefaultGridComments"
                         DataSource="CommentsList"
                         AllowPaging="true"
@@ -345,13 +323,31 @@
                     <GridSelectionSettings EnableToggle="true"></GridSelectionSettings>
 
                     <GridColumns>
-                        <GridColumn Field=@nameof(CommentModel.Employee_id) IsPrimaryKey="true" HeaderText="ID pracownika" TextAlign="TextAlign.Left" Width="50"></GridColumn>
-                        <GridColumn Field=@nameof(CommentModel.Description) HeaderText="Komentarz" TextAlign="TextAlign.Left" Width="250"></GridColumn>
-                        <GridColumn Field=@nameof(CommentModel.Date) HeaderText="Data" Format="d" Type="ColumnType.Date" TextAlign="TextAlign.Left" Width="120"></GridColumn>
+                        <GridColumn Field=@nameof(CommentModel.Employee_id) IsPrimaryKey="true" TextAlign="TextAlign.Left"></GridColumn>
+                        <GridColumn Field=@nameof(CommentModel.Description) TextAlign="TextAlign.Left"></GridColumn>
+                        <GridColumn Field=@nameof(CommentModel.Date) Format="d" Type="ColumnType.Date" TextAlign="TextAlign.Left"></GridColumn>
 
                     </GridColumns>
                 </SfGrid>
 
+                <EditForm Model="Comment">
+                    <div class="form-group">
+                        <label for="Dodaj komentarz:" class="control-label" required>Dodaj komentarz:</label>
+                        <input for="Dodaj komentarz:" class="form-control" @bind-value="@Comment.Description">
+                            <button class="button-addc" type="submit" data-dismiss="modal" @onclick="AddNewComment" hidden=@readOnly>Dodaj</button>
+                        </input>
+                    </div>
+                </EditForm>
+
+                <div class="form-group">
+                    <button type="submit" class="btn btn-block btn-info" data-dismiss="modal" @onclick="UpdateTask" hidden=@readOnly>Zapisz</button>
+                    <SfToast @ref="ToastObj" Title="Zadanie zaktualizowane pomyslnie!" Timeout=3000 Content="@ToastContentEdit">
+                        <ToastPosition X="Right"></ToastPosition>
+                    </SfToast>
+                    <SfToast @ref="FailedObj" Title="Brak zmian w zadaniu!" Timeout=3000 Content="@FailedContent">
+                        <ToastPosition X="Right"></ToastPosition>
+                    </SfToast>
+                </div>
             </Content>
         </DialogTemplates>
         <DialogEvents Closed="@DialogEditClosed"></DialogEvents>
@@ -997,3 +993,16 @@
 }
 
 
+<style>
+    .button-addc {
+        background-color: #3da081;
+        border-radius: 7px;
+        display: inline-block;
+        cursor: pointer;
+        color: #ffffff;
+        font-size: 13px;
+        padding: 8px 20px;
+        text-decoration: none;
+        text-shadow: 0px 1px 0px #2f6627;
+    }
+</style>
