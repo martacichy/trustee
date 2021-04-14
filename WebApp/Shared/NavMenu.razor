@@ -5,7 +5,7 @@
 
     <div class="col-lg-12 col-sm-12 col-md-12">
         <div id="wrapper">
-            <SfSidebar Width="220px" DockSize="72px" EnableDock="true" Position="SidebarPosition.Left" @ref="Sidebar" HtmlAttributes="@HtmlAttribute" @bind-IsOpen="SidebarToggle">
+            <SfSidebar Width="250px" MediaQuery="(min-width: 600px)" DockSize="72px" EnableDock="true" Position="SidebarPosition.Left" @ref="Sidebar" HtmlAttributes="@HtmlAttribute" @bind-IsOpen="SidebarToggle">
                 <ChildContent>
                     <div class="dock">
                         <ul>
@@ -150,6 +150,7 @@
         }
         */
         
+        .
 
         .title {
             text-align: center;
@@ -190,7 +191,13 @@
         .dockSidebar {
             text-decoration: none;
             font-family: 'Josefin Sans', sans-serif;
+
         }
+
+        .sidebar-item:hover {
+                background: #32856B;
+        }
+
 
             .dockSidebar .e-icons::before {
                 font-size: 30px;
