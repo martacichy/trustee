@@ -68,12 +68,12 @@
         <GridPageSettings PageSize="15"></GridPageSettings>
         <GridColumns>
             <GridColumn Field=@nameof(TaskModel.Task_id) IsPrimaryKey="true" HeaderText="ID" TextAlign="TextAlign.Left" Width="50"></GridColumn>
-            <GridColumn Field=@nameof(TaskModel.Name) HeaderText="Nazwa" TextAlign="TextAlign.Left" Width="250"></GridColumn>
-            <GridColumn Field=@nameof(TaskModel.Status) HeaderText="Status" TextAlign="TextAlign.Left" Width="120"></GridColumn>
+            <GridColumn Field=@nameof(TaskModel.Name) HeaderText="Nazwa" TextAlign="TextAlign.Left" Width="500"></GridColumn>
+            <GridColumn Field=@nameof(TaskModel.Status) HeaderText="Status" TextAlign="TextAlign.Left" Width="200"></GridColumn>
             <GridColumn Field=@nameof(TaskModel.Start_time) HeaderText="Data rozpoczęcia" Format="d" Type="ColumnType.Date"
-                        TextAlign="TextAlign.Left" Width="120"></GridColumn>
+                        TextAlign="TextAlign.Left" Width="200"></GridColumn>
             <GridColumn Field=@nameof(TaskModel.Deadline) HeaderText="Deadline" Format="d" Type="ColumnType.Date"
-                        TextAlign="TextAlign.Left" Width="120"></GridColumn>
+                        TextAlign="TextAlign.Left"></GridColumn>
         </GridColumns>
     </SfGrid>
 
