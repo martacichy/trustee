@@ -1,6 +1,7 @@
 ﻿@page "/tasks"
 
 <link href="css/popups.css" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 <div class="header">
     <h3>Lista wszystkich zadań</h3>
@@ -10,13 +11,13 @@
 {
     <div>
         <div class="actionBtn">
-            <Sfbutton class="btn btn-primary" @onclick="AddTask">Dodaj zadanie</Sfbutton>
+            <Sfbutton class="btn btn-primary" @onclick="AddTask"><i class="fa fa-plus"></i>&nbsp;Dodaj zadanie</Sfbutton>
         </div>
         <div class="actionBtn">
-            <Sfbutton class="btn btn-primary" @onclick="EditTask">Edytuj zadanie</Sfbutton>
+            <Sfbutton class="btn btn-primary" @onclick="EditTask"><i class="fa fa-pencil"></i>&nbsp;Edytuj zadanie</Sfbutton>
         </div>
         <div class="actionBtn">
-            <Sfbutton class="btn btn-primary" id="deleteBtn" @onclick="DeleteTask">Usuń zadanie</Sfbutton>
+            <Sfbutton class="btn btn-primary" id="deleteBtn" @onclick="DeleteTask"><i class="fa fa-trash"></i>&nbsp;Usuń zadanie</Sfbutton>
         </div>
     </div>
 }
@@ -337,14 +338,16 @@
                     <GridPageSettings PageSize="9"></GridPageSettings>
                     <GridSearchSettings IgnoreCase="true"></GridSearchSettings>
                     <GridSelectionSettings EnableToggle="true"></GridSelectionSettings>
-
-                    <GridColumns>
-                        <GridColumn Field=@nameof(CommentModel.Employee_id) IsPrimaryKey="true" TextAlign="TextAlign.Left"></GridColumn>
-                        <GridColumn Field=@nameof(CommentModel.Description) TextAlign="TextAlign.Left"></GridColumn>
-                        <GridColumn Field=@nameof(CommentModel.Date) Format="d" Type="ColumnType.Date" TextAlign="TextAlign.Left"></GridColumn>
-                    </GridColumns>
+                    <div class="komentarze" width="400px">
+                        <GridColumns>
+                            <GridColumn Field=@nameof(CommentModel.Employee_id) IsPrimaryKey="true" TextAlign="TextAlign.Left"></GridColumn>
+                            <GridColumn Field=@nameof(CommentModel.Description) TextAlign="TextAlign.Left"></GridColumn>
+                            <GridColumn Field=@nameof(CommentModel.Date) Format="d" Type="ColumnType.Date" TextAlign="TextAlign.Left"></GridColumn>
+                        </GridColumns>
+                    </div>
+                    
                 </SfGrid>
-
+                
                 <EditForm Model="Comment">
                     <div class="form-group" style="display:flex; flex-direction: row; justify-content: center; align-items: center">
                         <label for="Comment" class="control-label" required>Dodaj komentarz:</label>
