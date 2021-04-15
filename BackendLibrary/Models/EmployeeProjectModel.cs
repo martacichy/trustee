@@ -2,13 +2,13 @@
 {
     public class EmployeeProjectModel
     {
-        public int Employee_id { get; set; }
         public int Project_id { get; set; }
+        public int Employee_id { get; set; }
 
-        public EmployeeProjectModel(int employee_id, int project_id)
+        public EmployeeProjectModel(int project_id, int employee_id)
         {
-            Employee_id = employee_id;
             Project_id = project_id;
+            Employee_id = employee_id;
         }
     }
 }
