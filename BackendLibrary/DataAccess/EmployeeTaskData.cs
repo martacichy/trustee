@@ -12,6 +12,18 @@ namespace BackendLibrary.DataAccess
     /// </summary>
     public class EmployeeTaskData : SqlConnector
     {
+        /// <summary> Zwraca listę wszystkich pari pracownik-projekt. </summary>
+        public static List<EmployeeTaskModel> GetAll()
+        {
+            using (IDbConnection connection = new MySqlConnection(connectionString))
+            {
+                string sql = "SELECT * FROM database06.employeetask";
+                var data = connection.Query<EmployeeTaskModel>(sql).ToList();
+
+                return data;
+            }
+        }
+
         /// <summary> Zwraca listę wszystkich zadań danego pracownika. </summary>
         public static List<EmployeeTaskModel> GetAllTasksByEmployeeId(int employeeId)
         {

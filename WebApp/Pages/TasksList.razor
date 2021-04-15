@@ -40,7 +40,6 @@
             ContextMenuItems="@(new List<object>()
             {"SortDescending", "SortAscending", "Copy"})">
         <GridFilterSettings EnableCaseSensitivity="false"></GridFilterSettings>
-        <GridPageSettings PageSize="9"></GridPageSettings>
         <GridSearchSettings IgnoreCase="true"></GridSearchSettings>
         <GridSelectionSettings EnableToggle="true"></GridSelectionSettings>
         <GridEvents TValue="TaskModel"
@@ -49,7 +48,24 @@
                     OnRecordDoubleClick="DisplayTaskDetails"
                     OnRecordClick="ExpandTaskDetails">
         </GridEvents>
+        <GridTemplates>
+            <DetailTemplate>
+                @{
+                    var task = (context as TaskModel);
 
+                    <SfGrid DataSource="employeeTaskPairs" TValue="EmpTaskPair" Query="@GetEmployeesQuery(task.Task_id)" AllowPaging="true">
+                        <GridPageSettings PageSize="6"></GridPageSettings>
+                        <GridColumns>
+                            <GridColumn Field=@nameof(EmpTaskPair.Employee_id) HeaderText="ID" TextAlign="TextAlign.Left" Width="50"></GridColumn>
+                            <GridColumn Field=@nameof(EmpTaskPair.First_name) HeaderText="Imię" TextAlign="TextAlign.Left" Width="80"></GridColumn>
+                            <GridColumn Field=@nameof(EmpTaskPair.Last_name) HeaderText="Nazwisko" TextAlign="TextAlign.Left" Width="120"></GridColumn>
+                            <GridColumn Field=@nameof(EmpTaskPair.Email) HeaderText="E-mail" TextAlign="TextAlign.Left" Width="120"></GridColumn>
+                        </GridColumns>
+                    </SfGrid>
+                }
+            </DetailTemplate>
+        </GridTemplates>
+        <GridPageSettings PageSize="15"></GridPageSettings>
         <GridColumns>
             <GridColumn Field=@nameof(TaskModel.Task_id) IsPrimaryKey="true" HeaderText="ID" TextAlign="TextAlign.Left" Width="50"></GridColumn>
             <GridColumn Field=@nameof(TaskModel.Name) HeaderText="Nazwa" TextAlign="TextAlign.Left" Width="250"></GridColumn>
@@ -87,7 +103,6 @@
                         <label for="Starttime" class="control-label">Czas rozpoczęcia</label>
                         <SfDateTimePicker TValue="DateTime" @bind-value="TaskAdd.start_time"></SfDateTimePicker>
                         <ValidationMessage For="@(() => TaskAdd.start_time)" />
-                        
                     </div>
                     <div class="form-group">
                         <label for="Deadline" class="control-label">Deadline</label>
@@ -99,10 +114,10 @@
                             <div class="padding-top">
                                 <label asp-for="Status" class="control-label">Status</label>
                                 <SfDropDownList TValue="string" TItem="string"
-                                               @bind-Value="@TaskAdd.status"
-                                               Placeholder="Szukaj..."
-                                               DataSource="@status" AllowFiltering="true"
-                                               MaximumSelectionLength=1>
+                                                @bind-Value="@TaskAdd.status"
+                                                Placeholder="Szukaj..."
+                                                DataSource="@status" AllowFiltering="true"
+                                                MaximumSelectionLength=1>
                                     <DropDownListFieldSettings Text="status"> </DropDownListFieldSettings>
                                 </SfDropDownList>
                                 <ValidationMessage For="@(() => TaskAdd.status)" />
@@ -133,14 +148,15 @@
                     <div class="col-lg-12 control-section multiselect-height">
                         <div class="control-wrapper multi-select-parent">
                             <div class="padding-top">
-                                <label asp-for="projekt" class="control-label">Projekt
-                                <SfSwitch @bind-Checked="@isChecked" @onchange="@OnChangeButton"></SfSwitch>
+                                <label asp-for="projekt" class="control-label">
+                                    Projekt
+                                    <SfSwitch @bind-Checked="@isChecked" @onchange="@OnChangeButton"></SfSwitch>
                                 </label>
                                 <SfDropDownList TValue="string" TItem="BackendLibrary.Models.ProjectModel"
-                                               @bind-Value="@selectedProject"
-                                               Placeholder="Szukaj..."
-                                               DataSource="@projectsInDb" AllowFiltering="true"
-                                               Enabled="@EnableProjectDropDown">
+                                                @bind-Value="@selectedProject"
+                                                Placeholder="Szukaj..."
+                                                DataSource="@projectsInDb" AllowFiltering="true"
+                                                Enabled="@EnableProjectDropDown">
                                     <DropDownListFieldSettings Text="Name"></DropDownListFieldSettings>
                                 </SfDropDownList>
                             </div>
@@ -326,7 +342,6 @@
                         <GridColumn Field=@nameof(CommentModel.Employee_id) IsPrimaryKey="true" TextAlign="TextAlign.Left"></GridColumn>
                         <GridColumn Field=@nameof(CommentModel.Description) TextAlign="TextAlign.Left"></GridColumn>
                         <GridColumn Field=@nameof(CommentModel.Date) Format="d" Type="ColumnType.Date" TextAlign="TextAlign.Left"></GridColumn>
-
                     </GridColumns>
                 </SfGrid>
 
@@ -334,7 +349,7 @@
                     <div class="form-group" style="display:flex; flex-direction: row; justify-content: center; align-items: center">
                         <label for="Comment" class="control-label" required>Dodaj komentarz:</label>
                         <input for="Comment" class="form-control" @bind-value="@Comment.Description">
-                            <button class="button-addc" type="submit" data-dismiss="modal" @onclick="AddNewComment" hidden=@readOnly>Dodaj</button>
+                        <button class="button-addc" type="submit" data-dismiss="modal" @onclick="AddNewComment" hidden=@readOnly>Dodaj</button>
                         </input>
                     </div>
                 </EditForm>
@@ -353,7 +368,6 @@
         <DialogEvents Closed="@DialogEditClosed"></DialogEvents>
         <DialogAnimationSettings Effect="DialogEffect.Fade"></DialogAnimationSettings>
     </SfDialog>
-
 </div>
 
 @code {
@@ -361,11 +375,12 @@
     private SfGrid<TaskModel> DefaultGrid;
     private string searchStr;
     private static List<TaskModel> TaskList;
+    private List<EmpTaskPair> employeeTaskPairs;
+    private List<EmployeeTaskModel> allEmpTasks;
     public static TaskModel SelectedTask;
     private bool readOnly = false;
     private bool Enabled = true;
     private List<String> status = new List<String>(new string[] { "Nierozpoczęte", "W toku", "Zakończone", "Anulowane" });
-
 
     // Zmienne z AddNewTask
     SfToast SuccessTask;
@@ -385,7 +400,6 @@
     private Boolean VisibilityAdd { get; set; }
     private bool isChecked = false;
     public bool EnableProjectDropDown = false;
-
 
     // Zmienne z EditTask
     SfToast ToastObj;
@@ -412,7 +426,50 @@
     private SfGrid<CommentModel> DefaultGridComments;
     private static List<CommentModel> CommentsList;
 
+    protected override void OnInitialized()
+    {
+        if (Login.UserLoggedIn.If_manager == -1)
+        {
+            NavigationManager.NavigateTo("/");
+        }
+        if (Login.UserLoggedIn.If_manager == 0)
+        {
+            readOnly = true;
+            Enabled = false;
+        }
 
+        SelectedTask = new TaskModel();
+        TaskList = TaskData.GetAllByCompanyId(Pages.Login.UserLoggedIn.Company_id);
+        TaskAdd = new TaskValidation();
+        TaskEdit = new TaskValidation();
+        labelsInDb = LabelData.GetAllByCompanyId(Login.UserLoggedIn.Company_id);
+        employees = EmployeeData.GetAllByCompanyId(Login.UserLoggedIn.Company_id);
+        projectsInDb = ProjectData.GetAllByCompanyId(Login.UserLoggedIn.Company_id);
+        Comment = new CommentModel();
+        allEmpTasks = EmployeeTaskData.GetAll();
+
+        fillEmployeeTaskPairs();
+    }
+
+    /// <summary> Stworzenie listy par pracownik+zadanie do wyświetlania w DataGrid </summary>
+    private void fillEmployeeTaskPairs()
+    {
+        employeeTaskPairs = new List<EmpTaskPair>();
+        foreach (var element in allEmpTasks)
+        {
+            employeeTaskPairs.Add(new EmpTaskPair(
+            element.Employee_id,
+            employees.Find(x => x.Employee_id == element.Employee_id).First_name,
+            employees.Find(x => x.Employee_id == element.Employee_id).Last_name,
+            employees.Find(x => x.Employee_id == element.Employee_id).Email,
+            element.Task_id));
+        }
+    }
+
+    private Query GetEmployeesQuery(int task_id)
+    {
+        return new Query().Where("Task_id", "equal", task_id);
+    }
 
     /// <summary>
     /// Toggle Button od projektow (zmiana stanu)
@@ -429,30 +486,6 @@
             selectedProject = null;
             nameofProject = null;
         }
-
-    }
-
-    protected override void OnInitialized()
-    {
-        if (Login.UserLoggedIn.If_manager == -1)
-        {
-            NavigationManager.NavigateTo("/");
-        }
-        if (Login.UserLoggedIn.If_manager == 0)
-        {
-            readOnly = true;
-            Enabled = false;
-        }
-
-        SelectedTask = new TaskModel();
-        TaskList = TaskData.GetAllByCompanyId(Pages.Login.UserLoggedIn.Company_id);
-        TaskAdd = new BackendLibrary.Validation.TaskValidation();
-        TaskEdit = new BackendLibrary.Validation.TaskValidation();
-        labelsInDb = BackendLibrary.DataAccess.LabelData.GetAllByCompanyId(Login.UserLoggedIn.Company_id);
-        employees = BackendLibrary.DataAccess.EmployeeData.GetAllByCompanyId(Login.UserLoggedIn.Company_id);
-        projectsInDb = BackendLibrary.DataAccess.ProjectData.GetAllByCompanyId(Login.UserLoggedIn.Company_id);
-        Comment = new BackendLibrary.Models.CommentModel();
-
 
     }
 
@@ -544,14 +577,13 @@
                 EnableProjectDropDown = false;
             }
 
-
             // w ponizszych pętlach następuje przypisanie odpowiednich etykiet oraz pracownikow do tablicy, w celu wyswietlenia ich w task-details
-            for (int i=0; i<ListofLabelsId.Count; i++)
+            for (int i = 0; i < ListofLabelsId.Count; i++)
             {
                 nameoflabels[i] = LabelData.GetById(ListofLabelsId[i].Label_id).Name;
                 oldlabels[i] = LabelData.GetById(ListofLabelsId[i].Label_id).Name;
             }
-            for(int i=0; i<ListofEmployeesId.Count; i++)
+            for (int i = 0; i < ListofEmployeesId.Count; i++)
             {
                 nameofEmployees[i] = EmployeeData.GetById(ListofEmployeesId[i].Employee_id).Employee_id;
                 oldEmployees[i] = EmployeeData.GetById(ListofEmployeesId[i].Employee_id).Employee_id;
@@ -873,7 +905,7 @@
         }
 
         // sprawdza czy wprowadzono zmiany w przypisanych pracownikach
-        // BUG: jak zadanie nie ma zadnego pracownika przypisanego, to jak dodamy jakiegos 
+        // BUG: jak zadanie nie ma zadnego pracownika przypisanego, to jak dodamy jakiegos
         //      i od razu odznaczymy to nie wyswietli sie że brak zmian i zapisze do bazy (a zmian nie ma przecież :V)
         if (oldEmployees != null && nameofEmployees != null)
         {
@@ -929,9 +961,6 @@
                 if_updated = true;
         }
 
-
-
-
         if (if_updated == true) //sprawdza czy uzytkownik wyedytowal cos w zadaniu, jesli tak, updatuje wartosci w database oraz wystwietla stosowna informacje
         {
             BackendLibrary.Models.TaskModel updatedTask;
@@ -969,8 +998,6 @@
                 uriHelper.NavigateTo(uriHelper.Uri, forceLoad: true);
                 ClearTask(); //czysci pola obiektu task
             }
-
-
 
         }
 
