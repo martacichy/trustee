@@ -53,6 +53,7 @@
                 @{
                     var task = (context as TaskModel);
 
+                    <left>Pracownicy:</left>
                     <SfGrid DataSource="employeeTaskPairs" TValue="EmpTaskPair" Query="@GetEmployeesQuery(task.Task_id)" AllowPaging="true">
                         <GridPageSettings PageSize="6"></GridPageSettings>
                         <GridColumns>

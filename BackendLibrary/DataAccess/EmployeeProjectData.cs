@@ -55,8 +55,8 @@ namespace BackendLibrary.DataAccess
         {
             using (IDbConnection connection = new MySqlConnection(connectionString))
             {
-                string sql = @"insert into database06.employeeproject (employee_id, project_id)
-                            values (@Employee_id, @Project_id)";
+                string sql = @"insert into database06.employeeproject (project_id, employee_id)
+                            values (@Project_id, @Employee_id)";
 
                 connection.Execute(sql, newEmpProject);
             }
