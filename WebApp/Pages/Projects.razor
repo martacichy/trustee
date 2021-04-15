@@ -215,7 +215,7 @@
         lastProjectId = BackendLibrary.DataAccess.ProjectData.GetMaxId();
         for (int i = 0; i < selectedEmployeesId.Length; i++)
         {
-            EmployeeProjectModel employeeProject = new EmployeeProjectModel(selectedEmployeesId[i], lastProjectId);
+            EmployeeProjectModel employeeProject = new EmployeeProjectModel(lastProjectId, selectedEmployeesId[i]);
             EmployeeProjectData.AddEmployeeProject(employeeProject);
         }
     }
