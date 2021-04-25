@@ -260,9 +260,9 @@
             this.nameoflabels = new string[ListofLabelsId.Count];
             this.oldlabels = new string[ListofLabelsId.Count];
 
-            /* ListofProjectsId = EmployeeProjectData.GetAllProjectsByEmployeeId(Pages.Employees.SelectedEmployee.Employee_id);
+            ListofProjectsId = EmployeeProjectData.GetAllByEmployeeId(Pages.Employees.SelectedEmployee.Employee_id);
             this.nameofProjects = new string[ListofProjectsId.Count];
-            this.oldProjects = new string[ListofProjectsId.Count]; */
+            this.oldProjects = new string[ListofProjectsId.Count];
 
             for (int i = 0; i < ListofLabelsId.Count; i++)
             {
@@ -270,11 +270,11 @@
                 oldlabels[i] = LabelData.GetById(ListofLabelsId[i].Label_id).Name;
             }
 
-            /* for (int i = 0; i < ListofProjectsId.Count; i++)
+             for (int i = 0; i < ListofProjectsId.Count; i++)
             {
-                nameofProjects[i] = LabelData.GetById(ListofProjectsId[i].Project_id).Name;
-                oldProjects[i] = LabelData.GetById(ListofProjectsId[i].Project_id).Name;
-            } */
+                nameofProjects[i] = ProjectData.GetById(ListofProjectsId[i].Project_id).Name;
+                oldProjects[i] = ProjectData.GetById(ListofProjectsId[i].Project_id).Name;
+            } 
 
 
         }
