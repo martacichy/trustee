@@ -35,18 +35,18 @@
                             <div class="control-wrapper multi-select-parent">
                                 <div class="padding-top">
                                     <label asp-for="Rola" class="control-label">Rola</label>
-                                    <SfMultiSelect TValue="string" TItem="string"
-                                                   @bind-Value="@EmployeeEdit.role"
-                                                   Placeholder="Szukaj..."
-                                                   Enabled=@Enabled
-                                                   DataSource="@rola" AllowFiltering="true"
-                                                   MaximumSelectionLength=1>
-                                        <MultiSelectFieldSettings Text="status"> </MultiSelectFieldSettings>
-                                    </SfMultiSelect>
+                                    <SfDropDownList TValue="string" TItem="string"
+                                                    @bind-Value="@EmployeeEdit.role"
+                                                    Placeholder="Szukaj..."
+                                                    Enabled=@Enabled
+                                                    DataSource="@rola" AllowFiltering="true">
+                                        <DropDownListFieldSettings Text="status"> </DropDownListFieldSettings>
+                                    </SfDropDownList>
                                     <ValidationMessage For="@(() => EmployeeEdit.role)" />
                                 </div>
                             </div>
                         </div>
+                        
 
                         <div class="col-lg-12 control-section multiselect-height">
                             <div class="control-wrapper multi-select-parent">
@@ -80,7 +80,7 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <button type="submit" class="btn btn-block btn-info" data-dismiss="modal" hidden=@readOnly>Zapisz</button>
+                            <button type="submit" class="btn btn-block btn-info" data-dismiss="modal" @onclick="UpdateEmployee" hidden=@readOnly>Zapisz</button>
                             <SfToast @ref="ToastObj" Title="Dane zaktualizowane pomyslnie!" Timeout=3000 Content="@ToastContentEdit">
                                 <ToastPosition X="Right"></ToastPosition>
                             </SfToast>
@@ -270,11 +270,11 @@
                 oldlabels[i] = LabelData.GetById(ListofLabelsId[i].Label_id).Name;
             }
 
-             for (int i = 0; i < ListofProjectsId.Count; i++)
+            for (int i = 0; i < ListofProjectsId.Count; i++)
             {
                 nameofProjects[i] = ProjectData.GetById(ListofProjectsId[i].Project_id).Name;
                 oldProjects[i] = ProjectData.GetById(ListofProjectsId[i].Project_id).Name;
-            } 
+            }
 
 
         }
@@ -298,6 +298,148 @@
             NoSelectedEmployee.Show();
         }
 
+
+    }
+
+    private bool IsSelectedLabelsContainsInDbLabels(string label)
+    {
+        for (int i = 0; i < labelsInDb.Count; i++)
+        {
+            if (label.Equals(labelsInDb[i].Name))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void SaveLabels(string[] labels)
+    {
+        if (labels != null)
+        {
+            for (int i = 0; i < labels.Length; i++)
+            {
+                if (!IsSelectedLabelsContainsInDbLabels(labels[i]))
+                {
+                    BackendLibrary.Models.LabelModel new_label = new BackendLibrary.Models.LabelModel
+                        (labels[i], WebApp.Pages.Login.UserLoggedIn.Company_id);
+
+                    BackendLibrary.DataAccess.LabelData.AddLabel(new_label);
+                }
+            }
+        }
+    }
+
+    private void MergeSelectedLabels(BackendLibrary.Validation.EditEmployeeValidation Employee, string[] selectedLabels)
+    {
+        mergedSelectedLabels = "";
+        if (selectedLabels != null)
+        {
+            for (int i = 0; i < selectedLabels.Length; i++)
+            {
+                mergedSelectedLabels += selectedLabels[i];
+            }
+        }
+        Employee.SelectedLabel = mergedSelectedLabels;
+        isMergedLabelsMatchToPattern = Regex.IsMatch(mergedSelectedLabels, pattern);
+
+    }
+
+    private void EditEmployeeLabel()
+    {
+        for (int i = 0; i < ListofLabelsId.Count; i++)
+        {
+            BackendLibrary.DataAccess.EmployeeLabelData.DeleteEmployeeLabel(ListofLabelsId[i].Employee_id, ListofLabelsId[i].Label_id);
+        }
+
+        if (nameoflabels != null)
+        {
+            for (int i = 0; i < nameoflabels.Length; i++)
+            {
+                labelIdByName = BackendLibrary.DataAccess.LabelData.GetIdByName(nameoflabels[i]);
+                BackendLibrary.Models.EmployeeLabelModel employeeLabel = new BackendLibrary.Models.EmployeeLabelModel
+                    (SelectedEmployee.Employee_id, labelIdByName);
+                BackendLibrary.DataAccess.EmployeeLabelData.AddEmployeeLabel(employeeLabel);
+            }
+        }
+
+    }
+
+    private bool IsLabelsChanged(string label)
+    {
+        for (int i = 0; i < nameoflabels.Length; i++)
+        {
+            if (label.Equals(nameoflabels[i]))
+                return true;
+        }
+        return false;
+    }
+
+    private void UpdateEmployee()
+    {
+        bool if_updated = false;
+
+        if (EmployeeEdit.role != null && EmployeeEdit.role != SelectedEmployee.UserType)
+        {
+            if (EmployeeEdit.role == "Pracownik") SelectedEmployee.If_manager = 0;
+            else if (EmployeeEdit.role == "Kierownik") SelectedEmployee.If_manager = 1;
+            else SelectedEmployee.If_manager = 2;
+            if_updated = true;
+        }
+
+        if (oldlabels != null && nameoflabels != null)
+        {
+            if (oldlabels.Length == nameoflabels.Length)
+            {
+                for (int i = 0; i < nameoflabels.Length; i++)
+                {
+                    if (IsLabelsChanged(oldlabels[i]) == false)
+                    {
+                        if_updated = true;
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                if_updated = true;
+            }
+        }
+        else
+        {
+            if (oldlabels == null && nameoflabels == null)
+                ;
+            else
+                if_updated = true;
+        }
+        
+        if(if_updated == true)
+        {
+            BackendLibrary.Models.EmployeeModel updatedEmployee = new BackendLibrary.Models.EmployeeModel(SelectedEmployee.Employee_id, SelectedEmployee.Company_id,
+                SelectedEmployee.First_name, SelectedEmployee.Last_name, SelectedEmployee.Email, SelectedEmployee.If_manager, SelectedEmployee.Login, SelectedEmployee.Password);
+
+            MergeSelectedLabels(EmployeeEdit, nameoflabels);
+
+            if (isMergedLabelsMatchToPattern)
+            {
+                if (nameoflabels != null)
+                {
+                    SaveLabels(nameoflabels);
+                }
+                BackendLibrary.DataAccess.EmployeeData.UpdateEmployee(updatedEmployee);
+                EditEmployeeLabel();
+                ToastObj.Show();
+                VisibilityEdit = false;
+                uriHelper.NavigateTo(uriHelper.Uri, forceLoad: true);
+                ClearEmployee();
+
+            }
+
+        }
+        else
+        {
+            FailedObj.Show(); //wyswietla na ekran informacje o braku zmian w pracowniku
+        }
 
     }
 
@@ -344,5 +486,10 @@
     {
         errorMessage = "";
         inputValue = "";
+    }
+
+    private void ClearEmployee()
+    {
+        EmployeeEdit.role = null;
     }
 }

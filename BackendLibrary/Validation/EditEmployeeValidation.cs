@@ -23,7 +23,7 @@ namespace BackendLibrary.Validation
         [EmailAddress(ErrorMessage = "Wpisz poprawny email.")]
         public string email { get; set; }
 
-        public bool ifmanager { get; set; }
+        public int ifmanager { get; set; }
 
         public string role { get; set; }
 

@@ -170,9 +170,11 @@ namespace BackendLibrary.DataAccess
         {
             using (IDbConnection connection = new MySqlConnection(connectionString))
             {
-                string sql;
-
-               // connection.Execute(sql, updatedEmployee);
+                string sql = @"UPDATE database06.employee SET First_name = @First_name, Last_name = @Last_name, Email = @Email,
+                            If_manager = @If_manager, Login = @Login, Password = @Password
+                            WHERE employee_id = @Employee_id";
+                
+               connection.Execute(sql, updatedEmployee);
             }
         }
     }
