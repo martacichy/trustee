@@ -2,15 +2,17 @@
 <div class="header">
     <h3>Pracownicy</h3>
 </div>
+    
+<div>
     @if (Login.UserLoggedIn.If_manager == 2)
     {
-<div>
-    <div class="actionBtn">
-        <Sfbutton class="btn btn-primary" @onclick="AddEmployee">Nowy pracownik</Sfbutton>
-    </div>
-    <div  class="actionBtn">
-        <Sfbutton class="btn btn-primary" @onclick="EditEmployee">Edytuj</Sfbutton>
-    </div>
+        <div class="actionBtn">
+            <Sfbutton class="btn btn-primary" @onclick="AddEmployee">Nowy pracownik</Sfbutton>
+        </div>
+        <div class="actionBtn">
+            <Sfbutton class="btn btn-primary" @onclick="EditEmployee">Edytuj</Sfbutton>
+        </div>
+    }
 </div>
         <div class="form-group">
             <SfToast @ref="NoSelectedEmployee" Title="Wybierz pracownika!" Timeout=2000>
@@ -54,7 +56,8 @@
                                                    @bind-Value="@nameoflabels"
                                                    Enabled=@Enabled
                                                    Placeholder="Szukaj..."
-                                                   DataSource="@labelsInDb" AllowFiltering="true" AllowCustomValue="true">
+                                                   DataSource="@labelsInDb" AllowFiltering="true" AllowCustomValue="true"
+                                                   Mode="@VisualMode.Box">
                                         <MultiSelectFieldSettings Text="Name">  </MultiSelectFieldSettings>
                                     </SfMultiSelect>
                                     <ValidationMessage For="@(() => EmployeeEdit.SelectedLabel)" />
@@ -65,11 +68,12 @@
                             <div class="control-wrapper multi-select-parent">
                                 <div class="padding-top">
                                     <label asp-for="projekt" class="control-label">Projekt</label>
-                                    <SfMultiSelect TValue="string" TItem="BackendLibrary.Models.ProjectModel"
-                                                   @bind-Value="@nameofProject"
+                                    <SfMultiSelect TValue="string[]" TItem="BackendLibrary.Models.ProjectModel"
+                                                   @bind-Value="@nameofProjects"
                                                    Enabled=@Enabled
                                                    Placeholder="Szukaj..."
-                                                   DataSource="@projectsInDb" AllowFiltering="true" MaximumSelectionLength=1>
+                                                   DataSource="@projectsInDb" AllowFiltering="true"
+                                                   Mode="@VisualMode.Box">
                                         <MultiSelectFieldSettings Text="Name"></MultiSelectFieldSettings>
                                     </SfMultiSelect>
                                 </div>
@@ -110,7 +114,7 @@
 
         <br />
         <br />
-    }
+    
 
     <SfGrid DataSource="EmployeeList"
             AllowPaging="true"
@@ -159,11 +163,13 @@
     private Boolean VisibilityEdit { get; set; }
     private string[] nameoflabels { get; set; } = new string[] { };
     private string[] oldlabels { get; set; } = new string[] { };
-    private string nameofProject;
+    private string[] nameofProjects { get; set; } = new string[] { };
+    private string[] oldProjects { get; set; } = new string[] { };
     public static List<BackendLibrary.Models.EmployeeModel> ListOfEmployee;
     public static List<BackendLibrary.Models.EmployeeTaskModel> ListofEmployeesId;
     private int[] nameofEmployees { get; set; } = new int[] { };
     public static List<BackendLibrary.Models.EmployeeLabelModel> ListofLabelsId;
+    public static List<BackendLibrary.Models.EmployeeProjectModel> ListofProjectsId;
     private bool isChecked = false;
     public bool EnableProjectDropDown = false;
     //public static List<BackendLibrary.Models.TaskLabelModel> ListofLabelsId;
@@ -254,34 +260,36 @@
             this.nameoflabels = new string[ListofLabelsId.Count];
             this.oldlabels = new string[ListofLabelsId.Count];
 
-            //nazwa projektu do ktorego przypisane jest zadanie
-            if (ProjectData.GetById(Pages.TasksList.SelectedTask.Project_id) != null)
-            {
-                nameofProject = ProjectData.GetById(Pages.TasksList.SelectedTask.Project_id).Name;
-                isChecked = true;
-                EnableProjectDropDown = true;
-            }
+            /* ListofProjectsId = EmployeeProjectData.GetAllProjectsByEmployeeId(Pages.Employees.SelectedEmployee.Employee_id);
+            this.nameofProjects = new string[ListofProjectsId.Count];
+            this.oldProjects = new string[ListofProjectsId.Count]; */
 
-            else
-            {
-                nameofProject = null;
-                isChecked = false;
-                EnableProjectDropDown = false;
-            }
-
-
-            // w ponizszych pętlach następuje przypisanie odpowiednich etykiet oraz pracownikow do tablicy, w celu wyswietlenia ich w task-details
             for (int i = 0; i < ListofLabelsId.Count; i++)
             {
                 nameoflabels[i] = LabelData.GetById(ListofLabelsId[i].Label_id).Name;
                 oldlabels[i] = LabelData.GetById(ListofLabelsId[i].Label_id).Name;
             }
 
+            /* for (int i = 0; i < ListofProjectsId.Count; i++)
+            {
+                nameofProjects[i] = LabelData.GetById(ListofProjectsId[i].Project_id).Name;
+                oldProjects[i] = LabelData.GetById(ListofProjectsId[i].Project_id).Name;
+            } */
+
+
         }
+
+
 
         if (SelectedEmployee != null)
         {
             EmployeeEdit.role = SelectedEmployee.UserType;
+            EmployeeEdit.firstname = SelectedEmployee.First_name;
+            EmployeeEdit.lastname = SelectedEmployee.Last_name;
+            EmployeeEdit.email = SelectedEmployee.Email;
+            EmployeeEdit.login = SelectedEmployee.Login;
+            EmployeeEdit.password = SelectedEmployee.Password;
+
 
             VisibilityEdit = true;
         }
@@ -289,6 +297,12 @@
         {
             NoSelectedEmployee.Show();
         }
+
+
+    }
+
+    private void EmployeeDetails(MouseEventArgs e)
+    {
 
     }
 
