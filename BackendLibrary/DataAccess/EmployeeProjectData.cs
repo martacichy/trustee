@@ -12,13 +12,38 @@ namespace BackendLibrary.DataAccess
     /// </summary>
     public class EmployeeProjectData : SqlConnector
     {
-        /// <summary> Zwraca listę wszystkich projektów danego pracownika
+        /// <summary> Zwraca listę wszystkich pari pracownik-projekt. </summary>
+        public static List<EmployeeProjectModel> GetAll()
+        {
+            using (IDbConnection connection = new MySqlConnection(connectionString))
+            {
+                string sql = "SELECT * FROM database06.employeeproject";
+                var data = connection.Query<EmployeeProjectModel>(sql).ToList();
+
+                return data;
+            }
+        }
+
+        /// <summary> Zwraca listę wszystkich powiązań projektów z danym pracownikiem
         /// (szukając po id pracownika). </summary>
-        public static List<EmployeeProjectModel> GetAllProjectsByEmployeeId(int employeeId)
+        public static List<EmployeeProjectModel> GetAllByEmployeeId(int employeeId)
         {
             using (IDbConnection connection = new MySqlConnection(connectionString))
             {
                 string sql = $"SELECT * FROM database06.employeeproject WHERE employee_id = {employeeId}";
+                var data = connection.Query<EmployeeProjectModel>(sql).ToList();
+
+                return data;
+            }
+        }
+
+        /// <summary> Zwraca listę wszystkich powiązań pracowników z danym projektem
+        /// (szukając po id projektu). </summary>
+        public static List<EmployeeProjectModel> GetAllByProjectId(int projectId)
+        {
+            using (IDbConnection connection = new MySqlConnection(connectionString))
+            {
+                string sql = $"SELECT * FROM database06.employeeproject WHERE project_id = {projectId}";
                 var data = connection.Query<EmployeeProjectModel>(sql).ToList();
 
                 return data;
@@ -30,8 +55,8 @@ namespace BackendLibrary.DataAccess
         {
             using (IDbConnection connection = new MySqlConnection(connectionString))
             {
-                string sql = @"insert into database06.employeeproject (employee_id, project_id)
-                            values (@Employee_id, @Project_id)";
+                string sql = @"insert into database06.employeeproject (project_id, employee_id)
+                            values (@Project_id, @Employee_id)";
 
                 connection.Execute(sql, newEmpProject);
             }

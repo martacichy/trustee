@@ -17,7 +17,7 @@
 }
 
 <div>
-    @* okno dodawania nowego zadania*@
+    @* okno dodawania nowego projektu*@
     <SfDialog @bind-Visible="@visibility" Header="Nowy projekt" Width="500px" IsModal="true" ShowCloseIcon="true">
         <DialogTemplates>
             <Content>
@@ -35,7 +35,7 @@
                                 <SfMultiSelect TValue="int[]" TItem="EmployeeModel"
                                                @bind-Value="@selectedEmployeesId"
                                                Placeholder="Wybierz..."
-                                               DataSource="@employees" AllowFiltering="true"
+                                               DataSource="@allEmployees" AllowFiltering="true"
                                                Mode="@VisualMode.Box">
                                     <MultiSelectTemplates TItem="EmployeeModel">
                                         <!-- Zmieniony Context z default na "SelectedEmployee" aby mogła działać walidacja -->
@@ -80,9 +80,41 @@
             AllowPaging="true"
             AllowSorting="true"
             AllowFiltering="false"
-            ContextMenuItems="@(new List<object>()
-            { "AutoFit", "AutoFitAll", "SortAscending", "SortDescending", "Copy"})">
-        <GridPageSettings PageSize="12"></GridPageSettings>
+            ContextMenuItems="@(new List<object>() { "SortAscending", "SortDescending", "Copy" })">
+        <GridTemplates>
+            <DetailTemplate>
+                @{
+                    var project = (context as ProjectModel);
+
+                    <left>Zadania:</left>
+                    <SfGrid DataSource="tasks" TValue="TaskModel" Query="@GetTasksQuery(project.Project_id)" AllowPaging="true">
+                        <GridPageSettings PageSize="6"></GridPageSettings>
+                        <GridColumns>
+                            <GridColumn Field=@nameof(TaskModel.Task_id) IsPrimaryKey="true" HeaderText="ID" TextAlign="TextAlign.Left" Width="50"></GridColumn>
+                            <GridColumn Field=@nameof(TaskModel.Name) HeaderText="Nazwa" TextAlign="TextAlign.Left" Width="500"></GridColumn>
+                            <GridColumn Field=@nameof(TaskModel.Status) HeaderText="Status" TextAlign="TextAlign.Left" Width="200"></GridColumn>
+                            <GridColumn Field=@nameof(TaskModel.Start_time) HeaderText="Data rozpoczęcia" Format="d" Type="ColumnType.Date"
+                                        TextAlign="TextAlign.Left" Width="200"></GridColumn>
+                            <GridColumn Field=@nameof(TaskModel.Deadline) HeaderText="Deadline" Format="d" Type="ColumnType.Date"
+                                        TextAlign="TextAlign.Left"></GridColumn>
+                        </GridColumns>
+                    </SfGrid>
+
+                    <br />
+                    <left>Pracownicy:</left>
+                    <SfGrid DataSource="employeeProjectPairs" TValue="EmpProjectPair" Query="@GetEmployeesQuery(project.Project_id)" AllowPaging="true">
+                        <GridPageSettings PageSize="6"></GridPageSettings>
+                        <GridColumns>
+                            <GridColumn Field=@nameof(EmpProjectPair.Employee_id) HeaderText="ID" TextAlign="TextAlign.Left" Width="50"></GridColumn>
+                            <GridColumn Field=@nameof(EmpProjectPair.First_name) HeaderText="Imię" TextAlign="TextAlign.Left" Width="250"></GridColumn>
+                            <GridColumn Field=@nameof(EmpProjectPair.Last_name) HeaderText="Nazwisko" TextAlign="TextAlign.Left" Width="250"></GridColumn>
+                            <GridColumn Field=@nameof(EmpProjectPair.Email) HeaderText="E-mail" TextAlign="TextAlign.Left"></GridColumn>
+                        </GridColumns>
+                    </SfGrid>
+                }
+            </DetailTemplate>
+        </GridTemplates>
+        <GridPageSettings PageSize="15"></GridPageSettings>
         <GridColumns>
             <GridColumn Field=@nameof(ProjectModel.Project_id) IsPrimaryKey="true" HeaderText="ID" TextAlign="TextAlign.Left" Width="50"></GridColumn>
             <GridColumn Field=@nameof(ProjectModel.Name) IsPrimaryKey="true" HeaderText="Nazwa Projektu" TextAlign="TextAlign.Left" Width="300"></GridColumn>
@@ -97,8 +129,11 @@
     SfToast SubmitToast;
     private SfGrid<TaskModel> DefaultGrid;
     public ProjectModel selectedProject;
+    private List<TaskModel> tasks;
     private List<ProjectModel> projectList;
-    private List<EmployeeModel> employees;
+    private List<EmployeeModel> allEmployees;
+    private List<EmployeeProjectModel> allEmpProjects;
+    private List<EmpProjectPair> employeeProjectPairs;
     private ProjectValidation ProjectAdd;
     private int lastProjectId;
     private int[] selectedEmployeesId = new int[] { };
@@ -113,10 +148,39 @@
         }
 
         ProjectAdd = new ProjectValidation();
+        tasks = TaskData.GetAllByCompanyId(Login.UserLoggedIn.Company_id);
         projectList = ProjectData.GetAllByCompanyId(Login.UserLoggedIn.Company_id);
-        employees = EmployeeData.GetAllByCompanyId(Login.UserLoggedIn.Company_id);
+        allEmployees = EmployeeData.GetAllByCompanyId(Login.UserLoggedIn.Company_id);
+        allEmpProjects = EmployeeProjectData.GetAll();
         isChecked = false;
         visibility = false;
+
+        fillEmployeeProjectPairs();
+    }
+
+    /// <summary> Stworzenie listy par pracownik+projekt do wyświetlania w DataGrid </summary>
+    private void fillEmployeeProjectPairs()
+    {
+        employeeProjectPairs = new List<EmpProjectPair>();
+        foreach (var element in allEmpProjects)
+        {
+            employeeProjectPairs.Add(new EmpProjectPair(
+                element.Employee_id,
+                allEmployees.Find(x => x.Employee_id == element.Employee_id).First_name,
+                allEmployees.Find(x => x.Employee_id == element.Employee_id).Last_name,
+                allEmployees.Find(x => x.Employee_id == element.Employee_id).Email,
+                element.Project_id));
+        }
+    }
+
+    private Query GetEmployeesQuery(int project_id)
+    {
+        return new Query().Where("Project_id", "equal", project_id);
+    }
+
+    private Query GetTasksQuery(int project_id)
+    {
+        return new Query().Where("Project_id", "equal", project_id);
     }
 
     private void AddTask()
@@ -151,7 +215,7 @@
         lastProjectId = BackendLibrary.DataAccess.ProjectData.GetMaxId();
         for (int i = 0; i < selectedEmployeesId.Length; i++)
         {
-            EmployeeProjectModel employeeProject = new EmployeeProjectModel(selectedEmployeesId[i], lastProjectId);
+            EmployeeProjectModel employeeProject = new EmployeeProjectModel(lastProjectId, selectedEmployeesId[i]);
             EmployeeProjectData.AddEmployeeProject(employeeProject);
         }
     }
