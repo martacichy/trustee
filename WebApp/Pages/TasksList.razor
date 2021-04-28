@@ -329,11 +329,10 @@
                         </div>
                     </div>
                 </EditForm>
-
+                /*
                 <SfGrid @ref="DefaultGridComments"
                         DataSource="CommentsList"
-                        AllowPaging="true"
-                        >
+                        AllowPaging="true">
                         <SfListView ID="list"
                                     DataSource="CommentsList"
                                     ShowHeader="true"
@@ -349,12 +348,15 @@
                                                 <div class="font-weight-normal">@currentData.Employee_id</div>
                                                 <div class="bold">@currentData.Description</div>
                                                 <div class="small__font">@currentData.Date</div>
+                                                <div class="actionBtn">
+                                                    <Sfbutton class="btn btn-primary" id="deleteBtn" @onclick=""><i class="fa fa-trash"></i>&nbsp;U</Sfbutton>
+                                                </div>
                                             </div> 
                                     }
                                 </Template>
                             </ListViewTemplates>
                         </SfListView>
-
+                    */
                 </SfGrid>
 
                 <EditForm Model="Comment">
@@ -437,6 +439,9 @@
     BackendLibrary.Models.CommentModel Comment;
     private SfGrid<CommentModel> DefaultGridComments;
     private static List<CommentModel> CommentsList;
+    BackendLibrary.Models.CommentModel selectedComment;
+    private EmployeeModel loggedEmployee;
+    private bool commentDisable = true;
 
     protected override void OnInitialized()
     {
@@ -460,6 +465,7 @@
         projectsInDb = ProjectData.GetAllByCompanyId(Login.UserLoggedIn.Company_id);
         Comment = new CommentModel();
         allEmpTasks = EmployeeTaskData.GetAll();
+        loggedEmployee = Pages.Login.UserLoggedIn;
 
         fillEmployeeTaskPairs();
     }
@@ -833,6 +839,28 @@
         DefaultGridComments.Refresh();
     }
 
+
+    public void OnCommandClicked(CommandClickEventArgs<CommentModel> args)
+    {
+        selectedComment = args.RowData;
+        if (selectedComment.Employee_id == loggedEmployee.Employee_id)
+        {
+            DeleteComment();
+        }
+    }
+
+    private void DeleteComment()
+    {
+
+        BackendLibrary.DataAccess.CommentData.DeleteComment(selectedComment.Comment_id);
+        CommentsList.Remove(selectedComment);
+
+
+        DefaultGridComments.Refresh();
+
+    }
+
+
     /// <summary>
     /// Sprawdza czy w edycji zmieniono pracownika
     /// </summary>
@@ -1032,4 +1060,3 @@
         TaskEdit.auto_assigned = 0;
     }
 }
-
