@@ -231,12 +231,12 @@
                     </div>
                     <div class="form-group">
                         <label for="Starttime" class="control-label">Czas rozpoczęcia</label>
-                        <SfDateTimePicker TValue="DateTime" @bind-value="TaskAdd.start_time"></SfDateTimePicker>
+                        <SfDateTimePicker TValue="DateTime" @bind-value="TaskEdit.start_time"></SfDateTimePicker>
                         <ValidationMessage For="@(() => TaskEdit.start_time)" />
                     </div>
                     <div class="form-group">
                         <label for="Deadline" class="control-label">Deadline</label>
-                        <SfDateTimePicker TValue="DateTime" @bind-value="TaskAdd.deadline"></SfDateTimePicker>
+                        <SfDateTimePicker TValue="DateTime" @bind-value="TaskEdit.deadline"></SfDateTimePicker>
                         <ValidationMessage For="@(() => TaskEdit.deadline)" />
                     </div>
                     <div class="col-lg-12 control-section multiselect-height">
