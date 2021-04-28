@@ -339,16 +339,23 @@
                     <GridPageSettings PageSize="9"></GridPageSettings>
                     <GridSearchSettings IgnoreCase="true"></GridSearchSettings>
                     <GridSelectionSettings EnableToggle="true"></GridSelectionSettings>
+                    <GridEvents CommandClicked="OnCommandClicked" TValue="CommentModel"> </GridEvents>
+
                     <div class="komentarze" width="400px">
                         <GridColumns>
                             <GridColumn Field=@nameof(CommentModel.Employee_id) IsPrimaryKey="true" TextAlign="TextAlign.Left"></GridColumn>
                             <GridColumn Field=@nameof(CommentModel.Description) TextAlign="TextAlign.Left"></GridColumn>
                             <GridColumn Field=@nameof(CommentModel.Date) Format="d" Type="ColumnType.Date" TextAlign="TextAlign.Left"></GridColumn>
+                            <GridColumn>
+                                <GridCommandColumns>
+                                    <GridCommandColumn Type="CommandButtonType.Delete" ButtonOption="@(new CommandButtonOptions() {IconCss="e-icons e-delete", CssClass="e-flat"})"></GridCommandColumn>
+                                </GridCommandColumns>
+                            </GridColumn>
                         </GridColumns>
                     </div>
-                    
+
                 </SfGrid>
-                
+
                 <EditForm Model="Comment">
                     <div class="form-group" style="display:flex; flex-direction: row; justify-content: center; align-items: center">
                         <label for="Comment" class="control-label" required>Dodaj komentarz:</label>
@@ -429,6 +436,9 @@
     BackendLibrary.Models.CommentModel Comment;
     private SfGrid<CommentModel> DefaultGridComments;
     private static List<CommentModel> CommentsList;
+    BackendLibrary.Models.CommentModel selectedComment;
+    private EmployeeModel loggedEmployee;
+    private bool commentDisable = true;
 
     protected override void OnInitialized()
     {
@@ -451,6 +461,7 @@
         projectsInDb = ProjectData.GetAllByCompanyId(Login.UserLoggedIn.Company_id);
         Comment = new CommentModel();
         allEmpTasks = EmployeeTaskData.GetAll();
+        loggedEmployee = Pages.Login.UserLoggedIn;
 
         fillEmployeeTaskPairs();
     }
@@ -823,6 +834,28 @@
         DefaultGridComments.Refresh();
     }
 
+
+    public void OnCommandClicked(CommandClickEventArgs<CommentModel> args)
+    {
+        selectedComment = args.RowData;
+        if (selectedComment.Employee_id == loggedEmployee.Employee_id)
+        {
+            DeleteComment();
+        }
+    }
+
+    private void DeleteComment()
+    {
+
+        BackendLibrary.DataAccess.CommentData.DeleteComment(selectedComment.Comment_id);
+        CommentsList.Remove(selectedComment);
+
+
+        DefaultGridComments.Refresh();
+
+    }
+
+
     /// <summary>
     /// Sprawdza czy w edycji zmieniono pracownika
     /// </summary>
@@ -1022,3 +1055,10 @@
         TaskEdit.auto_assigned = 0;
     }
 }
+
+<style>
+
+    .e-view-details::before {
+        content: '\e787';
+    }
+</style>  
