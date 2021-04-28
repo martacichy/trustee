@@ -54,8 +54,8 @@
                 @{
                     var task = (context as TaskModel);
 
-                    <left>Pracownicy:</left>
-                    <SfGrid DataSource="employeeTaskPairs" TValue="EmpTaskPair" Query="@GetEmployeesQuery(task.Task_id)" AllowPaging="true">
+                    <label class="header-list"><i class="fas fa-user-friends"></i>Pracownicy:</label>
+                    <SfGrid DataSource="employeeTaskPairs" TValue="EmpTaskPair" Query="@GetEmployeesQuery(task.Task_id)">
                         <GridPageSettings PageSize="6"></GridPageSettings>
                         <GridColumns>
                             <GridColumn Field=@nameof(EmpTaskPair.Employee_id) HeaderText="ID" TextAlign="TextAlign.Left" Width="50"></GridColumn>
@@ -86,6 +86,7 @@
     </div>
 
     @* okno dodawania nowego zadania*@
+
     <SfDialog @bind-Visible="@VisibilityAdd" Header="Nowe zadanie" Width="800px" IsModal="true" ShowCloseIcon="true">
         <DialogTemplates>
             <Content>
@@ -255,7 +256,7 @@
                     </div>
                     <div class="form-group">
                         <label for="IfAutoAssigned" class="control-label" hidden=@readOnly>Czy przydzielić automatycznie? </label>
-                        <input for="IfAutoAssigned" type="checkbox" class="form-control" @bind-value="TaskEdit.auto_assigned" hidden=@readOnly />
+                        <input for="IfAutoAssigned" type="checkbox" class="form-control-checkbox" @bind-value="TaskEdit.auto_assigned" hidden=@readOnly />
                     </div>
 
                     <div class="col-lg-12 control-section multiselect-height">
@@ -332,23 +333,30 @@
                 <SfGrid @ref="DefaultGridComments"
                         DataSource="CommentsList"
                         AllowPaging="true"
-                        Locale="pl"
-                        ContextMenuItems="@(new List<object>()
-            { "AutoFit", "AutoFitAll", "SortDescending", "SortAscending"})">
-                    <GridFilterSettings EnableCaseSensitivity="false"></GridFilterSettings>
-                    <GridPageSettings PageSize="9"></GridPageSettings>
-                    <GridSearchSettings IgnoreCase="true"></GridSearchSettings>
-                    <GridSelectionSettings EnableToggle="true"></GridSelectionSettings>
-                    <div class="komentarze" width="400px">
-                        <GridColumns>
-                            <GridColumn Field=@nameof(CommentModel.Employee_id) IsPrimaryKey="true" TextAlign="TextAlign.Left"></GridColumn>
-                            <GridColumn Field=@nameof(CommentModel.Description) TextAlign="TextAlign.Left"></GridColumn>
-                            <GridColumn Field=@nameof(CommentModel.Date) Format="d" Type="ColumnType.Date" TextAlign="TextAlign.Left"></GridColumn>
-                        </GridColumns>
-                    </div>
-                    
+                        >
+                        <SfListView ID="list"
+                                    DataSource="CommentsList"
+                                    ShowHeader="true"
+                                    
+                                    HeaderTitle="Komentarze">
+                            <ListViewFieldSettings TValue="CommentModel" Id="Id" Text="Text"></ListViewFieldSettings>
+                            <ListViewTemplates TValue="CommentModel">
+                                <Template>
+                                    @{
+                                        var currentData = (context as CommentModel);
+                                
+                                        <div class="flex item__container">
+                                                <div class="font-weight-normal">@currentData.Employee_id</div>
+                                                <div class="bold">@currentData.Description</div>
+                                                <div class="small__font">@currentData.Date</div>
+                                            </div> 
+                                    }
+                                </Template>
+                            </ListViewTemplates>
+                        </SfListView>
+
                 </SfGrid>
-                
+
                 <EditForm Model="Comment">
                     <div class="form-group" style="display:flex; flex-direction: row; justify-content: center; align-items: center">
                         <label for="Comment" class="control-label" required>Dodaj komentarz:</label>
@@ -441,6 +449,7 @@
             readOnly = true;
             Enabled = false;
         }
+
 
         SelectedTask = new TaskModel();
         TaskList = TaskData.GetAllByCompanyId(Pages.Login.UserLoggedIn.Company_id);
@@ -621,6 +630,7 @@
             // NavigationManager.NavigateTo("/task-details");
         }
     }
+
 
     /// <summary>
     /// Powraca do listy zadan po zamknieciu okna
@@ -1022,3 +1032,4 @@
         TaskEdit.auto_assigned = 0;
     }
 }
+

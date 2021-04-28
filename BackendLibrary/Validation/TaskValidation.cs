@@ -16,14 +16,14 @@ namespace BackendLibrary.Validation
         public string description { get; set; }
 
         [DefaultDateAttribute(ErrorMessage = "Wprowadź poprawną datę.")]
-        public DateTime start_time { get; set; }
+        public DateTime start_time { get; set; } = DateTime.Now;
 
         [DateDeadlineAttribute(ErrorMessage = "Deadline nie może być wcześniejszy niż dzisiaj.")]
-        public DateTime deadline { get; set; }
+        public DateTime deadline { get; set; } = DateTime.Now;
 
         [Required(ErrorMessage = "To pole jest obowiązkowe!")]
         [StringLength(50, ErrorMessage = "To pole nie może mieć więcej niż 50 znaków.")]
-        public string status { get; set; }
+        public string status { get; set; } = "Nierozpoczęte";
 
         public int auto_assigned { get; set; }
 

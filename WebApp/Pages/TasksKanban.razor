@@ -1,63 +1,61 @@
 ﻿@page "/kanban"
-    <div class="header">
-        <h3>Twoje zadania</h3>
-    </div>
-    <div class="main">
-        <SfKanban TValue="BackendLibrary.Models.TaskModel" KeyField="Status" DataSource="@FilteredTasks" Locale="pl">
-            <KanbanCardSettings HeaderField="Task_id" ContentField="Name"></KanbanCardSettings>
-            <KanbanSwimlaneSettings AllowDragAndDrop="false"></KanbanSwimlaneSettings>
-            <KanbanEvents TValue="TaskModel"
-                          DialogOpen="@OnDialogOpen"
-                          CardClick="@OnCardClicked">
-            </KanbanEvents>
 
-            <KanbanColumns>
-                <KanbanColumn HeaderText="Nierozpoczęte" KeyField="@(new List<string>() { "Nierozpoczete" })"
-                              AllowToggle="true" AllowDrag="false"></KanbanColumn>
+<div class="header">
+    <h3>Twoje zadania</h3>
+</div>
+<div class="main">
+    <SfKanban CssClass="kanban-overview" TValue="BackendLibrary.Models.TaskModel" KeyField="Status" DataSource="@FilteredTasks" Locale="pl">
+        <KanbanCardSettings HeaderField="Name" ContentField="Description"></KanbanCardSettings>
+        <KanbanSwimlaneSettings AllowDragAndDrop="false"></KanbanSwimlaneSettings>
+        <KanbanEvents TValue="TaskModel"
+                      DialogOpen="@OnDialogOpen"
+                      CardClick="@OnCardClicked">
+        </KanbanEvents>
 
-                <KanbanColumn HeaderText="W toku" KeyField="@(new List<string>() { "W toku" })"
-                              AllowToggle="true" AllowDrag="false"></KanbanColumn>
+        <KanbanColumns>
+            <KanbanColumn HeaderText="Nierozpoczęte" KeyField="@(new List<string>() { "Nierozpoczete" })" AllowToggle="true" AllowDrag="false"></KanbanColumn>
 
-                <KanbanColumn HeaderText="Zakończone" KeyField="@(new List<string>() { "Zakonczone" })"
-                              AllowToggle="true" AllowDrag="false"></KanbanColumn>
+            <KanbanColumn HeaderText="W toku" KeyField="@(new List<string>() { "W toku" })" AllowToggle="true" AllowDrag="false"></KanbanColumn>
 
-                <KanbanColumn HeaderText="Anulowane" KeyField="@(new List<string>() { "Anulowane" })"
-                              AllowToggle="true" IsExpanded="false" AllowDrag="false"></KanbanColumn>
-            </KanbanColumns>
-        </SfKanban>
-    </div>
+            <KanbanColumn HeaderText="Zakończone" KeyField="@(new List<string>() { "Zakonczone" })"
+                          AllowToggle="true" AllowDrag="false"></KanbanColumn>
+
+            <KanbanColumn HeaderText="Anulowane" KeyField="@(new List<string>() { "Anulowane" })"
+                          AllowToggle="true" IsExpanded="false" AllowDrag="false"></KanbanColumn>
+        </KanbanColumns>
+
+    </SfKanban>
+</div>
 
 
-    @code {
-        public static List<TaskModel> AllTasks, FilteredTasks;
-        public static List<EmployeeTaskModel> MyTasks;
+@code {
+    public static List<TaskModel> AllTasks, FilteredTasks;
+    public static List<EmployeeTaskModel> MyTasks;
 
-        protected override void OnInitialized()
+    protected override void OnInitialized()
+    {
+        if (Login.UserLoggedIn.If_manager == -1)
         {
-            if (Login.UserLoggedIn.If_manager == -1)
-            {
-                NavigationManager.NavigateTo("/");
-            }
-
-            AllTasks = TaskData.GetAllByCompanyId(Login.UserLoggedIn.Company_id);
-            MyTasks = EmployeeTaskData.GetAllTasksByEmployeeId(Login.UserLoggedIn.Employee_id);
-
-            FilteredTasks = AllTasks.Where(x => MyTasks.Any(z => x.Task_id == z.Task_id)).ToList();
+            NavigationManager.NavigateTo("/");
         }
 
-        // anuluje otwieranie podgladu - do zmiany jak bedzie gotowe okno szczegółów
-        private void OnDialogOpen(DialogOpenEventArgs<TaskModel> args)
-        {
-            args.Cancel = true;
-        }
+        AllTasks = TaskData.GetAllByCompanyId(Login.UserLoggedIn.Company_id);
+        MyTasks = EmployeeTaskData.GetAllTasksByEmployeeId(Login.UserLoggedIn.Employee_id);
 
-        private void OnCardClicked(CardClickEventArgs<TaskModel> args)
-        {
-            // odczytanie modelu lub id taska i pokazanie okna podglądu
-        }
-
-        //TODO - obsługa DragStart i DragStop (<KanbanEvents />)
+        FilteredTasks = AllTasks.Where(x => MyTasks.Any(z => x.Task_id == z.Task_id)).ToList();
     }
 
-    <style>
-    </style>
+    // anuluje otwieranie podgladu - do zmiany jak bedzie gotowe okno szczegółów
+    private void OnDialogOpen(DialogOpenEventArgs<TaskModel> args)
+    {
+        args.Cancel = true;
+    }
+
+    private void OnCardClicked(CardClickEventArgs<TaskModel> args)
+    {
+        // odczytanie modelu lub id taska i pokazanie okna podglądu
+    }
+
+    //TODO - obsługa DragStart i DragStop (<KanbanEvents />)
+}
+

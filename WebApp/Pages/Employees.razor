@@ -1,4 +1,5 @@
 ﻿@page "/employees"
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <div class="header">
     <h3>Pracownicy</h3>
 </div>
@@ -6,11 +7,12 @@
 <div>
     @if (Login.UserLoggedIn.If_manager == 2)
     {
+        
         <div class="actionBtn">
-            <Sfbutton class="btn btn-primary" @onclick="AddEmployee">Nowy pracownik</Sfbutton>
+            <Sfbutton class="btn btn-primary" @onclick="AddEmployee"><i class="fa fa-plus"></i>&nbsp;Nowy pracownik</Sfbutton>
         </div>
         <div class="actionBtn">
-            <Sfbutton class="btn btn-primary" @onclick="EditEmployee">Edytuj</Sfbutton>
+            <Sfbutton class="btn btn-primary" @onclick="EditEmployee"><i class="fa fa-edit"></i>&nbsp;Edytuj</Sfbutton>
         </div>
     }
 </div>
@@ -19,15 +21,13 @@
                 <ToastPosition X="Center"></ToastPosition>
             </SfToast>
         </div>
-        <SfDialog @bind-Visible="@VisibilityEdit" AllowDragging="true" Width="500px" IsModal="true" ShowCloseIcon="true">
+        @*Edycja pracownika*@
+        <SfDialog @bind-Visible="@VisibilityEdit" AllowDragging="true" Width="800px" Height="800px" IsModal="true" ShowCloseIcon="true">
             <DialogTemplates>
-                <Header>
-                    Edycja uprawnień
-                </Header>
                 <Content>
-                    <div class="form-group">
-                        <label for="Imie" class="employeelabel">@SelectedEmployee.First_name</label>
-                        <label for="Nazwisko" class="employeelabel">@SelectedEmployee.Last_name</label>
+                    <div class="dane">
+                        <label for="Imie">@SelectedEmployee.First_name</label>
+                        <label for="Nazwisko">@SelectedEmployee.Last_name</label>
                     </div>
                     <EditForm Model="@EmployeeEdit">
                         <DataAnnotationsValidator />
@@ -46,8 +46,6 @@
                                 </div>
                             </div>
                         </div>
-                        
-
                         <div class="col-lg-12 control-section multiselect-height">
                             <div class="control-wrapper multi-select-parent">
                                 <div class="padding-top">
@@ -94,6 +92,7 @@
             <DialogEvents Closed="@DialogEditClosed"></DialogEvents>
             <DialogAnimationSettings Effect="DialogEffect.Fade"></DialogAnimationSettings>
         </SfDialog>
+    @*Dodawanie nowego pracownika*@
         <SfDialog @bind-Visible="@visibility" IsModal="true" Target="#target" Width="500px" ShowCloseIcon="true">
             <DialogEvents></DialogEvents>
             <DialogAnimationSettings Effect="DialogEffect.Zoom"></DialogAnimationSettings>
