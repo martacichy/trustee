@@ -1,6 +1,6 @@
 ﻿@page "/projects"
 <link href="css/popups.css" rel="stylesheet" />
-
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <div class="header">
     <h3>Projekty</h3>
 </div>
@@ -9,7 +9,7 @@
 {
     <div>
         <div class="actionBtn">
-            <Sfbutton class="btn btn-primary" @onclick="AddTask">Utwórz nowy projekt</Sfbutton>
+            <Sfbutton class="btn btn-primary" @onclick="AddTask"><i class="fa fa-plus"></i>&nbsp;Utwórz nowy projekt</Sfbutton>
         </div>
     </div>
     <br />
@@ -86,8 +86,11 @@
                 @{
                     var project = (context as ProjectModel);
 
-                    <left>Zadania:</left>
-                    <SfGrid DataSource="tasks" TValue="TaskModel" Query="@GetTasksQuery(project.Project_id)" AllowPaging="true">
+                                <div class="header-list">
+                                    <label>Zadania:</label>
+                                </div>
+                    
+                    <SfGrid DataSource="tasks" TValue="TaskModel" Query="@GetTasksQuery(project.Project_id)">
                         <GridPageSettings PageSize="6"></GridPageSettings>
                         <GridColumns>
                             <GridColumn Field=@nameof(TaskModel.Task_id) IsPrimaryKey="true" HeaderText="ID" TextAlign="TextAlign.Left" Width="50"></GridColumn>
@@ -101,8 +104,10 @@
                     </SfGrid>
 
                     <br />
-                    <left>Pracownicy:</left>
-                    <SfGrid DataSource="employeeProjectPairs" TValue="EmpProjectPair" Query="@GetEmployeesQuery(project.Project_id)" AllowPaging="true">
+                    <div class="header-list">
+                        <label>Pracownicy:</label>
+                    </div>
+                    <SfGrid DataSource="employeeProjectPairs" TValue="EmpProjectPair" Query="@GetEmployeesQuery(project.Project_id)">
                         <GridPageSettings PageSize="6"></GridPageSettings>
                         <GridColumns>
                             <GridColumn Field=@nameof(EmpProjectPair.Employee_id) HeaderText="ID" TextAlign="TextAlign.Left" Width="50"></GridColumn>
@@ -111,6 +116,8 @@
                             <GridColumn Field=@nameof(EmpProjectPair.Email) HeaderText="E-mail" TextAlign="TextAlign.Left"></GridColumn>
                         </GridColumns>
                     </SfGrid>
+                    <br />
+
                 }
             </DetailTemplate>
         </GridTemplates>
@@ -232,3 +239,12 @@
         isChecked = false;
     }
 }
+
+<style>
+    .header-list {
+        font-size: 26px;
+        font-family: 'Josefin Sans', sans-serif;
+        color: black;
+    }
+
+</style>

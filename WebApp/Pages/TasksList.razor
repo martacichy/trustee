@@ -54,8 +54,8 @@
                 @{
                     var task = (context as TaskModel);
 
-                    <left>Pracownicy:</left>
-                    <SfGrid DataSource="employeeTaskPairs" TValue="EmpTaskPair" Query="@GetEmployeesQuery(task.Task_id)" AllowPaging="true">
+                    <label class="header-list"><i class="fas fa-user-friends"></i>Pracownicy:</label>
+                    <SfGrid DataSource="employeeTaskPairs" TValue="EmpTaskPair" Query="@GetEmployeesQuery(task.Task_id)">
                         <GridPageSettings PageSize="6"></GridPageSettings>
                         <GridColumns>
                             <GridColumn Field=@nameof(EmpTaskPair.Employee_id) HeaderText="ID" TextAlign="TextAlign.Left" Width="50"></GridColumn>
@@ -86,6 +86,7 @@
     </div>
 
     @* okno dodawania nowego zadania*@
+
     <SfDialog @bind-Visible="@VisibilityAdd" Header="Nowe zadanie" Width="800px" IsModal="true" ShowCloseIcon="true">
         <DialogTemplates>
             <Content>
@@ -230,12 +231,12 @@
                     </div>
                     <div class="form-group">
                         <label for="Starttime" class="control-label">Czas rozpoczęcia</label>
-                        <SfDateTimePicker TValue="DateTime" @bind-value="TaskAdd.start_time"></SfDateTimePicker>
+                        <SfDateTimePicker TValue="DateTime" @bind-value="TaskEdit.start_time"></SfDateTimePicker>
                         <ValidationMessage For="@(() => TaskEdit.start_time)" />
                     </div>
                     <div class="form-group">
                         <label for="Deadline" class="control-label">Deadline</label>
-                        <SfDateTimePicker TValue="DateTime" @bind-value="TaskAdd.deadline"></SfDateTimePicker>
+                        <SfDateTimePicker TValue="DateTime" @bind-value="TaskEdit.deadline"></SfDateTimePicker>
                         <ValidationMessage For="@(() => TaskEdit.deadline)" />
                     </div>
                     <div class="col-lg-12 control-section multiselect-height">
@@ -255,7 +256,7 @@
                     </div>
                     <div class="form-group">
                         <label for="IfAutoAssigned" class="control-label" hidden=@readOnly>Czy przydzielić automatycznie? </label>
-                        <input for="IfAutoAssigned" type="checkbox" class="form-control" @bind-value="TaskEdit.auto_assigned" hidden=@readOnly />
+                        <input for="IfAutoAssigned" type="checkbox" class="form-control-checkbox" @bind-value="TaskEdit.auto_assigned" hidden=@readOnly />
                     </div>
 
                     <div class="col-lg-12 control-section multiselect-height">
@@ -327,8 +328,7 @@
                             </div>
                         </div>
                     </div>
-                </EditForm>
-
+                
                 <SfGrid @ref="DefaultGridComments"
                         DataSource="CommentsList"
                         AllowPaging="true"
@@ -339,34 +339,68 @@
                     <GridPageSettings PageSize="9"></GridPageSettings>
                     <GridSearchSettings IgnoreCase="true"></GridSearchSettings>
                     <GridSelectionSettings EnableToggle="true"></GridSelectionSettings>
+                    <GridEvents CommandClicked="OnCommandClicked" TValue="CommentModel"> </GridEvents>
                     <div class="komentarze" width="400px">
                         <GridColumns>
                             <GridColumn Field=@nameof(CommentModel.Employee_id) IsPrimaryKey="true" TextAlign="TextAlign.Left"></GridColumn>
                             <GridColumn Field=@nameof(CommentModel.Description) TextAlign="TextAlign.Left"></GridColumn>
                             <GridColumn Field=@nameof(CommentModel.Date) Format="d" Type="ColumnType.Date" TextAlign="TextAlign.Left"></GridColumn>
+                            <GridColumn>
+                                <GridCommandColumns>
+                                    <GridCommandColumn Type="CommandButtonType.Delete" ButtonOption="@(new CommandButtonOptions() {IconCss="e-icons e-delete", CssClass="e-flat"})"></GridCommandColumn>
+                                </GridCommandColumns>
+                            </GridColumn>
                         </GridColumns>
                     </div>
-                    
-                </SfGrid>
-                
-                <EditForm Model="Comment">
-                    <div class="form-group" style="display:flex; flex-direction: row; justify-content: center; align-items: center">
-                        <label for="Comment" class="control-label" required>Dodaj komentarz:</label>
-                        <input for="Comment" class="form-control" @bind-value="@Comment.Description">
-                        <button class="button-addc" type="submit" data-dismiss="modal" @onclick="AddNewComment" hidden=@readOnly>Dodaj</button>
-                        </input>
-                    </div>
-                </EditForm>
 
-                <div class="form-group">
-                    <button type="submit" class="btn btn-block btn-info" data-dismiss="modal" @onclick="UpdateTask" hidden=@readOnly>Zapisz</button>
-                    <SfToast @ref="ToastObj" Title="Zadanie zaktualizowane pomyslnie!" Timeout=3000 Content="@ToastContentEdit">
-                        <ToastPosition X="Right"></ToastPosition>
-                    </SfToast>
-                    <SfToast @ref="FailedObj" Title="Brak zmian w zadaniu!" Timeout=3000 Content="@FailedContent">
-                        <ToastPosition X="Right"></ToastPosition>
-                    </SfToast>
-                </div>
+                    <!--
+        <SfGrid @ref="DefaultGridComments"
+                DataSource="CommentsList"
+                AllowPaging="true">
+                <SfListView ID="list"
+                            DataSource="CommentsList"
+                            ShowHeader="true"
+
+                            HeaderTitle="Komentarze">
+                    <ListViewFieldSettings TValue="CommentModel" Id="Id" Text="Text"></ListViewFieldSettings>
+                    <ListViewTemplates TValue="CommentModel">
+                        <Template>
+                            @{
+                                var currentData = (context as CommentModel);
+
+                                <div class="flex item__container">
+                                        <div class="font-weight-normal">@currentData.Employee_id</div>
+                                        <div class="bold">@currentData.Description</div>
+                                        <div class="small__font">@currentData.Date</div>
+                                        <div class="actionBtn">
+                                            <Sfbutton class="btn btn-primary" id="deleteBtn"><i class="fa fa-trash"></i>&nbsp;U</Sfbutton>
+                                        </div>
+                                    </div>
+                            }
+                        </Template>
+                    </ListViewTemplates>
+                </SfListView></SfGrid>
+            -->
+                    </SfGrid></EditForm>
+
+                    <EditForm Model="Comment">
+                        <div class="form-group" style="display:flex; flex-direction: row; justify-content: center; align-items: center">
+                            <label for="Comment" class="control-label" required>Dodaj komentarz:</label>
+                            <input for="Comment" class="form-control" @bind-value="@Comment.Description">
+                            <button class="button-addc" type="submit" data-dismiss="modal" @onclick="AddNewComment" hidden=@readOnly>Dodaj</button>
+                            </input>
+                        </div>
+                    </EditForm>
+
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-block btn-info" data-dismiss="modal" @onclick="UpdateTask" hidden=@readOnly>Zapisz</button>
+                        <SfToast @ref="ToastObj" Title="Zadanie zaktualizowane pomyslnie!" Timeout=3000 Content="@ToastContentEdit">
+                            <ToastPosition X="Right"></ToastPosition>
+                        </SfToast>
+                        <SfToast @ref="FailedObj" Title="Brak zmian w zadaniu!" Timeout=3000 Content="@FailedContent">
+                            <ToastPosition X="Right"></ToastPosition>
+                        </SfToast>
+                    </div>
             </Content>
         </DialogTemplates>
         <DialogEvents Closed="@DialogEditClosed"></DialogEvents>
@@ -429,6 +463,9 @@
     BackendLibrary.Models.CommentModel Comment;
     private SfGrid<CommentModel> DefaultGridComments;
     private static List<CommentModel> CommentsList;
+    BackendLibrary.Models.CommentModel selectedComment;
+    private EmployeeModel loggedEmployee;
+    private bool commentDisable = true;
 
     protected override void OnInitialized()
     {
@@ -442,6 +479,7 @@
             Enabled = false;
         }
 
+
         SelectedTask = new TaskModel();
         TaskList = TaskData.GetAllByCompanyId(Pages.Login.UserLoggedIn.Company_id);
         TaskAdd = new TaskValidation();
@@ -451,6 +489,7 @@
         projectsInDb = ProjectData.GetAllByCompanyId(Login.UserLoggedIn.Company_id);
         Comment = new CommentModel();
         allEmpTasks = EmployeeTaskData.GetAll();
+        loggedEmployee = Pages.Login.UserLoggedIn;
 
         fillEmployeeTaskPairs();
     }
@@ -621,6 +660,7 @@
             // NavigationManager.NavigateTo("/task-details");
         }
     }
+
 
     /// <summary>
     /// Powraca do listy zadan po zamknieciu okna
@@ -822,6 +862,28 @@
         }
         DefaultGridComments.Refresh();
     }
+
+
+    public void OnCommandClicked(CommandClickEventArgs<CommentModel> args)
+    {
+        selectedComment = args.RowData;
+        if (selectedComment.Employee_id == loggedEmployee.Employee_id)
+        {
+            DeleteComment();
+        }
+    }
+
+    private void DeleteComment()
+    {
+
+        BackendLibrary.DataAccess.CommentData.DeleteComment(selectedComment.Comment_id);
+        CommentsList.Remove(selectedComment);
+
+
+        DefaultGridComments.Refresh();
+
+    }
+
 
     /// <summary>
     /// Sprawdza czy w edycji zmieniono pracownika
