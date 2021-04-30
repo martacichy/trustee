@@ -24,6 +24,44 @@ namespace BackendLibrary.DataAccess
             }
         }
 
+        public static List<TaskModel> GetUnstartedTasksByCompanyId(int company_id)
+        {
+            using (IDbConnection connection = new MySqlConnection(connectionString))
+            {
+                string sql = $"SELECT database06.task.* FROM database06.task " +
+                    $"WHERE database06.task.task_id NOT IN" +
+                             $"(SELECT database06.employeetask.task_id FROM database06.employeetask)" +
+                    $" AND database06.task.status = 'Nierozpoczęte' AND database06.task.company_id = {company_id}";
+                var data = connection.Query<TaskModel>(sql).ToList();
+
+                return data;
+            }
+        }
+
+        public static List<TaskModel> GetInProgressTasks(int company_id)
+        {
+            using (IDbConnection connection = new MySqlConnection(connectionString))
+            {
+                string sql = $"SELECT * FROM database06.task WHERE (status='W toku' OR status = 'Nierozpoczęte') AND Company_id = {company_id}";
+                var data = connection.Query<TaskModel>(sql).ToList();
+
+                return data;
+            }
+        }
+
+        public static List<TaskModel> GetAllTaskWithoutUnstartedByCompanyId(int company_id)
+        {
+            using (IDbConnection connection = new MySqlConnection(connectionString))
+            {
+                string sql = $"SELECT * FROM database06.task WHERE status!='Nierozpoczęte' AND Company_id = {company_id}";
+                var data = connection.Query<TaskModel>(sql).ToList();
+
+                return data;
+            }
+        }
+
+
+
         /// <summary> Zwraca model o przekazanym w argumencie id. </summary>
         public static TaskModel GetById(int task_id)
         {
@@ -80,12 +118,28 @@ namespace BackendLibrary.DataAccess
         {
             using (IDbConnection connection = new MySqlConnection(connectionString))
             {
-                string sql = $"SELECT company_id  FROM database06.task JOIN database06.employeetask WHERE employeetask.Employee_id = {employee_id}";
+                string sql = $"SELECT database06.task.* FROM database06.task JOIN database06.employeetask ON database06.task.task_id = " +
+                    $"database06.employeetask.task_id WHERE database06.employeetask.employee_id = {employee_id} ";
                 var data = connection.Query<TaskModel>(sql).ToList();
 
                 return data;
             }
         }
+
+        public static List<TaskModel> GetInProgressTaskByEmployeeId(int employee_id)
+        {
+            using (IDbConnection connection = new MySqlConnection(connectionString))
+            {
+                string sql = $"SELECT database06.task.* FROM database06.task JOIN database06.employeetask ON database06.task.task_id = " +
+                    $"database06.employeetask.task_id WHERE database06.employeetask.employee_id = {employee_id} AND" +
+                    $" (database06.task.status = 'W toku' OR database06.task.status = 'Nierozpoczęte') ";
+                var data = connection.Query<TaskModel>(sql).ToList();
+
+                return data;
+            }
+        }
+
+
 
         /// <summary> Dodaje nowego taska. </summary>
         public static void AddTask(TaskModel newTask)
