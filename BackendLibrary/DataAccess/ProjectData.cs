@@ -48,6 +48,8 @@ namespace BackendLibrary.DataAccess
             }
         }
 
+
+
         /// <summary> Zwraca autowygenerowane Id w ostatnio wykonanym insercie.</summary>
         public static int GetMaxId()
         {

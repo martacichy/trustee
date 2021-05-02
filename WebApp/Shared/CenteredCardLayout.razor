@@ -1,18 +1,36 @@
 ﻿@layout LoginLayout
 @inherits LayoutComponentBase
 
-<center>
-    <div class="col-8 card">
-        <div class="col-12 row">
-            <p>&nbsp;</p>
-        </div>
-        <div class="col-12 row">
-            <div class="col-6" style="border-right:groove">
-                <img src="https://i.pinimg.com/originals/88/e0/90/88e090cdd282b3763d722ecf644685c2.jpg" width="400px" height="400px" />
+
+
+    
+    <center>
+        
+        <div class="background">
+            <div class="col-12 row">
+                <p>&nbsp;</p>
             </div>
-            <div class="col-6" style="border-left:thick">
-                @Body
+            <div class="col-12 row">
+
+                <div class="col-6" style="border-left:thick">
+                    @Body
+                </div>
             </div>
         </div>
-    </div>
-</center>
+    </center>
+
+
+    <style>
+        .background {
+            background: url(./back.mp4);
+            background-position: center;
+            height: 686px;
+            position: fixed;
+            top: 100px;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            overflow: hidden;
+            z-index: -100;
+        }
+    </style>

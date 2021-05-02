@@ -74,8 +74,9 @@
             <GridColumn Field=@nameof(TaskModel.Status) HeaderText="Status" TextAlign="TextAlign.Left" Width="200"></GridColumn>
             <GridColumn Field=@nameof(TaskModel.Start_time) HeaderText="Data rozpoczęcia" Format="d" Type="ColumnType.Date"
                         TextAlign="TextAlign.Left" Width="200"></GridColumn>
-            <GridColumn Field=@nameof(TaskModel.Deadline) HeaderText="Deadline" Format="d" Type="ColumnType.Date"
+            <GridColumn Field=@nameof(TaskModel.Deadline) HeaderText="Data zakończenia" Format="d" Type="ColumnType.Date"
                         TextAlign="TextAlign.Left"></GridColumn>
+           
         </GridColumns>
     </SfGrid>
 
@@ -108,7 +109,7 @@
                         <ValidationMessage For="@(() => TaskAdd.start_time)" />
                     </div>
                     <div class="form-group">
-                        <label for="Deadline" class="control-label">Deadline</label>
+                        <label for="Deadline" class="control-label">Czas zakończenia</label>
                         <SfDateTimePicker TValue="DateTime" @bind-value="TaskAdd.deadline"></SfDateTimePicker>
                         <ValidationMessage For="@(() => TaskAdd.deadline)" />
                     </div>
@@ -466,6 +467,9 @@
     BackendLibrary.Models.CommentModel selectedComment;
     private EmployeeModel loggedEmployee;
     private bool commentDisable = true;
+
+
+   // private string nazwaprojektu = ProjectData.GetById();
 
     protected override void OnInitialized()
     {

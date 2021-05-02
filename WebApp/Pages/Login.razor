@@ -25,8 +25,9 @@
         </div>
         <br />
         <div class="col-12 row">
-            <span class="col-12"></span>
-            <input type="submit" class="form-control col-6 btn btn-primary" @onclick="LoginSubmit" value="Zaloguj się" />
+            <div class="actionBtn">
+                <Sfbutton class="btn btn-primary" @onclick="LoginSubmit"><i class="fas fa-sign-in-alt"></i>&nbsp;Zaloguj się</Sfbutton>
+            </div>
             <a href="/signup" class="col-6">Rejestracja</a>
         </div>
         <br />
