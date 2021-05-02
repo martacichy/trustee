@@ -58,7 +58,7 @@
                     <SfGrid DataSource="employeeTaskPairs" TValue="EmpTaskPair" Query="@GetEmployeesQuery(task.Task_id)">
                         <GridPageSettings PageSize="6"></GridPageSettings>
                         <GridColumns>
-                            <GridColumn Field=@nameof(EmpTaskPair.Employee_id) HeaderText="ID" TextAlign="TextAlign.Left" Width="50"></GridColumn>
+                            <GridColumn HeaderText="ID" TextAlign="TextAlign.Left" Width="50"></GridColumn>
                             <GridColumn Field=@nameof(EmpTaskPair.First_name) HeaderText="Imię" TextAlign="TextAlign.Left" Width="80"></GridColumn>
                             <GridColumn Field=@nameof(EmpTaskPair.Last_name) HeaderText="Nazwisko" TextAlign="TextAlign.Left" Width="120"></GridColumn>
                             <GridColumn Field=@nameof(EmpTaskPair.Email) HeaderText="E-mail" TextAlign="TextAlign.Left" Width="120"></GridColumn>
@@ -76,7 +76,9 @@
                         TextAlign="TextAlign.Left" Width="200"></GridColumn>
             <GridColumn Field=@nameof(TaskModel.Deadline) HeaderText="Data zakończenia" Format="d" Type="ColumnType.Date"
                         TextAlign="TextAlign.Left"></GridColumn>
-           
+            <GridColumn HeaderText="Akcje">    
+                    <Sfbutton class="btn btn-primary" @onclick="EditTask"><i class="fa fa-pencil"></i></Sfbutton>
+            </GridColumn>
         </GridColumns>
 
 
@@ -447,12 +449,13 @@
                         </input>
                     </div>
                 </EditForm>
-                <div class="actionBtn">
-                    <Sfbutton class="btn btn-primary" hidden="@isAssignTaskButtonHidden" @onclick="AssignTask"><i class="fa fa-plus"></i>&nbsp;Przypisz zadanie do mnie</Sfbutton>
-                </div>
+                
 
 
                 <div class="form-group">
+                    <div class="actionBtn">
+                        <Sfbutton class="btn btn-primary" hidden="@isAssignTaskButtonHidden" @onclick="AssignTask"><i class="fa fa-plus"></i>&nbsp;Przypisz zadanie do mnie</Sfbutton>
+                    </div>
                     <button type="submit" class="btn btn-block btn-info" data-dismiss="modal" @onclick="UpdateTask" hidden=@isSaveButtonHidden>Zapisz</button>
                     <SfToast @ref="ToastObj" Title="Zadanie zaktualizowane pomyslnie!" Timeout=3000 Content="@ToastContentEdit">
                         <ToastPosition X="Right"></ToastPosition>
@@ -532,7 +535,9 @@
     private bool commentDisable = true;
 
 
-   // private string nazwaprojektu = ProjectData.GetById();
+  
+
+    // private string nazwaprojektu = ProjectData.GetById();
 
     protected override void OnInitialized()
     {

@@ -27,6 +27,11 @@
 
   <ItemGroup>
     <Folder Include="Resources\" />
+    <Folder Include="wwwroot\Images\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\trustee.png" />
   </ItemGroup>
 
 </Project>

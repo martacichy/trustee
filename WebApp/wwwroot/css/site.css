@@ -62,6 +62,7 @@ a, .btn-link {
 
 .btn-primary {
     
+    justify-content: center;
     color: whitesmoke;
     background-color: #3da081;
     border-color: #3da081;
@@ -220,3 +221,14 @@ app {
 .form-control-checkbox {
     font-size: 16px;
 }
+
+@media screen and (max-width: 500px) {
+    .header a {
+        float: none;
+        display: block;
+        text-align: left;
+    }
+
+    .header-right {
+        float: none;
+    }
