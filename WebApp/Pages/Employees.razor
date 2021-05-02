@@ -179,6 +179,7 @@
     private string selectedProject;
     private int lastTaskId;
     private int labelIdByName;
+    private int projectIdByName;
     private string mergedSelectedLabels;
     private bool isMergedLabelsMatchToPattern;
     private string pattern = @"^[a-zA-Z0-9]+$";
@@ -364,6 +365,34 @@
 
     }
 
+    private void EditEmployeeProjects()
+    {
+        for (int i = 0; i < ListofProjectsId.Count; i++)
+        {
+            BackendLibrary.DataAccess.EmployeeProjectData.DeleteEmployeeProject(ListofProjectsId[i].Employee_id, ListofProjectsId[i].Project_id);
+        }
+
+        if(nameofProjects != null)
+        {
+            for(int i = 0; i < nameofProjects.Length; i++)
+            {
+                projectIdByName = BackendLibrary.DataAccess.ProjectData.GetIdByName(nameofProjects[i]);
+                BackendLibrary.Models.EmployeeProjectModel employeeProject = new BackendLibrary.Models.EmployeeProjectModel(projectIdByName, SelectedEmployee.Employee_id);
+                BackendLibrary.DataAccess.EmployeeProjectData.AddEmployeeProject(employeeProject);
+            }
+        }
+
+    }
+
+    private bool IsProjectsChanged(string project)
+    {
+        for(int i = 0; i < nameofProjects.Length; i++)
+        {
+            if (project.Equals(nameofProjects[i])) return true;
+        }
+        return false;
+    }
+
     private bool IsLabelsChanged(string label)
     {
         for (int i = 0; i < nameoflabels.Length; i++)
@@ -411,7 +440,28 @@
             else
                 if_updated = true;
         }
-        
+
+        if(oldProjects != null && nameofProjects != null)
+        {
+            if (oldProjects.Length == nameofProjects.Length)
+            {
+                for (int i = 0; i < nameofProjects.Length; i++)
+                {
+                    if (IsProjectsChanged(oldProjects[i]) == false)
+                    {
+                        if_updated = true;
+                        break;
+                    }
+                }
+            }
+            else if_updated = true;
+        }
+        else
+        {
+            if (oldProjects == null && nameofProjects == null) ;
+            else if_updated = true;
+        }
+
         if(if_updated == true)
         {
             BackendLibrary.Models.EmployeeModel updatedEmployee = new BackendLibrary.Models.EmployeeModel(SelectedEmployee.Employee_id, SelectedEmployee.Company_id,
@@ -427,6 +477,7 @@
                 }
                 BackendLibrary.DataAccess.EmployeeData.UpdateEmployee(updatedEmployee);
                 EditEmployeeLabel();
+                EditEmployeeProjects();
                 ToastObj.Show();
                 VisibilityEdit = false;
                 uriHelper.NavigateTo(uriHelper.Uri, forceLoad: true);

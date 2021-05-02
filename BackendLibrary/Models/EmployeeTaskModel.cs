@@ -12,5 +12,11 @@
             Employee_id = employee_id;
             Status = status;
         }
+
+        public EmployeeTaskModel(int task_id, int employee_id)
+        {
+            Task_id = task_id;
+            Employee_id = employee_id;
+        }
     }
 }
