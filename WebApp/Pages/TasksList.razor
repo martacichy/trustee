@@ -268,199 +268,197 @@
     </SfDialog>
 
     @* okno szczegolow zadania *@
-    <SfDialog @bind-Visible="@VisibilityDetails" AllowDragging="true" Width="800px" Height="800px" IsModal="true" ShowCloseIcon="true">
+    <SfDialog @bind-Visible="@VisibilityDetails" AllowDragging="true" Width="1200px" Height="900px" IsModal="true" ShowCloseIcon="true">
         <DialogTemplates>
             <Content>
-                <EditForm Model="@TaskEdit">
-                    <DataAnnotationsValidator />
-                    <div class="form-group">
-                        <label for="Tytuł" class="control-label" required>Tytuł</label>
-                        <input for="Tytuł" class="form-control" @bind-value="TaskEdit.name" readonly=@readOnly />
-                        <ValidationMessage For="@(() => TaskEdit.name)" />
-                    </div>
-                    <div class="form-group">
-                        <label for="Opis" class="control-label">Opis</label>
-                        <input for="Opis" class="form-control" @bind-value="TaskEdit.description" readonly=@readOnly />
-                        <ValidationMessage For="@(() => TaskEdit.description)" />
-                    </div>
-                    <div class="form-group">
-                        <label for="Starttime" class="control-label">Czas rozpoczęcia</label>
-                        <SfDateTimePicker TValue="DateTime" @bind-value="TaskAdd.start_time"></SfDateTimePicker>
-                        <ValidationMessage For="@(() => TaskEdit.start_time)" />
-                    </div>
-                    <div class="form-group">
-                        <label for="Deadline" class="control-label">Deadline</label>
-                        <SfDateTimePicker TValue="DateTime" @bind-value="TaskAdd.deadline"></SfDateTimePicker>
-                        <ValidationMessage For="@(() => TaskEdit.deadline)" />
-                    </div>
-                    <div class="col-lg-12 control-section multiselect-height">
-                        <div class="control-wrapper multi-select-parent">
-                            <div class="padding-top">
-                                <label asp-for="Status" class="control-label">Status</label>
-                                <SfDropDownList TValue="string" TItem="string"
-                                                @bind-Value="@TaskEdit.status"
-                                                Placeholder="Szukaj..."
-                                                Enabled=@EnabledStatus
-                                                DataSource="@status" AllowFiltering="true">
-                                    <DropDownListFieldSettings Text="status"> </DropDownListFieldSettings>
-                                </SfDropDownList>
-                                <ValidationMessage For="@(() => TaskEdit.status)" />
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="IfAutoAssigned" class="control-label" hidden=@readOnly>Czy przydzielić automatycznie? </label>
-                        <input for="IfAutoAssigned" type="checkbox" class="form-control-checkbox" @bind-value="TaskEdit.auto_assigned" hidden=@readOnly />
-                    </div>
-
-                    <div class="col-lg-12 control-section multiselect-height">
-                        <div class="control-wrapper multi-select-parent">
-                            <div class="padding-top">
-                                <label asp-for="etykiety" class="control-label">Etykiety</label>
-                                <SfMultiSelect TValue="string[]" TItem="BackendLibrary.Models.LabelModel"
-                                               @bind-Value="@nameoflabels"
-                                               Enabled=@Enabled
-                                               s
-                                               Placeholder="Szukaj..."
-                                               DataSource="@labelsInDb" AllowFiltering="true" AllowCustomValue="true"
-                                               Mode="@VisualMode.Box">
-                                    <MultiSelectFieldSettings Text="Name">  </MultiSelectFieldSettings>
-                                </SfMultiSelect>
-                                <ValidationMessage For="@(() => TaskEdit.SelectedLabel)" />
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-lg-12 control-section multiselect-height">
-                        <div class="control-wrapper multi-select-parent">
-                            <div class="padding-top">
-                                <label asp-for="projekt" class="control-label">
-                                    Projekt
-                                    <SfSwitch @bind-Checked="@isChecked" @onchange="@OnChangeButton"></SfSwitch>
-                                </label>
-                                <SfDropDownList TValue="string" TItem="BackendLibrary.Models.ProjectModel"
-                                                @bind-Value="@nameofProject"
-                                                Enabled="@EnableProjectDropDown"
-                                                Placeholder="Szukaj..."
-                                                DataSource="@projectsInDb" AllowFiltering="true">
-                                    <DropDownListFieldSettings Text="Name"></DropDownListFieldSettings>
-                                </SfDropDownList>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-lg-12 control-section multiselect-height">
-                        <div class="control-wrapper multi-select-parent">
-                            <div class="padding-top">
-                                <label asp-for="pracownicy" class="control-label">Pracownicy</label>
-                                <SfMultiSelect TValue="int[]" TItem="BackendLibrary.Models.EmployeeModel"
-                                               @bind-Value="@nameofEmployees"
-                                               Placeholder="Wybierz..."
-                                               Enabled=@Enabled
-                                               DataSource="@employees" AllowFiltering="true"
-                                               Mode="@VisualMode.Box">
-                                    <MultiSelectTemplates TItem="BackendLibrary.Models.EmployeeModel">
-                                        <!-- Zmieniony Context z default na "SelectedEmployee" aby mogła działać walidacja -->
-                                        <ItemTemplate Context="SelectedEmployee">
-                                            <div>
-                                                <div class="ename">
-                                                    @((SelectedEmployee as BackendLibrary.Models.EmployeeModel).First_name)
-                                                    @((SelectedEmployee as BackendLibrary.Models.EmployeeModel).Last_name)
+                <SfSplitter CssClass="out-splitter" Height="790px" Width="100%">
+                    <SplitterPanes>
+                        <SplitterPane Size="34%" Min="408px" Resizable="false">
+                            <ContentTemplate>
+                                <div>
+                                    <EditForm Model="@TaskEdit">
+                                        <DataAnnotationsValidator />
+                                        <div class="form-group">
+                                            <label for="Tytuł" class="control-label" required>Tytuł</label>
+                                            <input for="Tytuł" class="form-control" @bind-value="TaskEdit.name" readonly=@readOnly />
+                                            <ValidationMessage For="@(() => TaskEdit.name)" />
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="Opis" class="control-label">Opis</label>
+                                            <input for="Opis" class="form-control" @bind-value="TaskEdit.description" readonly=@readOnly />
+                                            <ValidationMessage For="@(() => TaskEdit.description)" />
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="Starttime" class="control-label">Czas rozpoczęcia</label>
+                                            <SfDateTimePicker TValue="DateTime" @bind-value="TaskAdd.start_time"></SfDateTimePicker>
+                                            <ValidationMessage For="@(() => TaskEdit.start_time)" />
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="Deadline" class="control-label">Deadline</label>
+                                            <SfDateTimePicker TValue="DateTime" @bind-value="TaskAdd.deadline"></SfDateTimePicker>
+                                            <ValidationMessage For="@(() => TaskEdit.deadline)" />
+                                        </div>
+                                        <div class="col-lg-12 control-section multiselect-height">
+                                            <div class="control-wrapper multi-select-parent">
+                                                <div class="padding-top">
+                                                    <label asp-for="Status" class="control-label">Status</label>
+                                                    <SfDropDownList TValue="string" TItem="string"
+                                                                    @bind-Value="@TaskEdit.status"
+                                                                    Placeholder="Szukaj..."
+                                                                    Enabled=@EnabledStatus
+                                                                    DataSource="@status" AllowFiltering="true">
+                                                        <DropDownListFieldSettings Text="status"> </DropDownListFieldSettings>
+                                                    </SfDropDownList>
+                                                    <ValidationMessage For="@(() => TaskEdit.status)" />
                                                 </div>
                                             </div>
-                                        </ItemTemplate>
-                                        <ValueTemplate Context="SelectedEmployee">
-                                            <div class="multiselect-width">
-                                                <div class="name">
-                                                    @((SelectedEmployee as BackendLibrary.Models.EmployeeModel).First_name)
-                                                    @((SelectedEmployee as BackendLibrary.Models.EmployeeModel).Last_name)
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="IfAutoAssigned" class="control-label" hidden=@readOnly>Czy przydzielić automatycznie? </label>
+                                            <input for="IfAutoAssigned" type="checkbox" class="form-control-checkbox" @bind-value="TaskEdit.auto_assigned" hidden=@readOnly />
+                                        </div>
+
+                                        <div class="col-lg-12 control-section multiselect-height">
+                                            <div class="control-wrapper multi-select-parent">
+                                                <div class="padding-top">
+                                                    <label asp-for="etykiety" class="control-label">Etykiety</label>
+                                                    <SfMultiSelect TValue="string[]" TItem="BackendLibrary.Models.LabelModel"
+                                                                   @bind-Value="@nameoflabels"
+                                                                   Enabled=@Enabled
+                                                                   s
+                                                                   Placeholder="Szukaj..."
+                                                                   DataSource="@labelsInDb" AllowFiltering="true" AllowCustomValue="true"
+                                                                   Mode="@VisualMode.Box">
+                                                        <MultiSelectFieldSettings Text="Name">  </MultiSelectFieldSettings>
+                                                    </SfMultiSelect>
+                                                    <ValidationMessage For="@(() => TaskEdit.SelectedLabel)" />
                                                 </div>
                                             </div>
-                                        </ValueTemplate>
-                                    </MultiSelectTemplates>
-                                    <MultiSelectFieldSettings Text="First_name" Value="Employee_id"></MultiSelectFieldSettings>
-                                </SfMultiSelect>
-                            </div>
-                        </div>
-                    </div>
+                                        </div>
 
-                    <SfGrid @ref="DefaultGridComments"
-                            DataSource="CommentsList"
-                            AllowPaging="true"
-                            Locale="pl"
-                            ContextMenuItems="@(new List<object>()
-            { "AutoFit", "AutoFitAll", "SortDescending", "SortAscending"})">
-                        <GridFilterSettings EnableCaseSensitivity="false"></GridFilterSettings>
-                        <GridPageSettings PageSize="9"></GridPageSettings>
-                        <GridSearchSettings IgnoreCase="true"></GridSearchSettings>
-                        <GridSelectionSettings EnableToggle="true"></GridSelectionSettings>
-                        <GridEvents CommandClicked="OnCommandClicked" TValue="CommentModel"> </GridEvents>
-                        <div class="komentarze" width="400px">
-                            <GridColumns>
-                                <GridColumn Field=@nameof(CommentModel.Employee_id) IsPrimaryKey="true" TextAlign="TextAlign.Left"></GridColumn>
-                                <GridColumn Field=@nameof(CommentModel.Description) TextAlign="TextAlign.Left"></GridColumn>
-                                <GridColumn Field=@nameof(CommentModel.Date) Format="d" Type="ColumnType.Date" TextAlign="TextAlign.Left"></GridColumn>
-                                <GridColumn>
-                                    <GridCommandColumns>
-                                        <GridCommandColumn Type="CommandButtonType.Delete" ButtonOption="@(new CommandButtonOptions() {IconCss="e-icons e-delete", CssClass="e-flat"})"></GridCommandColumn>
-                                    </GridCommandColumns>
-                                </GridColumn>
-                            </GridColumns>
-                        </div>
+                                        <div class="col-lg-12 control-section multiselect-height">
+                                            <div class="control-wrapper multi-select-parent">
+                                                <div class="padding-top">
+                                                    <label asp-for="projekt" class="control-label">
+                                                        Projekt
+                                                        <SfSwitch @bind-Checked="@isChecked" @onchange="@OnChangeButton"></SfSwitch>
+                                                    </label>
+                                                    <SfDropDownList TValue="string" TItem="BackendLibrary.Models.ProjectModel"
+                                                                    @bind-Value="@nameofProject"
+                                                                    Enabled="@EnableProjectDropDown"
+                                                                    Placeholder="Szukaj..."
+                                                                    DataSource="@projectsInDb" AllowFiltering="true">
+                                                        <DropDownListFieldSettings Text="Name"></DropDownListFieldSettings>
+                                                    </SfDropDownList>
+                                                </div>
+                                            </div>
+                                        </div>
 
-                        <!--
-                        <SfGrid @ref="DefaultGridComments"
-                                DataSource="CommentsList"
-                                AllowPaging="true">
-                                <SfListView ID="list"
-                                            DataSource="CommentsList"
-                                            ShowHeader="true"
+                                        <div class="col-lg-12 control-section multiselect-height">
+                                            <div class="control-wrapper multi-select-parent">
+                                                <div class="padding-top">
+                                                    <label asp-for="pracownicy" class="control-label">Pracownicy</label>
+                                                    <SfMultiSelect TValue="int[]" TItem="BackendLibrary.Models.EmployeeModel"
+                                                                   @bind-Value="@nameofEmployees"
+                                                                   Placeholder="Wybierz..."
+                                                                   Enabled=@Enabled
+                                                                   DataSource="@employees" AllowFiltering="true"
+                                                                   Mode="@VisualMode.Box">
+                                                        <MultiSelectTemplates TItem="BackendLibrary.Models.EmployeeModel">
+                                                            <!-- Zmieniony Context z default na "SelectedEmployee" aby mogła działać walidacja -->
+                                                            <ItemTemplate Context="SelectedEmployee">
+                                                                <div>
+                                                                    <div class="ename">
+                                                                        @((SelectedEmployee as BackendLibrary.Models.EmployeeModel).First_name)
+                                                                        @((SelectedEmployee as BackendLibrary.Models.EmployeeModel).Last_name)
+                                                                    </div>
+                                                                </div>
+                                                            </ItemTemplate>
+                                                            <ValueTemplate Context="SelectedEmployee">
+                                                                <div class="multiselect-width">
+                                                                    <div class="name">
+                                                                        @((SelectedEmployee as BackendLibrary.Models.EmployeeModel).First_name)
+                                                                        @((SelectedEmployee as BackendLibrary.Models.EmployeeModel).Last_name)
+                                                                    </div>
+                                                                </div>
+                                                            </ValueTemplate>
+                                                        </MultiSelectTemplates>
+                                                        <MultiSelectFieldSettings Text="First_name" Value="Employee_id"></MultiSelectFieldSettings>
+                                                    </SfMultiSelect>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </EditForm>
+                                    <!--<div class="actionBtn">
+                                        <Sfbutton class="btn btn-primary" hidden="@isAssignTaskButtonHidden" @onclick="AssignTask"><i class="fa fa-plus"></i>&nbsp;Przypisz zadanie do mnie</Sfbutton>
+                                    </div>-->
 
-                                            HeaderTitle="Komentarze">
-                                    <ListViewFieldSettings TValue="CommentModel" Id="Id" Text="Text"></ListViewFieldSettings>
-                                    <ListViewTemplates TValue="CommentModel">
-                                        <Template>
-                                            @{
-                                                var currentData = (context as CommentModel);
-
-                                                <div class="flex item__container">
-                                                        <div class="font-weight-normal">@currentData.Employee_id</div>
-                                                        <div class="bold">@currentData.Description</div>
-                                                        <div class="small__font">@currentData.Date</div>
-                                                        <div class="actionBtn">
-                                                            <Sfbutton class="btn btn-primary" id="deleteBtn"><i class="fa fa-trash"></i>&nbsp;U</Sfbutton>
+                                    <div class="form-group">
+                                        <button type="submit" class="btn btn-block btn-info" data-dismiss="modal" @onclick="UpdateTask" hidden=@isSaveButtonHidden>Zapisz</button>
+                                        <SfToast @ref="ToastObj" Title="Zadanie zaktualizowane pomyslnie!" Timeout=3000 Content="@ToastContentEdit">
+                                            <ToastPosition X="Right"></ToastPosition>
+                                        </SfToast>
+                                        <SfToast @ref="FailedObj" Title="Brak zmian w zadaniu!" Timeout=3000 Content="@FailedContent">
+                                            <ToastPosition X="Right"></ToastPosition>
+                                        </SfToast>
+                                    </div>
+                                </div>
+                            </ContentTemplate>
+                        </SplitterPane>
+                        <SplitterPane Size="66%" Min="792px" Resizable="false">
+                            <ContentTemplate>
+                                <div>
+                                    <SfSplitter Height="790px" Orientation="Syncfusion.Blazor.Layouts.Orientation.Vertical">
+                                        <SplitterPanes>
+                                            <SplitterPane Size="34%" Min="268.6px" Resizable="false">
+                                                <div>
+                                                    <div class="text-align">tu będą pliki</div>
+                                                </div>
+                                            </SplitterPane>
+                                            <SplitterPane Size="66%" Min="521.4px" Resizable="false">
+                                                <div>
+                                                    <SfGrid @ref="DefaultGridComments"
+                                                            DataSource="CommentsList"
+                                                            AllowPaging="true"
+                                                            Locale="pl"
+                                                            ContextMenuItems="@(new List<object>()
+                                                        { "AutoFit", "AutoFitAll", "SortDescending", "SortAscending"})">
+                                                        <GridFilterSettings EnableCaseSensitivity="false"></GridFilterSettings>
+                                                        <GridPageSettings PageSize="7"></GridPageSettings>
+                                                        <GridSearchSettings IgnoreCase="true"></GridSearchSettings>
+                                                        <GridSelectionSettings EnableToggle="true"></GridSelectionSettings>
+                                                        <GridEvents CommandClicked="OnCommandClicked" TValue="CommentModel"> </GridEvents>
+                                                        <div class="komentarze" width="400px">
+                                                            <GridColumns>
+                                                                <GridColumn Field=@nameof(CommentModel.Employee_id) IsPrimaryKey="true" TextAlign="TextAlign.Left"></GridColumn>
+                                                                <GridColumn Field=@nameof(CommentModel.Description) TextAlign="TextAlign.Left"></GridColumn>
+                                                                <GridColumn Field=@nameof(CommentModel.Date) Format="d" Type="ColumnType.Date" TextAlign="TextAlign.Left"></GridColumn>
+                                                                <GridColumn>
+                                                                    <GridCommandColumns>
+                                                                        <GridCommandColumn Type="CommandButtonType.Delete" ButtonOption="@(new CommandButtonOptions() {IconCss="e-icons e-delete", CssClass="e-flat"})"></GridCommandColumn>
+                                                                    </GridCommandColumns>
+                                                                </GridColumn>
+                                                            </GridColumns>
                                                         </div>
-                                                    </div>
-                                            }
-                                        </Template>
-                                    </ListViewTemplates>
-                                </SfListView></SfGrid>
-                            -->
-                    </SfGrid>
-                </EditForm>
+                                                    </SfGrid>
+                                                    <EditForm Model="Comment">
+                                                        <div class="form-group" style="display:flex; flex-direction: row; justify-content: center; align-items: center">
+                                                            <label for="Comment" class="control-label" required>Dodaj komentarz:</label>
+                                                            <input for="Comment" class="form-control" @bind-value="@Comment.Description">
+                                                            <button class="button-addc" type="submit" data-dismiss="modal" @onclick="AddNewComment" hidden=@readOnly>Dodaj</button>
+                                                            </input>
+                                                        </div>
+                                                    </EditForm>
+                                                </div>
+                                            </SplitterPane>
+                                        </SplitterPanes>
+                                    </SfSplitter>
+                                </div>
+                            </ContentTemplate>
+                        </SplitterPane>
+                    </SplitterPanes>
 
-                <EditForm Model="Comment">
-                    <div class="form-group" style="display:flex; flex-direction: row; justify-content: center; align-items: center">
-                        <label for="Comment" class="control-label" required>Dodaj komentarz:</label>
-                        <input for="Comment" class="form-control" @bind-value="@Comment.Description">
-                        <button class="button-addc" type="submit" data-dismiss="modal" @onclick="AddNewComment" hidden=@readOnly>Dodaj</button>
-                        </input>
-                    </div>
-                </EditForm>
-                <div class="actionBtn">
-                    <Sfbutton class="btn btn-primary" hidden="@isAssignTaskButtonHidden" @onclick="AssignTask"><i class="fa fa-plus"></i>&nbsp;Przypisz zadanie do mnie</Sfbutton>
-                </div>
-
-
-                <div class="form-group">
-                    <button type="submit" class="btn btn-block btn-info" data-dismiss="modal" @onclick="UpdateTask" hidden=@isSaveButtonHidden>Zapisz</button>
-                    <SfToast @ref="ToastObj" Title="Zadanie zaktualizowane pomyslnie!" Timeout=3000 Content="@ToastContentEdit">
-                        <ToastPosition X="Right"></ToastPosition>
-                    </SfToast>
-                    <SfToast @ref="FailedObj" Title="Brak zmian w zadaniu!" Timeout=3000 Content="@FailedContent">
-                        <ToastPosition X="Right"></ToastPosition>
-                    </SfToast>
-                </div>
+                </SfSplitter>
             </Content>
         </DialogTemplates>
         <DialogEvents Closed="@DialogEditClosed"></DialogEvents>
