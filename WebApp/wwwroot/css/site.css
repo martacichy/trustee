@@ -6,6 +6,8 @@
     color: #1B9D8C;
 }
 
+
+
 .e-dialog .e-dlg-header-content {
     background-color: #32856B;
 }
@@ -215,6 +217,7 @@ app {
 
 .form-group {
     font-size: 20px;
+    font-family: 'Josefin Sans', sans-serif;
 }
 
 .form-control-checkbox {
