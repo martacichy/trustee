@@ -2,45 +2,30 @@
 @layout CenteredCardLayout
 @inject NavigationManager NavigationManager
 
-<center>
-    <div>
-        <br /><br /><br /><br /><br />
-    </div>
-    <div>
-        <h3 style="font-weight:bold; color:#3da081">Zaloguj się</h3>
-    </div>
-    <div>
-        <br />
-    </div>
-    <EditForm Model="Log">
-        <DataAnnotationsValidator />
-        <div class="col-12 row">
-            <input class="form-control col-12" placeholder="email/id" @bind-value="Log.Login" />
-            <ValidationMessage For="@(() => Log.Login)" />
+<div class="vid-container">
+    <video class="bgvid" autoplay="autoplay" muted="muted" preload="auto" loop>
+        <source src="/Images/back.mp4" type="video/webm">
+    </video>
+    <div class="login-box">
+        <EditForm Model="Log">
+            <DataAnnotationsValidator />
+                <input class="form-control col-12" placeholder="email/id" @bind-value="Log.Login" />
+                <ValidationMessage For="@(() => Log.Login)" />
+                <input type="password" class="form-control col-12" placeholder="hasło" @bind-value="Log.Password" />
+                <ValidationMessage For="@(() => Log.Password)" />
+                <div class="actionBtn">
+                    <Sfbutton class="btn btn-primary" @onclick="LoginSubmit"><i class="fas fa-sign-in-alt"></i>&nbsp;Zaloguj się</Sfbutton>
+                </div>
+                <a href="/signup" class="col-6">Rejestracja</a>
+        </EditForm>
+        <div class="form-group">
+            <SfToast @ref="InvalidLogin" Title="Błędne dane logowania!" Timeout=2000 Content="@ToastContent">
+                <ToastPosition X="Center"></ToastPosition>
+            </SfToast>
         </div>
-        <br />
-        <div class="col-12 row">
-            <input type="password" class="form-control col-12" placeholder="hasło" @bind-value="Log.Password" />
-            <ValidationMessage For="@(() => Log.Password)" />
-        </div>
-        <br />
-        <div class="col-12 row">
-            <div class="actionBtn">
-                <Sfbutton class="btn btn-primary" @onclick="LoginSubmit"><i class="fas fa-sign-in-alt"></i>&nbsp;Zaloguj się</Sfbutton>
-            </div>
-            <a href="/signup" class="col-6">Rejestracja</a>
-        </div>
-        <br />
-        <div class="col-12 row" style="text-align:left; font-weight:bold">
-            <span class="col-12"></span>
-        </div>
-    </EditForm>
-    <div class="form-group">
-        <SfToast @ref="InvalidLogin" Title="Błędne dane logowania!" Timeout=2000 Content="@ToastContent">
-            <ToastPosition X="Center"></ToastPosition>
-        </SfToast>
     </div>
-</center>
+</div>
+
 
 @code{
 
@@ -82,3 +67,84 @@
 
     }
 }
+
+<style>
+    .vid-container {
+        position: relative;
+        height: 100vh;
+        overflow: hidden;
+    }
+    .bgvid {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100vw;
+    }
+        .bgvid.inner {
+            top: calc(-50vh + 200px);
+            left: calc(-50vw + 200px);
+           
+            -webkit-filter: blur(10px);
+            -ms-filter: blur(10px);
+            -o-filter: blur(10px);
+            filter: blur(10px);
+        }
+    .login-box {
+
+        position: absolute;
+        height: 400px;
+        width: 460px;
+        font-family: Helvetica;
+        color: #fff;
+        background: #32856B;
+        margin-left: 100px;
+
+    }
+
+    .login-box h1 {
+        text-align: center;
+        margin: 30px 0;
+        font-size: 30px;
+    }
+
+        .login-box input {
+            display: block;
+            width: 300px;
+            margin: 20px auto;
+            padding: 15px;
+            background: #32856B;
+            color: #fff;
+            border: 0;
+        }
+
+        .login-box input:focus, .login-box input:active, .login-box button:focus, .login-box button:active {
+            outline: none;
+        }
+
+    .login-box button {
+        background: #2ecc71;
+        border: 0;
+        color: #fff;
+        padding: 10px;
+        font-size: 20px;
+        width: 330px;
+        margin: 20px auto;
+        display: block;
+        cursor: pointer;
+    }
+
+        .login-box button:active {
+            background: #27ae60;
+        }
+
+    .login-box p {
+        font-size: 14px;
+        text-align: center;
+    }
+
+        .login-box p span {
+            cursor: pointer;
+            color: #666;
+        }
+
+</style>

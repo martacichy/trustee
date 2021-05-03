@@ -41,6 +41,7 @@
             Locale="pl"
             ContextMenuItems="@(new List<object>()
             {"SortDescending", "SortAscending", "Copy"})">
+       
         <GridFilterSettings EnableCaseSensitivity="false"></GridFilterSettings>
         <GridSearchSettings IgnoreCase="true"></GridSearchSettings>
         <GridSelectionSettings EnableToggle="true"></GridSelectionSettings>
@@ -48,7 +49,7 @@
                     RowSelected="RowSelectHandler"
                     RowDeselected="RowDeselectHandler"
                     OnRecordDoubleClick="DisplayTaskDetails"
-                    OnRecordClick="ExpandTaskDetails">
+                    OnRecordClick="ExpandTaskDetails" QueryCellInfo="CustomizeCell">
         </GridEvents>
         <GridTemplates>
             <DetailTemplate>
@@ -77,8 +78,8 @@
                         TextAlign="TextAlign.Left" Width="200"></GridColumn>
             <GridColumn Field=@nameof(TaskModel.Deadline) HeaderText="Data zakończenia" Format="d" Type="ColumnType.Date"
                         TextAlign="TextAlign.Left"></GridColumn>
-            <GridColumn HeaderText="Akcje">    
-                    <Sfbutton class="btn btn-primary" @onclick="EditTask"><i class="fa fa-pencil"></i></Sfbutton>
+            <GridColumn HeaderText="Akcje">
+                <Sfbutton class="btn btn-primary" @onclick="EditTask"><i class="fa fa-pencil"></i></Sfbutton>
             </GridColumn>
         </GridColumns>
 
@@ -536,7 +537,23 @@
     private bool commentDisable = true;
 
 
-  
+
+    public void CustomizeCell(Syncfusion.Blazor.Grids.QueryCellInfoEventArgs<TaskModel> args)
+    {
+        if(args.Column.Field == "Deadline")
+        {
+            if (args.Data.Deadline <= DateTime.Today.AddDays(2))
+            {
+                args.Cell.AddClass(new string[] { "deadline-below-today" });
+            }
+            else
+            {
+                args.Cell.AddClass(new string[] { "deadline-normal" });
+            }
+        }
+
+    }
+
 
     // private string nazwaprojektu = ProjectData.GetById();
 
