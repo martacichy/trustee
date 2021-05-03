@@ -390,10 +390,13 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        <div class="actionBtn">
+                                            <div class="padding-top">
+                                                <Sfbutton class="btn btn-primary" hidden="@isAssignTaskButtonHidden" @onclick="AssignTask"><i class="fa fa-plus"></i>&nbsp;Przypisz zadanie do mnie</Sfbutton>
+                                            </div>
+                                        </div>
                                     </EditForm>
-                                    <!--<div class="actionBtn">
-                                        <Sfbutton class="btn btn-primary" hidden="@isAssignTaskButtonHidden" @onclick="AssignTask"><i class="fa fa-plus"></i>&nbsp;Przypisz zadanie do mnie</Sfbutton>
-                                    </div>-->
+                                   
 
                                     <div class="form-group">
                                         <button type="submit" class="btn btn-block btn-info" data-dismiss="modal" @onclick="UpdateTask" hidden=@isSaveButtonHidden>Zapisz</button>
