@@ -15,7 +15,7 @@ namespace BackendLibrary.Validation
         ErrorMessage = "To pole nie może mieć więcej niż 500 znaków.")]
         public string description { get; set; }
 
-        [DefaultDateAttribute(ErrorMessage = "Wprowadź poprawną datę.")]
+        [DefaultDateAttribute(ErrorMessage = "Wprowadź poprawną datę rozpoczęcia.")]
         public DateTime start_time { get; set; } = DateTime.Now;
 
         [DateDeadlineAttribute(ErrorMessage = "Deadline nie może być wcześniejszy niż dzisiaj.")]
@@ -47,8 +47,7 @@ namespace BackendLibrary.Validation
     {
         public override bool IsValid(object value)
         {
-            DateTime defaultDateTime = new DateTime(1900, 1, 1, 0, 0, 0);
-            return (DateTime)value >= defaultDateTime;
+            return (DateTime)value >= DateTime.Today;
         }
     }
 }

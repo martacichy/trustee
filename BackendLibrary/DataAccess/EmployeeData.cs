@@ -74,6 +74,20 @@ namespace BackendLibrary.DataAccess
             }
         }
 
+        /// <summary> Zwraca listę wszystkich pracownikow danego projektu. </summary>
+        public static List<EmployeeModel> GetAllByProjectId(int project_id)
+        {
+            using (IDbConnection connection = new MySqlConnection(connectionString))
+            {
+                string sql = $"SELECT database06.employee.* FROM database06.employee JOIN database06.employeeproject ON" +
+                $" database06.employee.employee_id = database06.employeeproject.employee_id WHERE" +
+                $" database06.employeeproject.project_id = {project_id} ";
+                var data = connection.Query<EmployeeModel>(sql).ToList();
+
+                return data;
+            }
+        }
+
         /// <summary>
         /// Zwraca jednoelementowa liste, zawierajaca jednego pracownika, zgodnie z przekazanym ID,
         /// funkcja stworzona specjalnie do edycji pracownika.

@@ -60,6 +60,17 @@ namespace BackendLibrary.DataAccess
             }
         }
 
+        public static string GetNameById(int id)
+        {
+            using (IDbConnection connection = new MySqlConnection(connectionString))
+            {
+                string sql = $"SELECT Name from database06.label where Label_id= {id}";
+                string name = connection.Query<string>(sql).First();
+
+                return name;
+            }
+        }
+
         /// <summary> Zwraca listę wszystkich etykiet danej firmy. </summary>
         public static List<LabelModel> GetAllByCompanyId(int company_id)
         {
