@@ -585,6 +585,10 @@
 
         protected override void OnInitialized()
         {
+            if (NavMenu.shouldDisplayArchivalTask)
+            {
+                displayInlineOrNone = "none";
+            }
             if (Login.UserLoggedIn.If_manager == -1)
             {
                 NavigationManager.NavigateTo("/");
@@ -1328,7 +1332,7 @@
             else if (shouldDisplayTeamTasks && NavMenu.shouldDisplayArchivalTask == false)
             {
                 TaskList = TaskData.GetInProgressTaskByEmployeeId(Pages.Login.UserLoggedIn.Employee_id);
-            }   
+            }
             else if (shouldDisplayTeamTasks == false && NavMenu.shouldDisplayArchivalTask == false)
             {
                 TaskList = TaskData.GetInProgressTasksWithoutLoggedManager(Pages.Login.UserLoggedIn.Employee_id);
