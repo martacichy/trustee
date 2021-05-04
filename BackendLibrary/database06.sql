@@ -216,7 +216,7 @@ CREATE TABLE IF NOT EXISTS `database06`.`Comment` (
   `task_id` INT NOT NULL,
   `employee_id` INT NOT NULL,
   `date` DATETIME NULL,
-  `description` VARCHAR(1000) NULL DEFAULT NULL,
+  `description` LONGTEXT NULL DEFAULT NULL,
   PRIMARY KEY (`comment_id`),
   UNIQUE INDEX `comment_id_UNIQUE` (`comment_id` ASC) VISIBLE,
   INDEX `employee_id_idx` (`employee_id` ASC) VISIBLE,
