@@ -273,12 +273,16 @@
                         </SfToast>
                     </div>
                     <br />
-                    <div style="width:700px; margin:auto;">
-                        <SfGrid @ref="suggestedEmployeesGrid" DataSource="suggestedEmployees" TValue="EmployeeModel">
+                    <div style="width:750px; margin:auto;">
+                        <SfGrid @ref="suggestedEmployeesGrid" DataSource="suggestedEmployees" TValue="EmployeeStats">
                             <GridColumns>
-                                <GridColumn Field=@nameof(EmployeeModel.Employee_id) HeaderText="ID" TextAlign="TextAlign.Left" Width="50"></GridColumn>
-                                <GridColumn Field=@nameof(EmployeeModel.First_name) HeaderText="Imię" TextAlign="TextAlign.Left" Width="250"></GridColumn>
-                                <GridColumn Field=@nameof(EmployeeModel.Last_name) HeaderText="Nazwisko" TextAlign="TextAlign.Left" Width="250"></GridColumn>
+                                <GridColumn Field=@nameof(EmployeeStats.Employee_id) HeaderText="ID" TextAlign="TextAlign.Center" Width="35"></GridColumn>
+                                <GridColumn Field=@nameof(EmployeeStats.First_name) HeaderText="Imię" TextAlign="TextAlign.Left" Width="65"></GridColumn>
+                                <GridColumn Field=@nameof(EmployeeStats.Last_name) HeaderText="Nazwisko" TextAlign="TextAlign.Left" Width="75"></GridColumn>
+                                <GridColumn Field=@nameof(EmployeeStats.EmpLabelMatches) HeaderText="EmpLabelMatch" TextAlign="TextAlign.Center" Width="110"></GridColumn>
+                                <GridColumn Field=@nameof(EmployeeStats.TaskLabelMatches) HeaderText="TaskLabelMatch" TextAlign="TextAlign.Center" Width="110"></GridColumn>
+                                <GridColumn Field=@nameof(EmployeeStats.TaskDensity) HeaderText="TaskDensity" TextAlign="TextAlign.Center" Width="90"></GridColumn>
+                                <GridColumn Field=@nameof(EmployeeStats.FinalFactor) HeaderText="FinalFactor" TextAlign="TextAlign.Center" Width="80"></GridColumn>
                             </GridColumns>
                         </SfGrid>
                     </div>
@@ -516,7 +520,7 @@
         private String displayInlineOrNone = "inline";
 
         // Zmienne z AddNewTask
-        SfGrid<EmployeeModel> suggestedEmployeesGrid;
+        SfGrid<EmployeeStats> suggestedEmployeesGrid;
         SfToast SuccessTask;
         SfToast WrongInput;
         private string ToastContentAdd { get; set; } = "Zadanie zostało pomyślnie dodane.";
@@ -524,7 +528,7 @@
         private TaskValidation TaskAdd;
         private List<LabelModel> labelsInDb;
         private List<EmployeeModel> employees;
-        private List<EmployeeModel> suggestedEmployees;
+        private List<EmployeeStats> suggestedEmployees;
         private List<ProjectModel> projectsInDb;
         private string[] selectedLabels { get; set; } = new string[] { };
         private int[] selectedEmployeesId = new int[] { };
@@ -906,6 +910,8 @@
                         employeeStats.Add(new EmployeeStats
                         {
                             Employee_id = emp.Employee_id,
+                            First_name = emp.First_name,
+                            Last_name = emp.Last_name,
 
                             TaskDensity = taskCount,
                             EmpLabelMatches = selectedLabels.Intersect(empLabelNames).Count(),
@@ -918,10 +924,17 @@
 
                     employeeStats = employeeStats.OrderByDescending(x => x.FinalFactor).ToList();
 
+                    /*
                     suggestedEmployees = new List<EmployeeModel>();
 
                     foreach (var emp in employeeStats)
                         suggestedEmployees.Add(EmployeeData.GetById(emp.Employee_id));
+                    */
+
+                    suggestedEmployees = new List<EmployeeStats>();
+
+                    foreach (var emp in employeeStats)
+                        suggestedEmployees.Add(emp);
 
                     suggestedEmployeesGrid.Refresh();
                 }
