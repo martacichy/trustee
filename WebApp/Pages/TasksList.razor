@@ -17,23 +17,24 @@
 @* wyświetlanie przycisku do tworzenia nowych zadań *@
 @if (Login.UserLoggedIn.If_manager == 1 || Login.UserLoggedIn.If_manager == 2)
 {
-    <div>
-        <div class="actionBtn">
-            <Sfbutton class="btn btn-primary" @onclick="AddTask"><i class="fa fa-plus"></i>&nbsp;Dodaj zadanie</Sfbutton>
-        </div>
-        <div class="actionBtn">
-            <Sfbutton class="btn btn-primary" @onclick="EditTask"><i class="fa fa-pencil"></i>&nbsp;Edytuj zadanie</Sfbutton>
-        </div>
-        <div class="actionBtn">
-            <Sfbutton class="btn btn-primary" id="deleteBtn" @onclick="DeleteTask"><i class="fa fa-trash"></i>&nbsp;Usuń zadanie</Sfbutton>
-        </div>
+<div>
+    <div class="actionBtn">
+        <Sfbutton class="btn btn-primary" @onclick="AddTask"><i class="fa fa-plus"></i>&nbsp;Dodaj zadanie</Sfbutton>
     </div>
+    <div class="actionBtn">
+        <Sfbutton class="btn btn-primary" @onclick="EditTask"><i class="fa fa-pencil"></i>&nbsp;Edytuj zadanie</Sfbutton>
+    </div>
+    <div class="actionBtn">
+        <Sfbutton class="btn btn-primary" id="deleteBtn" @onclick="DeleteTask"><i class="fa fa-trash"></i>&nbsp;Usuń zadanie</Sfbutton>
+    </div>
+    <div class="form-group">
+        <label for="IfAutoAssigned" class="control-label" hidden=@readOnly>Wyświetl zadania zespołu </label>
+        <input for="IfAutoAssigned" type="checkbox" class="form-control-checkbox" hidden=@readOnly @bind-value="@shouldDisplayTeamTasks" @onclick="DisplayTeamTask" />
+    </div>
+</div>
 }
 
-<div class="form-group">
-    <label for="IfAutoAssigned" class="control-label" hidden=@readOnly>Wyswietl zadania zespołu </label>
-    <input for="IfAutoAssigned" type="checkbox" class="form-control-checkbox" hidden=@readOnly @bind-value="@shouldDisplayTeamTasks" @onclick="DisplayTeamTask" />
-</div>
+
 
 <div class="actionBtn" style="float: right; width: auto;">
     <label>Szukaj:</label>
