@@ -162,6 +162,49 @@ namespace BackendLibrary.DataAccess
             }
         }
 
+        /// <summary> Zwraca listę wszystkich archivalnych  tasków danego pracownika</summary>
+        public static List<TaskModel> GetArchivalTasksByEmployeeId(int employee_id)
+        {
+            using (IDbConnection connection = new MySqlConnection(connectionString))
+            {
+                string sql = $"SELECT DISTINCT  database06.task.* FROM database06.task JOIN database06.employeetask ON database06.task.task_id = " +
+                    $"database06.employeetask.task_id WHERE database06.employeetask.employee_id = {employee_id} AND" +
+                    $" (database06.task.status = 'Anulowane' OR database06.task.status = 'Zakończone') ";
+                var data = connection.Query<TaskModel>(sql).ToList();
+
+                return data;
+            }
+        }
+
+        /// <summary> Zwraca listę wszystkich tasków całego zespołu oprócz tasków zalogowanego kierownika, które mają status nierozpoczęte lub w toku</summary>
+        public static List<TaskModel> GetInProgressTasksWithoutLoggedManager(int employee_id)
+        {
+            using (IDbConnection connection = new MySqlConnection(connectionString))
+            {
+                string sql = $"SELECT DISTINCT  database06.task.* FROM database06.task JOIN database06.employeetask ON database06.task.task_id = " +
+                    $"database06.employeetask.task_id WHERE database06.employeetask.employee_id != {employee_id} AND" +
+                    $" (database06.task.status = 'W toku' OR database06.task.status = 'Nierozpoczęte') ";
+                var data = connection.Query<TaskModel>(sql).ToList();
+
+                return data;
+            }
+        }
+
+        public static List<TaskModel> GetArchivalTasksWithoutLoggedManager(int employee_id)
+        {
+            using (IDbConnection connection = new MySqlConnection(connectionString))
+            {
+                string sql = $"SELECT DISTINCT database06.task.* FROM database06.task JOIN database06.employeetask ON database06.task.task_id = " +
+                    $"database06.employeetask.task_id WHERE database06.employeetask.employee_id != {employee_id} AND" +
+                    $" (database06.task.status = 'Zakończone' OR database06.task.status = 'Anulowane') ";
+                var data = connection.Query<TaskModel>(sql).ToList();
+
+                return data;
+            }
+        }
+
+
+
         /// <summary> Aktualizuje wybranego taska o nowe wartosci. </summary>
         public static void UpdateTask(TaskModel updatedTask)
         {
