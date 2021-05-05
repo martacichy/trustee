@@ -24,6 +24,10 @@
                                 <span class="e-icons UnorderedList"></span>
                                 <span class="e-text" title="alltasks">Wszystkie zadania</span>
                             </li>
+                            <li class="sidebar-item" @onclick="@ShowArchivalTasks">
+                                <span class="e-icons UnorderedList"></span>
+                                <span class="e-text" title="alltasks">Zadania archiwalne</span>
+                            </li>
                             <li class="sidebar-item" @onclick="@ShowProjects">
                                 <span class="e-icons MT_Description"></span>
                                 <span class="e-text" title="projects">Projekty</span>
@@ -90,6 +94,7 @@
 
 
     @code {
+        public static bool shouldDisplayArchivalTask = false;
         SfSidebar Sidebar;
         private Boolean Visibility { get; set; }
         public string Leftbtn = "Left";
@@ -112,6 +117,14 @@
 
         private void ShowAllTasks()
         {
+            NavigationManager.NavigateTo("/empty");
+            shouldDisplayArchivalTask = false;
+            NavigationManager.NavigateTo("/tasks");
+        }
+        private void ShowArchivalTasks()
+        {           
+            NavigationManager.NavigateTo("/empty");
+            shouldDisplayArchivalTask = true;
             NavigationManager.NavigateTo("/tasks");
         }
 
@@ -125,7 +138,7 @@
             NavigationManager.NavigateTo("/employees");
         }
 
-        
+
         private void ShowProjects()
         {
             NavigationManager.NavigateTo("/projects");
@@ -204,7 +217,7 @@
 
 
             .dockSidebar .e-icons::before {
-                font-size: 36px;
+                font-size: 34px;
                 align-items: flex-start;        
             }
             /* dockbar icon Style */
@@ -283,7 +296,7 @@
             overflow: hidden;
             text-overflow: ellipsis;
             line-height: 23px;
-            font-size: 18px;
+            font-size: 17px;
         }
 
         .sidebar-item {

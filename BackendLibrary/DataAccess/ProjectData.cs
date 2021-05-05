@@ -37,6 +37,18 @@ namespace BackendLibrary.DataAccess
             }
         }
 
+        public static string GetNameById(int project_id)
+        {
+            using (IDbConnection connection = new MySqlConnection(connectionString))
+            {
+                string sql = $"SELECT name FROM database06.project WHERE project_id = {project_id}";
+                var data = connection.Query<string>(sql).FirstOrDefault();
+
+                return data;
+            }
+
+        }
+
         public static int GetIdByName(String name)
         {
             using (IDbConnection connection = new MySqlConnection(connectionString))
@@ -47,6 +59,8 @@ namespace BackendLibrary.DataAccess
                 return id;
             }
         }
+
+
 
         /// <summary> Zwraca autowygenerowane Id w ostatnio wykonanym insercie.</summary>
         public static int GetMaxId()

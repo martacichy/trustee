@@ -6,11 +6,16 @@
     color: #1B9D8C;
 }
 
+
+
 .e-dialog .e-dlg-header-content {
     background-color: #32856B;
-
 }
 
+.deadline-below-today {
+    color: red;
+    font-weight: bold;
+}
 
 .dane {
     text-align: center;
@@ -53,6 +58,7 @@ html, body {
     color: #8a8a8a;
     display: flex;
     flex-direction: column;
+    
 }
 
 a, .btn-link {
@@ -62,6 +68,7 @@ a, .btn-link {
 
 .btn-primary {
     
+    justify-content: center;
     color: whitesmoke;
     background-color: #3da081;
     border-color: #3da081;
@@ -102,7 +109,8 @@ app {
 
 
 .main {
-     flex: 1; 
+    flex: 1;
+    
 }
 
 
@@ -151,9 +159,7 @@ app {
         justify-content: space-between;
     }
 
-    .main .top-row a, .main .top-row .btn-link {
-        margin-left: 0;
-    }
+   
 }
 
 @media (min-width: 768px) {
@@ -166,10 +172,6 @@ app {
         top: 0;
     }
 
-    .main > div {
-        padding-left: 2rem !important;
-        padding-right: 1.5rem !important;
-    }
 }
 
 .my-custom-scrollbar {
@@ -191,7 +193,7 @@ app {
 
 
 .header {
-    padding: 36px;
+    
     text-align: center;
     width: 100%;
     background: #1abc9c;
@@ -215,8 +217,20 @@ app {
 
 .form-group {
     font-size: 20px;
+    font-family: 'Josefin Sans', sans-serif;
 }
 
 .form-control-checkbox {
     font-size: 16px;
 }
+
+@media screen and (max-width: 500px) {
+    .header a {
+        float: none;
+        display: block;
+        text-align: left;
+    }
+
+    .header-right {
+        float: none;
+    }

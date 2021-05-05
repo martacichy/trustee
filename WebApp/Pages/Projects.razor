@@ -99,7 +99,7 @@
                             <GridColumn Field=@nameof(TaskModel.Status) HeaderText="Status" TextAlign="TextAlign.Left" Width="200"></GridColumn>
                             <GridColumn Field=@nameof(TaskModel.Start_time) HeaderText="Data rozpoczęcia" Format="d" Type="ColumnType.Date"
                                         TextAlign="TextAlign.Left" Width="200"></GridColumn>
-                            <GridColumn Field=@nameof(TaskModel.Deadline) HeaderText="Deadline" Format="d" Type="ColumnType.Date"
+                            <GridColumn Field=@nameof(TaskModel.Deadline) HeaderText="Data zakończenia" Format="d" Type="ColumnType.Date"
                                         TextAlign="TextAlign.Left"></GridColumn>
                         </GridColumns>
                     </SfGrid>
@@ -246,6 +246,15 @@
         font-size: 26px;
         font-family: 'Josefin Sans', sans-serif;
         color: black;
+    }
+
+    .header {
+        background-image: url('/Pages/trustee.png');
+    }
+
+    .imageee {
+        height: 100px;
+        width: 100px;
     }
 
 </style>
