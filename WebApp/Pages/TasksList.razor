@@ -413,6 +413,9 @@
                                             <SplitterPane Size="34%" Min="268.6px" Resizable="false">
                                                 <div>
                                                     <div class="text-align">tu będą pliki</div>
+                                                    <SfUploader AutoUpload="false">
+                                                        <UploaderEvents ValueChange="FileFunction"></UploaderEvents>
+                                                    </SfUploader>
                                                 </div>
                                             </SplitterPane>
                                             <SplitterPane Size="66%" Min="521.4px" Resizable="false">
@@ -1154,7 +1157,10 @@
                 {
                     SaveLabels(nameoflabels);
                 }
+                //string sciezka = "C:/Users/Patryk/Downloads/Certyfikat.pdf";
+                //BackendLibrary.Models.FileModel testowyplik = new BackendLibrary.Models.FileModel(SelectedTask.Task_id, Login.UserLoggedIn.Employee_id, SelectedTask.Deadline, sciezka);
                 BackendLibrary.DataAccess.TaskData.UpdateTask(updatedTask);
+                //BackendLibrary.DataAccess.FileData.AddFile(testowyplik);
                 EditTaskLabel();
                 EditEmployeeToTask();
                 ToastObj.Show();
@@ -1180,5 +1186,20 @@
         TaskEdit.deadline = defaultDate;
         TaskEdit.status = null;
         TaskEdit.auto_assigned = 0;
+    }
+
+    private void FileFunction(UploadChangeEventArgs args)
+    {
+        foreach (var file in args.Files)
+        {
+            var path = file.FileInfo.Name;
+            FileStream filestream = new FileStream(path, FileMode.Create, FileAccess.Write);
+            file.Stream.WriteTo(filestream);
+            filestream.Close();
+            file.Stream.Close();
+            BackendLibrary.Models.FileModel testowyplik = new BackendLibrary.Models.FileModel(SelectedTask.Task_id, Login.UserLoggedIn.Employee_id, DateTime.Now, path);
+            BackendLibrary.DataAccess.FileData.AddFile(testowyplik);
+            File.Delete(path);
+        }
     }
 }
