@@ -59,7 +59,7 @@
         <GridEvents TValue="TaskModel"
                     RowSelected="RowSelectHandler"
                     RowDeselected="RowDeselectHandler"
-                    OnRecordDoubleClick="DisplayTaskDetails"
+                    OnRecordDoubleClick="SetAssingTaskButtonInisibleAndDisplayTaskDetails"
                     OnRecordClick="ExpandTaskDetails" QueryCellInfo="CustomizeCell">
         </GridEvents>
         <GridTemplates>
@@ -669,6 +669,10 @@
 
     protected override void OnInitialized()
     {
+        if (NavMenu.shouldDisplayArchivalTask)
+        {
+            displayInlineOrNone = "none";
+        }
         if (Login.UserLoggedIn.If_manager == -1)
         {
             NavigationManager.NavigateTo("/");
@@ -816,12 +820,14 @@
         isSaveButtonHidden = true;
         isAssignTaskButtonHidden = false;
         DisplayTaskDetails(args);
+    }
 
-        /*
+    private void SetAssingTaskButtonInisibleAndDisplayTaskDetails(RecordDoubleClickEventArgs<TaskModel> args)
+    {
         EnabledStatus = true;
-        isSaveButtonHidden = false; 
+        isSaveButtonHidden = false;
         isAssignTaskButtonHidden = true;
-        */
+        DisplayTaskDetails(args);
     }
 
 
