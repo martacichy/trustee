@@ -306,7 +306,7 @@
     <SfDialog @bind-Visible="@VisibilityDetails" AllowDragging="true" Width="1200px" Height="900px" IsModal="true" ShowCloseIcon="true">
         <DialogTemplates>
             <Content>
-                <SfSplitter CssClass="out-splitter" Height="790px" Width="100%">
+                <SfSplitter CssClass="out-splitter" Height="100%" Width="100%">
                     <SplitterPanes>
                         <SplitterPane Size="34%" Min="408px" Resizable="false">
                             <ContentTemplate>
@@ -667,6 +667,10 @@
 
     protected override void OnInitialized()
     {
+        if (NavMenu.shouldDisplayArchivalTask)
+        {
+            displayInlineOrNone = "none";
+        }
         if (Login.UserLoggedIn.If_manager == -1)
         {
             NavigationManager.NavigateTo("/");
@@ -1440,4 +1444,4 @@
         TaskEdit.status = null;
         TaskEdit.auto_assigned = 0;
     }
-    }
+}

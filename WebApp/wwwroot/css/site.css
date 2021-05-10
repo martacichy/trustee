@@ -110,7 +110,7 @@ app {
 
 .main {
     flex: 1;
-    
+    margin-right: 20px;
 }
 
 
@@ -202,6 +202,7 @@ app {
     margin-left: 0px;
     margin-right: 0px;
     margin-bottom: 10px;
+
 }
 
 .control-label {
@@ -218,6 +219,7 @@ app {
 .form-group {
     font-size: 20px;
     font-family: 'Josefin Sans', sans-serif;
+    width: 10px;
 }
 
 .form-control-checkbox {
@@ -234,3 +236,9 @@ app {
     .header-right {
         float: none;
     }
+}
+
+
+.header {
+    background-image: url('/Images/header.jpeg');
+}
