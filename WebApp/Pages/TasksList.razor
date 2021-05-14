@@ -92,6 +92,8 @@
                         TextAlign="TextAlign.Left" Width="200"></GridColumn>
             <GridColumn Field=@nameof(TaskModel.Deadline) HeaderText="Data zakończenia" Format="d" Type="ColumnType.Date"
                         TextAlign="TextAlign.Left"></GridColumn>
+            <GridForeignColumn Field=@nameof(TaskModel.Project_id) HeaderText="Projekty" ForeignKeyValue="Name"
+                               ForeignDataSource="@projects" Width="150"></GridForeignColumn>
         </GridColumns>
     </SfGrid>
 
@@ -145,7 +147,10 @@
                             TextAlign="TextAlign.Left" Width="200"></GridColumn>
                 <GridColumn Field=@nameof(TaskModel.Deadline) HeaderText="Data zakończenia" Format="d" Type="ColumnType.Date"
                             TextAlign="TextAlign.Left"></GridColumn>
+                <GridForeignColumn Field=@nameof(TaskModel.Project_id) HeaderText="Projekty"
+                                   ForeignKeyValue="Name" ForeignDataSource="@projectsForUnstartedTasks" Width="150"></GridForeignColumn>
                 <GridColumn Field=@nameof(TaskModel.MatchFactor) HeaderText="Dopasowanie" TextAlign="TextAlign.Center"></GridColumn>
+
             </GridColumns>
         </SfGrid>
     </div>
@@ -554,6 +559,8 @@
     private bool isSaveButtonHidden = false;
     private bool isAssignTaskButtonHidden = true;
     private List<String> status = new List<String>(new string[] { "Nierozpoczęte", "W toku", "Zakończone", "Anulowane" });
+    private List<ProjectModel> projects = new List<ProjectModel>();
+    private List<ProjectModel> projectsForUnstartedTasks = new List<ProjectModel>();
 
     // Zmienne z AddNewTask
     SfGrid<EmployeeStats> suggestedEmployeesGrid;
@@ -695,7 +702,9 @@
             TaskList = TaskData.GetArchivalTasksByEmployeeId(Pages.Login.UserLoggedIn.Employee_id);
         }
 
-        TaskAdd = new TaskValidation();
+        DisplayProjects();
+
+         TaskAdd = new TaskValidation();
         TaskEdit = new TaskValidation();
         labelsInDb = LabelData.GetAllByCompanyId(Login.UserLoggedIn.Company_id);
         employees = EmployeeData.GetAllByCompanyId(Login.UserLoggedIn.Company_id);
@@ -1473,6 +1482,8 @@
 
     private void DisplayTeamTask()
     {
+        projects.Clear();
+        projectsForUnstartedTasks.Clear();
         if (shouldDisplayTeamTasks && NavMenu.shouldDisplayArchivalTask)
         {
             TaskList = TaskData.GetArchivalTasksByEmployeeId(Pages.Login.UserLoggedIn.Employee_id);
@@ -1489,6 +1500,35 @@
         else if (shouldDisplayTeamTasks == false && NavMenu.shouldDisplayArchivalTask)
         {
             TaskList = TaskData.GetArchivalTasksWithoutLoggedManager(Pages.Login.UserLoggedIn.Employee_id);
+        }
+        DisplayProjects();
+
+    }
+
+    private void DisplayProjects()
+    {
+        for (int i = 0; i < TaskList.Count; i++)
+        {
+            if (TaskList[i].Project_id == 0)
+            {
+                projects.Add(new ProjectModel(TaskList[i].Project_id, TaskList[i].Company_id, ""));
+            }
+            else
+            {
+                projects.Add(ProjectData.GetByTaskId(TaskList[i].Task_id));
+            }
+        }
+
+        for (int i = 0; i < listOfUnstartedTasks.Count; i++)
+        {
+            if (listOfUnstartedTasks[i].Project_id == 0)
+            {
+                projectsForUnstartedTasks.Add(new ProjectModel(TaskList[i].Project_id, TaskList[i].Company_id, ""));
+            }
+            else
+            {
+                projectsForUnstartedTasks.Add(ProjectData.GetByTaskId(listOfUnstartedTasks[i].Task_id));
+            }
         }
     }
 
