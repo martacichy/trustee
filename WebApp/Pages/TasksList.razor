@@ -44,10 +44,9 @@
 <br />
 
 <div>
-    @*TODO - zaimplementować obsługę opcji z ContextMenu (głównie edit i delete)*@
+    @*LISTA ZADAŃ*@
     <SfGrid @ref="DefaultGrid"
             DataSource="TaskList"
-            AllowPaging="true"
             AllowSorting="true"
             AllowFiltering="true"
             AllowSelection="true"
@@ -70,7 +69,6 @@
 
                     <label class="header-list"><i class="fas fa-user-friends"></i>Pracownicy:</label>
                     <SfGrid DataSource="employeeTaskPairs" TValue="EmpTaskPair" Query="@GetEmployeesQuery(task.Task_id)">
-                        <GridPageSettings PageSize="6"></GridPageSettings>
                         <GridColumns>
                             <GridColumn Field=@nameof(EmpTaskPair.Employee_id) HeaderText="ID" TextAlign="TextAlign.Left" Width="50"></GridColumn>
                             <GridColumn Field=@nameof(EmpTaskPair.First_name) HeaderText="Imię" TextAlign="TextAlign.Left" Width="80"></GridColumn>
@@ -86,7 +84,7 @@
                 }
             </DetailTemplate>
         </GridTemplates>
-        <GridPageSettings PageSize="15"></GridPageSettings>
+        <p>Zadania w toku</p>
         <GridColumns>
             <GridColumn Field=@nameof(TaskModel.Task_id) IsPrimaryKey="true" HeaderText="ID" TextAlign="TextAlign.Left" Width="50"></GridColumn>
             <GridColumn Field=@nameof(TaskModel.Name) HeaderText="Nazwa" TextAlign="TextAlign.Left" Width="500"></GridColumn>
@@ -95,8 +93,13 @@
                         TextAlign="TextAlign.Left" Width="200"></GridColumn>
             <GridColumn Field=@nameof(TaskModel.Deadline) HeaderText="Data zakończenia" Format="d" Type="ColumnType.Date"
                         TextAlign="TextAlign.Left"></GridColumn>
+            <GridForeignColumn Field=@nameof(TaskModel.Project_id) HeaderText="Projekty" ForeignKeyValue="Name"
+                               ForeignDataSource="@projects" Width="150"></GridForeignColumn>
         </GridColumns>
     </SfGrid>
+
+    <br />
+    @*LISTA NIEROZPOCZĘTYCH ZADAŃ*@
     <div style="display: @displayInlineOrNone">
         <SfGrid @ref="DefaultGrid"
                 DataSource="listOfUnstartedTasks"
@@ -107,20 +110,20 @@
                 Locale="pl"
                 ContextMenuItems="@(new List<object>()
             {"SortDescending", "SortAscending", "Copy"})">
-        <GridFilterSettings EnableCaseSensitivity="false"></GridFilterSettings>
-        <GridSearchSettings IgnoreCase="true"></GridSearchSettings>
-        <GridSelectionSettings EnableToggle="true"></GridSelectionSettings>
-        <GridEvents TValue="TaskModel"
-                    RowSelected="RowSelectHandler"
-                    RowDeselected="RowDeselectHandler"
-                    OnRecordDoubleClick="SetAssingTaskButtonVisibleAndDisplayTaskDetails"
-                    OnRecordClick="ExpandTaskDetails">
-        </GridEvents>
-        
-        <GridTemplates>
-            <DetailTemplate>
-                @{
-                    var task = (context as TaskModel);
+            <GridFilterSettings EnableCaseSensitivity="false"></GridFilterSettings>
+            <GridSearchSettings IgnoreCase="true"></GridSearchSettings>
+            <GridSelectionSettings EnableToggle="true"></GridSelectionSettings>
+            <GridEvents TValue="TaskModel"
+                        RowSelected="RowSelectHandler"
+                        RowDeselected="RowDeselectHandler"
+                        OnRecordDoubleClick="SetAssingTaskButtonVisibleAndDisplayTaskDetails"
+                        OnRecordClick="ExpandTaskDetails">
+            </GridEvents>
+
+            <GridTemplates>
+                <DetailTemplate>
+                    @{
+                        var task = (context as TaskModel);
 
                         <label class="header-list"><i class="fas fa-user-friends"></i>Pracownicy:</label>
                         <SfGrid DataSource="employeeTaskPairs" TValue="EmpTaskPair" Query="@GetEmployeesQuery(task.Task_id)">
@@ -136,6 +139,7 @@
                 </DetailTemplate>
             </GridTemplates>
             <GridPageSettings PageSize="15"></GridPageSettings>
+            <p>Zadania nierozpoczęte</p>
             <GridColumns>
                 <GridColumn Field=@nameof(TaskModel.Task_id) IsPrimaryKey="true" HeaderText="ID" TextAlign="TextAlign.Left" Width="50"></GridColumn>
                 <GridColumn Field=@nameof(TaskModel.Name) HeaderText="Nazwa" TextAlign="TextAlign.Left" Width="500"></GridColumn>
@@ -144,6 +148,9 @@
                             TextAlign="TextAlign.Left" Width="200"></GridColumn>
                 <GridColumn Field=@nameof(TaskModel.Deadline) HeaderText="Data zakończenia" Format="d" Type="ColumnType.Date"
                             TextAlign="TextAlign.Left"></GridColumn>
+                <GridForeignColumn Field=@nameof(TaskModel.Project_id) HeaderText="Projekty"
+                                   ForeignKeyValue="Name" ForeignDataSource="@projectsForUnstartedTasks" Width="150"></GridForeignColumn>
+                <GridColumn Field=@nameof(TaskModel.MatchFactor) HeaderText="Dopasowanie" TextAlign="TextAlign.Center"></GridColumn>
 
             </GridColumns>
         </SfGrid>
@@ -202,10 +209,10 @@
                             <div class="padding-top">
                                 <label asp-for="etykiety" class="control-label">Etykiety</label>
                                 <SfMultiSelect TValue="string[]" TItem="BackendLibrary.Models.LabelModel"
-                                                @bind-Value="@selectedLabels"
-                                                Placeholder="Szukaj..."
-                                                DataSource="@labelsInDb" AllowFiltering="true" AllowCustomValue="true"
-                                                Mode="@VisualMode.Box">
+                                               @bind-Value="@selectedLabels"
+                                               Placeholder="Szukaj..."
+                                               DataSource="@labelsInDb" AllowFiltering="true" AllowCustomValue="true"
+                                               Mode="@VisualMode.Box">
                                     <MultiSelectFieldSettings Text="Name"> </MultiSelectFieldSettings>
                                 </SfMultiSelect>
                                 <ValidationMessage For="@(() => TaskAdd.SelectedLabel)" />
@@ -236,10 +243,10 @@
                             <div class="padding-top">
                                 <label asp-for="pracownicy" class="control-label">Pracownicy</label>
                                 <SfMultiSelect TValue="int[]" TItem="EmployeeModel"
-                                                @bind-Value="@selectedEmployeesId"
-                                                Placeholder="Wybierz..."
-                                                DataSource="@employees" AllowFiltering="true"
-                                                Mode="@VisualMode.Box">
+                                               @bind-Value="@selectedEmployeesId"
+                                               Placeholder="Wybierz..."
+                                               DataSource="@employees" AllowFiltering="true"
+                                               Mode="@VisualMode.Box">
                                     <MultiSelectTemplates TItem="EmployeeModel">
                                         <!-- Zmieniony Context z default na "SelectedEmployee" aby mogła działać walidacja -->
                                         <ItemTemplate Context="SelectedEmployee">
@@ -358,12 +365,12 @@
                                                 <div class="padding-top">
                                                     <label asp-for="etykiety" class="control-label">Etykiety</label>
                                                     <SfMultiSelect TValue="string[]" TItem="BackendLibrary.Models.LabelModel"
-                                                                    @bind-Value="@nameoflabels"
-                                                                    Enabled=@Enabled
-                                                                    s
-                                                                    Placeholder="Szukaj..."
-                                                                    DataSource="@labelsInDb" AllowFiltering="true" AllowCustomValue="true"
-                                                                    Mode="@VisualMode.Box">
+                                                                   @bind-Value="@nameoflabels"
+                                                                   Enabled=@Enabled
+                                                                   s
+                                                                   Placeholder="Szukaj..."
+                                                                   DataSource="@labelsInDb" AllowFiltering="true" AllowCustomValue="true"
+                                                                   Mode="@VisualMode.Box">
                                                         <MultiSelectFieldSettings Text="Name">  </MultiSelectFieldSettings>
                                                     </SfMultiSelect>
                                                     <ValidationMessage For="@(() => TaskEdit.SelectedLabel)" />
@@ -394,11 +401,11 @@
                                                 <div class="padding-top">
                                                     <label asp-for="pracownicy" class="control-label">Pracownicy</label>
                                                     <SfMultiSelect TValue="int[]" TItem="BackendLibrary.Models.EmployeeModel"
-                                                                    @bind-Value="@nameofEmployees"
-                                                                    Placeholder="Wybierz..."
-                                                                    Enabled=@Enabled
-                                                                    DataSource="@employees" AllowFiltering="true"
-                                                                    Mode="@VisualMode.Box">
+                                                                   @bind-Value="@nameofEmployees"
+                                                                   Placeholder="Wybierz..."
+                                                                   Enabled=@Enabled
+                                                                   DataSource="@employees" AllowFiltering="true"
+                                                                   Mode="@VisualMode.Box">
                                                         <MultiSelectTemplates TItem="BackendLibrary.Models.EmployeeModel">
                                                             <!-- Zmieniony Context z default na "SelectedEmployee" aby mogła działać walidacja -->
                                                             <ItemTemplate Context="SelectedEmployee">
@@ -500,27 +507,25 @@
                                                         <GridColumns>
                                                             <GridColumn Field=@nameof(CommentModel.Employee_id) IsPrimaryKey="true" HeaderText="Komentarze" TextAlign="TextAlign.Left" Width="50"></GridColumn>
                                                         </GridColumns>
-
                                                     </SfGrid>
                                                 </div>
 
                                                 <div>
-                                                    
-                                                        <EditForm Model="Comment" OnValidSubmit="AddNewComment">
-                                                                <SfRichTextEditor @ref="rteObj" Placeholder="..." @bind-Value="Comment.Description">
-                                                                    <RichTextEditorToolbarSettings Type="@Tooltype" Items="@Tools"></RichTextEditorToolbarSettings>
-                                                                </SfRichTextEditor> 
-                                                                <div id='buttonSection'>
-                                                                    <table>
-                                                                        <tr>
-                                                                            <td>
-                                                                                <button class="samplebtn e-control e-btn" data-ripple="true" type="submit">Dodaj</button>
-                                                                            </td>
-                                                                        </tr>
-                                                                    </table>
-                                                                </div>
-                                                        </EditForm>
-                                                    
+
+                                                    <EditForm Model="Comment" OnValidSubmit="AddNewComment">
+                                                        <SfRichTextEditor @ref="rteObj" Placeholder="..." @bind-Value="Comment.Description">
+                                                            <RichTextEditorToolbarSettings Type="@Tooltype" Items="@Tools"></RichTextEditorToolbarSettings>
+                                                        </SfRichTextEditor>
+                                                        <div id='buttonSection'>
+                                                            <table>
+                                                                <tr>
+                                                                    <td>
+                                                                        <button class="samplebtn e-control e-btn" data-ripple="true" type="submit">Dodaj</button>
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
+                                                        </div>
+                                                    </EditForm>
                                                 </div>
                                             </SplitterPane>
                                         </SplitterPanes>
@@ -555,6 +560,8 @@
     private bool isSaveButtonHidden = false;
     private bool isAssignTaskButtonHidden = true;
     private List<String> status = new List<String>(new string[] { "Nierozpoczęte", "W toku", "Zakończone", "Anulowane" });
+    private List<ProjectModel> projects = new List<ProjectModel>();
+    private List<ProjectModel> projectsForUnstartedTasks = new List<ProjectModel>();
 
     // Zmienne z AddNewTask
     SfGrid<EmployeeStats> suggestedEmployeesGrid;
@@ -627,7 +634,7 @@
     // Edytor tekstu
     private ToolbarType Tooltype = ToolbarType.Expand;
     private List<ToolbarItemModel> Tools = new List<ToolbarItemModel>()
-    {
+{
         new ToolbarItemModel() { Command = ToolbarCommand.Bold },
         new ToolbarItemModel() { Command = ToolbarCommand.Italic },
         new ToolbarItemModel() { Command = ToolbarCommand.Underline },
@@ -686,22 +693,19 @@
 
         SelectedTask = new TaskModel();
 
-        if (Login.UserLoggedIn.If_manager == 0 && NavMenu.shouldDisplayArchivalTask == false)
+        if (NavMenu.shouldDisplayArchivalTask == false)
         {
             TaskList = TaskData.GetInProgressTaskByEmployeeId(Pages.Login.UserLoggedIn.Employee_id);
-            listOfUnstartedTasks = TaskData.GetUnstartedTasksByCompanyId(Pages.Login.UserLoggedIn.Company_id);
-        }
-        else if ((Login.UserLoggedIn.If_manager == 1 || Login.UserLoggedIn.If_manager == 2) && NavMenu.shouldDisplayArchivalTask == false)
-        {
-            TaskList = TaskData.GetInProgressTaskByEmployeeId(Pages.Login.UserLoggedIn.Employee_id);
-            listOfUnstartedTasks = TaskData.GetUnstartedTasksByCompanyId(Pages.Login.UserLoggedIn.Company_id);
+            listOfUnstartedTasks = SuggestTasks();
         }
         else
         {
             TaskList = TaskData.GetArchivalTasksByEmployeeId(Pages.Login.UserLoggedIn.Employee_id);
         }
 
-        TaskAdd = new TaskValidation();
+        DisplayProjects();
+
+         TaskAdd = new TaskValidation();
         TaskEdit = new TaskValidation();
         labelsInDb = LabelData.GetAllByCompanyId(Login.UserLoggedIn.Company_id);
         employees = EmployeeData.GetAllByCompanyId(Login.UserLoggedIn.Company_id);
@@ -830,8 +834,6 @@
         isAssignTaskButtonHidden = true;
         DisplayTaskDetails(args);
     }
-
-
 
     private void DisplayTaskDetails(RecordDoubleClickEventArgs<TaskModel> args)
     {
@@ -1007,13 +1009,6 @@
 
                 employeeStats = employeeStats.OrderByDescending(x => x.FinalFactor).ToList();
 
-                /*
-                suggestedEmployees = new List<EmployeeModel>();
-
-                foreach (var emp in employeeStats)
-                    suggestedEmployees.Add(EmployeeData.GetById(emp.Employee_id));
-                */
-
                 suggestedEmployees = new List<EmployeeStats>();
 
                 foreach (var emp in employeeStats)
@@ -1032,6 +1027,70 @@
             ToastWrongInput = "Wprowadzono niepoprawny zakres dat.";
             WrongInput.Show();
         }
+    }
+
+    /// <summary>
+    /// Uruchamia algorytm automatycznego proponowania nierozpoczętych zadań dla pracownika.
+    /// </summary>
+    private List<TaskModel> SuggestTasks()
+    {
+        List<TaskModel> orderedTasks = new List<TaskModel>();
+        List<TaskStats> taskStats = new List<TaskStats>();
+        List<TaskModel> taskPool = TaskData.GetUnstartedTasksByCompanyId(Login.UserLoggedIn.Company_id);
+        List<TaskLabelModel> taskLabels;
+        List<TaskModel> empTasks = TaskData.GetArchivalTasksByEmployeeId(Login.UserLoggedIn.Employee_id);
+
+        // zebranie nazw etykiet pracownika
+        List<EmployeeLabelModel> empLabels = EmployeeLabelData.GetAllLabelsByEmployeeId(Login.UserLoggedIn.Employee_id);
+        List<string> empLabelNames = new List<string>();
+        foreach (var label in empLabels)
+            empLabelNames.Add(LabelData.GetNameById(label.Label_id));
+
+        // zebranie nazw etykiet zadań archiwalnych pracownika
+        List<string> archivalTaskLabelNames = new List<string>();
+        foreach (var task in empTasks)
+        {
+            if (task.Status == "Zakończone")
+            {
+                List<TaskLabelModel> labels = TaskLabelData.GetAllLabelsByTaskId(task.Task_id);
+                foreach (var label in labels)
+                {
+                    string name = LabelData.GetNameById(label.Task_id);
+                    if (!archivalTaskLabelNames.Contains(name))
+                        archivalTaskLabelNames.Add(name);
+                }
+            }
+        }
+
+        foreach (var task in taskPool)
+        {
+            // zebranie nazw etykiet zadania z poola zadań nierozpoczętych
+            List<string> taskLabelNames = new List<string>();
+            taskLabels = TaskLabelData.GetAllLabelsByTaskId(task.Task_id);
+            foreach (var label in taskLabels)
+                taskLabelNames.Add(LabelData.GetNameById(label.Label_id));
+
+            taskStats.Add(new TaskStats
+            {
+                Task_id = task.Task_id,
+
+                EmpLabelMatches = taskLabelNames.Intersect(empLabelNames).Count(),
+                ArchivalTaskLabelMatches = taskLabelNames.Intersect(archivalTaskLabelNames).Count(),
+            });
+        }
+
+        foreach (var emp in taskStats)
+            emp.CalculateFinalFactor(1, 1);
+
+        taskStats = taskStats.OrderByDescending(x => x.FinalFactor).ToList();
+
+        foreach (var task in taskStats)
+        {
+            orderedTasks.Add(TaskData.GetById(task.Task_id));
+            orderedTasks.Last().MatchFactor = task.FinalFactor;
+        }
+
+        return orderedTasks;
     }
 
     /// <summary>
@@ -1424,6 +1483,8 @@
 
     private void DisplayTeamTask()
     {
+        projects.Clear();
+        projectsForUnstartedTasks.Clear();
         if (shouldDisplayTeamTasks && NavMenu.shouldDisplayArchivalTask)
         {
             TaskList = TaskData.GetArchivalTasksByEmployeeId(Pages.Login.UserLoggedIn.Employee_id);
@@ -1440,6 +1501,35 @@
         else if (shouldDisplayTeamTasks == false && NavMenu.shouldDisplayArchivalTask)
         {
             TaskList = TaskData.GetArchivalTasksWithoutLoggedManager(Pages.Login.UserLoggedIn.Employee_id);
+        }
+        DisplayProjects();
+
+    }
+
+    private void DisplayProjects()
+    {
+        for (int i = 0; i < TaskList.Count; i++)
+        {
+            if (TaskList[i].Project_id == 0)
+            {
+                projects.Add(new ProjectModel(TaskList[i].Project_id, TaskList[i].Company_id, ""));
+            }
+            else
+            {
+                projects.Add(ProjectData.GetByTaskId(TaskList[i].Task_id));
+            }
+        }
+
+        for (int i = 0; i < listOfUnstartedTasks.Count; i++)
+        {
+            if (listOfUnstartedTasks[i].Project_id == 0)
+            {
+                projectsForUnstartedTasks.Add(new ProjectModel(TaskList[i].Project_id, TaskList[i].Company_id, ""));
+            }
+            else
+            {
+                projectsForUnstartedTasks.Add(ProjectData.GetByTaskId(listOfUnstartedTasks[i].Task_id));
+            }
         }
     }
 

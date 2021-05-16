@@ -14,6 +14,8 @@ namespace BackendLibrary.Models
         public int Auto_assigned { get; set; }
         public int Project_id { get; set; }
 
+        public double MatchFactor { get; set; }
+
         public TaskModel(int task_id, int company_id, string name, string description, DateTime start_time,
             DateTime deadline, string status, int auto_assigned, int project_id)
         {
