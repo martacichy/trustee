@@ -448,10 +448,37 @@
                                         <SplitterPanes>
                                             <SplitterPane Size="34%" Min="268.6px" Resizable="false">
                                                 <div>
-                                                    <div class="text-align">tu będą pliki</div>
+                                                    <div class="text-align">@*Wartości testowanej funkcji: @a1 *@</div>
                                                     <SfUploader AutoUpload="false">
-                                                        <UploaderEvents ValueChange="FileFunction"></UploaderEvents>
+                                                        <UploaderEvents ValueChange="AddFileFunction"></UploaderEvents>
                                                     </SfUploader>
+                                                </div>
+                                                <div>
+                                                    <SfGrid @ref="DefaultGrid2"
+                                                            DataSource="FileList"
+                                                            AllowPaging="true"
+                                                            AllowSorting="true"
+                                                            AllowFiltering="true"
+                                                            AllowSelection="true"
+                                                            Locale="pl"
+                                                            ContextMenuItems="@(new List<object>()
+                                                        {"SortDescending", "SortAscending", "Copy"})">
+                                                        <GridFilterSettings EnableCaseSensitivity="false"></GridFilterSettings>
+                                                        <GridSearchSettings IgnoreCase="true"></GridSearchSettings>
+                                                        <GridSelectionSettings EnableToggle="true"></GridSelectionSettings>
+                                                        <GridEvents TValue="FileModel"
+                                                                    RowSelected="RowSelectHandlerFile"
+                                                                    RowDeselected="RowDeselectHandlerFile"
+                                                                    OnRecordDoubleClick="DownloadSelectedFile">
+                                                        </GridEvents>
+                                                        <GridColumns>
+                                                            <GridColumn Field=@nameof(FileModel.File_id) IsPrimaryKey="true" HeaderText="ID" TextAlign="TextAlign.Left" Width="50"></GridColumn>
+                                                            <GridColumn Field=@nameof(FileModel.File_name) HeaderText="Nazwa" TextAlign="TextAlign.Left" Width="500"></GridColumn>
+                                                            <GridColumn Field=@nameof(FileModel.Date) HeaderText="Data wstawienia" Format="d" Type="ColumnType.Date"
+                                                                        TextAlign="TextAlign.Left" Width="200"></GridColumn>
+                                                        </GridColumns>
+                                                    </SfGrid>
+                                                
                                                 </div>
                                             </SplitterPane>
                                             <SplitterPane Size="66%" Min="521.4px" Resizable="false">
@@ -589,6 +616,8 @@
 
     // Zmienne z TaskDetails
     private SfGrid<TaskModel> DefaultGrid1;
+    private SfGrid<FileModel> DefaultGrid2;
+    private static List<FileModel> FileList;
     public static List<TaskModel> ListOfTasks;
     private Boolean addButtonClicked;
     private Boolean VisibilityDetails { get; set; }
@@ -606,6 +635,10 @@
     private EmployeeModel loggedEmployee;
     private bool commentDisable = true;
     private bool shouldDisplayTeamTasks = false;
+    public static FileModel SelectedFile;
+    public static string a1;
+    public static string a2;
+    public static byte[] a3;
 
     public void CustomizeCell(Syncfusion.Blazor.Grids.QueryCellInfoEventArgs<TaskModel> args)
     {
@@ -767,6 +800,16 @@
         SelectedTask = null;
     }
 
+    public void RowSelectHandlerFile(RowSelectEventArgs<FileModel> args)
+    {
+        SelectedFile = args.Data;
+    }
+
+    public void RowDeselectHandlerFile()
+    {
+        SelectedFile = null;
+    }
+
     private void SearchOnEnter(KeyboardEventArgs e)
     {
         if (e.Code == "Enter" || e.Code == "NumpadEnter")
@@ -830,6 +873,8 @@
     {
         SelectedTask = args.RowData;
         CommentsList = BackendLibrary.DataAccess.CommentData.GetAllByTaskId(SelectedTask.Task_id);
+
+        FileList = FileData.GetAllByTaskId(SelectedTask.Task_id);
 
         if (SelectedTask != null)
         {
@@ -1394,10 +1439,8 @@
                 {
                     SaveLabels(nameoflabels);
                 }
-                //string sciezka = "C:/Users/Patryk/Downloads/Certyfikat.pdf";
-                //BackendLibrary.Models.FileModel testowyplik = new BackendLibrary.Models.FileModel(SelectedTask.Task_id, Login.UserLoggedIn.Employee_id, SelectedTask.Deadline, sciezka);
+                
                 BackendLibrary.DataAccess.TaskData.UpdateTask(updatedTask);
-                //BackendLibrary.DataAccess.FileData.AddFile(testowyplik);
                 EditTaskLabel();
                 EditEmployeeToTask();
                 ToastObj.Show();
@@ -1446,7 +1489,7 @@
         TaskEdit.auto_assigned = 0;
     }
 
-    private void FileFunction(UploadChangeEventArgs args)
+    private void AddFileFunction(UploadChangeEventArgs args)
     {
         foreach (var file in args.Files)
         {
@@ -1455,9 +1498,19 @@
             file.Stream.WriteTo(filestream);
             filestream.Close();
             file.Stream.Close();
-            BackendLibrary.Models.FileModel testowyplik = new BackendLibrary.Models.FileModel(SelectedTask.Task_id, Login.UserLoggedIn.Employee_id, DateTime.Now, path);
-            BackendLibrary.DataAccess.FileData.AddFile(testowyplik);
+            BackendLibrary.Models.FileModel newfile = new BackendLibrary.Models.FileModel(SelectedTask.Task_id, Login.UserLoggedIn.Employee_id, DateTime.Now, path);
+            BackendLibrary.DataAccess.FileData.AddFile(newfile);
             File.Delete(path);
+            FileList.Add(newfile);
+            DefaultGrid2.Refresh();
         }
+    }
+
+    private void DownloadSelectedFile(RecordDoubleClickEventArgs<FileModel> args)
+    {
+        SelectedFile = new FileModel();
+        SelectedFile = args.RowData;
+        BackendLibrary.DataAccess.FileData.DownloadFile(SelectedFile);
+
     }
 }

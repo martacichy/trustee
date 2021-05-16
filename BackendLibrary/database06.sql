@@ -266,7 +266,7 @@ CREATE TABLE IF NOT EXISTS `database06`.`File` (
   `date` DATETIME NULL,
   `file_name` VARCHAR(256) NULL DEFAULT NULL
   `file_size` INT NULL DEFAULT NULL
-  `file_rawData` BLOB NULL DEFAULT NULL,
+  `file_rawData` LONGBLOB NULL DEFAULT NULL,
   PRIMARY KEY (`file_id`),
   UNIQUE INDEX `file_id_UNIQUE` (`file_id` ASC) VISIBLE,
   INDEX `employee_id_idx` (`employee_id` ASC) VISIBLE,

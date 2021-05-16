@@ -42,5 +42,10 @@ namespace BackendLibrary.Models
             File_size = Convert.ToInt32(info.Length);
             File_rawData = File.ReadAllBytes(path_to_file);
         }
+
+        public FileModel()
+        {
+
+        }
     }
 }
