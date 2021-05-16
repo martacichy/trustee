@@ -25,7 +25,7 @@
             </SfToast>
         </div>
         @*Edycja pracownika*@
-        <SfDialog @bind-Visible="@VisibilityEdit" AllowDragging="true" Width="800px" Height="800px" IsModal="true" ShowCloseIcon="true">
+        <SfDialog @bind-Visible="@VisibilityEdit" AllowDragging="true" Width="180px" Height="800px" IsModal="true" ShowCloseIcon="true">
             <DialogTemplates>
                 <Content>
                     <div class="dane">
@@ -81,7 +81,7 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <button type="submit" class="btn btn-block btn-info" data-dismiss="modal" @onclick="UpdateEmployee" hidden=@readOnly>Zapisz</button>
+                            <button type="submit" class="btn btn-primary" data-dismiss="modal" @onclick="UpdateEmployee" hidden=@readOnly>Zapisz</button>
                             <SfToast @ref="ToastObj" Title="Dane zaktualizowane pomyslnie!" Timeout=3000 Content="@ToastContentEdit">
                                 <ToastPosition X="Right"></ToastPosition>
                             </SfToast>
