@@ -37,6 +37,17 @@ namespace BackendLibrary.DataAccess
             }
         }
 
+        public static ProjectModel GetByTaskId(int task_id)
+        {
+            using (IDbConnection connection = new MySqlConnection(connectionString))
+            {
+                string sql = $"SELECT * FROM database06.project WHERE project_id IN (select project_id from database06.task where task_id = {task_id})";
+                var data = connection.Query<ProjectModel>(sql).FirstOrDefault();
+
+                return data;
+            }
+        }
+
         public static string GetNameById(int project_id)
         {
             using (IDbConnection connection = new MySqlConnection(connectionString))

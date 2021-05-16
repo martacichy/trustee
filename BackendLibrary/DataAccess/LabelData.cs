@@ -65,7 +65,7 @@ namespace BackendLibrary.DataAccess
             using (IDbConnection connection = new MySqlConnection(connectionString))
             {
                 string sql = $"SELECT Name from database06.label where Label_id= {id}";
-                string name = connection.Query<string>(sql).First();
+                string name = connection.Query<string>(sql).FirstOrDefault();
 
                 return name;
             }
