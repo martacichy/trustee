@@ -253,6 +253,32 @@ CREATE TABLE IF NOT EXISTS `database06`.`EmployeeProject` (
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
+-- -----------------------------------------------------
+-- Table `database06`.`File`
+-- -----------------------------------------------------
+
+DROP TABLE IF EXISTS `database06`.`File` ;
+
+CREATE TABLE IF NOT EXISTS `database06`.`File` (
+  `file_id` INT NOT NULL AUTO_INCREMENT,
+  `task_id` INT NOT NULL,
+  `employee_id` INT NOT NULL,
+  `date` DATETIME NULL,
+  `file_name` VARCHAR(256) NULL DEFAULT NULL
+  `file_size` INT NULL DEFAULT NULL
+  `file_rawData` BLOB NULL DEFAULT NULL,
+  PRIMARY KEY (`file_id`),
+  UNIQUE INDEX `file_id_UNIQUE` (`file_id` ASC) VISIBLE,
+  INDEX `employee_id_idx` (`employee_id` ASC) VISIBLE,
+  INDEX `task_id_idx` (`task_id` ASC) VISIBLE,
+  CONSTRAINT `employee_id_file`
+    FOREIGN KEY (`employee_id`)
+    REFERENCES `database06`.`Employee` (`employee_id`),
+  CONSTRAINT `task_id_file`
+    FOREIGN KEY (`task_id`)
+    REFERENCES `database06`.`Task` (`task_id`))
+ENGINE = InnoDB;
+
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
