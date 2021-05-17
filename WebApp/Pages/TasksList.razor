@@ -56,6 +56,7 @@
             Locale="pl"
             ContextMenuItems="@(new List<object>()
             {"SortDescending", "SortAscending", "Copy"})">
+        <GridEditSettings  AllowDeleting="true"></GridEditSettings>
 
         <GridFilterSettings EnableCaseSensitivity="false"></GridFilterSettings>
         <GridSearchSettings IgnoreCase="true"></GridSearchSettings>
@@ -66,7 +67,7 @@
                     OnRecordDoubleClick="SetAssingTaskButtonInisibleAndDisplayTaskDetails"
                     OnRecordClick="ExpandTaskDetails"
                     CommandClicked="OnCommandClicked"
-                    QueryCellInfo="CustomizeCell" >
+                    QueryCellInfo="CustomizeCell">
         </GridEvents>
         <GridTemplates>
             <DetailTemplate>
@@ -96,10 +97,10 @@
                         TextAlign="TextAlign.Left"></GridColumn>
             <GridForeignColumn Field=@nameof(TaskModel.Project_id) HeaderText="Projekty" ForeignKeyValue="Name"
                                ForeignDataSource="@projects" Width="150"></GridForeignColumn>
-            <GridColumn HeaderText="Akcje" Width="150">
+            <GridColumn HeaderText="Manage Records" Width="150">
                 <GridCommandColumns>
-                    <GridCommandColumn Type="CommandButtonType.Edit" ButtonOption="@(new CommandButtonOptions() {IconCss="e-icons e-edit", CssClass="e-flat" })"></GridCommandColumn>
-                    <GridCommandColumn Type="CommandButtonType.Delete" ButtonOption="@(new CommandButtonOptions() {IconCss="e-icons e-delete", CssClass="e-flat" })"></GridCommandColumn>
+                    <GridCommandColumn Type="CommandButtonType.Edit" ButtonOption="@(new CommandButtonOptions() { IconCss = "e-icons e-edit", CssClass = "e-flat" })"></GridCommandColumn>
+                    <GridCommandColumn Type="CommandButtonType.Delete" ButtonOption="@(new CommandButtonOptions() { IconCss = "e-icons e-delete", CssClass = "e-flat" })"></GridCommandColumn>
                 </GridCommandColumns>
             </GridColumn>
         </GridColumns>
@@ -578,8 +579,8 @@
 </div>
 
 @code {
-        SfToast NoSelectedTask;
-        SfRichTextEditor rteObj;
+    SfToast NoSelectedTask;
+    SfRichTextEditor rteObj;
     private SfGrid<TaskModel> DefaultGrid;
     private SfGrid<CommentModel> CommentGrid;
     private string searchStr;
@@ -661,11 +662,13 @@
 
         if (args.CommandColumn.Type == CommandButtonType.Edit)
         {
-            //podpiac metode wyswietlajaca okno szczegolow
+            SetAssingTaskButtonInisibleAndDisplayTaskDetailsOnOneClick(args);
         }
         else if (args.CommandColumn.Type == CommandButtonType.Delete)
         {
-            //podpiac metode usuwajaca zadanie
+            SelectedTask = args.RowData;
+            BackendLibrary.DataAccess.TaskData.DeleteTask(SelectedTask.Task_id);
+
         }
     }
 
@@ -888,7 +891,7 @@
         EnabledStatus = false;
         isSaveButtonHidden = true;
         isAssignTaskButtonHidden = false;
-        DisplayTaskDetails(args);
+        DisplayTaskDetails(args.RowData);
     }
 
     private void SetAssingTaskButtonInisibleAndDisplayTaskDetails(RecordDoubleClickEventArgs<TaskModel> args)
@@ -896,12 +899,28 @@
         EnabledStatus = true;
         isSaveButtonHidden = false;
         isAssignTaskButtonHidden = true;
-        DisplayTaskDetails(args);
+        DisplayTaskDetails(args.RowData);
     }
 
-    private void DisplayTaskDetails(RecordDoubleClickEventArgs<TaskModel> args)
+    private void SetAssingTaskButtonVisibleAndDisplayTaskDetailsOnOneClick(CommandClickEventArgs<TaskModel> args)
     {
-        SelectedTask = args.RowData;
+        EnabledStatus = false;
+        isSaveButtonHidden = true;
+        isAssignTaskButtonHidden = false;
+        DisplayTaskDetails(args.RowData);
+    }
+
+    private void SetAssingTaskButtonInisibleAndDisplayTaskDetailsOnOneClick(CommandClickEventArgs<TaskModel> args)
+    {
+        EnabledStatus = true;
+        isSaveButtonHidden = false;
+        isAssignTaskButtonHidden = true;
+        DisplayTaskDetails(args.RowData);
+    }
+
+    private void DisplayTaskDetails(TaskModel args)
+    {
+        SelectedTask = args;
         CommentsList = BackendLibrary.DataAccess.CommentData.GetAllByTaskId(SelectedTask.Task_id);
 
         FileList = FileData.GetAllByTaskId(SelectedTask.Task_id);
@@ -1595,7 +1614,7 @@
             {
                 if (listOfUnstartedTasks[i].Project_id == 0)
                 {
-                    projectsForUnstartedTasks.Add(new ProjectModel(TaskList[i].Project_id, TaskList[i].Company_id, ""));
+                    projectsForUnstartedTasks.Add(new ProjectModel(listOfUnstartedTasks[i].Project_id, listOfUnstartedTasks[i].Company_id, ""));
                 }
                 else
                 {
