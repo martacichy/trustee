@@ -578,8 +578,8 @@
 </div>
 
 @code {
-    SfToast NoSelectedTask;
-    SfRichTextEditor rteObj;
+        SfToast NoSelectedTask;
+        SfRichTextEditor rteObj;
     private SfGrid<TaskModel> DefaultGrid;
     private SfGrid<CommentModel> CommentGrid;
     private string searchStr;
@@ -965,7 +965,7 @@
         }
     }
 
-    
+
     private void AssignTask()
     {
 
@@ -1528,7 +1528,7 @@
                 {
                     SaveLabels(nameoflabels);
                 }
-                
+
                 BackendLibrary.DataAccess.TaskData.UpdateTask(updatedTask);
                 EditTaskLabel();
                 EditEmployeeToTask();
@@ -1574,27 +1574,33 @@
 
     private void DisplayProjects()
     {
-        for (int i = 0; i < TaskList.Count; i++)
+        if (TaskList != null)
         {
-            if (TaskList[i].Project_id == 0)
+            for (int i = 0; i < TaskList.Count; i++)
             {
-                projects.Add(new ProjectModel(TaskList[i].Project_id, TaskList[i].Company_id, ""));
+                if (TaskList[i].Project_id == 0)
+                {
+                    projects.Add(new ProjectModel(TaskList[i].Project_id, TaskList[i].Company_id, ""));
+                }
+                else
+                {
+                    projects.Add(ProjectData.GetByTaskId(TaskList[i].Task_id));
+                }
             }
-            else
-            {
-                projects.Add(ProjectData.GetByTaskId(TaskList[i].Task_id));
-            }
-        }
 
-        for (int i = 0; i < listOfUnstartedTasks.Count; i++)
+        }
+        if(listOfUnstartedTasks != null)
         {
-            if (listOfUnstartedTasks[i].Project_id == 0)
+            for (int i = 0; i < listOfUnstartedTasks.Count; i++)
             {
-                projectsForUnstartedTasks.Add(new ProjectModel(TaskList[i].Project_id, TaskList[i].Company_id, ""));
-            }
-            else
-            {
-                projectsForUnstartedTasks.Add(ProjectData.GetByTaskId(listOfUnstartedTasks[i].Task_id));
+                if (listOfUnstartedTasks[i].Project_id == 0)
+                {
+                    projectsForUnstartedTasks.Add(new ProjectModel(TaskList[i].Project_id, TaskList[i].Company_id, ""));
+                }
+                else
+                {
+                    projectsForUnstartedTasks.Add(ProjectData.GetByTaskId(listOfUnstartedTasks[i].Task_id));
+                }
             }
         }
     }
