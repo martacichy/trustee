@@ -463,7 +463,6 @@
                                 <div>
                                     <SfSplitter Height="790px" Orientation="Syncfusion.Blazor.Layouts.Orientation.Vertical">
                                         <SplitterPanes>
-                                            <GridColumn HeaderText="Komentarze" TextAlign="TextAlign.Left" Width="50"></GridColumn>
                                             <SplitterPane Size="34%" Min="268.6px" Resizable="false" >
                                                 <div>
                                                     <div class="text-align">@*Wartości testowanej funkcji: @a1 *@</div>
@@ -551,7 +550,7 @@
                                                 <div>
 
                                                     <EditForm Model="Comment" OnValidSubmit="AddNewComment">
-                                                        <SfRichTextEditor @ref="rteObj" Placeholder="." @bind-Value="Comment.Description">
+                                                        <SfRichTextEditor @ref="rteObj" @bind-Value="Comment.Description">
                                                             <RichTextEditorToolbarSettings Type="@Tooltype" Items="@Tools" EnableFloating="false"></RichTextEditorToolbarSettings>
                                                         </SfRichTextEditor>
                                                         <div id='buttonSection'>
