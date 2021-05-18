@@ -319,7 +319,7 @@
     </SfDialog>
 
     @* okno szczegolow zadania *@
-    <SfDialog @bind-Visible="@VisibilityDetails" AllowDragging="true" Width="1200px" Height="900px" IsModal="true" ShowCloseIcon="true">
+    <SfDialog @bind-Visible="@VisibilityDetails" AllowDragging="true" Width="1600px" Height="1200px" IsModal="true" ShowCloseIcon="true">
         <DialogTemplates>
             <Content>
                 <SfSplitter CssClass="out-splitter" Height="100%" Width="100%">
@@ -463,7 +463,8 @@
                                 <div>
                                     <SfSplitter Height="790px" Orientation="Syncfusion.Blazor.Layouts.Orientation.Vertical">
                                         <SplitterPanes>
-                                            <SplitterPane Size="34%" Min="268.6px" Resizable="false">
+                                            <GridColumn HeaderText="Komentarze" TextAlign="TextAlign.Left" Width="50"></GridColumn>
+                                            <SplitterPane Size="34%" Min="268.6px" Resizable="false" >
                                                 <div>
                                                     <div class="text-align">@*Wartości testowanej funkcji: @a1 *@</div>
                                                     <SfUploader AutoUpload="false">
@@ -488,7 +489,8 @@
                                                                     RowDeselected="RowDeselectHandlerFile"
                                                                     OnRecordDoubleClick="DownloadSelectedFile">
                                                         </GridEvents>
-                                                        <GridColumns>
+                                                        <GridColumns >
+
                                                             <GridColumn Field=@nameof(FileModel.File_id) IsPrimaryKey="true" HeaderText="ID" TextAlign="TextAlign.Left" Width="50"></GridColumn>
                                                             <GridColumn Field=@nameof(FileModel.File_name) HeaderText="Nazwa" TextAlign="TextAlign.Left" Width="500"></GridColumn>
                                                             <GridColumn Field=@nameof(FileModel.Date) HeaderText="Data wstawienia" Format="d" Type="ColumnType.Date"
@@ -549,8 +551,8 @@
                                                 <div>
 
                                                     <EditForm Model="Comment" OnValidSubmit="AddNewComment">
-                                                        <SfRichTextEditor @ref="rteObj" Placeholder="..." @bind-Value="Comment.Description">
-                                                            <RichTextEditorToolbarSettings Type="@Tooltype" Items="@Tools"></RichTextEditorToolbarSettings>
+                                                        <SfRichTextEditor @ref="rteObj" Placeholder="." @bind-Value="Comment.Description">
+                                                            <RichTextEditorToolbarSettings Type="@Tooltype" Items="@Tools" EnableFloating="false"></RichTextEditorToolbarSettings>
                                                         </SfRichTextEditor>
                                                         <div id='buttonSection'>
                                                             <table>
