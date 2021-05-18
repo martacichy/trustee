@@ -965,7 +965,7 @@
         }
     }
 
-    
+
     private void AssignTask()
     {
 
@@ -1528,7 +1528,7 @@
                 {
                     SaveLabels(nameoflabels);
                 }
-                
+
                 BackendLibrary.DataAccess.TaskData.UpdateTask(updatedTask);
                 EditTaskLabel();
                 EditEmployeeToTask();
@@ -1621,8 +1621,8 @@
             BackendLibrary.Models.FileModel newfile = new BackendLibrary.Models.FileModel(SelectedTask.Task_id, Login.UserLoggedIn.Employee_id, DateTime.Now, path);
             BackendLibrary.DataAccess.FileData.AddFile(newfile);
             File.Delete(path);
+            this.DefaultGrid2.Refresh();
             FileList.Add(newfile);
-            DefaultGrid2.Refresh();
         }
     }
 
