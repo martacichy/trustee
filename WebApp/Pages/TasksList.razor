@@ -292,8 +292,8 @@
                     </div>
                     <br />
                     <div style="width:750px; margin:auto;">
-                        <SfGrid @ref="suggestedEmployeesGrid" DataSource="suggestedEmployees" TValue="EmployeeStats" >
-                           <GridEvents CommandClicked="AddEmployeeToAssigned" TValue="EmployeeModel"></GridEvents>
+                        <SfGrid @ref="suggestedEmployeesGrid" DataSource="suggestedEmployees" TValue="EmployeeStats">
+                           <GridEvents CommandClicked="AddEmployeeToAssigned" TValue="EmployeeStats"></GridEvents>
                             <GridColumns>
                                 <GridColumn Field=@nameof(EmployeeStats.Employee_id) HeaderText="ID" TextAlign="TextAlign.Center" Width="35"></GridColumn>
                                 <GridColumn Field=@nameof(EmployeeStats.First_name) HeaderText="Imię" TextAlign="TextAlign.Left" Width="65"></GridColumn>
@@ -547,9 +547,6 @@
                                                         <GridPageSettings PageSize="1"></GridPageSettings>
                                                         <GridSortSettings>
                                                         </GridSortSettings>
-                                                        <GridColumns>
-                                                            <GridColumn Field=@nameof(CommentModel.Employee_id) IsPrimaryKey="true" HeaderText="Komentarze" TextAlign="TextAlign.Left" Width="50"></GridColumn>
-                                                        </GridColumns>
                                                     </SfGrid>
                                                     <EditForm Model="Comment" OnValidSubmit="AddNewComment">
                                                         <SfRichTextEditor @ref="rteObj" @bind-Value="Comment.Description" >
@@ -656,7 +653,7 @@
 
     /// <summary> Dodanie zaproponowanego pracownika do listy osób przypisanych do zadania
     /// <param name="args"></param>
-    public void AddEmployeeToAssigned(CommandClickEventArgs<EmployeeModel> args)
+    public void AddEmployeeToAssigned(CommandClickEventArgs<EmployeeStats> args)
     {
 
     }
@@ -666,12 +663,9 @@
 
         if (args.CommandColumn.Type == CommandButtonType.Edit)
         {
-            SetAssingTaskButtonInisibleAndDisplayTaskDetailsOnOneClick(args);
         }
         else if (args.CommandColumn.Type == CommandButtonType.Delete)
         {
-            SelectedTask = args.RowData;
-            BackendLibrary.DataAccess.TaskData.DeleteTask(SelectedTask.Task_id);
 
         }
     }

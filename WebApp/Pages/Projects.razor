@@ -19,7 +19,7 @@
 
 <div>
     @* okno dodawania nowego projektu*@
-    <SfDialog @bind-Visible="@visibility" Header="Nowy projekt" Width="500px" IsModal="true" ShowCloseIcon="true">
+    <SfDialog @bind-Visible="@visibility" Header="Nowy projekt" Width="500px" Height="500px" IsModal="true" ShowCloseIcon="true">
         <DialogTemplates>
             <Content>
                 <EditForm Model="@ProjectAdd">
@@ -62,8 +62,9 @@
                             </div>
                         </div>
                     </div>
-
-                    <div class="form-group">
+                    <br />
+                    <br />
+                    <div class="col-12 text-center">
                         <button type="submit" class="btn btn-primary" data-dismiss="modal" @onclick="SaveProject">Zapisz</button>
                         <SfToast @ref="SubmitToast" Title="Nowy projekt" Timeout=3000 Content="@toastContent">
                             <ToastPosition X="Right"></ToastPosition>

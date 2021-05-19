@@ -92,11 +92,12 @@ a, .btn-link {
 
 .btn-primary {
     font-family: 'Josefin Sans', sans-serif;
-    font-size: 15px;
+    font-size: 16px;
     justify-content: center;
     color: whitesmoke;
     background-color: #3da081;
     border-color: #3da081;
+    min-width: 90px;
 }
 
     .btn-primary:hover {
