@@ -172,7 +172,7 @@
 
     @* okno dodawania nowego zadania*@
 
-    <SfDialog @bind-Visible="@VisibilityAdd" Header="Nowe zadanie" Width="800px" IsModal="true" ShowCloseIcon="true">
+    <SfDialog @bind-Visible="@VisibilityAdd" Header="Nowe zadanie" Width="800px" IsModal="true" ShowCloseIcon="true" CssClass="e-custom">
         <DialogTemplates>
             <Content>
                 <EditForm Model="@TaskAdd">
@@ -180,22 +180,22 @@
                     <div class="form-group">
 
                         <label for="Tytuł" class="control-label" required>Tytuł</label>
-                        <SfTextBox TValue="string" @bind-Value="TaskAdd.name"></SfTextBox>
+                        <SfTextBox TValue="string" @bind-Value="TaskAdd.name" CssClass="e-custom"></SfTextBox>
                         <ValidationMessage For="@(() => TaskAdd.name)" />
                     </div>
                     <div class="form-group">
                         <label for="Opis" class="control-label">Opis</label>
-                        <SfTextBox Multiline=true TValue="string" @bind-Value="TaskAdd.description"></SfTextBox>
+                        <SfTextBox Multiline=true TValue="string" @bind-Value="TaskAdd.description" CssClass="e-custom"></SfTextBox>
                         <ValidationMessage For="@(() => TaskAdd.description)" />
                     </div>
                     <div class="form-group">
                         <label for="Starttime" class="control-label">Czas rozpoczęcia</label>
-                        <SfDateTimePicker TValue="DateTime" @bind-value="TaskAdd.start_time"></SfDateTimePicker>
+                        <SfDateTimePicker TValue="DateTime" @bind-value="TaskAdd.start_time" CssClass="e-custom"></SfDateTimePicker>
                         <ValidationMessage For="@(() => TaskAdd.start_time)" />
                     </div>
                     <div class="form-group">
                         <label for="Deadline" class="control-label">Data zakończenia</label>
-                        <SfDateTimePicker TValue="DateTime" @bind-value="TaskAdd.deadline"></SfDateTimePicker>
+                        <SfDateTimePicker TValue="DateTime" @bind-value="TaskAdd.deadline" CssClass="e-custom"></SfDateTimePicker>
                         <ValidationMessage For="@(() => TaskAdd.deadline)" />
                     </div>
                     <div class="col-lg-12 control-section multiselect-height">
@@ -205,7 +205,7 @@
                                 <SfDropDownList TValue="string" TItem="string"
                                                 @bind-Value="@TaskAdd.status"
                                                 Placeholder="Szukaj..."
-                                                DataSource="@status" AllowFiltering="true"
+                                                DataSource="@status" AllowFiltering="true" CssClass="e-custom"
                                                 MaximumSelectionLength=1>
                                     <DropDownListFieldSettings Text="status"> </DropDownListFieldSettings>
                                 </SfDropDownList>
@@ -217,7 +217,7 @@
                         <div class="control-wrapper multi-select-parent">
                             <div class="padding-top">
                                 <label asp-for="etykiety" class="control-label">Etykiety</label>
-                                <SfMultiSelect TValue="string[]" TItem="BackendLibrary.Models.LabelModel"
+                                <SfMultiSelect TValue="string[]" TItem="BackendLibrary.Models.LabelModel" CssClass="e-custom"
                                                @bind-Value="@selectedLabels"
                                                Placeholder="Szukaj..."
                                                DataSource="@labelsInDb" AllowFiltering="true" AllowCustomValue="true"
@@ -234,7 +234,7 @@
                             <div class="padding-top">
                                 <label asp-for="projekt" class="control-label">
                                     Projekt
-                                    <SfSwitch @bind-Checked="@isProjectSelectingOn" @onchange="@OnChangeButton"></SfSwitch>
+                                    <SfSwitch @bind-Checked="@isProjectSelectingOn" @onchange="@OnChangeButton" CssClass="e-custom"></SfSwitch>
                                 </label>
                                 <SfDropDownList TValue="string" TItem="BackendLibrary.Models.ProjectModel"
                                                 @bind-Value="@selectedProject"
@@ -254,13 +254,13 @@
                                 <SfMultiSelect TValue="int[]" TItem="EmployeeModel"
                                                @bind-Value="@selectedEmployeesId"
                                                Placeholder="Wybierz..."
-                                               DataSource="@employees" AllowFiltering="true"
+                                               DataSource="@employees" AllowFiltering="true" CssClass="e-custom"
                                                Mode="@VisualMode.Box">
                                     <MultiSelectTemplates TItem="EmployeeModel">
                                         <!-- Zmieniony Context z default na "SelectedEmployee" aby mogła działać walidacja -->
                                         <ItemTemplate Context="SelectedEmployee">
                                             <div>
-                                                <div class="ename">
+                                                <div class="control-label">
                                                     @((SelectedEmployee as EmployeeModel).First_name)
                                                     @((SelectedEmployee as EmployeeModel).Last_name)
                                                 </div>
@@ -268,7 +268,7 @@
                                         </ItemTemplate>
                                         <ValueTemplate Context="SelectedEmployee">
                                             <div class="multiselect-width">
-                                                <div class="name">
+                                                <div class="control-label">
                                                     @((SelectedEmployee as EmployeeModel).First_name)
                                                     @((SelectedEmployee as EmployeeModel).Last_name)
                                                 </div>
@@ -292,7 +292,8 @@
                     </div>
                     <br />
                     <div style="width:750px; margin:auto;">
-                        <SfGrid @ref="suggestedEmployeesGrid" DataSource="suggestedEmployees" TValue="EmployeeStats">
+                        <SfGrid @ref="suggestedEmployeesGrid" DataSource="suggestedEmployees" TValue="EmployeeStats" >
+                           <GridEvents CommandClicked="AddEmployeeToAssigned" TValue="EmployeeModel"></GridEvents>
                             <GridColumns>
                                 <GridColumn Field=@nameof(EmployeeStats.Employee_id) HeaderText="ID" TextAlign="TextAlign.Center" Width="35"></GridColumn>
                                 <GridColumn Field=@nameof(EmployeeStats.First_name) HeaderText="Imię" TextAlign="TextAlign.Left" Width="65"></GridColumn>
@@ -301,6 +302,11 @@
                                 <GridColumn Field=@nameof(EmployeeStats.TaskLabelMatches) HeaderText="TaskLabelMatch" TextAlign="TextAlign.Center" Width="110"></GridColumn>
                                 <GridColumn Field=@nameof(EmployeeStats.TaskDensity) HeaderText="TaskDensity" TextAlign="TextAlign.Center" Width="90"></GridColumn>
                                 <GridColumn Field=@nameof(EmployeeStats.FinalFactor) HeaderText="FinalFactor" TextAlign="TextAlign.Center" Width="80"></GridColumn>
+                                <GridColumn HeaderText="Dodaj" Width="80">
+                                    <GridCommandColumns>
+                                        <GridCommandColumn ButtonOption="@(new CommandButtonOptions() { IconCss = "e-icons e-add", CssClass = "e-flat" })"></GridCommandColumn>
+                                    </GridCommandColumns>
+                                </GridColumn>
                             </GridColumns>
                         </SfGrid>
                     </div>
@@ -324,7 +330,7 @@
             <Content>
                 <SfSplitter CssClass="out-splitter" Height="100%" Width="100%">
                     <SplitterPanes>
-                        <SplitterPane Size="34%" Min="408px" Resizable="false">
+                        <SplitterPane  Size="34%" Min="408px"Resizable="false">
                             <ContentTemplate>
                                 <div>
                                     <EditForm Model="@TaskEdit">
@@ -545,22 +551,12 @@
                                                             <GridColumn Field=@nameof(CommentModel.Employee_id) IsPrimaryKey="true" HeaderText="Komentarze" TextAlign="TextAlign.Left" Width="50"></GridColumn>
                                                         </GridColumns>
                                                     </SfGrid>
-                                                </div>
-
-                                                <div>
-
                                                     <EditForm Model="Comment" OnValidSubmit="AddNewComment">
-                                                        <SfRichTextEditor @ref="rteObj" @bind-Value="Comment.Description">
+                                                        <SfRichTextEditor @ref="rteObj" @bind-Value="Comment.Description" >
                                                             <RichTextEditorToolbarSettings Type="@Tooltype" Items="@Tools" EnableFloating="false"></RichTextEditorToolbarSettings>
                                                         </SfRichTextEditor>
-                                                        <div id='buttonSection'>
-                                                            <table>
-                                                                <tr>
-                                                                    <td>
-                                                                        <button class="samplebtn e-control e-btn" data-ripple="true" type="submit">Dodaj</button>
-                                                                    </td>
-                                                                </tr>
-                                                            </table>
+                                                        <div class="col-12 text-center">
+                                                                        <button class="btn btn-primary" data-ripple="true" type="submit">Dodaj</button>
                                                         </div>
                                                     </EditForm>
                                                 </div>
@@ -658,6 +654,13 @@
     public static string a2;
     public static byte[] a3;
 
+    /// <summary> Dodanie zaproponowanego pracownika do listy osób przypisanych do zadania
+    /// <param name="args"></param>
+    public void AddEmployeeToAssigned(CommandClickEventArgs<EmployeeModel> args)
+    {
+
+    }
+
     public void OnCommandClicked(CommandClickEventArgs<TaskModel> args)
     {
 
@@ -690,7 +693,7 @@
     }
 
     // Edytor tekstu
-    private ToolbarType Tooltype = ToolbarType.Expand;
+    private ToolbarType Tooltype = ToolbarType.MultiRow;
     private List<ToolbarItemModel> Tools = new List<ToolbarItemModel>()
 {
         new ToolbarItemModel() { Command = ToolbarCommand.Bold },
@@ -729,8 +732,6 @@
         new ToolbarItemModel() { Command = ToolbarCommand.SourceCode },
         new ToolbarItemModel() { Command = ToolbarCommand.FullScreen },
         new ToolbarItemModel() { Command = ToolbarCommand.Separator },
-        new ToolbarItemModel() { Command = ToolbarCommand.Undo },
-        new ToolbarItemModel() { Command = ToolbarCommand.Redo }
     };
 
     protected override void OnInitialized()

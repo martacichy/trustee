@@ -1,5 +1,6 @@
 @import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
 @import url('https://fonts.googleapis.com/css2?family=Josefin+Sans&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@200&display=swap');
 
 .employeelabel {
     font-size: 14px;
@@ -90,7 +91,8 @@ a, .btn-link {
 }
 
 .btn-primary {
-    
+    font-family: 'Josefin Sans', sans-serif;
+    font-size: 15px;
     justify-content: center;
     color: whitesmoke;
     background-color: #3da081;
@@ -127,6 +129,7 @@ app {
     position: relative;
     display: flex;
     flex-direction: column;
+    font-family: 'Montserrat', sans-serif;
 }
 
 
@@ -230,6 +233,11 @@ app {
 }
 
 .control-label {
+    font-size: 18px;
+    font-family: 'Josefin Sans', sans-serif;
+}
+
+.e-gridheader {
     font-size: 18px;
     font-family: 'Josefin Sans', sans-serif;
 }

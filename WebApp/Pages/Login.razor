@@ -13,11 +13,12 @@
     </div>
     <EditForm Model="Log">
         <DataAnnotationsValidator />
-            <div class="col-12 row">
-                <SfTextBox TValue="string" Placeholder='Login' @bind-Value="Log.Login" Width="200" CssClass="e-custom">
-                </SfTextBox>
-            </div>
+        <div class="col-12 row">
+            <SfTextBox TValue="string" Placeholder='Login' @bind-Value="Log.Login" Width="200" CssClass="e-custom">
+            </SfTextBox>
+
             <ValidationMessage For="@(() => Log.Login)" />
+        </div>
         <br />
         <div class="col-12 row">
             <SfTextBox TValue="string" Placeholder='Hasło' Type="Syncfusion.Blazor.Inputs.InputType.Password" @bind-Value="Log.Password" Width="200" CssClass="e-custom">
