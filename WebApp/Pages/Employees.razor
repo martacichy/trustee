@@ -1,16 +1,15 @@
 ﻿@page "/employees"
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <div class="header">
-    <img src="/Images/logo.png" height="100" />
+    <br />
+    <br />
     <h3>Pracownicy</h3>
-    
 
 </div>
     
 <div>
     @if (Login.UserLoggedIn.If_manager == 2)
     {
-        
         <div class="actionBtn">
             <Sfbutton class="btn btn-primary" @onclick="AddEmployee"><i class="fa fa-plus"></i>&nbsp;Nowy pracownik</Sfbutton>
         </div>
@@ -25,7 +24,7 @@
             </SfToast>
         </div>
         @*Edycja pracownika*@
-        <SfDialog @bind-Visible="@VisibilityEdit" AllowDragging="true" Width="180px" Height="800px" IsModal="true" ShowCloseIcon="true">
+        <SfDialog @bind-Visible="@VisibilityEdit" AllowDragging="true" Width="400px" Height="400px" IsModal="true" ShowCloseIcon="true">
             <DialogTemplates>
                 <Content>
                     <div class="dane">
@@ -80,7 +79,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="form-group">
+                        <div class="col-12 text-center">
                             <button type="submit" class="btn btn-primary" data-dismiss="modal" @onclick="UpdateEmployee" hidden=@readOnly>Zapisz</button>
                             <SfToast @ref="ToastObj" Title="Dane zaktualizowane pomyslnie!" Timeout=3000 Content="@ToastContentEdit">
                                 <ToastPosition X="Right"></ToastPosition>

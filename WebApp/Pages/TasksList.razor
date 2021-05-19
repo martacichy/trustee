@@ -4,7 +4,8 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 <div class="header">
-    <img src="/Images/logo.png" height="100" />
+    <br />
+    <br />
     @if (NavMenu.shouldDisplayArchivalTask)
     {
         <h3>Lista archiwalnych zadań</h3>
@@ -172,7 +173,7 @@
 
     @* okno dodawania nowego zadania*@
 
-    <SfDialog @bind-Visible="@VisibilityAdd" Header="Nowe zadanie" Width="800px" IsModal="true" ShowCloseIcon="true" CssClass="e-custom">
+    <SfDialog @bind-Visible="@VisibilityAdd" Header="Nowe zadanie" Width="800px" Height="1200px" IsModal="true" ShowCloseIcon="true" CssClass="e-custom">
         <DialogTemplates>
             <Content>
                 <EditForm Model="@TaskAdd">
@@ -282,7 +283,7 @@
                     </div>
 
                     @* ALGORYTM *@
-                    <div class="form-group">
+                    <div class="col-12 text-center">
                         <button type="submit" class="btn btn-primary" data-dismiss="modal" @onclick="SuggestEmployees">
                             Zaproponuj pasujących pracowników
                         </button>
@@ -295,14 +296,13 @@
                         <SfGrid @ref="suggestedEmployeesGrid" DataSource="suggestedEmployees" TValue="EmployeeStats">
                            <GridEvents CommandClicked="AddEmployeeToAssigned" TValue="EmployeeStats"></GridEvents>
                             <GridColumns>
-                                <GridColumn Field=@nameof(EmployeeStats.Employee_id) HeaderText="ID" TextAlign="TextAlign.Center" Width="35"></GridColumn>
-                                <GridColumn Field=@nameof(EmployeeStats.First_name) HeaderText="Imię" TextAlign="TextAlign.Left" Width="65"></GridColumn>
-                                <GridColumn Field=@nameof(EmployeeStats.Last_name) HeaderText="Nazwisko" TextAlign="TextAlign.Left" Width="75"></GridColumn>
-                                <GridColumn Field=@nameof(EmployeeStats.EmpLabelMatches) HeaderText="EmpLabelMatch" TextAlign="TextAlign.Center" Width="110"></GridColumn>
-                                <GridColumn Field=@nameof(EmployeeStats.TaskLabelMatches) HeaderText="TaskLabelMatch" TextAlign="TextAlign.Center" Width="110"></GridColumn>
-                                <GridColumn Field=@nameof(EmployeeStats.TaskDensity) HeaderText="TaskDensity" TextAlign="TextAlign.Center" Width="90"></GridColumn>
+                                <GridColumn Field=@nameof(EmployeeStats.First_name) HeaderText="Imię" TextAlign="TextAlign.Left" Width="90"></GridColumn>
+                                <GridColumn Field=@nameof(EmployeeStats.Last_name) HeaderText="Nazwisko" TextAlign="TextAlign.Left" Width="90"></GridColumn>
+                                <GridColumn Field=@nameof(EmployeeStats.EmpLabelMatches) HeaderText="EmpLabelMatch" TextAlign="TextAlign.Center" Width="80"></GridColumn>
+                                <GridColumn Field=@nameof(EmployeeStats.TaskLabelMatches) HeaderText="TaskLabelMatch" TextAlign="TextAlign.Center" Width="80"></GridColumn>
+                                <GridColumn Field=@nameof(EmployeeStats.TaskDensity) HeaderText="TaskDensity" TextAlign="TextAlign.Center" Width="80"></GridColumn>
                                 <GridColumn Field=@nameof(EmployeeStats.FinalFactor) HeaderText="FinalFactor" TextAlign="TextAlign.Center" Width="80"></GridColumn>
-                                <GridColumn HeaderText="Dodaj" Width="80">
+                                <GridColumn HeaderText="Dodaj" Width="50">
                                     <GridCommandColumns>
                                         <GridCommandColumn ButtonOption="@(new CommandButtonOptions() { IconCss = "e-icons e-add", CssClass = "e-flat" })"></GridCommandColumn>
                                     </GridCommandColumns>
@@ -311,7 +311,7 @@
                         </SfGrid>
                     </div>
                     <br />
-                    <div class="form-group">
+                    <div class="col-12 text-center">
                         <button type="submit" class="btn btn-primary" data-dismiss="modal" @onclick="SaveTask">Zapisz</button>
                         <SfToast @ref="SuccessTask" Title="Dodano nowe zadanie!" Timeout=3000 Content="@ToastContentAdd">
                             <ToastPosition X="Right"></ToastPosition>
@@ -325,7 +325,7 @@
     </SfDialog>
 
     @* okno szczegolow zadania *@
-    <SfDialog @bind-Visible="@VisibilityDetails" AllowDragging="true" Width="1600px" Height="1200px" IsModal="true" ShowCloseIcon="true">
+    <SfDialog @bind-Visible="@VisibilityDetails" AllowDragging="true" Width="1600px" Height="1600px" IsModal="true" ShowCloseIcon="true">
         <DialogTemplates>
             <Content>
                 <SfSplitter CssClass="out-splitter" Height="100%" Width="100%">
@@ -517,23 +517,13 @@
                                                                     var comment = (context as CommentModel);
 
                                                                     <div class="answer">
-                                                                        <table>
-                                                                            <tr>
-                                                                                <td>
                                                                                     <div class="authorname">
                                                                                         @EmployeeData.GetById(comment.Employee_id).First_name
                                                                                         @EmployeeData.GetById(comment.Employee_id).Last_name
                                                                                     </div>
-                                                                                </td>
-                                                                            </tr>
-                                                                            <tr>
-                                                                                <td>
                                                                                     <div class="detailsAnswer">
                                                                                         @comment.Date
                                                                                     </div>
-                                                                                </td>
-                                                                            </tr>
-                                                                        </table>
                                                                         <div class="posting">
                                                                             @((MarkupString)comment.Description)
                                                                         </div>
@@ -663,10 +653,12 @@
 
         if (args.CommandColumn.Type == CommandButtonType.Edit)
         {
+            SetAssingTaskButtonInisibleAndDisplayTaskDetailsOnOneClick(args);
         }
         else if (args.CommandColumn.Type == CommandButtonType.Delete)
         {
-
+            SelectedTask = args.RowData;
+            BackendLibrary.DataAccess.TaskData.DeleteTask(SelectedTask.Task_id);
         }
     }
 
@@ -701,8 +693,6 @@
         new ToolbarItemModel() { Command = ToolbarCommand.FontColor },
         new ToolbarItemModel() { Command = ToolbarCommand.BackgroundColor },
         new ToolbarItemModel() { Command = ToolbarCommand.Separator },
-        new ToolbarItemModel() { Command = ToolbarCommand.LowerCase },
-        new ToolbarItemModel() { Command = ToolbarCommand.UpperCase },
         new ToolbarItemModel() { Command = ToolbarCommand.Separator },
         new ToolbarItemModel() { Command = ToolbarCommand.SuperScript },
         new ToolbarItemModel() { Command = ToolbarCommand.SubScript },

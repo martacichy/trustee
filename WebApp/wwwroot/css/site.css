@@ -7,6 +7,11 @@
     color: #1B9D8C;
 }
 
+
+.h3 {
+    margin-top: 30px;
+}
+
 .authorname {
     font-size: 14px;
     font-family: 'Josefin Sans', sans-serif;
@@ -27,7 +32,19 @@
 .e-input-group.e-control-wrapper.e-custom .e-input {
     font-size: 18px;
     font-family: 'Josefin Sans', sans-serif;
-} 
+}
+
+.input[type="checkbox"], input[type="radio"] {
+    box-sizing: border-box;
+    padding: 0;
+    margin-top: 5px;
+    margin-right: 5px;
+}
+
+.e-kanban .e-kanban-content {
+    font-size: 18px;
+    font-family: 'Josefin Sans', sans-serif;
+}
 
 .e-dialog .e-dlg-header-content {
     background-color: #32856B;
@@ -48,24 +65,40 @@
 
 .e-kanban .e-kanban-table {
     font-size: 20px;
-    font-family: 'Josefin Sans', sans-serif;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.e-kanban .e-kanban-content .e-content-row .e-content-cells .e-card-container .e-card .e-card-header .e-card-header-title {
+    font-size: 18px;
+    font-family: 'Montserrat', sans-serif;
+}
+.e-kanban .e-kanban-content .e-content-row .e-content-cells .e-card-container .e-card .e-card-content {
+    font-size: 14px;
+    font-family: 'Montserrat', sans-serif;
+}
+.e-kanban .e-kanban-content .e-content-row .e-content-cells .e-card .e-card-content {
+    font-size: 20px;
+    font-family: 'Montserrat', sans-serif;
 }
 
 .e-kanban .e-kanban-content .e-content-row .e-content-cells.e-collapsed .e-collapse-header-text {
-    font-size: 18px;
+    font-size: 20px;
     font-family: 'Josefin Sans', sans-serif;
+    
+}
+.e-kanban .e-kanban-header .e-header-cells .e-header-text {
+    font-size: 20px;
 }
 
 .e-kanban .e-kanban-header .e-header-cells {
     font-size: 24px;
     background: #5CC1A1;
-    color: white;
     font-family: 'Josefin Sans', sans-serif;
 }
 
     .e-kanban .e-kanban-header .e-header-cells .e-header-text {
-        font-size: 20px;
-        
+        font-size: 24px;
+        text-align: center
     }
 
 .button1 {
@@ -83,6 +116,7 @@ html, body {
     flex-direction: column;
     
 }
+ 
 
 a, .btn-link {
     color: white;
@@ -104,6 +138,11 @@ a, .btn-link {
         color: whitesmoke;
         background-color: #399679;
     }
+
+.btn-info {
+    border-color: #3da081;
+    background-color: #3da081;
+}
 
 .actionBtn {
     margin-left: 10px;
@@ -221,7 +260,6 @@ app {
 
 
 .header {
-    
     text-align: center;
     width: 100%;
     background: #1abc9c;
@@ -230,7 +268,14 @@ app {
     margin-left: 0px;
     margin-right: 0px;
     margin-bottom: 10px;
+    font-family: 'Josefin Sans', sans-serif;
+}
 
+.e-dialog .e-dlg-header {
+    text-align: center;
+    font-size: 30px;
+    font-family: 'Josefin Sans', sans-serif;
+    color: #F7F4F2;
 }
 
 .control-label {
@@ -244,10 +289,12 @@ app {
 }
 
 .header-list {
-    font-size: 20px;
+    font-size: 26px;
     font-family: 'Josefin Sans', sans-serif;
     color: black;
 }
+
+
 
 .form-group {
     font-size: 20px;
@@ -271,10 +318,71 @@ app {
     }
 }
 
+.e-pager .e-pagercontainer {
+    border-radius: 4px;
+    border-style: solid;
+    border-width: 1px;
+    display: inline-block;
+    margin: 0 0 -4px;
+    overflow: hidden;
+    font-size: 1px;
+    height: 35px;
+}
+
+// licznik stron, wiadomosc
+.e-pager div.e-parentmsgbar {
+    float: right;
+    padding-bottom: 9px;
+    padding-right: 0;
+    padding-top: 8px;
+    font-family: 8px;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.e-grid .e-rowcell {
+    font-size: 16px;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.e-input-group textarea.e-input, .e-input-group.e-control-wrapper textarea.e-input {
+    font-size: 16px;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.e-control .e-input-group.e-control-wrapper input {
+    font-size: 16px;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.e-richtexteditor .e-rte-content .e-content {
+    font-size: 14px;
+    font-family: 'Montserrat', sans-serif;
+}
+<!-- kolor countera -->
+.e-pager .e-currentitem {
+    background-color: #A3A3A3;
+}
+
+.e-pager .e-numericitem {
+    border-right-style: solid;
+    border-right-width: 1px;
+    display: inline-block;
+    line-height: 1;
+    margin-right: 0;
+    min-width: 26px;
+    padding: 13px 12px 10px 12px;
+    font-size: 12px;
+    text-align: center;
+}
 
 .header {
     background-image: url('/Images/back.mp4');
     background-position:  center ;
     background-size: 100%;
     height: 150px;
+}
+
+
+.e-grid .e-icons {
+    color: #858585;
 }
