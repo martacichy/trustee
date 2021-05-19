@@ -81,7 +81,7 @@
             AllowPaging="true"
             AllowSorting="true"
             AllowFiltering="false"
-            ContextMenuItems="@(new List<object>() { "SortAscending", "SortDescending", "Copy" })">
+            ContextMenuItems="@(new List<object>() { "SortAscending", "SortDescending", "Copy" })" Width="1900">
         <GridTemplates>
             <DetailTemplate>
                 @{
@@ -92,7 +92,7 @@
                                 </div>
                     
                     <SfGrid DataSource="tasks" TValue="TaskModel" Query="@GetTasksQuery(project.Project_id)">
-                        <GridPageSettings PageSize="6"></GridPageSettings>
+                        <GridPageSettings PageSize="10"></GridPageSettings>
                         <GridColumns>
                             <GridColumn Field=@nameof(TaskModel.Task_id) IsPrimaryKey="true" HeaderText="ID" TextAlign="TextAlign.Left" Width="50"></GridColumn>
                             <GridColumn Field=@nameof(TaskModel.Name) HeaderText="Nazwa" TextAlign="TextAlign.Left" Width="500"></GridColumn>
@@ -109,7 +109,7 @@
                         <label>Pracownicy:</label>
                     </div>
                     <SfGrid DataSource="employeeProjectPairs" TValue="EmpProjectPair" Query="@GetEmployeesQuery(project.Project_id)">
-                        <GridPageSettings PageSize="6"></GridPageSettings>
+                        <GridPageSettings PageSize="10"></GridPageSettings>
                         <GridColumns>
                             <GridColumn Field=@nameof(EmpProjectPair.Employee_id) HeaderText="ID" TextAlign="TextAlign.Left" Width="50"></GridColumn>
                             <GridColumn Field=@nameof(EmpProjectPair.First_name) HeaderText="Imię" TextAlign="TextAlign.Left" Width="250"></GridColumn>
