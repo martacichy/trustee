@@ -129,7 +129,8 @@
             <GridPageSettings PageSize="12"></GridPageSettings>
             <GridSearchSettings IgnoreCase="true"></GridSearchSettings>
             <GridEvents TValue="EmployeeModel"
-                        OnRecordDoubleClick="DisplayEmployeeDetails">
+                         OnRecordDoubleClick="RowDoubleClickHandler"
+                        RowSelected="RowSelectedHandler">
             </GridEvents>
             <GridColumns>
                 <GridColumn Field=@nameof(EmployeeModel.Employee_id) IsPrimaryKey="true" HeaderText="ID" TextAlign="TextAlign.Left" Width="50"></GridColumn>
@@ -228,23 +229,7 @@
 
     private void EditEmployee()
     {
-        if (SelectedEmployee != null)
-        {
-            EmployeeEdit.firstname = SelectedEmployee.First_name;
-            EmployeeEdit.lastname = SelectedEmployee.Last_name;
-            EmployeeEdit.email = SelectedEmployee.Email;
-            EmployeeEdit.role = SelectedEmployee.UserType;
-            VisibilityEdit = true;
-        }
-        else
-        {
-            NoSelectedEmployee.Show();
-        }
-    }
-
-    public void RowSelectHandler(RowSelectEventArgs<EmployeeModel> args)
-    {
-        SelectedEmployee = args.Data;
+        DisplayEmployeeDetails(SelectedEmployee);
     }
 
     public void RowDeselectHandler()
@@ -258,11 +243,20 @@
 
     }
 
-    private void DisplayEmployeeDetails(RecordDoubleClickEventArgs<EmployeeModel> args)
+    private void RowSelectedHandler(RowSelectEventArgs<EmployeeModel> args)
+    {
+        SelectedEmployee = args.Data;
+    }
+
+    private void RowDoubleClickHandler(RecordDoubleClickEventArgs<EmployeeModel> args)
     {
         SelectedEmployee = args.RowData;
+        DisplayEmployeeDetails(SelectedEmployee);
+    }
 
-        if (SelectedEmployee != null)
+    private void DisplayEmployeeDetails(EmployeeModel SelectedEmployee)
+    {
+        if (SelectedEmployee.First_name != null)
         {
             ListOfEmployee = EmployeeData.GetByIdList(Pages.Employees.SelectedEmployee.Employee_id); //jednoelementowa lista zawierająca wybranego pracownika
 
@@ -287,13 +281,9 @@
                 nameofProjects[i] = ProjectData.GetById(ListofProjectsId[i].Project_id).Name;
                 oldProjects[i] = ProjectData.GetById(ListofProjectsId[i].Project_id).Name;
             }
-
-
         }
 
-
-
-        if (SelectedEmployee != null)
+        if (SelectedEmployee.First_name != null)
         {
             EmployeeEdit.role = SelectedEmployee.UserType;
             EmployeeEdit.firstname = SelectedEmployee.First_name;
@@ -309,8 +299,6 @@
         {
             NoSelectedEmployee.Show();
         }
-
-
     }
 
     private bool IsSelectedLabelsContainsInDbLabels(string label)
