@@ -19,22 +19,22 @@
 @* wyświetlanie przycisku do tworzenia nowych zadań *@
 @if (Login.UserLoggedIn.If_manager == 1 || Login.UserLoggedIn.If_manager == 2)
 {
-<div>
-    <div class="actionBtn">
-        <Sfbutton class="btn btn-primary" @onclick="AddTask"><i class="fa fa-plus"></i>&nbsp;Dodaj zadanie</Sfbutton>
+    <div>
+        <div class="actionBtn">
+            <Sfbutton class="btn btn-primary" @onclick="AddTask"><i class="fa fa-plus"></i>&nbsp;Dodaj zadanie</Sfbutton>
+        </div>
+        <div class="actionBtn">
+            <Sfbutton class="btn btn-primary" @onclick="EditTask"><i class="fa fa-pencil"></i>&nbsp;Edytuj zadanie</Sfbutton>
+        </div>
+        <div class="actionBtn">
+            <Sfbutton class="btn btn-primary" id="deleteBtn" @onclick="DeleteTask"><i class="fa fa-trash"></i>&nbsp;Usuń zadanie</Sfbutton>
+        </div>
+        <div class="actionBtn">
+            <SfButton class="btn btn-primary" hidden=@readOnly>
+                <input type="checkbox" class="actionBtn" @bind-value="@shouldDisplayTeamTasks" @onclick="DisplayTeamTask" /> Wyświetl zadania zespołu
+            </SfButton>
+        </div>
     </div>
-    <div class="actionBtn">
-        <Sfbutton class="btn btn-primary" @onclick="EditTask"><i class="fa fa-pencil"></i>&nbsp;Edytuj zadanie</Sfbutton>
-    </div>
-    <div class="actionBtn">
-        <Sfbutton class="btn btn-primary" id="deleteBtn" @onclick="DeleteTask"><i class="fa fa-trash"></i>&nbsp;Usuń zadanie</Sfbutton>
-    </div>
-    <div class="actionBtn">
-        <SfButton class="btn btn-primary" hidden=@readOnly>
-            <input type="checkbox" class="actionBtn" @bind-value="@shouldDisplayTeamTasks" @onclick="DisplayTeamTask"/> Wyświetl zadania zespołu
-        </SfButton>
-    </div>
-</div>
 }
 
 
@@ -49,7 +49,7 @@
 <div>
 
     @*LISTA ZADAŃ*@
-    
+
     <SfGrid @ref="DefaultGrid"
             DataSource="TaskList"
             AllowSorting="true"
@@ -58,18 +58,18 @@
             Locale="pl"
             ContextMenuItems="@(new List<object>()
             {"SortDescending", "SortAscending", "Copy"})">
-        <GridEditSettings  AllowDeleting="true"></GridEditSettings>
+        <GridEditSettings AllowDeleting="true"></GridEditSettings>
 
         <GridFilterSettings EnableCaseSensitivity="false"></GridFilterSettings>
         <GridSearchSettings IgnoreCase="true"></GridSearchSettings>
         <GridSelectionSettings EnableToggle="true"></GridSelectionSettings>
         <GridEvents TValue="TaskModel"
                     RowSelected="RowSelectHandler"
-                    RowDeselected="RowDeselectHandler"
                     OnRecordDoubleClick="SetAssingTaskButtonInisibleAndDisplayTaskDetails"
                     OnRecordClick="ExpandTaskDetails"
                     CommandClicked="OnCommandClicked"
-                    QueryCellInfo="CustomizeCell">
+                    QueryCellInfo="CustomizeCell"
+                    RowDeselected="RowDeselectHandler">
         </GridEvents>
         <GridTemplates>
             <DetailTemplate>
@@ -116,62 +116,62 @@
 
     <br />
     @*LISTA NIEROZPOCZĘTYCH ZADAŃ*@
-    
-<div style="display: @displayInlineOrNone">
-    <label class="header-list">Zadania nierozpoczęte</label>
-    <SfGrid @ref="DefaultGrid"
-            DataSource="listOfUnstartedTasks"
-            AllowPaging="true"
-            AllowSorting="true"
-            AllowFiltering="true"
-            AllowSelection="true"
-            Locale="pl"
-            ContextMenuItems="@(new List<object>()
+
+    <div style="display: @displayInlineOrNone">
+        <label class="header-list">Zadania nierozpoczęte</label>
+        <SfGrid @ref="DefaultGrid"
+                DataSource="listOfUnstartedTasks"
+                AllowPaging="true"
+                AllowSorting="true"
+                AllowFiltering="true"
+                AllowSelection="true"
+                Locale="pl"
+                ContextMenuItems="@(new List<object>()
             {"SortDescending", "SortAscending", "Copy"})">
-        <GridFilterSettings EnableCaseSensitivity="false"></GridFilterSettings>
-        <GridSearchSettings IgnoreCase="true"></GridSearchSettings>
-        <GridSelectionSettings EnableToggle="true"></GridSelectionSettings>
-        <GridEvents TValue="TaskModel"
-                    RowSelected="RowSelectHandler"
-                    RowDeselected="RowDeselectHandler"
-                    OnRecordDoubleClick="SetAssingTaskButtonVisibleAndDisplayTaskDetails"
-                    OnRecordClick="ExpandTaskDetails">
-        </GridEvents>
+            <GridFilterSettings EnableCaseSensitivity="false"></GridFilterSettings>
+            <GridSearchSettings IgnoreCase="true"></GridSearchSettings>
+            <GridSelectionSettings EnableToggle="true"></GridSelectionSettings>
+            <GridEvents TValue="TaskModel"
+                        RowSelected="RowSelectHandler"
+                        OnRecordDoubleClick="SetAssingTaskButtonVisibleAndDisplayTaskDetails"
+                        OnRecordClick="ExpandTaskDetails"
+                        RowDeselected="RowDeselectHandler">
+            </GridEvents>
 
-        <GridTemplates>
-            <DetailTemplate>
-                @{
-                    var task = (context as TaskModel);
+            <GridTemplates>
+                <DetailTemplate>
+                    @{
+                        var task = (context as TaskModel);
 
-                    <label class="header-list"><i class="fas fa-user-friends"></i>Pracownicy:</label>
-                    <SfGrid DataSource="employeeTaskPairs" TValue="EmpTaskPair" Query="@GetEmployeesQuery(task.Task_id)">
-                        <GridPageSettings PageSize="6"></GridPageSettings>
-                        <GridColumns>
-                            <GridColumn Field=@nameof(EmpTaskPair.Employee_id) HeaderText="ID" TextAlign="TextAlign.Left" Width="50"></GridColumn>
-                            <GridColumn Field=@nameof(EmpTaskPair.First_name) HeaderText="Imię" TextAlign="TextAlign.Left" Width="80"></GridColumn>
-                            <GridColumn Field=@nameof(EmpTaskPair.Last_name) HeaderText="Nazwisko" TextAlign="TextAlign.Left" Width="120"></GridColumn>
-                            <GridColumn Field=@nameof(EmpTaskPair.Email) HeaderText="E-mail" TextAlign="TextAlign.Left" Width="120"></GridColumn>
-                        </GridColumns>
-                    </SfGrid>
-                }
-            </DetailTemplate>
-        </GridTemplates>
-        <GridPageSettings PageSize="15"></GridPageSettings>
-        <GridColumns>
-            <GridColumn Field=@nameof(TaskModel.Task_id) IsPrimaryKey="true" HeaderText="ID" TextAlign="TextAlign.Left" Width="50"></GridColumn>
-            <GridColumn Field=@nameof(TaskModel.Name) HeaderText="Nazwa" TextAlign="TextAlign.Left" Width="500"></GridColumn>
-            <GridColumn Field=@nameof(TaskModel.Status) HeaderText="Status" TextAlign="TextAlign.Left" Width="200"></GridColumn>
-            <GridColumn Field=@nameof(TaskModel.Start_time) HeaderText="Data rozpoczęcia" Format="d" Type="ColumnType.Date"
-                        TextAlign="TextAlign.Left" Width="200"></GridColumn>
-            <GridColumn Field=@nameof(TaskModel.Deadline) HeaderText="Data zakończenia" Format="d" Type="ColumnType.Date"
-                        TextAlign="TextAlign.Left"></GridColumn>
-            <GridForeignColumn Field=@nameof(TaskModel.Project_id) HeaderText="Projekty"
-                               ForeignKeyValue="Name" ForeignDataSource="@projectsForUnstartedTasks" Width="150"></GridForeignColumn>
-            <GridColumn Field=@nameof(TaskModel.MatchFactor) HeaderText="Dopasowanie" TextAlign="TextAlign.Center"></GridColumn>
+                        <label class="header-list"><i class="fas fa-user-friends"></i>Pracownicy:</label>
+                        <SfGrid DataSource="employeeTaskPairs" TValue="EmpTaskPair" Query="@GetEmployeesQuery(task.Task_id)">
+                            <GridPageSettings PageSize="6"></GridPageSettings>
+                            <GridColumns>
+                                <GridColumn Field=@nameof(EmpTaskPair.Employee_id) HeaderText="ID" TextAlign="TextAlign.Left" Width="50"></GridColumn>
+                                <GridColumn Field=@nameof(EmpTaskPair.First_name) HeaderText="Imię" TextAlign="TextAlign.Left" Width="80"></GridColumn>
+                                <GridColumn Field=@nameof(EmpTaskPair.Last_name) HeaderText="Nazwisko" TextAlign="TextAlign.Left" Width="120"></GridColumn>
+                                <GridColumn Field=@nameof(EmpTaskPair.Email) HeaderText="E-mail" TextAlign="TextAlign.Left" Width="120"></GridColumn>
+                            </GridColumns>
+                        </SfGrid>
+                    }
+                </DetailTemplate>
+            </GridTemplates>
+            <GridPageSettings PageSize="15"></GridPageSettings>
+            <GridColumns>
+                <GridColumn Field=@nameof(TaskModel.Task_id) IsPrimaryKey="true" HeaderText="ID" TextAlign="TextAlign.Left" Width="50"></GridColumn>
+                <GridColumn Field=@nameof(TaskModel.Name) HeaderText="Nazwa" TextAlign="TextAlign.Left" Width="500"></GridColumn>
+                <GridColumn Field=@nameof(TaskModel.Status) HeaderText="Status" TextAlign="TextAlign.Left" Width="200"></GridColumn>
+                <GridColumn Field=@nameof(TaskModel.Start_time) HeaderText="Data rozpoczęcia" Format="d" Type="ColumnType.Date"
+                            TextAlign="TextAlign.Left" Width="200"></GridColumn>
+                <GridColumn Field=@nameof(TaskModel.Deadline) HeaderText="Data zakończenia" Format="d" Type="ColumnType.Date"
+                            TextAlign="TextAlign.Left"></GridColumn>
+                <GridForeignColumn Field=@nameof(TaskModel.Project_id) HeaderText="Projekty"
+                                   ForeignKeyValue="Name" ForeignDataSource="@projectsForUnstartedTasks" Width="150"></GridForeignColumn>
+                <GridColumn Field=@nameof(TaskModel.MatchFactor) HeaderText="Dopasowanie" TextAlign="TextAlign.Center"></GridColumn>
 
-        </GridColumns>
-    </SfGrid>
-</div>
+            </GridColumns>
+        </SfGrid>
+    </div>
     <div class="form-group">
         <SfToast @ref="NoSelectedTask" Title="Wybierz zadanie!" Timeout=2000>
             <ToastPosition X="Center"></ToastPosition>
@@ -302,7 +302,7 @@
                     <br />
                     <div style="width:750px; margin:auto;">
                         <SfGrid @ref="suggestedEmployeesGrid" DataSource="suggestedEmployees" TValue="EmployeeStats">
-                           <GridEvents CommandClicked="AddEmployeeToAssigned" TValue="EmployeeStats"></GridEvents>
+                            <GridEvents CommandClicked="AddEmployeeToAssigned" TValue="EmployeeStats"></GridEvents>
                             <GridColumns>
                                 <GridColumn Field=@nameof(EmployeeStats.First_name) HeaderText="Imię" TextAlign="TextAlign.Left" Width="90"></GridColumn>
                                 <GridColumn Field=@nameof(EmployeeStats.Last_name) HeaderText="Nazwisko" TextAlign="TextAlign.Left" Width="90"></GridColumn>
@@ -338,7 +338,7 @@
             <Content>
                 <SfSplitter CssClass="out-splitter" Height="100%" Width="100%">
                     <SplitterPanes>
-                        <SplitterPane  Size="34%" Min="408px"Resizable="false">
+                        <SplitterPane Size="34%" Min="408px" Resizable="false">
                             <ContentTemplate>
                                 <div>
                                     <EditForm Model="@TaskEdit">
@@ -476,7 +476,7 @@
                                 <div>
                                     <SfSplitter Height="790px" Orientation="Syncfusion.Blazor.Layouts.Orientation.Vertical">
                                         <SplitterPanes>
-                                            <SplitterPane Size="34%" Min="268.6px" Resizable="false" >
+                                            <SplitterPane Size="34%" Min="268.6px" Resizable="false">
                                                 <div>
                                                     <div class="text-align">@*Wartości testowanej funkcji: @a1 *@</div>
                                                     <SfUploader AutoUpload="false">
@@ -501,13 +501,13 @@
                                                                     RowDeselected="RowDeselectHandlerFile"
                                                                     OnRecordDoubleClick="DownloadSelectedFile">
                                                         </GridEvents>
-                                                        <GridColumns >
+                                                        <GridColumns>
                                                             <GridColumn Field=@nameof(FileModel.File_name) HeaderText="Nazwa pliku" TextAlign="TextAlign.Left" Width="500"></GridColumn>
                                                             <GridColumn Field=@nameof(FileModel.Date) HeaderText="Data wstawienia" Format="d" Type="ColumnType.Date"
                                                                         TextAlign="TextAlign.Left" Width="200"></GridColumn>
                                                         </GridColumns>
                                                     </SfGrid>
-                                                
+
                                                 </div>
                                             </SplitterPane>
                                             <SplitterPane Size="66%" Min="521.4px" Resizable="false">
@@ -521,13 +521,13 @@
                                                                 @{
                                                                     var comment = (context as CommentModel);
                                                                     <div class="answer">
-                                                                                    <div class="authorname">
-                                                                                        @EmployeeData.GetById(comment.Employee_id).First_name
-                                                                                        @EmployeeData.GetById(comment.Employee_id).Last_name
-                                                                                    </div>
-                                                                                    <div class="detailsAnswer">
-                                                                                        @comment.Date
-                                                                                    </div>
+                                                                        <div class="authorname">
+                                                                            @EmployeeData.GetById(comment.Employee_id).First_name
+                                                                            @EmployeeData.GetById(comment.Employee_id).Last_name
+                                                                        </div>
+                                                                        <div class="detailsAnswer">
+                                                                            @comment.Date
+                                                                        </div>
                                                                         <div class="posting">
                                                                             @((MarkupString)comment.Description)
                                                                         </div>
@@ -543,11 +543,11 @@
                                                         </GridSortSettings>
                                                     </SfGrid>
                                                     <EditForm Model="Comment" OnValidSubmit="AddNewComment">
-                                                        <SfRichTextEditor @ref="rteObj" @bind-Value="Comment.Description" >
+                                                        <SfRichTextEditor @ref="rteObj" @bind-Value="Comment.Description">
                                                             <RichTextEditorToolbarSettings Type="@Tooltype" Items="@Tools" EnableFloating="false"></RichTextEditorToolbarSettings>
                                                         </SfRichTextEditor>
                                                         <div class="col-12 text-center">
-                                                                        <button class="btn btn-primary" data-ripple="true" type="submit">Dodaj</button>
+                                                            <button class="btn btn-primary" data-ripple="true" type="submit">Dodaj</button>
                                                         </div>
                                                     </EditForm>
                                                 </div>
@@ -751,6 +751,7 @@
         loggedEmployee = Pages.Login.UserLoggedIn;
 
         fillEmployeeTaskPairs();
+        RowDeselectHandler();
     }
 
     /// <summary> Zamkniecie okna przy kliknieciu poza nie. </summary>
@@ -835,30 +836,17 @@
         VisibilityAdd = true;
     }
 
-    private void EditTask(MouseEventArgs e)
+    private void EditTask()
     {
-        if (SelectedTask != null)
-        {
-            TaskEdit.name = SelectedTask.Name;
-            TaskEdit.description = SelectedTask.Description;
-            TaskEdit.start_time = SelectedTask.Start_time;
-            TaskEdit.deadline = SelectedTask.Deadline;
-            TaskEdit.status = SelectedTask.Status;
-            TaskEdit.auto_assigned = SelectedTask.Auto_assigned;
-            TaskEdit.project_id = SelectedTask.Project_id;
-            VisibilityEdit = true;
-        }
-        else
-        {
-            NoSelectedTask.Show();
-        }
+        DisplayTaskDetails(SelectedTask);
     }
 
-    private void DeleteTask(MouseEventArgs e)
+    private void DeleteTask()
     {
         if (SelectedTask != null)
         {
-
+            BackendLibrary.DataAccess.TaskData.DeleteTask(SelectedTask.Task_id);
+            uriHelper.NavigateTo(uriHelper.Uri, forceLoad: true);
         }
         else
         {
@@ -900,12 +888,13 @@
     private void DisplayTaskDetails(TaskModel args)
     {
         SelectedTask = args;
-        CommentsList = BackendLibrary.DataAccess.CommentData.GetAllByTaskId(SelectedTask.Task_id);
 
-        FileList = FileData.GetAllByTaskId(SelectedTask.Task_id);
 
         if (SelectedTask != null)
         {
+            CommentsList = BackendLibrary.DataAccess.CommentData.GetAllByTaskId(SelectedTask.Task_id);
+
+            FileList = FileData.GetAllByTaskId(SelectedTask.Task_id);
             ListOfTasks = TaskData.GetByIdList(Pages.TasksList.SelectedTask.Task_id); //jednoelementowa lista zawierająca wybranego taska
 
             //tutaj przechowywane są id etykiet, nastepnie odpowiednie etykiety wpisane do tablicy
@@ -1547,6 +1536,7 @@
 
     private void DisplayTeamTask()
     {
+        SelectedTask = null;
         projects.Clear();
         projectsForUnstartedTasks.Clear();
         if (shouldDisplayTeamTasks && NavMenu.shouldDisplayArchivalTask)
@@ -1587,7 +1577,7 @@
             }
 
         }
-        if(listOfUnstartedTasks != null)
+        if (listOfUnstartedTasks != null)
         {
             for (int i = 0; i < listOfUnstartedTasks.Count; i++)
             {
