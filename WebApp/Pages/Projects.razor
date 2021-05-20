@@ -1,4 +1,5 @@
 ﻿@page "/projects"
+@layout MainLayout
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <div class="header">
     <br />
@@ -17,7 +18,6 @@
     <br />
 }
 
-<div>
     @* okno dodawania nowego projektu*@
     <SfDialog @bind-Visible="@visibility" Header="Nowy projekt" Width="500px" Height="500px" IsModal="true" ShowCloseIcon="true">
         <DialogTemplates>
@@ -25,8 +25,8 @@
                 <EditForm Model="@ProjectAdd">
                     <DataAnnotationsValidator />
                     <div class="form-group">
-                        <label for="Nazwa projektu" class="control-label" required>Nazwa projektu</label>
-                        <input for="Nazwa projektu" class="form-control" @bind-value="ProjectAdd.Name" />
+                        <label for="Nazwa projektu" class="control-label" required>Tytuł</label>
+                        <SfTextBox TValue="string" @bind-Value="ProjectAdd.Name" CssClass="e-custom"></SfTextBox>
                         <ValidationMessage For="@(() => ProjectAdd.Name)" />
                     </div>
                     <div class="col-lg-12 control-section multiselect-height">
@@ -37,7 +37,7 @@
                                                @bind-Value="@selectedEmployeesId"
                                                Placeholder="Wybierz..."
                                                DataSource="@allEmployees" AllowFiltering="true"
-                                               Mode="@VisualMode.Box">
+                                               Mode="@VisualMode.Box" >
                                     <MultiSelectTemplates TItem="EmployeeModel">
                                         <!-- Zmieniony Context z default na "SelectedEmployee" aby mogła działać walidacja -->
                                         <ItemTemplate Context="SelectedEmployee">
@@ -102,6 +102,12 @@
                                         TextAlign="TextAlign.Left" Width="200"></GridColumn>
                             <GridColumn Field=@nameof(TaskModel.Deadline) HeaderText="Data zakończenia" Format="d" Type="ColumnType.Date"
                                         TextAlign="TextAlign.Left"></GridColumn>
+                            <GridColumn HeaderText="Zarządzaj" Width="150">
+                                <GridCommandColumns>
+                                    <GridCommandColumn Type="CommandButtonType.Edit" ButtonOption="@(new CommandButtonOptions() { IconCss = "e-icons e-edit", CssClass = "e-flat" })"></GridCommandColumn>
+                                    <GridCommandColumn Type="CommandButtonType.Delete" ButtonOption="@(new CommandButtonOptions() { IconCss = "e-icons e-delete", CssClass = "e-flat" })"></GridCommandColumn>
+                                </GridCommandColumns>
+                            </GridColumn>
                         </GridColumns>
                     </SfGrid>
 
@@ -116,6 +122,12 @@
                             <GridColumn Field=@nameof(EmpProjectPair.First_name) HeaderText="Imię" TextAlign="TextAlign.Left" Width="250"></GridColumn>
                             <GridColumn Field=@nameof(EmpProjectPair.Last_name) HeaderText="Nazwisko" TextAlign="TextAlign.Left" Width="250"></GridColumn>
                             <GridColumn Field=@nameof(EmpProjectPair.Email) HeaderText="E-mail" TextAlign="TextAlign.Left"></GridColumn>
+                            <GridColumn HeaderText="Zarządzaj" Width="150">
+                                <GridCommandColumns>
+                                    <GridCommandColumn Type="CommandButtonType.Edit" ButtonOption="@(new CommandButtonOptions() { IconCss = "e-icons e-edit", CssClass = "e-flat" })"></GridCommandColumn>
+                                    <GridCommandColumn Type="CommandButtonType.Delete" ButtonOption="@(new CommandButtonOptions() { IconCss = "e-icons e-delete", CssClass = "e-flat" })"></GridCommandColumn>
+                                </GridCommandColumns>
+                            </GridColumn>
                         </GridColumns>
                     </SfGrid>
                     <br />
@@ -127,9 +139,14 @@
         <GridColumns>
             <GridColumn Field=@nameof(ProjectModel.Project_id) IsPrimaryKey="true" HeaderText="ID" TextAlign="TextAlign.Left" Width="50"></GridColumn>
             <GridColumn Field=@nameof(ProjectModel.Name) IsPrimaryKey="true" HeaderText="Nazwa Projektu" TextAlign="TextAlign.Left" Width="300"></GridColumn>
+            <GridColumn HeaderText="Zarządzaj" Width="150">
+                <GridCommandColumns>
+                    <GridCommandColumn Type="CommandButtonType.Edit" ButtonOption="@(new CommandButtonOptions() { IconCss = "e-icons e-edit", CssClass = "e-flat" })"></GridCommandColumn>
+                    <GridCommandColumn Type="CommandButtonType.Delete" ButtonOption="@(new CommandButtonOptions() { IconCss = "e-icons e-delete", CssClass = "e-flat" })"></GridCommandColumn>
+                </GridCommandColumns>
+            </GridColumn>
         </GridColumns>
     </SfGrid>
-</div>
 
 @code {
     /// <summary>
@@ -242,10 +259,3 @@
     }
 }
 
-<style>
-    
-
-   
-
-
-</style>

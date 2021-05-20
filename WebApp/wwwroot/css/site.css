@@ -1,12 +1,38 @@
 @import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
 @import url('https://fonts.googleapis.com/css2?family=Josefin+Sans&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@200&display=swap');
+@import url('file:///C:\Users\Marta\Desktop\ZESP\WebApp\wwwroot\css\site.css');
 
 .employeelabel {
     font-size: 14px;
     color: #1B9D8C;
 }
 
+
+.body {
+    margin-right: 20px;
+}
+
+.e-multi-select-wrapper .e-chips > .e-chipcontent {
+    color: #fff;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+}
+
+.e-dropdownbase .e-list-item {
+    width: 100%;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 13px;
+}
+
+
+.e-kanban .e-kanban-content .e-content-row .e-content-cells.e-collapsed {
+    overflow: hidden;
+    text-align: center;
+    width: 50px;
+    min-height: 250px;
+    height: 250px;
+}
 
 .h3 {
     margin-top: 30px;
@@ -19,7 +45,7 @@
 }
 
 .detailsAnswer {
-    font-size: 9px;
+    font-size: 10x;
     font-family: 'Josefin Sans', sans-serif;
     font-weight: lighter;
 }
@@ -34,7 +60,7 @@
     font-family: 'Josefin Sans', sans-serif;
 }
 
-.input[type="checkbox"], input[type="radio"] {
+.input[type="checkbox"] {
     box-sizing: border-box;
     padding: 0;
     margin-top: 5px;
@@ -124,6 +150,13 @@ a, .btn-link {
     font-family: 'Josefin Sans', sans-serif;
 }
 
+
+.e-btn.e-flat.e-primary, .e-css.e-btn.e-flat.e-primary {
+    background-color: #3da081;
+    
+    color: #fff;
+}
+
 .btn-primary {
     font-family: 'Josefin Sans', sans-serif;
     font-size: 16px;
@@ -137,11 +170,18 @@ a, .btn-link {
     .btn-primary:hover {
         color: whitesmoke;
         background-color: #399679;
+        border-color: #3da081;
     }
 
 .btn-info {
     border-color: #3da081;
     background-color: #3da081;
+    border-color: #3da081;
+}
+
+button, input, optgroup, select, textarea {
+    line-height: inherit;
+    margin-right: 20px;
 }
 
 .actionBtn {
@@ -150,10 +190,14 @@ a, .btn-link {
     float: left;
 }
 
-#deleteBtn {
-    background-color: #ff6363;
-    border-color: #ff6363;
-}
+    .actionBtn[type="checkbox"] {
+        margin-top: 5px;
+    }
+
+    #deleteBtn {
+        background-color: #ff6363;
+        border-color: #ff6363;
+    }
 
     #deleteBtn:hover {
         border-color: #de5757;
@@ -176,7 +220,7 @@ app {
 
 .main {
     flex: 1;
-    //margin-right: 20px;
+    margin-right: 20px;
     font-family: 'Josefin Sans', sans-serif;
 }
 
@@ -339,6 +383,8 @@ app {
     font-family: 'Montserrat', sans-serif;
 }
 
+/// 
+
 .e-grid .e-rowcell {
     font-size: 16px;
     font-family: 'Montserrat', sans-serif;
@@ -347,6 +393,7 @@ app {
 .e-input-group textarea.e-input, .e-input-group.e-control-wrapper textarea.e-input {
     font-size: 16px;
     font-family: 'Montserrat', sans-serif;
+    max-height: 100px;
 }
 
 .e-control .e-input-group.e-control-wrapper input {
@@ -386,3 +433,4 @@ app {
 .e-grid .e-icons {
     color: #858585;
 }
+

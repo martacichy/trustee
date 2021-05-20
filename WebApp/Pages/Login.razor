@@ -14,14 +14,14 @@
     <EditForm Model="Log">
         <DataAnnotationsValidator />
         <div class="col-12 row">
-            <SfTextBox TValue="string" Placeholder='Login' @bind-Value="Log.Login" Width="200" CssClass="e-custom">
+            <SfTextBox TValue="string" Placeholder='login' @bind-Value="Log.Login" Width="200" CssClass="e-custom">
             </SfTextBox>
 
             <ValidationMessage For="@(() => Log.Login)" />
         </div>
         <br />
         <div class="col-12 row">
-            <SfTextBox TValue="string" Placeholder='Hasło' Type="Syncfusion.Blazor.Inputs.InputType.Password" @bind-Value="Log.Password" Width="200" CssClass="e-custom">
+            <SfTextBox TValue="string" Placeholder='hasło' Type="Syncfusion.Blazor.Inputs.InputType.Password" @bind-Value="Log.Password" Width="200" CssClass="e-custom">
                 <i class="fas fa-key"></i>
             </SfTextBox>
             <ValidationMessage For="@(() => Log.Password)" />
@@ -34,7 +34,7 @@
         <br />
     </EditForm>
     <div class="form-group">
-        <SfToast @ref="InvalidLogin" Title="Błędne dane logowania!" Timeout=2000 Content="@ToastContent">
+        <SfToast @ref="InvalidLogin" Title="Błędne dane logowania!" Timeout=4000 Content="@ToastContent">
             <ToastPosition X="Center"></ToastPosition>
         </SfToast>
     </div>
@@ -80,7 +80,3 @@
 
     }
 }
-
-<style>
-    
-</style>

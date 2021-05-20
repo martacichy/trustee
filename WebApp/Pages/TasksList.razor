@@ -30,7 +30,7 @@
     </div>
     <div class="actionBtn">
         <SfButton class="btn btn-primary" hidden=@readOnly>
-            <input type="checkbox" class="actionBtn" @bind-value="@shouldDisplayTeamTasks" @onclick="DisplayTeamTask"/> &nbsp;Wyświetl zadania zespołu
+            <input type="checkbox" class="actionBtn" @bind-value="@shouldDisplayTeamTasks" @onclick="DisplayTeamTask"/> Wyświetl zadania zespołu
         </SfButton>
     </div>
 </div>
@@ -48,7 +48,7 @@
 <div>
 
     @*LISTA ZADAŃ*@
-    <label class="header-list">Zadania w toku</label>
+    
     <SfGrid @ref="DefaultGrid"
             DataSource="TaskList"
             AllowSorting="true"
@@ -82,6 +82,12 @@
                             <GridColumn Field=@nameof(EmpTaskPair.First_name) HeaderText="Imię" TextAlign="TextAlign.Left" Width="80"></GridColumn>
                             <GridColumn Field=@nameof(EmpTaskPair.Last_name) HeaderText="Nazwisko" TextAlign="TextAlign.Left" Width="120"></GridColumn>
                             <GridColumn Field=@nameof(EmpTaskPair.Email) HeaderText="E-mail" TextAlign="TextAlign.Left" Width="120"></GridColumn>
+                            <GridColumn HeaderText="Zarządzaj" Width="150">
+                                <GridCommandColumns>
+                                    <GridCommandColumn Type="CommandButtonType.Edit" ButtonOption="@(new CommandButtonOptions() { IconCss = "e-icons e-edit", CssClass = "e-flat" })"></GridCommandColumn>
+                                    <GridCommandColumn Type="CommandButtonType.Delete" ButtonOption="@(new CommandButtonOptions() { IconCss = "e-icons e-delete", CssClass = "e-flat" })"></GridCommandColumn>
+                                </GridCommandColumns>
+                            </GridColumn>
                         </GridColumns>
                     </SfGrid>
                 }
@@ -173,7 +179,7 @@
 
     @* okno dodawania nowego zadania*@
 
-    <SfDialog @bind-Visible="@VisibilityAdd" Header="Nowe zadanie" Width="800px" Height="1200px" IsModal="true" ShowCloseIcon="true" CssClass="e-custom">
+    <SfDialog @bind-Visible="@VisibilityAdd" Header="Nowe zadanie" Width="800px" Height="1200px" MinHeight="900px" IsModal="true" ShowCloseIcon="true" CssClass="e-custom">
         <DialogTemplates>
             <Content>
                 <EditForm Model="@TaskAdd">
@@ -284,6 +290,7 @@
 
                     @* ALGORYTM *@
                     <div class="col-12 text-center">
+                        <br />
                         <button type="submit" class="btn btn-primary" data-dismiss="modal" @onclick="SuggestEmployees">
                             Zaproponuj pasujących pracowników
                         </button>
@@ -325,7 +332,7 @@
     </SfDialog>
 
     @* okno szczegolow zadania *@
-    <SfDialog @bind-Visible="@VisibilityDetails" AllowDragging="true" Width="1600px" Height="1600px" IsModal="true" ShowCloseIcon="true">
+    <SfDialog @bind-Visible="@VisibilityDetails" AllowDragging="true" Width="1600px" Height="1600px" MinHeight="900px" IsModal="true" ShowCloseIcon="true">
         <DialogTemplates>
             <Content>
                 <SfSplitter CssClass="out-splitter" Height="100%" Width="100%">
@@ -446,7 +453,8 @@
                                             </div>
                                         </div>
                                         <div class="actionBtn">
-                                            <div class="padding-top">
+                                            <div class="col-12 text-center">
+                                                <br />
                                                 <Sfbutton class="btn btn-primary" hidden="@isAssignTaskButtonHidden" @onclick="AssignTask"><i class="fa fa-plus"></i>&nbsp;Przypisz zadanie do mnie</Sfbutton>
                                             </div>
                                         </div>
@@ -495,9 +503,7 @@
                                                                     OnRecordDoubleClick="DownloadSelectedFile">
                                                         </GridEvents>
                                                         <GridColumns >
-
-                                                            <GridColumn Field=@nameof(FileModel.File_id) IsPrimaryKey="true" HeaderText="ID" TextAlign="TextAlign.Left" Width="50"></GridColumn>
-                                                            <GridColumn Field=@nameof(FileModel.File_name) HeaderText="Nazwa" TextAlign="TextAlign.Left" Width="500"></GridColumn>
+                                                            <GridColumn Field=@nameof(FileModel.File_name) HeaderText="Nazwa pliku" TextAlign="TextAlign.Left" Width="500"></GridColumn>
                                                             <GridColumn Field=@nameof(FileModel.Date) HeaderText="Data wstawienia" Format="d" Type="ColumnType.Date"
                                                                         TextAlign="TextAlign.Left" Width="200"></GridColumn>
                                                         </GridColumns>
@@ -515,7 +521,6 @@
                                                             <RowTemplate>
                                                                 @{
                                                                     var comment = (context as CommentModel);
-
                                                                     <div class="answer">
                                                                                     <div class="authorname">
                                                                                         @EmployeeData.GetById(comment.Employee_id).First_name
@@ -689,33 +694,22 @@
         new ToolbarItemModel() { Command = ToolbarCommand.Separator },
         new ToolbarItemModel() { Command = ToolbarCommand.FontName },
         new ToolbarItemModel() { Command = ToolbarCommand.FontSize },
-        new ToolbarItemModel() { Command = ToolbarCommand.Separator },
         new ToolbarItemModel() { Command = ToolbarCommand.FontColor },
         new ToolbarItemModel() { Command = ToolbarCommand.BackgroundColor },
-        new ToolbarItemModel() { Command = ToolbarCommand.Separator },
-        new ToolbarItemModel() { Command = ToolbarCommand.Separator },
         new ToolbarItemModel() { Command = ToolbarCommand.SuperScript },
         new ToolbarItemModel() { Command = ToolbarCommand.SubScript },
-        new ToolbarItemModel() { Command = ToolbarCommand.Separator },
         new ToolbarItemModel() { Command = ToolbarCommand.Formats },
         new ToolbarItemModel() { Command = ToolbarCommand.Alignments },
-        new ToolbarItemModel() { Command = ToolbarCommand.Separator },
         new ToolbarItemModel() { Command = ToolbarCommand.OrderedList },
         new ToolbarItemModel() { Command = ToolbarCommand.UnorderedList },
-        new ToolbarItemModel() { Command = ToolbarCommand.Separator },
         new ToolbarItemModel() { Command = ToolbarCommand.Outdent },
         new ToolbarItemModel() { Command = ToolbarCommand.Indent },
-        new ToolbarItemModel() { Command = ToolbarCommand.Separator },
         new ToolbarItemModel() { Command = ToolbarCommand.CreateLink },
-        new ToolbarItemModel() { Command = ToolbarCommand.Image },
         new ToolbarItemModel() { Command = ToolbarCommand.CreateTable },
-        new ToolbarItemModel() { Command = ToolbarCommand.Separator },
         new ToolbarItemModel() { Command = ToolbarCommand.ClearFormat },
-        new ToolbarItemModel() { Command = ToolbarCommand.Separator },
         new ToolbarItemModel() { Command = ToolbarCommand.Print },
         new ToolbarItemModel() { Command = ToolbarCommand.SourceCode },
         new ToolbarItemModel() { Command = ToolbarCommand.FullScreen },
-        new ToolbarItemModel() { Command = ToolbarCommand.Separator },
     };
 
     protected override void OnInitialized()
