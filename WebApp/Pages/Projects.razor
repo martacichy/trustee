@@ -1,34 +1,38 @@
 ﻿@page "/projects"
-@layout MainLayout
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<div class="header">
-    <br />
-    <br />
-    <h3>Projekty</h3>
-</div>
 
-@if (Login.UserLoggedIn.If_manager == 2 || Login.UserLoggedIn.If_manager == 1)
-{
-    <div>
-        <div class="actionBtn">
-            <Sfbutton class="btn btn-primary" @onclick="AddTask"><i class="fa fa-plus"></i>&nbsp;Utwórz nowy projekt</Sfbutton>
-        </div>
+<div class="projects">
+    <div class="header">
+        <br />
+        <br />
+        <h3>Projekty</h3>
     </div>
-    <br />
-    <br />
-}
+
+
+    @if (Login.UserLoggedIn.If_manager == 2 || Login.UserLoggedIn.If_manager == 1)
+    {
+        <div>
+            <div class="actionBtn">
+                <Sfbutton class="btn btn-primary" @onclick="AddTask"><i class="fa fa-plus"></i>&nbsp;Utwórz nowy projekt</Sfbutton>
+            </div>
+        </div>
+        <br />
+        <br />
+    }
 
     @* okno dodawania nowego projektu*@
-    <SfDialog @bind-Visible="@visibility" Header="Nowy projekt" Width="500px" Height="500px" IsModal="true" ShowCloseIcon="true">
+    <SfDialog @bind-Visible="@visibility" Header="Nowy projekt" Width="500px" Height="300px" IsModal="true" ShowCloseIcon="true">
         <DialogTemplates>
             <Content>
                 <EditForm Model="@ProjectAdd">
                     <DataAnnotationsValidator />
-                    <div class="form-group">
-                        <label for="Nazwa projektu" class="control-label" required>Tytuł</label>
+
+                    <div class="col-12">
+                        <label for="Nazwa projektu" class="control-label" required>Nazwa projektu</label>
                         <SfTextBox TValue="string" @bind-Value="ProjectAdd.Name" CssClass="e-custom"></SfTextBox>
                         <ValidationMessage For="@(() => ProjectAdd.Name)" />
                     </div>
+                    <br />
                     <div class="col-lg-12 control-section multiselect-height">
                         <div class="control-wrapper multi-select-parent">
                             <div class="padding-top">
@@ -37,7 +41,7 @@
                                                @bind-Value="@selectedEmployeesId"
                                                Placeholder="Wybierz..."
                                                DataSource="@allEmployees" AllowFiltering="true"
-                                               Mode="@VisualMode.Box" >
+                                               Mode="@VisualMode.Box">
                                     <MultiSelectTemplates TItem="EmployeeModel">
                                         <!-- Zmieniony Context z default na "SelectedEmployee" aby mogła działać walidacja -->
                                         <ItemTemplate Context="SelectedEmployee">
@@ -88,10 +92,10 @@
                 @{
                     var project = (context as ProjectModel);
 
-                                <div class="header-list">
-                                    <label>Zadania:</label>
-                                </div>
-                    
+                    <div class="header-list">
+                        <label>Zadania:</label>
+                    </div>
+
                     <SfGrid DataSource="tasks" TValue="TaskModel" Query="@GetTasksQuery(project.Project_id)">
                         <GridPageSettings PageSize="10"></GridPageSettings>
                         <GridColumns>
@@ -148,6 +152,7 @@
         </GridColumns>
     </SfGrid>
 
+</div>
 @code {
     /// <summary>
     /// Strona wyświetlająca listę projektów.
@@ -259,3 +264,9 @@
     }
 }
 
+
+<style>
+    .projects {
+        margin-right: 40px;
+    }
+</style>

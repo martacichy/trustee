@@ -25,6 +25,11 @@
     font-size: 13px;
 }
 
+.e-grid .e-emptyrow {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 10px;
+}
+
 .e-grid.e-responsive .e-rowcell, .e-grid.e-responsive .e-headercelldiv {
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -223,9 +228,9 @@ th {
 }
 
 app {
-    position: relative;
+    //position: relative;
     display: flex;
-    flex-direction: column;
+    //flex-direction: column;
     font-family: 'Montserrat', sans-serif;
 }
 

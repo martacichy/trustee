@@ -24,7 +24,7 @@
             </SfToast>
         </div>
         @*Edycja pracownika*@
-        <SfDialog @bind-Visible="@VisibilityEdit" AllowDragging="true" Width="400px" Height="400px" IsModal="true" ShowCloseIcon="true">
+        <SfDialog @bind-Visible="@VisibilityEdit" AllowDragging="true" Width="400px" Height="400px" MinHeight="400px" IsModal="true" ShowCloseIcon="true">
             <DialogTemplates>
                 <Content>
                     <div class="dane">
@@ -141,7 +141,6 @@
                 <GridColumn HeaderText="Zarządzaj" Width="150">
                     <GridCommandColumns>
                         <GridCommandColumn Type="CommandButtonType.Edit" ButtonOption="@(new CommandButtonOptions() { IconCss = "e-icons e-edit", CssClass = "e-flat" })"></GridCommandColumn>
-                        <GridCommandColumn Type="CommandButtonType.Delete" ButtonOption="@(new CommandButtonOptions() { IconCss = "e-icons e-delete", CssClass = "e-flat" })"></GridCommandColumn>
                     </GridCommandColumns>
                 </GridColumn>
             </GridColumns>
