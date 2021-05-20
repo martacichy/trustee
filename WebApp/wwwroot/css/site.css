@@ -25,6 +25,19 @@
     font-size: 13px;
 }
 
+.e-grid.e-responsive .e-rowcell, .e-grid.e-responsive .e-headercelldiv {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 14px;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.e-btn.e-flat, .e-css.e-btn.e-flat {
+    background-color: #888896;
+    border-color: #888896;
+    box-shadow: none;
+    color: #fff;
+}
 
 .e-kanban .e-kanban-content .e-content-row .e-content-cells.e-collapsed {
     overflow: hidden;

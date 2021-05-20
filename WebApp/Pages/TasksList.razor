@@ -104,7 +104,7 @@
                         TextAlign="TextAlign.Left"></GridColumn>
             <GridForeignColumn Field=@nameof(TaskModel.Project_id) HeaderText="Projekty" ForeignKeyValue="Name"
                                ForeignDataSource="@projects" Width="150"></GridForeignColumn>
-            <GridColumn HeaderText="Manage Records" Width="150">
+            <GridColumn HeaderText="Zarządzaj" Width="150">
                 <GridCommandColumns>
                     <GridCommandColumn Type="CommandButtonType.Edit" ButtonOption="@(new CommandButtonOptions() { IconCss = "e-icons e-edit", CssClass = "e-flat" })"></GridCommandColumn>
                     <GridCommandColumn Type="CommandButtonType.Delete" ButtonOption="@(new CommandButtonOptions() { IconCss = "e-icons e-delete", CssClass = "e-flat" })"></GridCommandColumn>
