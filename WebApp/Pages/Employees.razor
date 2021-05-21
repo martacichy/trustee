@@ -1,16 +1,15 @@
 ﻿@page "/employees"
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <div class="header">
-    <img src="/Images/logo.png" height="100" />
+    <br />
+    <br />
     <h3>Pracownicy</h3>
-    
 
 </div>
     
 <div>
     @if (Login.UserLoggedIn.If_manager == 2)
     {
-        
         <div class="actionBtn">
             <Sfbutton class="btn btn-primary" @onclick="AddEmployee"><i class="fa fa-plus"></i>&nbsp;Nowy pracownik</Sfbutton>
         </div>
@@ -25,7 +24,7 @@
             </SfToast>
         </div>
         @*Edycja pracownika*@
-        <SfDialog @bind-Visible="@VisibilityEdit" AllowDragging="true" Width="180px" Height="800px" IsModal="true" ShowCloseIcon="true">
+        <SfDialog @bind-Visible="@VisibilityEdit" AllowDragging="true" Width="400px" Height="400px" MinHeight="400px" IsModal="true" ShowCloseIcon="true">
             <DialogTemplates>
                 <Content>
                     <div class="dane">
@@ -80,8 +79,10 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <button type="submit" class="btn btn-primary" data-dismiss="modal" @onclick="UpdateEmployee" hidden=@readOnly>Zapisz</button>
+                        <br />
+                        <br />
+                        <div class="col-12 text-center">
+                            <button class="btn btn-primary" data-dismiss="modal" @onclick="UpdateEmployee" hidden=@readOnly>Zapisz</button>
                             <SfToast @ref="ToastObj" Title="Dane zaktualizowane pomyslnie!" Timeout=3000 Content="@ToastContentEdit">
                                 <ToastPosition X="Right"></ToastPosition>
                             </SfToast>
@@ -101,41 +102,49 @@
             <DialogAnimationSettings Effect="DialogEffect.Zoom"></DialogAnimationSettings>
             <DialogTemplates>
                 <Header>
-                    Dodawanie nowego pracownika
+                    Dodaj pracownika
                 </Header>
                 <Content>
-                    <p>Wprowadź adres e-mail przypisany do pracownika, którego chcesz dodać.</p>
-                    <input type="email" @bind-value="@inputValue" name="Required" class="e-input" style="width: 415px;">
-                    <label style="color: indianred">@errorMessage</label>
+                    <div class="form-control">
+                        <label>Wprowadź adres e-mail przypisany do pracownika, którego chcesz dodać.</label>
+                        <input type="email" @bind-value="@inputValue" name="Required" class="e-input" style="width: 415px;">
+                        <label style="color: indianred">@errorMessage</label>
+                    </div>
                 </Content>
             </DialogTemplates>
-            <DialogButtons>
-                <DialogButton Content="Dodaj" IsPrimary="true" OnClick="@submitAdd" />
-            </DialogButtons>
+            <SfButton>
+                <SfButton Content="Dodaj" IsPrimary="true" OnClick="@submitAdd" />
+            </SfButton>
         </SfDialog>
 
         <br />
         <br />
-    
 
-    <SfGrid DataSource="EmployeeList"
-            AllowPaging="true"
-            AllowSorting="true"
-            AllowFiltering="false"
-            ContextMenuItems="@(new List<object>()
+        <SfGrid DataSource="EmployeeList"
+                AllowPaging="true"
+                AllowSorting="true"
+                AllowFiltering="false"
+                ContextMenuItems="@(new List<object>()
             {"SortAscending", "SortDescending", "Copy"})">
-        <GridPageSettings PageSize="12"></GridPageSettings>
-        <GridEvents TValue="EmployeeModel"
-            OnRecordDoubleClick="DisplayEmployeeDetails" >
-        </GridEvents>
-        <GridColumns>
-            <GridColumn Field=@nameof(EmployeeModel.Employee_id) IsPrimaryKey="true" HeaderText="ID" TextAlign="TextAlign.Left" Width="50"></GridColumn>
-            <GridColumn Field=@nameof(EmployeeModel.First_name) HeaderText="Imię" TextAlign="TextAlign.Left" Width="80"></GridColumn>
-            <GridColumn Field=@nameof(EmployeeModel.Last_name) HeaderText="Nazwisko" TextAlign="TextAlign.Left" Width="120"></GridColumn>
-            <GridColumn Field=@nameof(EmployeeModel.Email) HeaderText="E-mail" TextAlign="TextAlign.Left" Width="120"></GridColumn>
-            <GridColumn Field=@nameof(EmployeeModel.UserType) HeaderText="Rodzaj" TextAlign="TextAlign.Left" Width="80"></GridColumn>
-        </GridColumns>
-    </SfGrid>
+            <GridPageSettings PageSize="12"></GridPageSettings>
+            <GridSearchSettings IgnoreCase="true"></GridSearchSettings>
+            <GridEvents TValue="EmployeeModel"
+                         OnRecordDoubleClick="RowDoubleClickHandler"
+                        RowSelected="RowSelectedHandler">
+            </GridEvents>
+            <GridColumns>
+                <GridColumn Field=@nameof(EmployeeModel.Employee_id) IsPrimaryKey="true" HeaderText="ID" TextAlign="TextAlign.Left" Width="50"></GridColumn>
+                <GridColumn Field=@nameof(EmployeeModel.First_name) HeaderText="Imię" TextAlign="TextAlign.Left" Width="80"></GridColumn>
+                <GridColumn Field=@nameof(EmployeeModel.Last_name) HeaderText="Nazwisko" TextAlign="TextAlign.Left" Width="120"></GridColumn>
+                <GridColumn Field=@nameof(EmployeeModel.Email) HeaderText="E-mail" TextAlign="TextAlign.Left" Width="120"></GridColumn>
+                <GridColumn Field=@nameof(EmployeeModel.UserType) HeaderText="Rodzaj" TextAlign="TextAlign.Left" Width="80"></GridColumn>
+                <GridColumn HeaderText="Zarządzaj" Width="150">
+                    <GridCommandColumns>
+                        <GridCommandColumn Type="CommandButtonType.Edit" ButtonOption="@(new CommandButtonOptions() { IconCss = "e-icons e-edit", CssClass = "e-flat" })"></GridCommandColumn>
+                    </GridCommandColumns>
+                </GridColumn>
+            </GridColumns>
+        </SfGrid>
 
 
 @code {
@@ -219,23 +228,7 @@
 
     private void EditEmployee()
     {
-        if (SelectedEmployee != null)
-        {
-            EmployeeEdit.firstname = SelectedEmployee.First_name;
-            EmployeeEdit.lastname = SelectedEmployee.Last_name;
-            EmployeeEdit.email = SelectedEmployee.Email;
-            EmployeeEdit.role = SelectedEmployee.UserType;
-            VisibilityEdit = true;
-        }
-        else
-        {
-            NoSelectedEmployee.Show();
-        }
-    }
-
-    public void RowSelectHandler(RowSelectEventArgs<EmployeeModel> args)
-    {
-        SelectedEmployee = args.Data;
+        DisplayEmployeeDetails(SelectedEmployee);
     }
 
     public void RowDeselectHandler()
@@ -249,11 +242,20 @@
 
     }
 
-    private void DisplayEmployeeDetails(RecordDoubleClickEventArgs<EmployeeModel> args)
+    private void RowSelectedHandler(RowSelectEventArgs<EmployeeModel> args)
+    {
+        SelectedEmployee = args.Data;
+    }
+
+    private void RowDoubleClickHandler(RecordDoubleClickEventArgs<EmployeeModel> args)
     {
         SelectedEmployee = args.RowData;
+        DisplayEmployeeDetails(SelectedEmployee);
+    }
 
-        if (SelectedEmployee != null)
+    private void DisplayEmployeeDetails(EmployeeModel SelectedEmployee)
+    {
+        if (SelectedEmployee.First_name != null)
         {
             ListOfEmployee = EmployeeData.GetByIdList(Pages.Employees.SelectedEmployee.Employee_id); //jednoelementowa lista zawierająca wybranego pracownika
 
@@ -278,13 +280,9 @@
                 nameofProjects[i] = ProjectData.GetById(ListofProjectsId[i].Project_id).Name;
                 oldProjects[i] = ProjectData.GetById(ListofProjectsId[i].Project_id).Name;
             }
-
-
         }
 
-
-
-        if (SelectedEmployee != null)
+        if (SelectedEmployee.First_name != null)
         {
             EmployeeEdit.role = SelectedEmployee.UserType;
             EmployeeEdit.firstname = SelectedEmployee.First_name;
@@ -300,8 +298,6 @@
         {
             NoSelectedEmployee.Show();
         }
-
-
     }
 
     private bool IsSelectedLabelsContainsInDbLabels(string label)

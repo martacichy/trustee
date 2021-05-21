@@ -1,34 +1,38 @@
 ﻿@page "/projects"
-<link href="css/popups.css" rel="stylesheet" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<div class="header">
-    <img src="/Images/logo.png" height="100"/>
-    <h3>Projekty</h3>
-</div>
 
-@if (Login.UserLoggedIn.If_manager == 2 || Login.UserLoggedIn.If_manager == 1)
-{
-    <div>
-        <div class="actionBtn">
-            <Sfbutton class="btn btn-primary" @onclick="AddTask"><i class="fa fa-plus"></i>&nbsp;Utwórz nowy projekt</Sfbutton>
-        </div>
+<div class="projects">
+    <div class="header">
+        <br />
+        <br />
+        <h3>Projekty</h3>
     </div>
-    <br />
-    <br />
-}
 
-<div>
+
+    @if (Login.UserLoggedIn.If_manager == 2 || Login.UserLoggedIn.If_manager == 1)
+    {
+        <div>
+            <div class="actionBtn">
+                <Sfbutton class="btn btn-primary" @onclick="AddTask"><i class="fa fa-plus"></i>&nbsp;Utwórz nowy projekt</Sfbutton>
+            </div>
+        </div>
+        <br />
+        <br />
+    }
+
     @* okno dodawania nowego projektu*@
-    <SfDialog @bind-Visible="@visibility" Header="Nowy projekt" Width="500px" IsModal="true" ShowCloseIcon="true">
+    <SfDialog @bind-Visible="@visibility" Header="Nowy projekt" Width="500px" Height="300px" IsModal="true" ShowCloseIcon="true">
         <DialogTemplates>
             <Content>
                 <EditForm Model="@ProjectAdd">
                     <DataAnnotationsValidator />
-                    <div class="form-group">
+
+                    <div class="col-12">
                         <label for="Nazwa projektu" class="control-label" required>Nazwa projektu</label>
-                        <input for="Nazwa projektu" class="form-control" @bind-value="ProjectAdd.Name" />
+                        <SfTextBox TValue="string" @bind-Value="ProjectAdd.Name" CssClass="e-custom"></SfTextBox>
                         <ValidationMessage For="@(() => ProjectAdd.Name)" />
                     </div>
+                    <br />
                     <div class="col-lg-12 control-section multiselect-height">
                         <div class="control-wrapper multi-select-parent">
                             <div class="padding-top">
@@ -62,8 +66,9 @@
                             </div>
                         </div>
                     </div>
-
-                    <div class="form-group">
+                    <br />
+                    <br />
+                    <div class="col-12 text-center">
                         <button type="submit" class="btn btn-primary" data-dismiss="modal" @onclick="SaveProject">Zapisz</button>
                         <SfToast @ref="SubmitToast" Title="Nowy projekt" Timeout=3000 Content="@toastContent">
                             <ToastPosition X="Right"></ToastPosition>
@@ -87,12 +92,12 @@
                 @{
                     var project = (context as ProjectModel);
 
-                                <div class="header-list">
-                                    <label>Zadania:</label>
-                                </div>
-                    
+                    <div class="header-list">
+                        <label>Zadania:</label>
+                    </div>
+
                     <SfGrid DataSource="tasks" TValue="TaskModel" Query="@GetTasksQuery(project.Project_id)">
-                        <GridPageSettings PageSize="6"></GridPageSettings>
+                        <GridPageSettings PageSize="10"></GridPageSettings>
                         <GridColumns>
                             <GridColumn Field=@nameof(TaskModel.Task_id) IsPrimaryKey="true" HeaderText="ID" TextAlign="TextAlign.Left" Width="50"></GridColumn>
                             <GridColumn Field=@nameof(TaskModel.Name) HeaderText="Nazwa" TextAlign="TextAlign.Left" Width="500"></GridColumn>
@@ -101,6 +106,12 @@
                                         TextAlign="TextAlign.Left" Width="200"></GridColumn>
                             <GridColumn Field=@nameof(TaskModel.Deadline) HeaderText="Data zakończenia" Format="d" Type="ColumnType.Date"
                                         TextAlign="TextAlign.Left"></GridColumn>
+                            <GridColumn HeaderText="Zarządzaj" Width="150">
+                                <GridCommandColumns>
+                                    <GridCommandColumn Type="CommandButtonType.Edit" ButtonOption="@(new CommandButtonOptions() { IconCss = "e-icons e-edit", CssClass = "e-flat" })"></GridCommandColumn>
+                                    <GridCommandColumn Type="CommandButtonType.Delete" ButtonOption="@(new CommandButtonOptions() { IconCss = "e-icons e-delete", CssClass = "e-flat" })"></GridCommandColumn>
+                                </GridCommandColumns>
+                            </GridColumn>
                         </GridColumns>
                     </SfGrid>
 
@@ -109,12 +120,18 @@
                         <label>Pracownicy:</label>
                     </div>
                     <SfGrid DataSource="employeeProjectPairs" TValue="EmpProjectPair" Query="@GetEmployeesQuery(project.Project_id)">
-                        <GridPageSettings PageSize="6"></GridPageSettings>
+                        <GridPageSettings PageSize="10"></GridPageSettings>
                         <GridColumns>
                             <GridColumn Field=@nameof(EmpProjectPair.Employee_id) HeaderText="ID" TextAlign="TextAlign.Left" Width="50"></GridColumn>
                             <GridColumn Field=@nameof(EmpProjectPair.First_name) HeaderText="Imię" TextAlign="TextAlign.Left" Width="250"></GridColumn>
                             <GridColumn Field=@nameof(EmpProjectPair.Last_name) HeaderText="Nazwisko" TextAlign="TextAlign.Left" Width="250"></GridColumn>
                             <GridColumn Field=@nameof(EmpProjectPair.Email) HeaderText="E-mail" TextAlign="TextAlign.Left"></GridColumn>
+                            <GridColumn HeaderText="Zarządzaj" Width="150">
+                                <GridCommandColumns>
+                                    <GridCommandColumn Type="CommandButtonType.Edit" ButtonOption="@(new CommandButtonOptions() { IconCss = "e-icons e-edit", CssClass = "e-flat" })"></GridCommandColumn>
+                                    <GridCommandColumn Type="CommandButtonType.Delete" ButtonOption="@(new CommandButtonOptions() { IconCss = "e-icons e-delete", CssClass = "e-flat" })"></GridCommandColumn>
+                                </GridCommandColumns>
+                            </GridColumn>
                         </GridColumns>
                     </SfGrid>
                     <br />
@@ -126,10 +143,16 @@
         <GridColumns>
             <GridColumn Field=@nameof(ProjectModel.Project_id) IsPrimaryKey="true" HeaderText="ID" TextAlign="TextAlign.Left" Width="50"></GridColumn>
             <GridColumn Field=@nameof(ProjectModel.Name) IsPrimaryKey="true" HeaderText="Nazwa Projektu" TextAlign="TextAlign.Left" Width="300"></GridColumn>
+            <GridColumn HeaderText="Zarządzaj" Width="150">
+                <GridCommandColumns>
+                    <GridCommandColumn Type="CommandButtonType.Edit" ButtonOption="@(new CommandButtonOptions() { IconCss = "e-icons e-edit", CssClass = "e-flat" })"></GridCommandColumn>
+                    <GridCommandColumn Type="CommandButtonType.Delete" ButtonOption="@(new CommandButtonOptions() { IconCss = "e-icons e-delete", CssClass = "e-flat" })"></GridCommandColumn>
+                </GridCommandColumns>
+            </GridColumn>
         </GridColumns>
     </SfGrid>
-</div>
 
+</div>
 @code {
     /// <summary>
     /// Strona wyświetlająca listę projektów.
@@ -241,20 +264,3 @@
     }
 }
 
-<style>
-    .header-list {
-        font-size: 26px;
-        font-family: 'Josefin Sans', sans-serif;
-        color: black;
-    }
-
-    .header {
-        background-image: url('/Pages/trustee.png');
-    }
-
-    .imageee {
-        height: 100px;
-        width: 100px;
-    }
-
-</style>

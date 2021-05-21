@@ -40,9 +40,9 @@
                                 <span class="e-icons profile"></span>
                                 <span class="e-text" title="profile">Twój profil</span>
                             </li>
-                            <li class="sidebar-item">
+                            <li class="sidebar-item"  @onclick="@Logout">
                                 <span class="e-icons Export"></span>
-                                <span class="e-text" title="logout" @onclick="@Logout">Wyloguj się</span>
+                                <span class="e-text" title="logout">Wyloguj się</span>
                             </li>
                         </ul>
                     </div>
@@ -56,14 +56,15 @@
     </div>
 
     @* okno z profilem *@
-    <SfDialog @bind-Visible="@Visibility"  Height="500px" Width="500px" IsModal="true" ShowCloseIcon="true">
+    <SfDialog @bind-Visible="@Visibility"  Height="500px" Width="500px" MinHeight="500px" IsModal="true" ShowCloseIcon="true">
+        <DialogPositionData X="700" Y="100"></DialogPositionData>
         <DialogTemplates>
             <Content>
                 <div class="card user-card-full">
                     <div class="row m-l-0 m-r-0">
                         <div class="col-sm-4 bg-c-lite-green user-profile">
                             <div class="card-block text-center text-white">
-                                <div class="m-b-25"> <img src="~/Images/user.png" style="width:80px; height:80px"> </div>
+                                <div class="m-b-25"> <img src="~/Images/logo.png" style="width:80px; height:80px"> </div>
                                 <h6 class="f-w-600">@Login.UserLoggedIn.First_name @Login.UserLoggedIn.Last_name</h6>
                                 <p>@Login.UserLoggedIn.UserType</p>
                             </div>
@@ -71,7 +72,6 @@
                         <div class="col-sm-8">
                             <div class="card-block">
                                 <h6 class="m-b-20 p-b-5 b-b-default f-w-600">Informacje</h6>
-                                <div class="row">
                                     <div class="col-sm-6">
                                         <p class="m-b-10 f-w-600">Email</p>
                                         <h6 class="text-muted f-w-400">@Login.UserLoggedIn.Email</h6>
@@ -81,7 +81,7 @@
                                         <p class="m-b-10 f-w-600">Firma</p>
                                         <h6 class="text-muted f-w-400">@Login.UserCompany.Name</h6>
                                     </div>
-                                </div>
+                                
                             </div>
                         </div>
                     </div>

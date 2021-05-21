@@ -1,10 +1,12 @@
 ﻿@page "/tasks"
 
+
 <link href="css/popups.css" rel="stylesheet" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 <div class="header">
-    <img src="/Images/logo.png" height="100" />
+    <br />
+    <br />
     @if (NavMenu.shouldDisplayArchivalTask)
     {
         <h3>Lista archiwalnych zadań</h3>
@@ -17,22 +19,22 @@
 @* wyświetlanie przycisku do tworzenia nowych zadań *@
 @if (Login.UserLoggedIn.If_manager == 1 || Login.UserLoggedIn.If_manager == 2)
 {
-<div>
-    <div class="actionBtn">
-        <Sfbutton class="btn btn-primary" @onclick="AddTask"><i class="fa fa-plus"></i>&nbsp;Dodaj zadanie</Sfbutton>
+    <div>
+        <div class="actionBtn">
+            <Sfbutton class="btn btn-primary" @onclick="AddTask"><i class="fa fa-plus"></i>&nbsp;Dodaj zadanie</Sfbutton>
+        </div>
+        <div class="actionBtn">
+            <Sfbutton class="btn btn-primary" @onclick="EditTask"><i class="fa fa-pencil"></i>&nbsp;Edytuj zadanie</Sfbutton>
+        </div>
+        <div class="actionBtn">
+            <Sfbutton class="btn btn-primary" id="deleteBtn" @onclick="DeleteTask"><i class="fa fa-trash"></i>&nbsp;Usuń zadanie</Sfbutton>
+        </div>
+        <div class="actionBtn">
+            <SfButton class="btn btn-primary" hidden=@readOnly>
+                <input type="checkbox" class="actionBtn" @bind-value="@shouldDisplayTeamTasks" @onclick="DisplayTeamTask" /> Wyświetl zadania zespołu
+            </SfButton>
+        </div>
     </div>
-    <div class="actionBtn">
-        <Sfbutton class="btn btn-primary" @onclick="EditTask"><i class="fa fa-pencil"></i>&nbsp;Edytuj zadanie</Sfbutton>
-    </div>
-    <div class="actionBtn">
-        <Sfbutton class="btn btn-primary" id="deleteBtn" @onclick="DeleteTask"><i class="fa fa-trash"></i>&nbsp;Usuń zadanie</Sfbutton>
-    </div>
-    <div class="actionBtn">
-        <SfButton class="btn btn-primary" hidden=@readOnly>
-            <input type="checkbox" class="actionBtn" @bind-value="@shouldDisplayTeamTasks" @onclick="DisplayTeamTask"/> &nbsp;Wyświetl zadania zespołu
-        </SfButton>
-    </div>
-</div>
 }
 
 
@@ -47,7 +49,7 @@
 <div>
 
     @*LISTA ZADAŃ*@
-    <label class="header-list">Zadania w toku</label>
+
     <SfGrid @ref="DefaultGrid"
             DataSource="TaskList"
             AllowSorting="true"
@@ -56,18 +58,18 @@
             Locale="pl"
             ContextMenuItems="@(new List<object>()
             {"SortDescending", "SortAscending", "Copy"})">
-        <GridEditSettings  AllowDeleting="true"></GridEditSettings>
+        <GridEditSettings AllowDeleting="true"></GridEditSettings>
 
         <GridFilterSettings EnableCaseSensitivity="false"></GridFilterSettings>
         <GridSearchSettings IgnoreCase="true"></GridSearchSettings>
         <GridSelectionSettings EnableToggle="true"></GridSelectionSettings>
         <GridEvents TValue="TaskModel"
                     RowSelected="RowSelectHandler"
-                    RowDeselected="RowDeselectHandler"
                     OnRecordDoubleClick="SetAssingTaskButtonInisibleAndDisplayTaskDetails"
                     OnRecordClick="ExpandTaskDetails"
                     CommandClicked="OnCommandClicked"
-                    QueryCellInfo="CustomizeCell">
+                    QueryCellInfo="CustomizeCell"
+                    RowDeselected="RowDeselectHandler">
         </GridEvents>
         <GridTemplates>
             <DetailTemplate>
@@ -81,6 +83,12 @@
                             <GridColumn Field=@nameof(EmpTaskPair.First_name) HeaderText="Imię" TextAlign="TextAlign.Left" Width="80"></GridColumn>
                             <GridColumn Field=@nameof(EmpTaskPair.Last_name) HeaderText="Nazwisko" TextAlign="TextAlign.Left" Width="120"></GridColumn>
                             <GridColumn Field=@nameof(EmpTaskPair.Email) HeaderText="E-mail" TextAlign="TextAlign.Left" Width="120"></GridColumn>
+                            <GridColumn HeaderText="Zarządzaj" Width="150">
+                                <GridCommandColumns>
+                                    <GridCommandColumn Type="CommandButtonType.Edit" ButtonOption="@(new CommandButtonOptions() { IconCss = "e-icons e-edit", CssClass = "e-flat" })"></GridCommandColumn>
+                                    <GridCommandColumn Type="CommandButtonType.Delete" ButtonOption="@(new CommandButtonOptions() { IconCss = "e-icons e-delete", CssClass = "e-flat" })"></GridCommandColumn>
+                                </GridCommandColumns>
+                            </GridColumn>
                         </GridColumns>
                     </SfGrid>
                 }
@@ -97,7 +105,7 @@
                         TextAlign="TextAlign.Left"></GridColumn>
             <GridForeignColumn Field=@nameof(TaskModel.Project_id) HeaderText="Projekty" ForeignKeyValue="Name"
                                ForeignDataSource="@projects" Width="150"></GridForeignColumn>
-            <GridColumn HeaderText="Manage Records" Width="150">
+            <GridColumn HeaderText="Zarządzaj" Width="150">
                 <GridCommandColumns>
                     <GridCommandColumn Type="CommandButtonType.Edit" ButtonOption="@(new CommandButtonOptions() { IconCss = "e-icons e-edit", CssClass = "e-flat" })"></GridCommandColumn>
                     <GridCommandColumn Type="CommandButtonType.Delete" ButtonOption="@(new CommandButtonOptions() { IconCss = "e-icons e-delete", CssClass = "e-flat" })"></GridCommandColumn>
@@ -108,62 +116,62 @@
 
     <br />
     @*LISTA NIEROZPOCZĘTYCH ZADAŃ*@
-    
-<div style="display: @displayInlineOrNone">
-    <label class="header-list">Zadania nierozpoczęte</label>
-    <SfGrid @ref="DefaultGrid"
-            DataSource="listOfUnstartedTasks"
-            AllowPaging="true"
-            AllowSorting="true"
-            AllowFiltering="true"
-            AllowSelection="true"
-            Locale="pl"
-            ContextMenuItems="@(new List<object>()
+
+    <div style="display: @displayInlineOrNone">
+        <label class="header-list">Zadania nierozpoczęte</label>
+        <SfGrid @ref="DefaultGrid"
+                DataSource="listOfUnstartedTasks"
+                AllowPaging="true"
+                AllowSorting="true"
+                AllowFiltering="true"
+                AllowSelection="true"
+                Locale="pl"
+                ContextMenuItems="@(new List<object>()
             {"SortDescending", "SortAscending", "Copy"})">
-        <GridFilterSettings EnableCaseSensitivity="false"></GridFilterSettings>
-        <GridSearchSettings IgnoreCase="true"></GridSearchSettings>
-        <GridSelectionSettings EnableToggle="true"></GridSelectionSettings>
-        <GridEvents TValue="TaskModel"
-                    RowSelected="RowSelectHandler"
-                    RowDeselected="RowDeselectHandler"
-                    OnRecordDoubleClick="SetAssingTaskButtonVisibleAndDisplayTaskDetails"
-                    OnRecordClick="ExpandTaskDetails">
-        </GridEvents>
+            <GridFilterSettings EnableCaseSensitivity="false"></GridFilterSettings>
+            <GridSearchSettings IgnoreCase="true"></GridSearchSettings>
+            <GridSelectionSettings EnableToggle="true"></GridSelectionSettings>
+            <GridEvents TValue="TaskModel"
+                        RowSelected="RowSelectHandler"
+                        OnRecordDoubleClick="SetAssingTaskButtonVisibleAndDisplayTaskDetails"
+                        OnRecordClick="ExpandTaskDetails"
+                        RowDeselected="RowDeselectHandler">
+            </GridEvents>
 
-        <GridTemplates>
-            <DetailTemplate>
-                @{
-                    var task = (context as TaskModel);
+            <GridTemplates>
+                <DetailTemplate>
+                    @{
+                        var task = (context as TaskModel);
 
-                    <label class="header-list"><i class="fas fa-user-friends"></i>Pracownicy:</label>
-                    <SfGrid DataSource="employeeTaskPairs" TValue="EmpTaskPair" Query="@GetEmployeesQuery(task.Task_id)">
-                        <GridPageSettings PageSize="6"></GridPageSettings>
-                        <GridColumns>
-                            <GridColumn Field=@nameof(EmpTaskPair.Employee_id) HeaderText="ID" TextAlign="TextAlign.Left" Width="50"></GridColumn>
-                            <GridColumn Field=@nameof(EmpTaskPair.First_name) HeaderText="Imię" TextAlign="TextAlign.Left" Width="80"></GridColumn>
-                            <GridColumn Field=@nameof(EmpTaskPair.Last_name) HeaderText="Nazwisko" TextAlign="TextAlign.Left" Width="120"></GridColumn>
-                            <GridColumn Field=@nameof(EmpTaskPair.Email) HeaderText="E-mail" TextAlign="TextAlign.Left" Width="120"></GridColumn>
-                        </GridColumns>
-                    </SfGrid>
-                }
-            </DetailTemplate>
-        </GridTemplates>
-        <GridPageSettings PageSize="15"></GridPageSettings>
-        <GridColumns>
-            <GridColumn Field=@nameof(TaskModel.Task_id) IsPrimaryKey="true" HeaderText="ID" TextAlign="TextAlign.Left" Width="50"></GridColumn>
-            <GridColumn Field=@nameof(TaskModel.Name) HeaderText="Nazwa" TextAlign="TextAlign.Left" Width="500"></GridColumn>
-            <GridColumn Field=@nameof(TaskModel.Status) HeaderText="Status" TextAlign="TextAlign.Left" Width="200"></GridColumn>
-            <GridColumn Field=@nameof(TaskModel.Start_time) HeaderText="Data rozpoczęcia" Format="d" Type="ColumnType.Date"
-                        TextAlign="TextAlign.Left" Width="200"></GridColumn>
-            <GridColumn Field=@nameof(TaskModel.Deadline) HeaderText="Data zakończenia" Format="d" Type="ColumnType.Date"
-                        TextAlign="TextAlign.Left"></GridColumn>
-            <GridForeignColumn Field=@nameof(TaskModel.Project_id) HeaderText="Projekty"
-                               ForeignKeyValue="Name" ForeignDataSource="@projectsForUnstartedTasks" Width="150"></GridForeignColumn>
-            <GridColumn Field=@nameof(TaskModel.MatchFactor) HeaderText="Dopasowanie" TextAlign="TextAlign.Center"></GridColumn>
+                        <label class="header-list"><i class="fas fa-user-friends"></i>Pracownicy:</label>
+                        <SfGrid DataSource="employeeTaskPairs" TValue="EmpTaskPair" Query="@GetEmployeesQuery(task.Task_id)">
+                            <GridPageSettings PageSize="6"></GridPageSettings>
+                            <GridColumns>
+                                <GridColumn Field=@nameof(EmpTaskPair.Employee_id) HeaderText="ID" TextAlign="TextAlign.Left" Width="50"></GridColumn>
+                                <GridColumn Field=@nameof(EmpTaskPair.First_name) HeaderText="Imię" TextAlign="TextAlign.Left" Width="80"></GridColumn>
+                                <GridColumn Field=@nameof(EmpTaskPair.Last_name) HeaderText="Nazwisko" TextAlign="TextAlign.Left" Width="120"></GridColumn>
+                                <GridColumn Field=@nameof(EmpTaskPair.Email) HeaderText="E-mail" TextAlign="TextAlign.Left" Width="120"></GridColumn>
+                            </GridColumns>
+                        </SfGrid>
+                    }
+                </DetailTemplate>
+            </GridTemplates>
+            <GridPageSettings PageSize="15"></GridPageSettings>
+            <GridColumns>
+                <GridColumn Field=@nameof(TaskModel.Task_id) IsPrimaryKey="true" HeaderText="ID" TextAlign="TextAlign.Left" Width="50"></GridColumn>
+                <GridColumn Field=@nameof(TaskModel.Name) HeaderText="Nazwa" TextAlign="TextAlign.Left" Width="500"></GridColumn>
+                <GridColumn Field=@nameof(TaskModel.Status) HeaderText="Status" TextAlign="TextAlign.Left" Width="200"></GridColumn>
+                <GridColumn Field=@nameof(TaskModel.Start_time) HeaderText="Data rozpoczęcia" Format="d" Type="ColumnType.Date"
+                            TextAlign="TextAlign.Left" Width="200"></GridColumn>
+                <GridColumn Field=@nameof(TaskModel.Deadline) HeaderText="Data zakończenia" Format="d" Type="ColumnType.Date"
+                            TextAlign="TextAlign.Left"></GridColumn>
+                <GridForeignColumn Field=@nameof(TaskModel.Project_id) HeaderText="Projekty"
+                                   ForeignKeyValue="Name" ForeignDataSource="@projectsForUnstartedTasks" Width="150"></GridForeignColumn>
+                <GridColumn Field=@nameof(TaskModel.MatchFactor) HeaderText="Dopasowanie" TextAlign="TextAlign.Center"></GridColumn>
 
-        </GridColumns>
-    </SfGrid>
-</div>
+            </GridColumns>
+        </SfGrid>
+    </div>
     <div class="form-group">
         <SfToast @ref="NoSelectedTask" Title="Wybierz zadanie!" Timeout=2000>
             <ToastPosition X="Center"></ToastPosition>
@@ -172,7 +180,7 @@
 
     @* okno dodawania nowego zadania*@
 
-    <SfDialog @bind-Visible="@VisibilityAdd" Header="Nowe zadanie" Width="800px" IsModal="true" ShowCloseIcon="true">
+    <SfDialog @bind-Visible="@VisibilityAdd" Header="Nowe zadanie" Width="800px" Height="1200px" MinHeight="900px" IsModal="true" ShowCloseIcon="true" CssClass="e-custom">
         <DialogTemplates>
             <Content>
                 <EditForm Model="@TaskAdd">
@@ -180,22 +188,22 @@
                     <div class="form-group">
 
                         <label for="Tytuł" class="control-label" required>Tytuł</label>
-                        <SfTextBox TValue="string" @bind-Value="TaskAdd.name"></SfTextBox>
+                        <SfTextBox TValue="string" @bind-Value="TaskAdd.name" CssClass="e-custom"></SfTextBox>
                         <ValidationMessage For="@(() => TaskAdd.name)" />
                     </div>
                     <div class="form-group">
                         <label for="Opis" class="control-label">Opis</label>
-                        <SfTextBox Multiline=true TValue="string" @bind-Value="TaskAdd.description"></SfTextBox>
+                        <SfTextBox Multiline=true TValue="string" @bind-Value="TaskAdd.description" CssClass="e-custom"></SfTextBox>
                         <ValidationMessage For="@(() => TaskAdd.description)" />
                     </div>
                     <div class="form-group">
                         <label for="Starttime" class="control-label">Czas rozpoczęcia</label>
-                        <SfDateTimePicker TValue="DateTime" @bind-value="TaskAdd.start_time"></SfDateTimePicker>
+                        <SfDateTimePicker TValue="DateTime" @bind-value="TaskAdd.start_time" CssClass="e-custom"></SfDateTimePicker>
                         <ValidationMessage For="@(() => TaskAdd.start_time)" />
                     </div>
                     <div class="form-group">
                         <label for="Deadline" class="control-label">Data zakończenia</label>
-                        <SfDateTimePicker TValue="DateTime" @bind-value="TaskAdd.deadline"></SfDateTimePicker>
+                        <SfDateTimePicker TValue="DateTime" @bind-value="TaskAdd.deadline" CssClass="e-custom"></SfDateTimePicker>
                         <ValidationMessage For="@(() => TaskAdd.deadline)" />
                     </div>
                     <div class="col-lg-12 control-section multiselect-height">
@@ -205,7 +213,7 @@
                                 <SfDropDownList TValue="string" TItem="string"
                                                 @bind-Value="@TaskAdd.status"
                                                 Placeholder="Szukaj..."
-                                                DataSource="@status" AllowFiltering="true"
+                                                DataSource="@status" AllowFiltering="true" CssClass="e-custom"
                                                 MaximumSelectionLength=1>
                                     <DropDownListFieldSettings Text="status"> </DropDownListFieldSettings>
                                 </SfDropDownList>
@@ -217,7 +225,7 @@
                         <div class="control-wrapper multi-select-parent">
                             <div class="padding-top">
                                 <label asp-for="etykiety" class="control-label">Etykiety</label>
-                                <SfMultiSelect TValue="string[]" TItem="BackendLibrary.Models.LabelModel"
+                                <SfMultiSelect TValue="string[]" TItem="BackendLibrary.Models.LabelModel" CssClass="e-custom"
                                                @bind-Value="@selectedLabels"
                                                Placeholder="Szukaj..."
                                                DataSource="@labelsInDb" AllowFiltering="true" AllowCustomValue="true"
@@ -234,7 +242,7 @@
                             <div class="padding-top">
                                 <label asp-for="projekt" class="control-label">
                                     Projekt
-                                    <SfSwitch @bind-Checked="@isProjectSelectingOn" @onchange="@OnChangeButton"></SfSwitch>
+                                    <SfSwitch @bind-Checked="@isProjectSelectingOn" @onchange="@OnChangeButton" CssClass="e-custom"></SfSwitch>
                                 </label>
                                 <SfDropDownList TValue="string" TItem="BackendLibrary.Models.ProjectModel"
                                                 @bind-Value="@selectedProject"
@@ -254,13 +262,13 @@
                                 <SfMultiSelect TValue="int[]" TItem="EmployeeModel"
                                                @bind-Value="@selectedEmployeesId"
                                                Placeholder="Wybierz..."
-                                               DataSource="@employees" AllowFiltering="true"
+                                               DataSource="@employees" AllowFiltering="true" CssClass="e-custom"
                                                Mode="@VisualMode.Box">
                                     <MultiSelectTemplates TItem="EmployeeModel">
                                         <!-- Zmieniony Context z default na "SelectedEmployee" aby mogła działać walidacja -->
                                         <ItemTemplate Context="SelectedEmployee">
                                             <div>
-                                                <div class="ename">
+                                                <div class="control-label">
                                                     @((SelectedEmployee as EmployeeModel).First_name)
                                                     @((SelectedEmployee as EmployeeModel).Last_name)
                                                 </div>
@@ -268,7 +276,7 @@
                                         </ItemTemplate>
                                         <ValueTemplate Context="SelectedEmployee">
                                             <div class="multiselect-width">
-                                                <div class="name">
+                                                <div class="control-label">
                                                     @((SelectedEmployee as EmployeeModel).First_name)
                                                     @((SelectedEmployee as EmployeeModel).Last_name)
                                                 </div>
@@ -282,7 +290,8 @@
                     </div>
 
                     @* ALGORYTM *@
-                    <div class="form-group">
+                    <div class="col-12 text-center">
+                        <br />
                         <button type="submit" class="btn btn-primary" data-dismiss="modal" @onclick="SuggestEmployees">
                             Zaproponuj pasujących pracowników
                         </button>
@@ -293,19 +302,24 @@
                     <br />
                     <div style="width:750px; margin:auto;">
                         <SfGrid @ref="suggestedEmployeesGrid" DataSource="suggestedEmployees" TValue="EmployeeStats">
+                            <GridEvents CommandClicked="AddEmployeeToAssigned" TValue="EmployeeStats"></GridEvents>
                             <GridColumns>
-                                <GridColumn Field=@nameof(EmployeeStats.Employee_id) HeaderText="ID" TextAlign="TextAlign.Center" Width="35"></GridColumn>
-                                <GridColumn Field=@nameof(EmployeeStats.First_name) HeaderText="Imię" TextAlign="TextAlign.Left" Width="65"></GridColumn>
-                                <GridColumn Field=@nameof(EmployeeStats.Last_name) HeaderText="Nazwisko" TextAlign="TextAlign.Left" Width="75"></GridColumn>
-                                <GridColumn Field=@nameof(EmployeeStats.EmpLabelMatches) HeaderText="EmpLabelMatch" TextAlign="TextAlign.Center" Width="110"></GridColumn>
-                                <GridColumn Field=@nameof(EmployeeStats.TaskLabelMatches) HeaderText="TaskLabelMatch" TextAlign="TextAlign.Center" Width="110"></GridColumn>
-                                <GridColumn Field=@nameof(EmployeeStats.TaskDensity) HeaderText="TaskDensity" TextAlign="TextAlign.Center" Width="90"></GridColumn>
+                                <GridColumn Field=@nameof(EmployeeStats.First_name) HeaderText="Imię" TextAlign="TextAlign.Left" Width="90"></GridColumn>
+                                <GridColumn Field=@nameof(EmployeeStats.Last_name) HeaderText="Nazwisko" TextAlign="TextAlign.Left" Width="90"></GridColumn>
+                                <GridColumn Field=@nameof(EmployeeStats.EmpLabelMatches) HeaderText="EmpLabelMatch" TextAlign="TextAlign.Center" Width="80"></GridColumn>
+                                <GridColumn Field=@nameof(EmployeeStats.TaskLabelMatches) HeaderText="TaskLabelMatch" TextAlign="TextAlign.Center" Width="80"></GridColumn>
+                                <GridColumn Field=@nameof(EmployeeStats.TaskDensity) HeaderText="TaskDensity" TextAlign="TextAlign.Center" Width="80"></GridColumn>
                                 <GridColumn Field=@nameof(EmployeeStats.FinalFactor) HeaderText="FinalFactor" TextAlign="TextAlign.Center" Width="80"></GridColumn>
+                                <GridColumn HeaderText="Dodaj" Width="50">
+                                    <GridCommandColumns>
+                                        <GridCommandColumn ButtonOption="@(new CommandButtonOptions() { IconCss = "e-icons e-add", CssClass = "e-flat" })"></GridCommandColumn>
+                                    </GridCommandColumns>
+                                </GridColumn>
                             </GridColumns>
                         </SfGrid>
                     </div>
                     <br />
-                    <div class="form-group">
+                    <div class="col-12 text-center">
                         <button type="submit" class="btn btn-primary" data-dismiss="modal" @onclick="SaveTask">Zapisz</button>
                         <SfToast @ref="SuccessTask" Title="Dodano nowe zadanie!" Timeout=3000 Content="@ToastContentAdd">
                             <ToastPosition X="Right"></ToastPosition>
@@ -319,7 +333,7 @@
     </SfDialog>
 
     @* okno szczegolow zadania *@
-    <SfDialog @bind-Visible="@VisibilityDetails" AllowDragging="true" Width="1600px" Height="1200px" IsModal="true" ShowCloseIcon="true">
+    <SfDialog @bind-Visible="@VisibilityDetails" AllowDragging="true" Width="1600px" Height="1600px" MinHeight="900px" IsModal="true" ShowCloseIcon="true">
         <DialogTemplates>
             <Content>
                 <SfSplitter CssClass="out-splitter" Height="100%" Width="100%">
@@ -341,12 +355,12 @@
                                         </div>
                                         <div class="form-group">
                                             <label for="Starttime" class="control-label">Czas rozpoczęcia</label>
-                                            <SfDateTimePicker TValue="DateTime" @bind-value="TaskAdd.start_time"></SfDateTimePicker>
+                                            <SfDateTimePicker TValue="DateTime" @bind-value="TaskEdit.start_time"></SfDateTimePicker>
                                             <ValidationMessage For="@(() => TaskEdit.start_time)" />
                                         </div>
                                         <div class="form-group">
                                             <label for="Deadline" class="control-label">Data zakończenia</label>
-                                            <SfDateTimePicker TValue="DateTime" @bind-value="TaskAdd.deadline"></SfDateTimePicker>
+                                            <SfDateTimePicker TValue="DateTime" @bind-value="TaskEdit.deadline"></SfDateTimePicker>
                                             <ValidationMessage For="@(() => TaskEdit.deadline)" />
                                         </div>
                                         <div class="col-lg-12 control-section multiselect-height">
@@ -439,11 +453,10 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="actionBtn">
-                                            <div class="padding-top">
+                                            <div class="col-12 text-center">
+                                                <br />
                                                 <Sfbutton class="btn btn-primary" hidden="@isAssignTaskButtonHidden" @onclick="AssignTask"><i class="fa fa-plus"></i>&nbsp;Przypisz zadanie do mnie</Sfbutton>
                                             </div>
-                                        </div>
                                     </EditForm>
 
                                     <div class="form-group">
@@ -463,7 +476,7 @@
                                 <div>
                                     <SfSplitter Height="790px" Orientation="Syncfusion.Blazor.Layouts.Orientation.Vertical">
                                         <SplitterPanes>
-                                            <SplitterPane Size="34%" Min="268.6px" Resizable="false" >
+                                            <SplitterPane Size="34%" Min="268.6px" Resizable="false">
                                                 <div>
                                                     <div class="text-align">@*Wartości testowanej funkcji: @a1 *@</div>
                                                     <SfUploader AutoUpload="false">
@@ -489,16 +502,11 @@
                                                                     OnRecordDoubleClick="DownloadSelectedFile">
                                                         </GridEvents>
                                                         <GridColumns>
-
-                                                            <GridColumn Field=@nameof(FileModel.File_id) IsPrimaryKey="true" HeaderText="ID" TextAlign="TextAlign.Left" Width="50"></GridColumn>
-                                                            <GridColumn Field=@nameof(FileModel.File_name) HeaderText="Nazwa" TextAlign="TextAlign.Left" Width="500"></GridColumn>
+                                                            <GridColumn Field=@nameof(FileModel.File_name) HeaderText="Nazwa pliku" TextAlign="TextAlign.Left" Width="500"></GridColumn>
                                                             <GridColumn Field=@nameof(FileModel.Date) HeaderText="Data wstawienia" Format="d" Type="ColumnType.Date"
                                                                         TextAlign="TextAlign.Left" Width="200"></GridColumn>
                                                         </GridColumns>
                                                     </SfGrid>
-                                                    <SfToast @ref="ToastFile" Title="Plik został pobrany pomyślnie!" Timeout=3000 Content="@ToastFileDownload">
-                                                        <ToastPosition X="Right"></ToastPosition>
-                                                    </SfToast>
 
                                                 </div>
                                             </SplitterPane>
@@ -512,25 +520,14 @@
                                                             <RowTemplate>
                                                                 @{
                                                                     var comment = (context as CommentModel);
-
                                                                     <div class="answer">
-                                                                        <table>
-                                                                            <tr>
-                                                                                <td>
-                                                                                    <div class="authorname">
-                                                                                        @EmployeeData.GetById(comment.Employee_id).First_name
-                                                                                        @EmployeeData.GetById(comment.Employee_id).Last_name
-                                                                                    </div>
-                                                                                </td>
-                                                                            </tr>
-                                                                            <tr>
-                                                                                <td>
-                                                                                    <div class="detailsAnswer">
-                                                                                        @comment.Date
-                                                                                    </div>
-                                                                                </td>
-                                                                            </tr>
-                                                                        </table>
+                                                                        <div class="authorname">
+                                                                            @EmployeeData.GetById(comment.Employee_id).First_name
+                                                                            @EmployeeData.GetById(comment.Employee_id).Last_name
+                                                                        </div>
+                                                                        <div class="detailsAnswer">
+                                                                            @comment.Date
+                                                                        </div>
                                                                         <div class="posting">
                                                                             @((MarkupString)comment.Description)
                                                                         </div>
@@ -544,26 +541,13 @@
                                                         <GridPageSettings PageSize="1"></GridPageSettings>
                                                         <GridSortSettings>
                                                         </GridSortSettings>
-                                                        <GridColumns>
-                                                            <GridColumn Field=@nameof(CommentModel.Employee_id) IsPrimaryKey="true" HeaderText="Komentarze" TextAlign="TextAlign.Left" Width="50"></GridColumn>
-                                                        </GridColumns>
                                                     </SfGrid>
-                                                </div>
-
-                                                <div>
-
                                                     <EditForm Model="Comment" OnValidSubmit="AddNewComment">
                                                         <SfRichTextEditor @ref="rteObj" @bind-Value="Comment.Description">
                                                             <RichTextEditorToolbarSettings Type="@Tooltype" Items="@Tools" EnableFloating="false"></RichTextEditorToolbarSettings>
                                                         </SfRichTextEditor>
-                                                        <div id='buttonSection'>
-                                                            <table>
-                                                                <tr>
-                                                                    <td>
-                                                                        <button class="samplebtn e-control e-btn" data-ripple="true" type="submit">Dodaj</button>
-                                                                    </td>
-                                                                </tr>
-                                                            </table>
+                                                        <div class="col-12 text-center">
+                                                            <button class="btn btn-primary" data-ripple="true" type="submit">Dodaj</button>
                                                         </div>
                                                     </EditForm>
                                                 </div>
@@ -663,6 +647,13 @@
     public static string a2;
     public static byte[] a3;
 
+    /// <summary> Dodanie zaproponowanego pracownika do listy osób przypisanych do zadania
+    /// <param name="args"></param>
+    public void AddEmployeeToAssigned(CommandClickEventArgs<EmployeeStats> args)
+    {
+
+    }
+
     public void OnCommandClicked(CommandClickEventArgs<TaskModel> args)
     {
 
@@ -674,7 +665,6 @@
         {
             SelectedTask = args.RowData;
             BackendLibrary.DataAccess.TaskData.DeleteTask(SelectedTask.Task_id);
-
         }
     }
 
@@ -695,7 +685,7 @@
     }
 
     // Edytor tekstu
-    private ToolbarType Tooltype = ToolbarType.Expand;
+    private ToolbarType Tooltype = ToolbarType.MultiRow;
     private List<ToolbarItemModel> Tools = new List<ToolbarItemModel>()
 {
         new ToolbarItemModel() { Command = ToolbarCommand.Bold },
@@ -705,37 +695,22 @@
         new ToolbarItemModel() { Command = ToolbarCommand.Separator },
         new ToolbarItemModel() { Command = ToolbarCommand.FontName },
         new ToolbarItemModel() { Command = ToolbarCommand.FontSize },
-        new ToolbarItemModel() { Command = ToolbarCommand.Separator },
         new ToolbarItemModel() { Command = ToolbarCommand.FontColor },
         new ToolbarItemModel() { Command = ToolbarCommand.BackgroundColor },
-        new ToolbarItemModel() { Command = ToolbarCommand.Separator },
-        new ToolbarItemModel() { Command = ToolbarCommand.LowerCase },
-        new ToolbarItemModel() { Command = ToolbarCommand.UpperCase },
-        new ToolbarItemModel() { Command = ToolbarCommand.Separator },
         new ToolbarItemModel() { Command = ToolbarCommand.SuperScript },
         new ToolbarItemModel() { Command = ToolbarCommand.SubScript },
-        new ToolbarItemModel() { Command = ToolbarCommand.Separator },
         new ToolbarItemModel() { Command = ToolbarCommand.Formats },
         new ToolbarItemModel() { Command = ToolbarCommand.Alignments },
-        new ToolbarItemModel() { Command = ToolbarCommand.Separator },
         new ToolbarItemModel() { Command = ToolbarCommand.OrderedList },
         new ToolbarItemModel() { Command = ToolbarCommand.UnorderedList },
-        new ToolbarItemModel() { Command = ToolbarCommand.Separator },
         new ToolbarItemModel() { Command = ToolbarCommand.Outdent },
         new ToolbarItemModel() { Command = ToolbarCommand.Indent },
-        new ToolbarItemModel() { Command = ToolbarCommand.Separator },
         new ToolbarItemModel() { Command = ToolbarCommand.CreateLink },
-        new ToolbarItemModel() { Command = ToolbarCommand.Image },
         new ToolbarItemModel() { Command = ToolbarCommand.CreateTable },
-        new ToolbarItemModel() { Command = ToolbarCommand.Separator },
         new ToolbarItemModel() { Command = ToolbarCommand.ClearFormat },
-        new ToolbarItemModel() { Command = ToolbarCommand.Separator },
         new ToolbarItemModel() { Command = ToolbarCommand.Print },
         new ToolbarItemModel() { Command = ToolbarCommand.SourceCode },
         new ToolbarItemModel() { Command = ToolbarCommand.FullScreen },
-        new ToolbarItemModel() { Command = ToolbarCommand.Separator },
-        new ToolbarItemModel() { Command = ToolbarCommand.Undo },
-        new ToolbarItemModel() { Command = ToolbarCommand.Redo }
     };
 
     protected override void OnInitialized()
@@ -778,6 +753,7 @@
         loggedEmployee = Pages.Login.UserLoggedIn;
 
         fillEmployeeTaskPairs();
+        RowDeselectHandler();
     }
 
     /// <summary> Zamkniecie okna przy kliknieciu poza nie. </summary>
@@ -862,30 +838,17 @@
         VisibilityAdd = true;
     }
 
-    private void EditTask(MouseEventArgs e)
+    private void EditTask()
     {
-        if (SelectedTask != null)
-        {
-            TaskEdit.name = SelectedTask.Name;
-            TaskEdit.description = SelectedTask.Description;
-            TaskEdit.start_time = SelectedTask.Start_time;
-            TaskEdit.deadline = SelectedTask.Deadline;
-            TaskEdit.status = SelectedTask.Status;
-            TaskEdit.auto_assigned = SelectedTask.Auto_assigned;
-            TaskEdit.project_id = SelectedTask.Project_id;
-            VisibilityEdit = true;
-        }
-        else
-        {
-            NoSelectedTask.Show();
-        }
+        DisplayTaskDetails(SelectedTask);
     }
 
-    private void DeleteTask(MouseEventArgs e)
+    private void DeleteTask()
     {
         if (SelectedTask != null)
         {
-
+            BackendLibrary.DataAccess.TaskData.DeleteTask(SelectedTask.Task_id);
+            uriHelper.NavigateTo(uriHelper.Uri, forceLoad: true);
         }
         else
         {
@@ -927,12 +890,13 @@
     private void DisplayTaskDetails(TaskModel args)
     {
         SelectedTask = args;
-        CommentsList = BackendLibrary.DataAccess.CommentData.GetAllByTaskId(SelectedTask.Task_id);
 
-        FileList = FileData.GetAllByTaskId(SelectedTask.Task_id);
 
         if (SelectedTask != null)
         {
+            CommentsList = BackendLibrary.DataAccess.CommentData.GetAllByTaskId(SelectedTask.Task_id);
+
+            FileList = FileData.GetAllByTaskId(SelectedTask.Task_id);
             ListOfTasks = TaskData.GetByIdList(Pages.TasksList.SelectedTask.Task_id); //jednoelementowa lista zawierająca wybranego taska
 
             //tutaj przechowywane są id etykiet, nastepnie odpowiednie etykiety wpisane do tablicy
@@ -1574,6 +1538,7 @@
 
     private void DisplayTeamTask()
     {
+        SelectedTask = null;
         projects.Clear();
         projectsForUnstartedTasks.Clear();
         if (shouldDisplayTeamTasks && NavMenu.shouldDisplayArchivalTask)
@@ -1614,7 +1579,7 @@
             }
 
         }
-        if(listOfUnstartedTasks != null)
+        if (listOfUnstartedTasks != null)
         {
             for (int i = 0; i < listOfUnstartedTasks.Count; i++)
             {

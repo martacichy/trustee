@@ -1,9 +1,59 @@
 @import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
 @import url('https://fonts.googleapis.com/css2?family=Josefin+Sans&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@200&display=swap');
+@import url('file:///C:\Users\Marta\Desktop\ZESP\WebApp\wwwroot\css\site.css');
 
 .employeelabel {
     font-size: 14px;
     color: #1B9D8C;
+}
+
+
+.body {
+    margin-right: 20px;
+}
+
+.e-multi-select-wrapper .e-chips > .e-chipcontent {
+    color: #fff;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+}
+
+.e-dropdownbase .e-list-item {
+    width: 100%;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 13px;
+}
+
+.e-grid .e-emptyrow {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 10px;
+}
+
+.e-grid.e-responsive .e-rowcell, .e-grid.e-responsive .e-headercelldiv {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 14px;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.e-btn.e-flat, .e-css.e-btn.e-flat {
+    background-color: #888896;
+    border-color: #888896;
+    box-shadow: none;
+    color: #fff;
+}
+
+.e-kanban .e-kanban-content .e-content-row .e-content-cells.e-collapsed {
+    overflow: hidden;
+    text-align: center;
+    width: 50px;
+    min-height: 250px;
+    height: 250px;
+}
+
+.h3 {
+    margin-top: 30px;
 }
 
 .authorname {
@@ -13,7 +63,7 @@
 }
 
 .detailsAnswer {
-    font-size: 9px;
+    font-size: 10x;
     font-family: 'Josefin Sans', sans-serif;
     font-weight: lighter;
 }
@@ -26,7 +76,19 @@
 .e-input-group.e-control-wrapper.e-custom .e-input {
     font-size: 18px;
     font-family: 'Josefin Sans', sans-serif;
-} 
+}
+
+.input[type="checkbox"] {
+    box-sizing: border-box;
+    padding: 0;
+    margin-top: 5px;
+    margin-right: 5px;
+}
+
+.e-kanban .e-kanban-content {
+    font-size: 18px;
+    font-family: 'Josefin Sans', sans-serif;
+}
 
 .e-dialog .e-dlg-header-content {
     background-color: #32856B;
@@ -47,24 +109,40 @@
 
 .e-kanban .e-kanban-table {
     font-size: 20px;
-    font-family: 'Josefin Sans', sans-serif;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.e-kanban .e-kanban-content .e-content-row .e-content-cells .e-card-container .e-card .e-card-header .e-card-header-title {
+    font-size: 18px;
+    font-family: 'Montserrat', sans-serif;
+}
+.e-kanban .e-kanban-content .e-content-row .e-content-cells .e-card-container .e-card .e-card-content {
+    font-size: 14px;
+    font-family: 'Montserrat', sans-serif;
+}
+.e-kanban .e-kanban-content .e-content-row .e-content-cells .e-card .e-card-content {
+    font-size: 20px;
+    font-family: 'Montserrat', sans-serif;
 }
 
 .e-kanban .e-kanban-content .e-content-row .e-content-cells.e-collapsed .e-collapse-header-text {
-    font-size: 18px;
+    font-size: 20px;
     font-family: 'Josefin Sans', sans-serif;
+    
+}
+.e-kanban .e-kanban-header .e-header-cells .e-header-text {
+    font-size: 20px;
 }
 
 .e-kanban .e-kanban-header .e-header-cells {
     font-size: 24px;
     background: #5CC1A1;
-    color: white;
     font-family: 'Josefin Sans', sans-serif;
 }
 
     .e-kanban .e-kanban-header .e-header-cells .e-header-text {
-        font-size: 20px;
-        
+        font-size: 24px;
+        text-align: center
     }
 
 .button1 {
@@ -82,6 +160,7 @@ html, body {
     flex-direction: column;
     
 }
+ 
 
 a, .btn-link {
     color: white;
@@ -89,18 +168,39 @@ a, .btn-link {
     font-family: 'Josefin Sans', sans-serif;
 }
 
-.btn-primary {
+
+.e-btn.e-flat.e-primary, .e-css.e-btn.e-flat.e-primary {
+    background-color: #3da081;
     
+    color: #fff;
+}
+
+.btn-primary {
+    font-family: 'Josefin Sans', sans-serif;
+    font-size: 16px;
     justify-content: center;
     color: whitesmoke;
     background-color: #3da081;
     border-color: #3da081;
+    min-width: 90px;
 }
 
     .btn-primary:hover {
         color: whitesmoke;
         background-color: #399679;
+        border-color: #3da081;
     }
+
+.btn-info {
+    border-color: #3da081;
+    background-color: #3da081;
+    border-color: #3da081;
+}
+
+button, input, optgroup, select, textarea {
+    line-height: inherit;
+    margin-right: 20px;
+}
 
 .actionBtn {
     margin-left: 10px;
@@ -108,10 +208,14 @@ a, .btn-link {
     float: left;
 }
 
-#deleteBtn {
-    background-color: #ff6363;
-    border-color: #ff6363;
-}
+    .actionBtn[type="checkbox"] {
+        margin-top: 5px;
+    }
+
+    #deleteBtn {
+        background-color: #ff6363;
+        border-color: #ff6363;
+    }
 
     #deleteBtn:hover {
         border-color: #de5757;
@@ -124,16 +228,17 @@ th {
 }
 
 app {
-    position: relative;
+    //position: relative;
     display: flex;
-    flex-direction: column;
+    //flex-direction: column;
+    font-family: 'Montserrat', sans-serif;
 }
 
 
 
 .main {
     flex: 1;
-    //margin-right: 20px;
+    margin-right: 20px;
     font-family: 'Josefin Sans', sans-serif;
 }
 
@@ -217,7 +322,6 @@ app {
 
 
 .header {
-    
     text-align: center;
     width: 100%;
     background: #1abc9c;
@@ -226,7 +330,14 @@ app {
     margin-left: 0px;
     margin-right: 0px;
     margin-bottom: 10px;
+    font-family: 'Josefin Sans', sans-serif;
+}
 
+.e-dialog .e-dlg-header {
+    text-align: center;
+    font-size: 30px;
+    font-family: 'Josefin Sans', sans-serif;
+    color: #F7F4F2;
 }
 
 .control-label {
@@ -234,11 +345,18 @@ app {
     font-family: 'Josefin Sans', sans-serif;
 }
 
+.e-gridheader {
+    font-size: 18px;
+    font-family: 'Josefin Sans', sans-serif;
+}
+
 .header-list {
-    font-size: 20px;
+    font-size: 26px;
     font-family: 'Josefin Sans', sans-serif;
     color: black;
 }
+
+
 
 .form-group {
     font-size: 20px;
@@ -262,6 +380,65 @@ app {
     }
 }
 
+.e-pager .e-pagercontainer {
+    border-radius: 4px;
+    border-style: solid;
+    border-width: 1px;
+    display: inline-block;
+    margin: 0 0 -4px;
+    overflow: hidden;
+    font-size: 1px;
+    height: 35px;
+}
+
+// licznik stron, wiadomosc
+.e-pager div.e-parentmsgbar {
+    float: right;
+    padding-bottom: 9px;
+    padding-right: 0;
+    padding-top: 8px;
+    font-family: 8px;
+    font-family: 'Montserrat', sans-serif;
+}
+
+/// 
+
+.e-grid .e-rowcell {
+    font-size: 16px;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.e-input-group textarea.e-input, .e-input-group.e-control-wrapper textarea.e-input {
+    font-size: 16px;
+    font-family: 'Montserrat', sans-serif;
+    max-height: 100px;
+}
+
+.e-control .e-input-group.e-control-wrapper input {
+    font-size: 16px;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.e-richtexteditor .e-rte-content .e-content {
+    font-size: 14px;
+    font-family: 'Montserrat', sans-serif;
+}
+<!-- kolor countera -->
+.e-pager .e-currentitem {
+    background-color: #A3A3A3;
+}
+
+.e-pager .e-numericitem {
+    border-right-style: solid;
+    border-right-width: 1px;
+    display: inline-block;
+    line-height: 1;
+    margin-right: 0;
+    min-width: 26px;
+    padding: 13px 12px 10px 12px;
+    font-size: 12px;
+    text-align: center;
+}
 
 .header {
     background-image: url('/Images/back.mp4');
@@ -269,3 +446,9 @@ app {
     background-size: 100%;
     height: 150px;
 }
+
+
+.e-grid .e-icons {
+    color: #858585;
+}
+

@@ -1,14 +1,14 @@
 ﻿@inherits LayoutComponentBase
 @inject NavigationManager NavigationManager
 
-<div class="main">
-    <NavMenu />
-</div>
-<div class="head">
-    <div>
-        @Body
+    <div class="main">
+        <NavMenu />
     </div>
-</div>
+    <div class="body">
+        <div>
+            @Body
+        </div>
+    </div>
 
 @code {
 
@@ -20,7 +20,7 @@
 }
 <style>
 
-    .head {
+    .body {
         margin-right: 40px;
     }
 

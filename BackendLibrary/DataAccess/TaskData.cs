@@ -122,7 +122,7 @@ namespace BackendLibrary.DataAccess
                     $"database06.employeetask.task_id WHERE database06.employeetask.employee_id = {employee_id} ";
                 var data = connection.Query<TaskModel>(sql).ToList();
 
-                return data;
+                 return data;
             }
         }
 
@@ -138,8 +138,6 @@ namespace BackendLibrary.DataAccess
                 return data;
             }
         }
-
-
 
         /// <summary> Dodaje nowego taska. </summary>
         public static void AddTask(TaskModel newTask)
