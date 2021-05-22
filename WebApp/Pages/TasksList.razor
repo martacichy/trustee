@@ -608,8 +608,10 @@
     // Zmienne z EditTask
     SfToast ToastObj;
     SfToast FailedObj;
+    SfToast ToastFile;
     private string ToastContentEdit { get; set; } = "Zadanie zaktualizowane pomyslnie!";
     private string FailedContent { get; set; } = "Brak zmian w zadaniu!";
+    private string ToastFileDownload { get; set; } = "sprawdź katalog Pobrane/";
     private TaskValidation TaskEdit;
     DateTime defaultDate = new DateTime(0001, 1, 1, 0, 0, 0);
     private Boolean VisibilityEdit { get; set; }
@@ -1610,8 +1612,8 @@
             BackendLibrary.Models.FileModel newfile = new BackendLibrary.Models.FileModel(SelectedTask.Task_id, Login.UserLoggedIn.Employee_id, DateTime.Now, path);
             BackendLibrary.DataAccess.FileData.AddFile(newfile);
             File.Delete(path);
+            this.DefaultGrid2.Refresh();
             FileList.Add(newfile);
-            DefaultGrid2.Refresh();
         }
     }
 
@@ -1620,6 +1622,7 @@
         SelectedFile = new FileModel();
         SelectedFile = args.RowData;
         BackendLibrary.DataAccess.FileData.DownloadFile(SelectedFile);
+        ToastFile.Show();
 
     }
 }
