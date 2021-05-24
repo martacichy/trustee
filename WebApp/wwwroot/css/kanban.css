@@ -1,0 +1,60 @@
+﻿@import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
+@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@200&display=swap');
+@import url('file:///C:\Users\Marta\Desktop\ZESP\WebApp\wwwroot\css\site.css');
+
+/* Arkusze stylów dla strony Kanban */
+
+
+.e-kanban .e-kanban-content {
+    font-size: 18px;
+    font-family: 'Josefin Sans', sans-serif;
+}
+
+.e-kanban .e-kanban-table {
+    font-size: 20px;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.e-kanban .e-kanban-content .e-content-row .e-content-cells .e-card-container .e-card .e-card-header .e-card-header-title {
+    font-size: 18px;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.e-kanban .e-kanban-content .e-content-row .e-content-cells .e-card-container .e-card .e-card-content {
+    font-size: 14px;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.e-kanban .e-kanban-content .e-content-row .e-content-cells .e-card .e-card-content {
+    font-size: 20px;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.e-kanban .e-kanban-content .e-content-row .e-content-cells.e-collapsed .e-collapse-header-text {
+    font-size: 20px;
+    font-family: 'Josefin Sans', sans-serif;
+}
+
+.e-kanban .e-kanban-header .e-header-cells .e-header-text {
+    font-size: 20px;
+}
+
+.e-kanban .e-kanban-header .e-header-cells {
+    font-size: 24px;
+    background: #5CC1A1;
+    font-family: 'Josefin Sans', sans-serif;
+}
+
+    .e-kanban .e-kanban-header .e-header-cells .e-header-text {
+        font-size: 24px;
+        text-align: center
+    }
+
+.e-kanban .e-kanban-content .e-content-row .e-content-cells.e-collapsed {
+    overflow: hidden;
+    text-align: center;
+    width: 50px;
+    min-height: 250px;
+    height: 250px;
+}

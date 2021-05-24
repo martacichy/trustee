@@ -1,0 +1,40 @@
+﻿@import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
+@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@200&display=swap');
+@import url('file:///C:\Users\Marta\Desktop\ZESP\WebApp\wwwroot\css\site.css');
+
+/* Formularze */
+
+.form-group {
+    font-size: 20px;
+    font-family: 'Josefin Sans', sans-serif;
+    margin-right: 30px;
+    margin-left: 30px;
+    margin-top: 10px;
+}
+
+.form-control-checkbox {
+    font-size: 16px;
+}
+
+.control-label {
+    font-size: 18px;
+    font-family: 'Josefin Sans', sans-serif;
+}
+
+.e-control .e-input-group.e-control-wrapper input {
+    font-size: 16px;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.e-input-group textarea.e-input, .e-input-group.e-control-wrapper textarea.e-input {
+    font-size: 16px;
+    font-family: 'Montserrat', sans-serif;
+    max-height: 100px;
+}
+
+/* textbox dodawania komentarzy */
+.e-richtexteditor .e-rte-content .e-content {
+    font-size: 14px;
+    font-family: 'Montserrat', sans-serif;
+}

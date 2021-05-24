@@ -1,0 +1,72 @@
+﻿@import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
+@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@200&display=swap');
+@import url('file:///C:\Users\Marta\Desktop\ZESP\WebApp\wwwroot\css\site.css');
+
+/* style dla buttonów */
+
+.e-btn.e-flat, .e-css.e-btn.e-flat {
+    background-color: #888896;
+    border-color: #888896;
+    box-shadow: none;
+    color: #fff;
+}
+a, .btn-link {
+    color: white;
+    font-size: 18px;
+    font-family: 'Josefin Sans', sans-serif;
+}
+
+
+.e-btn.e-flat.e-primary, .e-css.e-btn.e-flat.e-primary {
+    background-color: #3da081;
+    color: #fff;
+}
+
+.btn-primary {
+    font-family: 'Josefin Sans', sans-serif;
+    font-size: 16px;
+    justify-content: center;
+    color: whitesmoke;
+    background-color: #3da081;
+    border-color: #3da081;
+    min-width: 90px;
+}
+
+    .btn-primary:hover {
+        color: whitesmoke;
+        background-color: #399679;
+        border-color: #3da081;
+    }
+
+.btn-info {
+    border-color: #3da081;
+    background-color: #3da081;
+    border-color: #3da081;
+}
+
+button, input, optgroup, select, textarea {
+    line-height: inherit;
+    margin-right: 20px;
+}
+
+.actionBtn {
+    margin-left: 10px;
+    display: inline-block;
+    float: left;
+}
+
+    .actionBtn[type="checkbox"] {
+        margin-top: 5px;
+    }
+
+#deleteBtn {
+    background-color: #ff6363;
+    border-color: #ff6363;
+}
+
+    #deleteBtn:hover {
+        border-color: #de5757;
+        background-color: #de5757;
+    }
+
