@@ -28,6 +28,21 @@ namespace BackendLibrary.DataAccess
                 connection.Execute(sql, newFile);
             }
         }
+
+        /// <summary>
+        /// zwraca wszystkie pliki
+        /// </summary>
+        public static List<FileModel> GetAll()
+        {
+            using (IDbConnection connection = new MySqlConnection(connectionString))
+            {
+                string sql = $"SELECT * FROM database06.file";
+                var data = connection.Query<FileModel>(sql).ToList();
+
+                return data;
+            }
+        }
+
         /// <summary>
         /// zwraca wszystkie pliki przypisane do konkretnego zadania
         /// </summary>
