@@ -173,7 +173,8 @@
                                 <div>
                                     <SfSplitter Height="790px" Orientation="Syncfusion.Blazor.Layouts.Orientation.Vertical">
                                         <SplitterPanes>
-                                            <SplitterPane Size="34%" Min="268.6px" Resizable="false">
+                                            <SplitterPane Size="54%" Min="268.6px" Resizable="false">
+                                                <label class="form-group">Pliki:</label>
                                                 <div>
                                                     <div class="text-align">@*Wartości testowanej funkcji: @a1 *@</div>
                                                     <SfUploader AutoUpload="false">
@@ -198,16 +199,44 @@
                                                                     RowDeselected="RowDeselectHandlerFile"
                                                                     OnRecordDoubleClick="DownloadSelectedFile">
                                                         </GridEvents>
+                                                        <GridPageSettings PageSize="5"></GridPageSettings>
                                                         <GridColumns>
                                                             <GridColumn Field=@nameof(FileModel.File_name) HeaderText="Nazwa pliku" TextAlign="TextAlign.Left" Width="500"></GridColumn>
                                                             <GridColumn Field=@nameof(FileModel.Date) HeaderText="Data wstawienia" Format="d" Type="ColumnType.Date"
                                                                         TextAlign="TextAlign.Left" Width="200"></GridColumn>
                                                         </GridColumns>
                                                     </SfGrid>
-
+                                                    <SfToast @ref="ToastFile" Title="Plik został pobrany pomyślnie!" Timeout=3000 Content="@ToastFileDownload">
+                                                        <ToastPosition X="Right"></ToastPosition>
+                                                    </SfToast>
+                                                </div>
+                                                <div>
+                                                    <label class="form-group">Proponowane pliki z podobnych zadań:</label>
+                                                    <!-- LISTA PROPONOWANYCH PLIKÓW -->
+                                                    <SfGrid @ref="ProposedFileGrid"
+                                                            DataSource="suggestedFiles"
+                                                            AllowSelection="true"
+                                                            Locale="pl"
+                                                            ContextMenuItems="@(new List<object>()
+                                                        {"SortDescending", "SortAscending", "Copy"})">
+                                                        <GridFilterSettings EnableCaseSensitivity="false"></GridFilterSettings>
+                                                        <GridSearchSettings IgnoreCase="true"></GridSearchSettings>
+                                                        <GridSelectionSettings EnableToggle="true"></GridSelectionSettings>
+                                                        <GridEvents TValue="FileModel"
+                                                                    RowSelected="RowSelectHandlerFile"
+                                                                    RowDeselected="RowDeselectHandlerFile"
+                                                                    OnRecordDoubleClick="DownloadSelectedFile">
+                                                        </GridEvents>
+                                                        <GridColumns>
+                                                            <GridColumn Field=@nameof(FileModel.File_name) HeaderText="Nazwa pliku" TextAlign="TextAlign.Left" Width="500"></GridColumn>
+                                                            <GridColumn Field=@nameof(FileModel.Date) HeaderText="Data wstawienia" Format="d" Type="ColumnType.Date"
+                                                                        TextAlign="TextAlign.Left" Width="200"></GridColumn>
+                                                        </GridColumns>
+                                                    </SfGrid>
                                                 </div>
                                             </SplitterPane>
-                                            <SplitterPane Size="66%" Min="521.4px" Resizable="false">
+
+                                            <SplitterPane Size="46%" Min="521.4px" Resizable="false">
                                                 <div>
                                                     <SfGrid DataSource="CommentsList"
                                                             @ref="CommentGrid"
@@ -322,9 +351,11 @@
     private Boolean VisibilityEdit { get; set; }
 
     // Zmienne z TaskDetails
+    private SfGrid<FileModel> ProposedFileGrid;
     private SfGrid<TaskModel> DefaultGrid1;
     private SfGrid<FileModel> DefaultGrid2;
     private static List<FileModel> FileList;
+    private List<FileModel> suggestedFiles = new List<FileModel>();
     public static List<TaskModel> ListOfTasks;
     private Boolean addButtonClicked;
     private Boolean VisibilityDetails { get; set; }
@@ -601,6 +632,11 @@
             TaskEdit.status = SelectedTask.Status;
             TaskEdit.auto_assigned = SelectedTask.Auto_assigned;
             TaskEdit.project_id = SelectedTask.Project_id;
+
+            // automatyczne proponowanie plików
+            suggestedFiles.Clear();
+            SuggestFiles(SelectedTask.Task_id);
+
             VisibilityDetails = true;
         }
         else
@@ -1186,7 +1222,7 @@
             BackendLibrary.DataAccess.TaskData.UpdateTask(updatedTask);
             EditEmployeeToTask();
             ToastObj.Show();
-            VisibilityEdit = false;          
+            VisibilityEdit = false;
         }
     }
 
@@ -1252,5 +1288,64 @@
         BackendLibrary.DataAccess.FileData.DownloadFile(SelectedFile);
         ToastFile.Show();
 
+    }
+
+    /// <summary>
+    /// Algorytm proponowania plików w szczegółach zadania.
+    /// </summary>
+    private void SuggestFiles(int selectedTaskId)
+    {
+        List<FileModel> allFiles = FileData.GetAll();
+        List<TaskLabelModel> labelsFromTasksWithFiles = new List<TaskLabelModel>();
+
+        List<TaskLabelModel> currentTaskLabels = TaskLabelData.GetAllLabelsByTaskId(selectedTaskId);
+        Dictionary<int, int> labelOccurences = new Dictionary<int, int>();
+
+        // zebranie wszystkich etykiet z zadań które mają pliki
+        foreach (var file in allFiles)
+        {
+            if (file.Task_id != selectedTaskId)
+            {
+                labelsFromTasksWithFiles.AddRange(TaskLabelData.GetAllLabelsByTaskId(file.Task_id));
+            }
+        }
+
+        // policzenie ile razy występuje dana etykieta
+        foreach (var label in labelsFromTasksWithFiles)
+        {
+            if (labelOccurences.ContainsKey(label.Label_id))
+                labelOccurences[label.Label_id]++;
+            else
+                labelOccurences.Add(label.Label_id, 1);
+        }
+
+        // odfiltrowanie etykiet ktorymi nie jest opisane badane zadanie
+        List<int> labelsIds = new List<int>();
+        foreach (var label in currentTaskLabels)
+            labelsIds.Add(label.Label_id);
+        labelOccurences = labelOccurences
+            .Where(label => labelsIds.Contains(label.Key)).ToDictionary(i => i.Key, i => i.Value);
+
+        // posortowanie rosnąco po ilości wystąpień
+        labelOccurences = labelOccurences.OrderBy(key => key.Value).ToDictionary(i => i.Key, i => i.Value); ;
+
+        // dodanie wszystkich plików według kolejności dopasowania
+        foreach (var label in labelOccurences)
+        {
+            List<TaskLabelModel> labels = labelsFromTasksWithFiles.Where(l => l.Label_id == label.Key).ToList();
+
+            foreach (var task in labels)
+            {
+                if (task.Task_id != selectedTaskId)
+                    suggestedFiles.AddRange(FileData.GetAllByTaskId(task.Task_id));
+            }
+        }
+
+        // zostawienie tylko 8 pierwszych (najlepiej dopasowanych) plików
+        if (suggestedFiles.Count() >= 8)
+            suggestedFiles = suggestedFiles.GetRange(0, 8);
+
+        // odświeżenie sfgrid
+        ProposedFileGrid.Refresh();
     }
 }
