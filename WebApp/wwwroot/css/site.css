@@ -281,7 +281,7 @@ th {
     height: 35px;
 }
 
-.e-pager div.e-parentmsgbar {
+.e-pager .e-parentmsgbar {
     float: right;
     padding-bottom: 9px;
     padding-right: 0;

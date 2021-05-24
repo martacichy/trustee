@@ -1330,6 +1330,8 @@
             CommentsList.Add(CommentAdd);
         }
         CommentGrid.Refresh();
+
+        this.rteObj.Value = null;
     }
 
     public void OnCommandClicked(CommandClickEventArgs<CommentModel> args)
