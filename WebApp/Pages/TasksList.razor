@@ -471,11 +471,12 @@
                                 <div>
                                     <SfSplitter Height="790px" Orientation="Syncfusion.Blazor.Layouts.Orientation.Vertical">
                                         <SplitterPanes>
-                                            <SplitterPane Size="34%" Min="268.6px" Resizable="false">
+                                            <SplitterPane Size="54%" Min="268.6px" Resizable="false">
+                                                <label class="form-group">Pliki:</label>
                                                 <div>
                                                     <div class="text-align">@*Wartości testowanej funkcji: @a1 *@</div>
                                                     <SfUploader AutoUpload="false">
-                                                        <UploaderEvents ValueChange="AddFileFunction"></UploaderEvents>
+                                                        <UploaderEvents ValueChange="AddFileFunction" ></UploaderEvents>
                                                     </SfUploader>
                                                 </div>
                                                 <div>
@@ -505,10 +506,37 @@
                                                     <SfToast @ref="ToastFile" Title="Plik został pobrany pomyślnie!" Timeout=3000 Content="@ToastFileDownload">
                                                         <ToastPosition X="Right"></ToastPosition>
                                                     </SfToast>
-
+                                                </div>
+                                                <div>
+                                                    <label class="form-group">Proponowane pliki:</label>
+                                                    <!-- Artur Kolaska i algorytm plikowy -->
+                                                    <SfGrid @ref="ProposedFileGrid"
+                                                            DataSource="FileList"
+                                                            AllowPaging="true"
+                                                            AllowSorting="true"
+                                                            AllowFiltering="true"
+                                                            AllowSelection="true"
+                                                            Locale="pl"
+                                                            ContextMenuItems="@(new List<object>()
+                                                        {"SortDescending", "SortAscending", "Copy"})">
+                                                        <GridFilterSettings EnableCaseSensitivity="false"></GridFilterSettings>
+                                                        <GridSearchSettings IgnoreCase="true"></GridSearchSettings>
+                                                        <GridSelectionSettings EnableToggle="true"></GridSelectionSettings>
+                                                        <GridEvents TValue="FileModel"
+                                                                    RowSelected="RowSelectHandlerFile"
+                                                                    RowDeselected="RowDeselectHandlerFile"
+                                                                    OnRecordDoubleClick="DownloadSelectedFile">
+                                                        </GridEvents>
+                                                        <GridColumns>
+                                                            <GridColumn Field=@nameof(FileModel.File_name) HeaderText="Nazwa pliku" TextAlign="TextAlign.Left" Width="500"></GridColumn>
+                                                            <GridColumn Field=@nameof(FileModel.Date) HeaderText="Data wstawienia" Format="d" Type="ColumnType.Date"
+                                                                        TextAlign="TextAlign.Left" Width="200"></GridColumn>
+                                                        </GridColumns>
+                                                    </SfGrid>
                                                 </div>
                                             </SplitterPane>
-                                            <SplitterPane Size="66%" Min="521.4px" Resizable="false">
+                                            
+                                            <SplitterPane Size="46%" Min="521.4px" Resizable="false">
                                                 <div>
                                                     <SfGrid DataSource="CommentsList"
                                                             @ref="CommentGrid"
@@ -569,6 +597,7 @@
     SfRichTextEditor rteObj;
     private SfGrid<TaskModel> DefaultGrid;
     private SfGrid<CommentModel> CommentGrid;
+
     private string searchStr;
     private static List<TaskModel> TaskList;
     private static List<TaskModel> listOfUnstartedTasks;
@@ -622,6 +651,7 @@
     // Zmienne z TaskDetails
     private SfGrid<TaskModel> DefaultGrid1;
     private SfGrid<FileModel> DefaultGrid2;
+    private SfGrid<FileModel> ProposedFileGrid;
     private static List<FileModel> FileList;
     public static List<TaskModel> ListOfTasks;
     private Boolean addButtonClicked;
