@@ -502,6 +502,9 @@
                                                                         TextAlign="TextAlign.Left" Width="200"></GridColumn>
                                                         </GridColumns>
                                                     </SfGrid>
+                                                    <SfToast @ref="ToastFile" Title="Plik został pobrany pomyślnie!" Timeout=3000 Content="@ToastFileDownload">
+                                                        <ToastPosition X="Right"></ToastPosition>
+                                                    </SfToast>
 
                                                 </div>
                                             </SplitterPane>
