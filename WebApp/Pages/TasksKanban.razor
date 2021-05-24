@@ -1,63 +1,1256 @@
 ﻿@page "/kanban"
-
+<link href="css/popups.css" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <div class="header">
     <br />
     <br />
     <h3>Twoje zadania</h3>
 </div>
 <div class="main">
-    <SfKanban CssClass="kanban-overview" TValue="BackendLibrary.Models.TaskModel" KeyField="Status" DataSource="@FilteredTasks" Locale="pl">
+    <SfKanban CssClass="kanban-overview" TValue="TaskModel" KeyField="Status" DataSource="@TaskList" Locale="pl">
         <KanbanCardSettings HeaderField="Name" ContentField="Description"></KanbanCardSettings>
-        <KanbanSwimlaneSettings AllowDragAndDrop="false"></KanbanSwimlaneSettings>
+        <KanbanSwimlaneSettings AllowDragAndDrop="true"></KanbanSwimlaneSettings>
         <KanbanEvents TValue="TaskModel"
                       DialogOpen="@OnDialogOpen"
-                      CardClick="@OnCardClicked">
+                      DragStop="@DragStop"
+                      CardDoubleClick="SetAssingTaskButtonInisibleAndDisplayTaskDetails">
         </KanbanEvents>
 
         <KanbanColumns>
-            <KanbanColumn HeaderText="Nierozpoczęte" KeyField="@(new List<string>() { "Nierozpoczete" })" AllowToggle="true" AllowDrag="false"></KanbanColumn>
+            <KanbanColumn HeaderText="Nierozpoczęte" KeyField="@(new List<string>() { "Nierozpoczęte" })" AllowToggle="true" AllowDrag="true"></KanbanColumn>
 
-            <KanbanColumn HeaderText="W toku" KeyField="@(new List<string>() { "W toku" })" AllowToggle="true" AllowDrag="false"></KanbanColumn>
+            <KanbanColumn HeaderText="W toku" KeyField="@(new List<string>() { "W toku" })" AllowToggle="true" AllowDrag="true"></KanbanColumn>
 
-            <KanbanColumn HeaderText="Zakończone" KeyField="@(new List<string>() { "Zakonczone" })"
-                          AllowToggle="true" AllowDrag="false"></KanbanColumn>
+            <KanbanColumn HeaderText="Zakończone" KeyField="@(new List<string>() { "Zakończone" })"
+                          AllowToggle="true" AllowDrag="true"></KanbanColumn>
 
             <KanbanColumn HeaderText="Anulowane" KeyField="@(new List<string>() { "Anulowane" })"
-                          AllowToggle="true" IsExpanded="false" AllowDrag="false"></KanbanColumn>
+                          AllowToggle="true" IsExpanded="false" AllowDrag="true"></KanbanColumn>
         </KanbanColumns>
 
     </SfKanban>
+
+
+</div>
+<div>
+    <SfDialog @bind-Visible="@VisibilityDetails" AllowDragging="true" Width="1600px" Height="1600px" MinHeight="900px" IsModal="true" ShowCloseIcon="true">
+        <DialogTemplates>
+            <Content>
+                <SfSplitter CssClass="out-splitter" Height="100%" Width="100%">
+                    <SplitterPanes>
+                        <SplitterPane Size="34%" Min="408px" Resizable="false">
+                            <ContentTemplate>
+                                <div>
+                                    <EditForm Model="@TaskEdit">
+                                        <DataAnnotationsValidator />
+                                        <div class="form-group">
+                                            <label for="Tytuł" class="control-label" required>Tytuł</label>
+                                            <SfTextBox TValue="string" @bind-Value="TaskEdit.name" Readonly="@readOnly"></SfTextBox>
+                                            <ValidationMessage For="@(() => TaskEdit.name)" />
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="Opis" class="control-label">Opis</label>
+                                            <SfTextBox Multiline=true TValue="string" @bind-Value="TaskEdit.description" Readonly="@readOnly"></SfTextBox>
+                                            <ValidationMessage For="@(() => TaskEdit.description)" />
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="Starttime" class="control-label">Czas rozpoczęcia</label>
+                                            <SfDateTimePicker TValue="DateTime" @bind-value="TaskEdit.start_time"></SfDateTimePicker>
+                                            <ValidationMessage For="@(() => TaskEdit.start_time)" />
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="Deadline" class="control-label">Data zakończenia</label>
+                                            <SfDateTimePicker TValue="DateTime" @bind-value="TaskEdit.deadline"></SfDateTimePicker>
+                                            <ValidationMessage For="@(() => TaskEdit.deadline)" />
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="control-wrapper multi-select-parent">
+                                                <div class="padding-top">
+                                                    <label asp-for="Status" class="control-label">Status</label>
+                                                    <SfDropDownList TValue="string" TItem="string"
+                                                                    @bind-Value="@TaskEdit.status"
+                                                                    Placeholder="Szukaj..."
+                                                                    Enabled=@EnabledStatus
+                                                                    DataSource="@status" AllowFiltering="true">
+                                                        <DropDownListFieldSettings Text="status"> </DropDownListFieldSettings>
+                                                    </SfDropDownList>
+                                                    <ValidationMessage For="@(() => TaskEdit.status)" />
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                        <div class="form-group">
+                                            <div class="control-wrapper multi-select-parent">
+                                                <div class="padding-top">
+                                                    <label asp-for="etykiety" class="control-label">Etykiety</label>
+                                                    <SfMultiSelect TValue="string[]" TItem="BackendLibrary.Models.LabelModel"
+                                                                   @bind-Value="@nameoflabels"
+                                                                   Enabled=@Enabled
+                                                                   s
+                                                                   Placeholder="Szukaj..."
+                                                                   DataSource="@labelsInDb" AllowFiltering="true" AllowCustomValue="true"
+                                                                   Mode="@VisualMode.Box">
+                                                        <MultiSelectFieldSettings Text="Name">  </MultiSelectFieldSettings>
+                                                    </SfMultiSelect>
+                                                    <ValidationMessage For="@(() => TaskEdit.SelectedLabel)" />
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <div class="control-wrapper multi-select-parent">
+                                                <div class="padding-top">
+                                                    <label asp-for="projekt" class="control-label">
+                                                        Projekt
+                                                        <SfSwitch @bind-Checked="@isProjectSelectingOn" @onchange="@OnChangeButton"></SfSwitch>
+                                                    </label>
+                                                    <SfDropDownList TValue="string" TItem="BackendLibrary.Models.ProjectModel"
+                                                                    @bind-Value="@nameofProject"
+                                                                    Enabled="@EnableProjectDropDown"
+                                                                    Placeholder="Szukaj..."
+                                                                    DataSource="@projectsInDb" AllowFiltering="true">
+                                                        <DropDownListFieldSettings Text="Name"></DropDownListFieldSettings>
+                                                    </SfDropDownList>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <div class="control-wrapper multi-select-parent">
+                                                <div class="padding-top">
+                                                    <label asp-for="pracownicy" class="control-label">Pracownicy</label>
+                                                    <SfMultiSelect TValue="int[]" TItem="BackendLibrary.Models.EmployeeModel"
+                                                                   @bind-Value="@nameofEmployees"
+                                                                   Placeholder="Wybierz..."
+                                                                   Enabled=@Enabled
+                                                                   DataSource="@employees" AllowFiltering="true"
+                                                                   Mode="@VisualMode.Box">
+                                                        <MultiSelectTemplates TItem="BackendLibrary.Models.EmployeeModel">
+                                                            <!-- Zmieniony Context z default na "SelectedEmployee" aby mogła działać walidacja -->
+                                                            <ItemTemplate Context="SelectedEmployee">
+                                                                <div>
+                                                                    <div class="ename">
+                                                                        @((SelectedEmployee as BackendLibrary.Models.EmployeeModel).First_name)
+                                                                        @((SelectedEmployee as BackendLibrary.Models.EmployeeModel).Last_name)
+                                                                    </div>
+                                                                </div>
+                                                            </ItemTemplate>
+                                                            <ValueTemplate Context="SelectedEmployee">
+                                                                <div class="multiselect-width">
+                                                                    <div class="name">
+                                                                        @((SelectedEmployee as BackendLibrary.Models.EmployeeModel).First_name)
+                                                                        @((SelectedEmployee as BackendLibrary.Models.EmployeeModel).Last_name)
+                                                                    </div>
+                                                                </div>
+                                                            </ValueTemplate>
+                                                        </MultiSelectTemplates>
+                                                        <MultiSelectFieldSettings Text="First_name" Value="Employee_id"></MultiSelectFieldSettings>
+                                                    </SfMultiSelect>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 text-center">
+                                            <br />
+                                            <Sfbutton class="btn btn-primary" hidden="@isAssignTaskButtonHidden" @onclick="AssignTask"><i class="fa fa-plus"></i>&nbsp;Przypisz zadanie do mnie</Sfbutton>
+                                        </div>
+                                    </EditForm>
+
+                                    <div class="form-group">
+                                        <button type="submit" class="btn btn-block btn-info" data-dismiss="modal" @onclick="CheckIfThereWereChanges" hidden=@isSaveButtonHidden>Zapisz</button>
+                                        <SfToast @ref="ToastObj" Title="Zadanie zaktualizowane pomyslnie!" Timeout=3000 Content="@ToastContentEdit">
+                                            <ToastPosition X="Right"></ToastPosition>
+                                        </SfToast>
+                                        <SfToast @ref="FailedObj" Title="Brak zmian w zadaniu!" Timeout=3000 Content="@FailedContent">
+                                            <ToastPosition X="Right"></ToastPosition>
+                                        </SfToast>
+                                    </div>
+                                </div>
+                            </ContentTemplate>
+                        </SplitterPane>
+                        <SplitterPane Size="66%" Min="792px" Resizable="false">
+                            <ContentTemplate>
+                                <div>
+                                    <SfSplitter Height="790px" Orientation="Syncfusion.Blazor.Layouts.Orientation.Vertical">
+                                        <SplitterPanes>
+                                            <SplitterPane Size="34%" Min="268.6px" Resizable="false">
+                                                <div>
+                                                    <div class="text-align">@*Wartości testowanej funkcji: @a1 *@</div>
+                                                    <SfUploader AutoUpload="false">
+                                                        <UploaderEvents ValueChange="AddFileFunction"></UploaderEvents>
+                                                    </SfUploader>
+                                                </div>
+                                                <div>
+                                                    <SfGrid @ref="DefaultGrid2"
+                                                            DataSource="FileList"
+                                                            AllowPaging="true"
+                                                            AllowSorting="true"
+                                                            AllowFiltering="true"
+                                                            AllowSelection="true"
+                                                            Locale="pl"
+                                                            ContextMenuItems="@(new List<object>()
+                                                        {"SortDescending", "SortAscending", "Copy"})">
+                                                        <GridFilterSettings EnableCaseSensitivity="false"></GridFilterSettings>
+                                                        <GridSearchSettings IgnoreCase="true"></GridSearchSettings>
+                                                        <GridSelectionSettings EnableToggle="true"></GridSelectionSettings>
+                                                        <GridEvents TValue="FileModel"
+                                                                    RowSelected="RowSelectHandlerFile"
+                                                                    RowDeselected="RowDeselectHandlerFile"
+                                                                    OnRecordDoubleClick="DownloadSelectedFile">
+                                                        </GridEvents>
+                                                        <GridColumns>
+                                                            <GridColumn Field=@nameof(FileModel.File_name) HeaderText="Nazwa pliku" TextAlign="TextAlign.Left" Width="500"></GridColumn>
+                                                            <GridColumn Field=@nameof(FileModel.Date) HeaderText="Data wstawienia" Format="d" Type="ColumnType.Date"
+                                                                        TextAlign="TextAlign.Left" Width="200"></GridColumn>
+                                                        </GridColumns>
+                                                    </SfGrid>
+
+                                                </div>
+                                            </SplitterPane>
+                                            <SplitterPane Size="66%" Min="521.4px" Resizable="false">
+                                                <div>
+                                                    <SfGrid DataSource="CommentsList"
+                                                            @ref="CommentGrid"
+                                                            AllowPaging="true"
+                                                            Locale="pl">
+                                                        <GridTemplates>
+                                                            <RowTemplate>
+                                                                @{
+                                                                    var comment = (context as CommentModel);
+                                                                    <div class="answer">
+                                                                        <div class="authorname">
+                                                                            @EmployeeData.GetById(comment.Employee_id).First_name
+                                                                            @EmployeeData.GetById(comment.Employee_id).Last_name
+                                                                        </div>
+                                                                        <div class="detailsAnswer">
+                                                                            @comment.Date
+                                                                        </div>
+                                                                        <div class="posting">
+                                                                            @((MarkupString)comment.Description)
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <!--<label class="header-list"><i class="fas fa-user-friends"></i>Pracownicy:</label>-->
+
+                                                                }
+                                                            </RowTemplate>
+                                                        </GridTemplates>
+                                                        <GridPageSettings PageSize="1"></GridPageSettings>
+                                                        <GridSortSettings>
+                                                        </GridSortSettings>
+                                                    </SfGrid>
+                                                    <EditForm Model="Comment" OnValidSubmit="AddNewComment">
+                                                        <SfRichTextEditor @ref="rteObj" @bind-Value="Comment.Description">
+                                                            <RichTextEditorToolbarSettings Type="@Tooltype" Items="@Tools" EnableFloating="false"></RichTextEditorToolbarSettings>
+                                                        </SfRichTextEditor>
+                                                        <div class="col-12 text-center">
+                                                            <button class="btn btn-primary" data-ripple="true" type="submit">Dodaj</button>
+                                                        </div>
+                                                    </EditForm>
+                                                </div>
+                                            </SplitterPane>
+                                        </SplitterPanes>
+                                    </SfSplitter>
+                                </div>
+                            </ContentTemplate>
+                        </SplitterPane>
+                    </SplitterPanes>
+                </SfSplitter>
+            </Content>
+        </DialogTemplates>
+        <DialogEvents Closed="@DialogEditClosed" OnOverlayClick="@overlayClick"></DialogEvents>
+        <DialogAnimationSettings Effect="DialogEffect.Fade"></DialogAnimationSettings>
+    </SfDialog>
 </div>
 
 
+
 @code {
-    public static List<TaskModel> AllTasks, FilteredTasks;
-    public static List<EmployeeTaskModel> MyTasks;
+
+    SfToast NoSelectedTask;
+    SfRichTextEditor rteObj;
+    private SfGrid<TaskModel> DefaultGrid;
+    private SfGrid<CommentModel> CommentGrid;
+    private string searchStr;
+    private static List<TaskModel> TaskList;
+    private static List<TaskModel> listOfUnstartedTasks;
+    private List<EmpTaskPair> employeeTaskPairs;
+    private List<EmployeeTaskModel> allEmpTasks;
+    public TaskModel SelectedTask;
+    private String displayInlineOrNone = "inline";
+    private bool readOnly = false;
+    private bool Enabled = true;
+    private bool EnabledStatus = true;
+    private bool isSaveButtonHidden = false;
+    private bool isAssignTaskButtonHidden = true;
+    private List<String> status = new List<String>(new string[] { "Nierozpoczęte", "W toku", "Zakończone", "Anulowane" });
+    private List<ProjectModel> projects = new List<ProjectModel>();
+    private List<ProjectModel> projectsForUnstartedTasks = new List<ProjectModel>();
+
+    // Zmienne z AddNewTask
+    SfGrid<EmployeeStats> suggestedEmployeesGrid;
+    SfToast SuccessTask;
+    SfToast WrongInput;
+    private string ToastContentAdd { get; set; } = "Zadanie zostało pomyślnie dodane.";
+    private string ToastWrongInput { get; set; }
+    private TaskValidation TaskAdd;
+    private List<LabelModel> labelsInDb;
+    private List<EmployeeModel> employees;
+    private List<EmployeeStats> suggestedEmployees;
+    private List<ProjectModel> projectsInDb;
+    private string[] selectedLabels { get; set; } = new string[] { };
+    private int[] selectedEmployeesId = new int[] { };
+    private string selectedProject;
+    private int lastTaskId;
+    private int labelIdByName;
+    private string mergedSelectedLabels;
+    private bool isMergedLabelsMatchToPattern;
+    private string pattern = @"^[a-zA-ZĄĆĘŁŃÓŚŹŻąćęłńóśźż0-9]*$";
+    private Boolean VisibilityAdd { get; set; }
+    private bool isProjectSelectingOn = false;
+    public bool EnableProjectDropDown = false;
+
+    // Zmienne z EditTask
+    SfToast ToastObj;
+    SfToast FailedObj;
+    SfToast ToastFile;
+    private string ToastContentEdit { get; set; } = "Zadanie zaktualizowane pomyslnie!";
+    private string FailedContent { get; set; } = "Brak zmian w zadaniu!";
+    private string ToastFileDownload { get; set; } = "sprawdź katalog Pobrane/";
+    private TaskValidation TaskEdit;
+    DateTime defaultDate = new DateTime(0001, 1, 1, 0, 0, 0);
+    private Boolean VisibilityEdit { get; set; }
+
+    // Zmienne z TaskDetails
+    private SfGrid<TaskModel> DefaultGrid1;
+    private SfGrid<FileModel> DefaultGrid2;
+    private static List<FileModel> FileList;
+    public static List<TaskModel> ListOfTasks;
+    private Boolean addButtonClicked;
+    private Boolean VisibilityDetails { get; set; }
+    public static List<TaskLabelModel> ListofLabelsId;
+    private string[] nameoflabels { get; set; } = new string[] { };
+    private string[] oldlabels { get; set; } = new string[] { };
+    public static List<EmployeeTaskModel> ListofEmployeesId;
+    private int[] nameofEmployees { get; set; } = new int[] { };
+    private int[] oldEmployees { get; set; } = new int[] { };
+    private string nameofProject;
+    BackendLibrary.Models.CommentModel Comment;
+    private SfGrid<CommentModel> DefaultGridComments;
+    private static List<CommentModel> CommentsList;
+    BackendLibrary.Models.CommentModel selectedComment;
+    private EmployeeModel loggedEmployee;
+    private bool commentDisable = true;
+    private bool shouldDisplayTeamTasks = false;
+    public static FileModel SelectedFile;
+    public static string a1;
+    public static string a2;
+    public static byte[] a3;
+
+
+    // Edytor tekstu
+    private ToolbarType Tooltype = ToolbarType.MultiRow;
+    private List<ToolbarItemModel> Tools = new List<ToolbarItemModel>()
+{
+        new ToolbarItemModel() { Command = ToolbarCommand.Bold },
+        new ToolbarItemModel() { Command = ToolbarCommand.Italic },
+        new ToolbarItemModel() { Command = ToolbarCommand.Underline },
+        new ToolbarItemModel() { Command = ToolbarCommand.StrikeThrough },
+        new ToolbarItemModel() { Command = ToolbarCommand.Separator },
+        new ToolbarItemModel() { Command = ToolbarCommand.FontName },
+        new ToolbarItemModel() { Command = ToolbarCommand.FontSize },
+        new ToolbarItemModel() { Command = ToolbarCommand.FontColor },
+        new ToolbarItemModel() { Command = ToolbarCommand.BackgroundColor },
+        new ToolbarItemModel() { Command = ToolbarCommand.SuperScript },
+        new ToolbarItemModel() { Command = ToolbarCommand.SubScript },
+        new ToolbarItemModel() { Command = ToolbarCommand.Formats },
+        new ToolbarItemModel() { Command = ToolbarCommand.Alignments },
+        new ToolbarItemModel() { Command = ToolbarCommand.OrderedList },
+        new ToolbarItemModel() { Command = ToolbarCommand.UnorderedList },
+        new ToolbarItemModel() { Command = ToolbarCommand.Outdent },
+        new ToolbarItemModel() { Command = ToolbarCommand.Indent },
+        new ToolbarItemModel() { Command = ToolbarCommand.CreateLink },
+        new ToolbarItemModel() { Command = ToolbarCommand.CreateTable },
+        new ToolbarItemModel() { Command = ToolbarCommand.ClearFormat },
+        new ToolbarItemModel() { Command = ToolbarCommand.Print },
+        new ToolbarItemModel() { Command = ToolbarCommand.SourceCode },
+        new ToolbarItemModel() { Command = ToolbarCommand.FullScreen },
+    };
 
     protected override void OnInitialized()
     {
+        TaskList = TaskData.GetAllByEmployeeId(Login.UserLoggedIn.Employee_id);
+        SelectedTask = new TaskModel();
         if (Login.UserLoggedIn.If_manager == -1)
         {
             NavigationManager.NavigateTo("/");
         }
+        if (Login.UserLoggedIn.If_manager == 0)
+        {
+            readOnly = true;
+            Enabled = false;
+        }
 
-        AllTasks = TaskData.GetAllByCompanyId(Login.UserLoggedIn.Company_id);
-        MyTasks = EmployeeTaskData.GetAllTasksByEmployeeId(Login.UserLoggedIn.Employee_id);
+        DisplayProjects();
 
-        FilteredTasks = AllTasks.Where(x => MyTasks.Any(z => x.Task_id == z.Task_id)).ToList();
+        TaskAdd = new TaskValidation();
+        TaskEdit = new TaskValidation();
+        labelsInDb = LabelData.GetAllByCompanyId(Login.UserLoggedIn.Company_id);
+        employees = EmployeeData.GetAllByCompanyId(Login.UserLoggedIn.Company_id);
+        projectsInDb = ProjectData.GetAllByCompanyId(Login.UserLoggedIn.Company_id);
+        Comment = new CommentModel();
+        allEmpTasks = EmployeeTaskData.GetAll();
+        loggedEmployee = Pages.Login.UserLoggedIn;
+
+        fillEmployeeTaskPairs();
+        RowDeselectHandler();
     }
-
-    // anuluje otwieranie podgladu - do zmiany jak bedzie gotowe okno szczegółów
     private void OnDialogOpen(DialogOpenEventArgs<TaskModel> args)
     {
         args.Cancel = true;
     }
 
-    private void OnCardClicked(CardClickEventArgs<TaskModel> args)
+    //TODO - obsługa DragStart i DragStop (<KanbanEvents />)
+
+    private void DragStop(Syncfusion.Blazor.Kanban.DragEventArgs<TaskModel> args)
     {
-        // odczytanie modelu lub id taska i pokazanie okna podglądu
+        SelectedTask = args.Data[0];
+        ListofEmployeesId = EmployeeTaskData.GetAllEmployeesByTaskId(SelectedTask.Task_id);
+        this.nameofEmployees = new int[ListofEmployeesId.Count];
+        this.oldEmployees = new int[ListofEmployeesId.Count];
+        for (int i = 0; i < ListofEmployeesId.Count; i++)
+        {
+            nameofEmployees[i] = EmployeeData.GetById(ListofEmployeesId[i].Employee_id).Employee_id;
+            oldEmployees[i] = EmployeeData.GetById(ListofEmployeesId[i].Employee_id).Employee_id;
+        }
+        UpdateTask();
     }
 
-    //TODO - obsługa DragStart i DragStop (<KanbanEvents />)
-}
 
+    /// <summary> Zamkniecie okna przy kliknieciu poza nie. </summary>
+    private void overlayClick(MouseEventArgs args)
+    {
+        VisibilityEdit = false;
+        VisibilityDetails = false;
+        VisibilityAdd = false;
+        isProjectSelectingOn = false;
+        EnableProjectDropDown = false;
+        ClearTask();
+    }
+
+    /// <summary> Stworzenie listy par pracownik+zadanie do wyświetlania w DataGrid </summary>
+    private void fillEmployeeTaskPairs()
+    {
+        employeeTaskPairs = new List<EmpTaskPair>();
+        foreach (var element in allEmpTasks)
+        {
+            employeeTaskPairs.Add(new EmpTaskPair(
+            element.Employee_id,
+            employees.Find(x => x.Employee_id == element.Employee_id).First_name,
+            employees.Find(x => x.Employee_id == element.Employee_id).Last_name,
+            employees.Find(x => x.Employee_id == element.Employee_id).Email,
+            element.Task_id));
+        }
+    }
+
+    private Query GetEmployeesQuery(int task_id)
+    {
+        return new Query().Where("Task_id", "equal", task_id);
+    }
+
+    /// <summary>
+    /// Toggle Button od projektow (zmiana stanu)
+    /// </summary>
+    private void OnChangeButton()
+    {
+        isProjectSelectingOn = !isProjectSelectingOn;
+
+        if (isProjectSelectingOn == true)
+            EnableProjectDropDown = true;
+        else
+        {
+            EnableProjectDropDown = false;
+            selectedProject = null;
+            nameofProject = null;
+        }
+
+    }
+
+    public void RowSelectHandler(RowSelectEventArgs<TaskModel> args)
+    {
+        SelectedTask = args.Data;
+    }
+
+    public void RowDeselectHandler()
+    {
+        SelectedTask = null;
+    }
+
+    public void RowSelectHandlerFile(RowSelectEventArgs<FileModel> args)
+    {
+        SelectedFile = args.Data;
+    }
+
+    public void RowDeselectHandlerFile()
+    {
+        SelectedFile = null;
+    }
+
+    private void SearchOnEnter(KeyboardEventArgs e)
+    {
+        if (e.Code == "Enter" || e.Code == "NumpadEnter")
+        {
+            this.DefaultGrid.Search(searchStr);
+        }
+    }
+
+    private void AddTask(MouseEventArgs e)
+    {
+        VisibilityAdd = true;
+    }
+
+    private void EditTask()
+    {
+        DisplayTaskDetails(SelectedTask);
+    }
+
+    private void DeleteTask()
+    {
+        if (SelectedTask != null)
+        {
+            BackendLibrary.DataAccess.TaskData.DeleteTask(SelectedTask.Task_id);
+            uriHelper.NavigateTo(uriHelper.Uri, forceLoad: true);
+        }
+        else
+        {
+            NoSelectedTask.Show();
+        }
+    }
+    private void SetAssingTaskButtonVisibleAndDisplayTaskDetails(CardClickEventArgs<TaskModel> args)
+    {
+        EnabledStatus = false;
+        isSaveButtonHidden = true;
+        isAssignTaskButtonHidden = false;
+        DisplayTaskDetails(args.Data);
+    }
+
+    private void SetAssingTaskButtonInisibleAndDisplayTaskDetails(CardClickEventArgs<TaskModel> args)
+    {
+        EnabledStatus = true;
+        isSaveButtonHidden = false;
+        isAssignTaskButtonHidden = true;
+        DisplayTaskDetails(args.Data);
+    }
+
+    private void DisplayTaskDetails(TaskModel args)
+    {
+        SelectedTask = args;
+
+
+        if (SelectedTask != null)
+        {
+            CommentsList = BackendLibrary.DataAccess.CommentData.GetAllByTaskId(SelectedTask.Task_id);
+
+            FileList = FileData.GetAllByTaskId(SelectedTask.Task_id);
+            ListOfTasks = TaskData.GetByIdList(SelectedTask.Task_id); //jednoelementowa lista zawierająca wybranego taska
+
+            //tutaj przechowywane są id etykiet, nastepnie odpowiednie etykiety wpisane do tablicy
+            ListofLabelsId = TaskLabelData.GetAllLabelsByTaskId(SelectedTask.Task_id);
+            this.nameoflabels = new string[ListofLabelsId.Count];
+            this.oldlabels = new string[ListofLabelsId.Count];
+
+            //tutaj przechowywane są id pracownikow, nastepnie odpowiedni pracownicy wpisani do tablicy
+            ListofEmployeesId = EmployeeTaskData.GetAllEmployeesByTaskId(SelectedTask.Task_id);
+            this.nameofEmployees = new int[ListofEmployeesId.Count];
+            this.oldEmployees = new int[ListofEmployeesId.Count];
+
+            //nazwa projektu do ktorego przypisane jest zadanie
+            if (ProjectData.GetById(SelectedTask.Task_id) != null)
+            {
+                nameofProject = ProjectData.GetById(SelectedTask.Task_id).Name;
+                isProjectSelectingOn = true;
+                EnableProjectDropDown = true;
+            }
+
+            else
+            {
+                nameofProject = null;
+                isProjectSelectingOn = false;
+                EnableProjectDropDown = false;
+            }
+
+            // w ponizszych pętlach następuje przypisanie odpowiednich etykiet oraz pracownikow do tablicy, w celu wyswietlenia ich w task-details
+            for (int i = 0; i < ListofLabelsId.Count; i++)
+            {
+                nameoflabels[i] = LabelData.GetById(ListofLabelsId[i].Label_id).Name;
+                oldlabels[i] = LabelData.GetById(ListofLabelsId[i].Label_id).Name;
+            }
+            for (int i = 0; i < ListofEmployeesId.Count; i++)
+            {
+                nameofEmployees[i] = EmployeeData.GetById(ListofEmployeesId[i].Employee_id).Employee_id;
+                oldEmployees[i] = EmployeeData.GetById(ListofEmployeesId[i].Employee_id).Employee_id;
+            }
+        }
+
+        if (SelectedTask != null)
+        {
+            TaskEdit.name = SelectedTask.Name;
+            TaskEdit.description = SelectedTask.Description;
+            TaskEdit.start_time = SelectedTask.Start_time;
+            TaskEdit.deadline = SelectedTask.Deadline;
+            TaskEdit.status = SelectedTask.Status;
+            TaskEdit.auto_assigned = SelectedTask.Auto_assigned;
+            TaskEdit.project_id = SelectedTask.Project_id;
+            VisibilityDetails = true;
+        }
+        else
+        {
+            NoSelectedTask.Show();
+        }
+    }
+
+
+    private void AssignTask()
+    {
+
+        BackendLibrary.DataAccess.EmployeeTaskData.AddEmployeeTask(new EmployeeTaskModel(SelectedTask.Task_id, loggedEmployee.Employee_id));
+        uriHelper.NavigateTo(uriHelper.Uri, forceLoad: true);
+    }
+
+    // TODO - testowe zachowanie - do poprawy LUB usuniecia i rozwijania szczegółów w inny sposób
+    private void ExpandTaskDetails(RecordClickEventArgs<TaskModel> args)
+    {
+        SelectedTask = args.RowData;
+
+        if (SelectedTask != null)
+        {
+            // NavigationManager.NavigateTo("/task-details");
+        }
+    }
+
+    /// <summary>
+    /// Powraca do listy zadan po zamknieciu okna
+    /// </summary>
+    private void DialogClosed(CloseEventArgs args)
+    {
+        VisibilityAdd = false;
+        VisibilityDetails = false;
+        isProjectSelectingOn = false;
+        EnableProjectDropDown = false;
+    }
+
+    private void DialogEditClosed(CloseEventArgs args)
+    {
+        VisibilityEdit = false;
+        isProjectSelectingOn = false;
+        EnableProjectDropDown = false;
+        ClearTask();
+    }
+
+    /// <summary>
+    /// Uruchamia algorytm automatycznego proponowania pracowników do tworzonego zadania.
+    /// </summary>
+    private void SuggestEmployees()
+    {
+        if (TaskAdd.deadline >= DateTime.Today && TaskAdd.start_time >= DateTime.Today)
+        {
+            List<EmployeeStats> employeeStats = new List<EmployeeStats>();
+            List<EmployeeModel> employeePool;
+            List<EmployeeLabelModel> empLabels;
+            List<TaskModel> empTasks;
+
+            if (selectedProject == null)
+            {
+                employeePool = employees;
+            }
+            else
+            {
+                employeePool = EmployeeData.GetAllByProjectId(ProjectData.GetIdByName(selectedProject));
+            }
+
+            MergeSelectedLabels(TaskAdd, selectedLabels);
+            if (isMergedLabelsMatchToPattern)
+            {
+                foreach (var emp in employeePool)
+                {
+                    // zebranie nazw etykiet pracownika
+                    List<string> empLabelNames = new List<string>();
+                    empLabels = EmployeeLabelData.GetAllLabelsByEmployeeId(emp.Employee_id);
+                    foreach (var label in empLabels)
+                        empLabelNames.Add(LabelData.GetNameById(label.Label_id));
+
+                    List<string> taskLabelNames = new List<string>();
+                    int taskCount = 0;
+                    empTasks = TaskData.GetAllByEmployeeId(emp.Employee_id);
+                    foreach (var task in empTasks)
+                    {
+                        // zebranie nazw etykiet archiwalnych zadań pracownika
+                        if (task.Status == "Zakończone")
+                        {
+                            List<TaskLabelModel> labels = TaskLabelData.GetAllLabelsByTaskId(task.Task_id);
+                            foreach (var label in labels)
+                            {
+                                string name = LabelData.GetNameById(label.Task_id);
+                                if (!taskLabelNames.Contains(name))
+                                    taskLabelNames.Add(name);
+                            }
+                        }
+                        // zsumowanie ilości zadań pracownika w okresie miedzy start_time a deadline
+                        // TODO - uwzglednienie dlugosci zadania jako wagi
+                        else
+                        {
+                            if (task.Start_time <= TaskAdd.deadline && task.Deadline >= TaskAdd.start_time)
+                                taskCount++;
+                        }
+                    }
+
+                    employeeStats.Add(new EmployeeStats
+                    {
+                        Employee_id = emp.Employee_id,
+                        First_name = emp.First_name,
+                        Last_name = emp.Last_name,
+
+                        TaskDensity = taskCount,
+                        EmpLabelMatches = selectedLabels.Intersect(empLabelNames).Count(),
+                        TaskLabelMatches = selectedLabels.Intersect(taskLabelNames).Count(),
+                    });
+                }
+
+                foreach (var emp in employeeStats)
+                    emp.CalculateFinalFactor(1, 1, 1);
+
+                employeeStats = employeeStats.OrderByDescending(x => x.FinalFactor).ToList();
+
+                suggestedEmployees = new List<EmployeeStats>();
+
+                foreach (var emp in employeeStats)
+                    suggestedEmployees.Add(emp);
+
+                suggestedEmployeesGrid.Refresh();
+            }
+            else
+            {
+                ToastWrongInput = "Wprowadzono niepoprawne etykiety.";
+                WrongInput.Show();
+            }
+        }
+        else
+        {
+            ToastWrongInput = "Wprowadzono niepoprawny zakres dat.";
+            WrongInput.Show();
+        }
+    }
+
+    /// <summary>
+    /// Uruchamia algorytm automatycznego proponowania nierozpoczętych zadań dla pracownika.
+    /// </summary>
+    private List<TaskModel> SuggestTasks()
+    {
+        List<TaskModel> orderedTasks = new List<TaskModel>();
+        List<TaskStats> taskStats = new List<TaskStats>();
+        List<TaskModel> taskPool = TaskData.GetUnstartedTasksByCompanyId(Login.UserLoggedIn.Company_id);
+        List<TaskLabelModel> taskLabels;
+        List<TaskModel> empTasks = TaskData.GetArchivalTasksByEmployeeId(Login.UserLoggedIn.Employee_id);
+
+        // zebranie nazw etykiet pracownika
+        List<EmployeeLabelModel> empLabels = EmployeeLabelData.GetAllLabelsByEmployeeId(Login.UserLoggedIn.Employee_id);
+        List<string> empLabelNames = new List<string>();
+        foreach (var label in empLabels)
+            empLabelNames.Add(LabelData.GetNameById(label.Label_id));
+
+        // zebranie nazw etykiet zadań archiwalnych pracownika
+        List<string> archivalTaskLabelNames = new List<string>();
+        foreach (var task in empTasks)
+        {
+            if (task.Status == "Zakończone")
+            {
+                List<TaskLabelModel> labels = TaskLabelData.GetAllLabelsByTaskId(task.Task_id);
+                foreach (var label in labels)
+                {
+                    string name = LabelData.GetNameById(label.Task_id);
+                    if (!archivalTaskLabelNames.Contains(name))
+                        archivalTaskLabelNames.Add(name);
+                }
+            }
+        }
+
+        foreach (var task in taskPool)
+        {
+            // zebranie nazw etykiet zadania z poola zadań nierozpoczętych
+            List<string> taskLabelNames = new List<string>();
+            taskLabels = TaskLabelData.GetAllLabelsByTaskId(task.Task_id);
+            foreach (var label in taskLabels)
+                taskLabelNames.Add(LabelData.GetNameById(label.Label_id));
+
+            taskStats.Add(new TaskStats
+            {
+                Task_id = task.Task_id,
+
+                EmpLabelMatches = taskLabelNames.Intersect(empLabelNames).Count(),
+                ArchivalTaskLabelMatches = taskLabelNames.Intersect(archivalTaskLabelNames).Count(),
+            });
+        }
+
+        foreach (var emp in taskStats)
+            emp.CalculateFinalFactor(1, 1);
+
+        taskStats = taskStats.OrderByDescending(x => x.FinalFactor).ToList();
+
+        foreach (var task in taskStats)
+        {
+            orderedTasks.Add(TaskData.GetById(task.Task_id));
+            orderedTasks.Last().MatchFactor = task.FinalFactor;
+        }
+
+        return orderedTasks;
+    }
+
+    /// <summary>
+    /// Dodaje do bazy danych zadanie, które zostało nakreślone w gui aplikacji.
+    /// </summary>
+    private void SaveTask()
+    {
+        BackendLibrary.Models.TaskModel newTask;
+        if (TaskAdd.name != null && TaskAdd.description != null && TaskAdd.status != null
+            && TaskAdd.deadline >= DateTime.Today && TaskAdd.start_time >= DateTime.Today)
+        {
+            if (selectedProject == null)
+            {
+                newTask = new BackendLibrary.Models.TaskModel
+                (WebApp.Pages.Login.UserLoggedIn.Company_id, TaskAdd.name,
+                TaskAdd.description, TaskAdd.start_time, TaskAdd.deadline, TaskAdd.status, TaskAdd.auto_assigned, -1);
+            }
+            else
+            {
+                TaskAdd.project_id = BackendLibrary.DataAccess.ProjectData.GetIdByName(selectedProject);
+                newTask = new BackendLibrary.Models.TaskModel
+                (WebApp.Pages.Login.UserLoggedIn.Company_id, TaskAdd.name,
+                TaskAdd.description, TaskAdd.start_time, TaskAdd.deadline, TaskAdd.status, TaskAdd.auto_assigned, TaskAdd.project_id);
+            }
+
+            MergeSelectedLabels(TaskAdd, selectedLabels);
+
+            if (isMergedLabelsMatchToPattern)
+            {
+                SaveLabels(selectedLabels);
+                BackendLibrary.DataAccess.TaskData.AddTask(newTask);
+                SaveTaskLabel();
+                AddEmployeeToTask();
+                SuccessTask.Show();
+                uriHelper.NavigateTo(uriHelper.Uri, forceLoad: true);
+                VisibilityAdd = false;
+            }
+        }
+    }
+
+    /// <summary>
+    /// Walidacja dla etykiet. Scala wybrane etykiety w jednego stringa i porównuje czy całość pasuje do wzorca.
+    /// </summary>
+    private void MergeSelectedLabels(BackendLibrary.Validation.TaskValidation Task, string[] selectedLabels)
+    {
+        mergedSelectedLabels = "";
+        if (selectedLabels != null)
+        {
+            for (int i = 0; i < selectedLabels.Length; i++)
+            {
+                mergedSelectedLabels += selectedLabels[i];
+            }
+        }
+        Task.SelectedLabel = mergedSelectedLabels;
+        isMergedLabelsMatchToPattern = Regex.IsMatch(mergedSelectedLabels, pattern);
+
+    }
+
+    /// <summary>
+    /// Zapisuje do bazy etykiety, których jeszcze nie ma w bazie.
+    /// </summary>
+    //TODO - Trzeba jeszcze pobrac opis(czy w ogóle będzie opis etykiet? No chyba nie w prototypie)
+    private void SaveLabels(string[] labels)
+    {
+        if (labels != null)
+        {
+            for (int i = 0; i < labels.Length; i++)
+            {
+                if (!IsSelectedLabelsContainsInDbLabels(labels[i]))
+                {
+                    BackendLibrary.Models.LabelModel new_label = new LabelModel(labels[i], WebApp.Pages.Login.UserLoggedIn.Company_id);
+                    BackendLibrary.DataAccess.LabelData.AddLabel(new_label);
+                }
+            }
+        }
+    }
+
+    /// <summary>
+    /// Sprawdza czy etykieta jest już w bazie danych.
+    /// </summary>
+    private bool IsSelectedLabelsContainsInDbLabels(string label)
+    {
+        for (int i = 0; i < labelsInDb.Count; i++)
+        {
+            if (label.Equals(labelsInDb[i].Name))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /// <summary>
+    /// Przypisuje etykiety do dodanego zadania
+    /// </summary>
+    private void SaveTaskLabel()
+    {
+        lastTaskId = BackendLibrary.DataAccess.TaskData.GetMaxId();
+        if (selectedLabels != null)
+        {
+            for (int i = 0; i < selectedLabels.Length; i++)
+            {
+                labelIdByName = BackendLibrary.DataAccess.LabelData.GetIdByName(selectedLabels[i]);
+                BackendLibrary.Models.TaskLabelModel taskLabel = new BackendLibrary.Models.TaskLabelModel(lastTaskId, labelIdByName);
+                BackendLibrary.DataAccess.TaskLabelData.AddTaskLabel(taskLabel);
+            }
+        }
+    }
+
+    /// <summary>
+    /// Przypisuje pracowników do dodanego zadania
+    /// </summary>
+    private void AddEmployeeToTask()
+    {
+        for (int i = 0; i < selectedEmployeesId.Length; i++)
+        {
+            BackendLibrary.Models.EmployeeTaskModel employeeTask = new BackendLibrary.Models.EmployeeTaskModel(lastTaskId, selectedEmployeesId[i], TaskAdd.status);
+            BackendLibrary.DataAccess.EmployeeTaskData.AddEmployeeTask(employeeTask);
+        }
+    }
+
+    /// <summary>
+    /// Zmienia pracowników danego zadania na nowych
+    /// </summary>
+    private void EditEmployeeToTask()
+    {
+        for (int i = 0; i < ListofEmployeesId.Count; i++)
+        {
+            BackendLibrary.DataAccess.EmployeeTaskData.DeleteEmployeeTask(ListofEmployeesId[i].Employee_id, ListofEmployeesId[i].Task_id);
+        }
+        if (nameofEmployees != null)
+        {
+            for (int i = 0; i < nameofEmployees.Length; i++)
+            {
+                BackendLibrary.Models.EmployeeTaskModel employeeTask = new BackendLibrary.Models.EmployeeTaskModel(SelectedTask.Task_id, nameofEmployees[i], SelectedTask.Status);
+                BackendLibrary.DataAccess.EmployeeTaskData.AddEmployeeTask(employeeTask);
+            }
+        }
+
+    }
+
+    /// <summary>
+    /// Zmienia etykiety danego zadania na nowe
+    /// </summary>
+    private void EditTaskLabel()
+    {
+        for (int i = 0; i < ListofLabelsId.Count; i++)
+        {
+            BackendLibrary.DataAccess.TaskLabelData.DeleteTaskLabel(ListofLabelsId[i].Task_id, ListofLabelsId[i].Label_id);
+        }
+
+        if (nameoflabels != null)
+        {
+            for (int i = 0; i < nameoflabels.Length; i++)
+            {
+                labelIdByName = BackendLibrary.DataAccess.LabelData.GetIdByName(nameoflabels[i]);
+                BackendLibrary.Models.TaskLabelModel taskLabel = new BackendLibrary.Models.TaskLabelModel
+                    (SelectedTask.Task_id, labelIdByName);
+                BackendLibrary.DataAccess.TaskLabelData.AddTaskLabel(taskLabel);
+            }
+        }
+
+    }
+
+    /// <summary>
+    /// Dodaje nowy komentarz dotyczący wybranego zadania do bazy danych
+    /// </summary>
+    private void AddNewComment()
+    {
+        if (this.rteObj.Value != null)
+        {
+            BackendLibrary.Models.CommentModel CommentAdd = new BackendLibrary.Models.CommentModel(SelectedTask.Task_id, Login.UserLoggedIn.Employee_id, DateTime.Now, this.rteObj.Value);
+
+            BackendLibrary.DataAccess.CommentData.AddComment(CommentAdd);
+            CommentsList.Add(CommentAdd);
+        }
+        CommentGrid.Refresh();
+    }
+
+    public void OnCommandClicked(CommandClickEventArgs<CommentModel> args)
+    {
+        selectedComment = args.RowData;
+        if (selectedComment.Employee_id == loggedEmployee.Employee_id)
+        {
+            DeleteComment();
+        }
+    }
+
+    private void DeleteComment()
+    {
+
+        BackendLibrary.DataAccess.CommentData.DeleteComment(selectedComment.Comment_id);
+        CommentsList.Remove(selectedComment);
+
+        DefaultGridComments.Refresh();
+
+    }
+
+    /// <summary>
+    /// Sprawdza czy w edycji zmieniono pracownika
+    /// </summary>
+    private bool IsEmployeesChanged(int employee)
+    {
+        for (int i = 0; i < nameofEmployees.Length; i++)
+        {
+            if (employee.Equals(nameofEmployees[i]))
+                return true;
+        }
+        return false;
+    }
+
+    /// <summary>
+    /// Sprawdza czy w edycji zmieniono etykiete
+    /// </summary>
+    private bool IsLabelsChanged(string label)
+    {
+        for (int i = 0; i < nameoflabels.Length; i++)
+        {
+            if (label.Equals(nameoflabels[i]))
+                return true;
+        }
+        return false;
+    }
+
+    /// <summary>
+    /// Aktualizuje w bazie danych zadanie, które zostało nakreślone w gui aplikacji.
+    /// </summary>
+    private void CheckIfThereWereChanges()
+    {
+        bool if_updated = false; // sprawdza, czy uzytkownik wyedytowal cokolwiek w zadaniu true/false
+                                 // poniższe ify sprawdzaja, czy pole do edycji zawiera cos nowego, po czym przypisuje wartosci do Selected_Task oraz zmienia if_updated na true
+        if (TaskEdit.name != null && SelectedTask.Name != TaskEdit.name)
+        {
+            SelectedTask.Name = TaskEdit.name;
+            if_updated = true;
+        }
+
+        if (TaskEdit.description != null && SelectedTask.Description != TaskEdit.description)
+        {
+            SelectedTask.Description = TaskEdit.description;
+            if_updated = true;
+        }
+
+        if (TaskEdit.status != null && SelectedTask.Status != TaskEdit.status)
+        {
+            SelectedTask.Status = TaskEdit.status;
+            if_updated = true;
+        }
+
+        if ((DateTime.Compare(TaskEdit.start_time, defaultDate)) != 0 && SelectedTask.Start_time != TaskEdit.start_time)
+        {
+            SelectedTask.Start_time = TaskEdit.start_time;
+            if_updated = true;
+        }
+
+        if ((DateTime.Compare(TaskEdit.deadline, defaultDate)) != 0 && SelectedTask.Deadline != TaskEdit.deadline)
+        {
+            SelectedTask.Deadline = TaskEdit.deadline;
+            if_updated = true;
+        }
+
+        if (nameofProject != null)
+        {
+            if (SelectedTask.Project_id != BackendLibrary.DataAccess.ProjectData.GetIdByName(nameofProject))
+            {
+                SelectedTask.Project_id = BackendLibrary.DataAccess.ProjectData.GetIdByName(nameofProject);
+                if_updated = true;
+            }
+        }
+        else
+        {
+            if (ProjectData.GetById(SelectedTask.Project_id) != null)
+            {
+                if_updated = true;
+            }
+        }
+
+        // sprawdza czy wprowadzono zmiany w przypisanych pracownikach
+        // BUG: jak zadanie nie ma zadnego pracownika przypisanego, to jak dodamy jakiegos
+        //      i od razu odznaczymy to nie wyswietli sie że brak zmian i zapisze do bazy (a zmian nie ma przecież :V)
+        if (oldEmployees != null && nameofEmployees != null)
+        {
+            if (oldEmployees.Length == nameofEmployees.Length)
+            {
+                for (int i = 0; i < nameofEmployees.Length; i++)
+                {
+                    if (IsEmployeesChanged(oldEmployees[i]) == false)
+                    {
+                        if_updated = true;
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                if_updated = true;
+            }
+        }
+        else
+        {
+            if (oldEmployees == null && nameofEmployees == null)
+                ;
+            else
+                if_updated = true;
+        }
+
+        // sprawdza czy wprowadzono zmiany w przypisanych etykietach
+        // problem ten sam co przy pracownikach
+        if (oldlabels != null && nameoflabels != null)
+        {
+            if (oldlabels.Length == nameoflabels.Length)
+            {
+                for (int i = 0; i < nameoflabels.Length; i++)
+                {
+                    if (IsLabelsChanged(oldlabels[i]) == false)
+                    {
+                        if_updated = true;
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                if_updated = true;
+            }
+        }
+        else
+        {
+            if (oldlabels == null && nameoflabels == null)
+                ;
+            else
+                if_updated = true;
+        }
+
+        if (if_updated == true) //sprawdza czy uzytkownik wyedytowal cos w zadaniu, jesli tak, updatuje wartosci w database oraz wystwietla stosowna informacje
+        {
+            UpdateTask();
+            uriHelper.NavigateTo(uriHelper.Uri, forceLoad: true);
+            ClearTask(); //czysci pola obiektu task
+
+        }
+
+        else
+        {
+            FailedObj.Show(); //wyswietla na ekran informacje o braku zmian w zadaniu
+        }
+
+    }
+
+    private void UpdateTask()
+    {
+
+        BackendLibrary.Models.TaskModel updatedTask;
+        if (nameofProject == null)
+        {
+            updatedTask = new BackendLibrary.Models.TaskModel
+            (SelectedTask.Task_id, SelectedTask.Company_id,
+           SelectedTask.Name, SelectedTask.Description, SelectedTask.Start_time,
+           SelectedTask.Deadline, SelectedTask.Status, SelectedTask.Auto_assigned,
+            -1);
+        }
+        else
+        {
+            SelectedTask.Project_id = BackendLibrary.DataAccess.ProjectData.GetIdByName(nameofProject);
+            updatedTask = new BackendLibrary.Models.TaskModel
+            (SelectedTask.Task_id, SelectedTask.Company_id,
+            SelectedTask.Name, SelectedTask.Description, SelectedTask.Start_time,
+            SelectedTask.Deadline, SelectedTask.Status, SelectedTask.Auto_assigned,
+            SelectedTask.Project_id);
+        }
+
+        MergeSelectedLabels(TaskEdit, nameoflabels);
+
+        if (isMergedLabelsMatchToPattern)
+        {
+            if (nameoflabels != null)
+            {
+                SaveLabels(nameoflabels);
+            }
+
+            BackendLibrary.DataAccess.TaskData.UpdateTask(updatedTask);
+            EditEmployeeToTask();
+            ToastObj.Show();
+            VisibilityEdit = false;          
+        }
+    }
+
+    private void DisplayTeamTask()
+    {
+        SelectedTask = null;
+        projects.Clear();
+        projectsForUnstartedTasks.Clear();
+        TaskList = TaskData.GetAllByEmployeeId(Login.UserLoggedIn.Employee_id);
+
+    }
+
+    private void DisplayProjects()
+    {
+        if (TaskList != null)
+        {
+            for (int i = 0; i < TaskList.Count; i++)
+            {
+                if (TaskList[i].Project_id == 0)
+                {
+                    projects.Add(new ProjectModel(TaskList[i].Project_id, TaskList[i].Company_id, ""));
+                }
+                else
+                {
+                    projects.Add(ProjectData.GetByTaskId(TaskList[i].Task_id));
+                }
+            }
+
+        }
+    }
+
+    private void ClearTask()
+    {
+        TaskEdit.name = null;
+        TaskEdit.description = null;
+        TaskEdit.start_time = defaultDate;
+        TaskEdit.deadline = defaultDate;
+        TaskEdit.status = null;
+        TaskEdit.auto_assigned = 0;
+    }
+
+    private void AddFileFunction(UploadChangeEventArgs args)
+    {
+        foreach (var file in args.Files)
+        {
+            var path = file.FileInfo.Name;
+            FileStream filestream = new FileStream(path, FileMode.Create, FileAccess.Write);
+            file.Stream.WriteTo(filestream);
+            filestream.Close();
+            file.Stream.Close();
+            BackendLibrary.Models.FileModel newfile = new BackendLibrary.Models.FileModel(SelectedTask.Task_id, Login.UserLoggedIn.Employee_id, DateTime.Now, path);
+            BackendLibrary.DataAccess.FileData.AddFile(newfile);
+            File.Delete(path);
+            this.DefaultGrid2.Refresh();
+            FileList.Add(newfile);
+        }
+    }
+
+    private void DownloadSelectedFile(RecordDoubleClickEventArgs<FileModel> args)
+    {
+        SelectedFile = new FileModel();
+        SelectedFile = args.RowData;
+        BackendLibrary.DataAccess.FileData.DownloadFile(SelectedFile);
+        ToastFile.Show();
+
+    }
+}
