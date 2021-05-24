@@ -471,7 +471,7 @@
                                                 <div>
                                                     <div class="text-align">@*Wartości testowanej funkcji: @a1 *@</div>
                                                     <SfUploader AutoUpload="false">
-                                                        <UploaderEvents ValueChange="AddFileFunction" ></UploaderEvents>
+                                                        <UploaderEvents ValueChange="AddFileFunction"></UploaderEvents>
                                                     </SfUploader>
                                                 </div>
                                                 <div>
@@ -492,6 +492,7 @@
                                                                     RowDeselected="RowDeselectHandlerFile"
                                                                     OnRecordDoubleClick="DownloadSelectedFile">
                                                         </GridEvents>
+                                                        <GridPageSettings PageSize="5"></GridPageSettings>
                                                         <GridColumns>
                                                             <GridColumn Field=@nameof(FileModel.File_name) HeaderText="Nazwa pliku" TextAlign="TextAlign.Left" Width="500"></GridColumn>
                                                             <GridColumn Field=@nameof(FileModel.Date) HeaderText="Data wstawienia" Format="d" Type="ColumnType.Date"
@@ -503,13 +504,10 @@
                                                     </SfToast>
                                                 </div>
                                                 <div>
-                                                    <label class="form-group">Proponowane pliki:</label>
-                                                    <!-- Artur Kolaska i algorytm plikowy -->
+                                                    <label class="form-group">Proponowane pliki z podobnych zadań:</label>
+                                                    <!-- LISTA PROPONOWANYCH PLIKÓW -->
                                                     <SfGrid @ref="ProposedFileGrid"
-                                                            DataSource="FileList"
-                                                            AllowPaging="true"
-                                                            AllowSorting="true"
-                                                            AllowFiltering="true"
+                                                            DataSource="suggestedFiles"
                                                             AllowSelection="true"
                                                             Locale="pl"
                                                             ContextMenuItems="@(new List<object>()
@@ -530,7 +528,7 @@
                                                     </SfGrid>
                                                 </div>
                                             </SplitterPane>
-                                            
+
                                             <SplitterPane Size="46%" Min="521.4px" Resizable="false">
                                                 <div>
                                                     <SfGrid DataSource="CommentsList"
@@ -588,8 +586,8 @@
 </div>
 
 @code {
-    SfToast NoSelectedTask;
-    SfRichTextEditor rteObj;
+        SfToast NoSelectedTask;
+        SfRichTextEditor rteObj;
     private SfGrid<TaskModel> DefaultGrid;
     private SfGrid<CommentModel> CommentGrid;
 
@@ -649,7 +647,7 @@
     private SfGrid<FileModel> ProposedFileGrid;
     private static List<FileModel> FileList;
     public static List<TaskModel> ListOfTasks;
-    private List<FileModel> suggestedFiles;
+    private List<FileModel> suggestedFiles = new List<FileModel>();
     private Boolean addButtonClicked;
     private Boolean VisibilityDetails { get; set; }
     public static List<TaskLabelModel> ListofLabelsId;
@@ -969,6 +967,11 @@
             TaskEdit.status = SelectedTask.Status;
             TaskEdit.auto_assigned = SelectedTask.Auto_assigned;
             TaskEdit.project_id = SelectedTask.Project_id;
+
+            // automatyczne proponowanie plików
+            suggestedFiles.Clear();
+            SuggestFiles(SelectedTask.Task_id);
+
             VisibilityDetails = true;
         }
         else
@@ -1656,18 +1659,18 @@
     /// <summary>
     /// Algorytm proponowania plików w szczegółach zadania.
     /// </summary>
-    private void SuggestFiles()
+    private void SuggestFiles(int selectedTaskId)
     {
         List<FileModel> allFiles = FileData.GetAll();
         List<TaskLabelModel> labelsFromTasksWithFiles = new List<TaskLabelModel>();
 
-        List<TaskLabelModel> currentTaskLabels = TaskLabelData.GetAllLabelsByTaskId(SelectedTask.Task_id);
+        List<TaskLabelModel> currentTaskLabels = TaskLabelData.GetAllLabelsByTaskId(selectedTaskId);
         Dictionary<int, int> labelOccurences = new Dictionary<int, int>();
 
         // zebranie wszystkich etykiet z zadań które mają pliki
         foreach (var file in allFiles)
         {
-            if (file.Task_id != SelectedTask.Task_id)
+            if (file.Task_id != selectedTaskId)
             {
                 labelsFromTasksWithFiles.AddRange(TaskLabelData.GetAllLabelsByTaskId(file.Task_id));
             }
@@ -1698,12 +1701,19 @@
             List<TaskLabelModel> labels = labelsFromTasksWithFiles.Where(l => l.Label_id == label.Key).ToList();
 
             foreach (var task in labels)
-                suggestedFiles.AddRange(FileData.GetAllByTaskId(task.Task_id));
+            {
+                if ( task.Task_id != selectedTaskId)
+                    suggestedFiles.AddRange(FileData.GetAllByTaskId(task.Task_id));
+            }
         }
 
+        Console.WriteLine("suggestedFiles count: " + suggestedFiles.Count());
+
         // zostawienie tylko 8 pierwszych (najlepiej dopasowanych) plików
-        suggestedFiles = suggestedFiles.GetRange(0, 8);
+        if (suggestedFiles.Count() >= 8)
+            suggestedFiles = suggestedFiles.GetRange(0, 8);
 
         // odświeżenie sfgrid
+        ProposedFileGrid.Refresh();
     }
 }
