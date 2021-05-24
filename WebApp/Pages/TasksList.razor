@@ -138,24 +138,7 @@
                         RowDeselected="RowDeselectHandler">
             </GridEvents>
 
-            <GridTemplates>
-                <DetailTemplate>
-                    @{
-                        var task = (context as TaskModel);
-
-                        <label class="header-list"><i class="fas fa-user-friends"></i>Pracownicy:</label>
-                        <SfGrid DataSource="employeeTaskPairs" TValue="EmpTaskPair" Query="@GetEmployeesQuery(task.Task_id)">
-                            <GridPageSettings PageSize="6"></GridPageSettings>
-                            <GridColumns>
-                                <GridColumn Field=@nameof(EmpTaskPair.Employee_id) HeaderText="ID" TextAlign="TextAlign.Left" Width="50"></GridColumn>
-                                <GridColumn Field=@nameof(EmpTaskPair.First_name) HeaderText="Imię" TextAlign="TextAlign.Left" Width="80"></GridColumn>
-                                <GridColumn Field=@nameof(EmpTaskPair.Last_name) HeaderText="Nazwisko" TextAlign="TextAlign.Left" Width="120"></GridColumn>
-                                <GridColumn Field=@nameof(EmpTaskPair.Email) HeaderText="E-mail" TextAlign="TextAlign.Left" Width="120"></GridColumn>
-                            </GridColumns>
-                        </SfGrid>
-                    }
-                </DetailTemplate>
-            </GridTemplates>
+            
             <GridPageSettings PageSize="15"></GridPageSettings>
             <GridColumns>
                 <GridColumn Field=@nameof(TaskModel.Task_id) IsPrimaryKey="true" HeaderText="ID" TextAlign="TextAlign.Left" Width="50"></GridColumn>
