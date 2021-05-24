@@ -1,6 +1,5 @@
 ﻿@page "/tasks"
 
-
 <link href="css/popups.css" rel="stylesheet" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
@@ -36,8 +35,6 @@
         </div>
     </div>
 }
-
-
 
 <div class="actionBtn" style="float: right; width: auto;">
     <label>Szukaj:</label>
@@ -151,7 +148,6 @@
                 <GridForeignColumn Field=@nameof(TaskModel.Project_id) HeaderText="Projekty"
                                    ForeignKeyValue="Name" ForeignDataSource="@projectsForUnstartedTasks" Width="150"></GridForeignColumn>
                 <GridColumn Field=@nameof(TaskModel.MatchFactor) HeaderText="Dopasowanie" TextAlign="TextAlign.Center"></GridColumn>
-
             </GridColumns>
         </SfGrid>
     </div>
@@ -190,17 +186,17 @@
                         <ValidationMessage For="@(() => TaskAdd.deadline)" />
                     </div>
                     <div class="form-group">
-                            <div class="padding-top">
-                                <label asp-for="Status" class="control-label">Status</label>
-                                <SfDropDownList TValue="string" TItem="string"
-                                                @bind-Value="@TaskAdd.status"
-                                                Placeholder="Szukaj..."
-                                                DataSource="@status" AllowFiltering="true" CssClass="e-custom"
-                                                MaximumSelectionLength=1>
-                                    <DropDownListFieldSettings Text="status"> </DropDownListFieldSettings>
-                                </SfDropDownList>
-                                <ValidationMessage For="@(() => TaskAdd.status)" />
-                            </div>
+                        <div class="padding-top">
+                            <label asp-for="Status" class="control-label">Status</label>
+                            <SfDropDownList TValue="string" TItem="string"
+                                            @bind-Value="@TaskAdd.status"
+                                            Placeholder="Szukaj..."
+                                            DataSource="@status" AllowFiltering="true" CssClass="e-custom"
+                                            MaximumSelectionLength=1>
+                                <DropDownListFieldSettings Text="status"> </DropDownListFieldSettings>
+                            </SfDropDownList>
+                            <ValidationMessage For="@(() => TaskAdd.status)" />
+                        </div>
                     </div>
                     <div class="form-group">
                         <div class="control-wrapper multi-select-parent">
@@ -359,7 +355,6 @@
                                                 </div>
                                             </div>
                                         </div>
-                                       
 
                                         <div class="form-group">
                                             <div class="control-wrapper multi-select-parent">
@@ -431,10 +426,10 @@
                                                 </div>
                                             </div>
                                         </div>
-                                            <div class="col-12 text-center">
-                                                <br />
-                                                <Sfbutton class="btn btn-primary" hidden="@isAssignTaskButtonHidden" @onclick="AssignTask"><i class="fa fa-plus"></i>&nbsp;Przypisz zadanie do mnie</Sfbutton>
-                                            </div>
+                                        <div class="col-12 text-center">
+                                            <br />
+                                            <Sfbutton class="btn btn-primary" hidden="@isAssignTaskButtonHidden" @onclick="AssignTask"><i class="fa fa-plus"></i>&nbsp;Przypisz zadanie do mnie</Sfbutton>
+                                        </div>
                                     </EditForm>
 
                                     <div class="form-group">
@@ -637,6 +632,7 @@
     private SfGrid<FileModel> ProposedFileGrid;
     private static List<FileModel> FileList;
     public static List<TaskModel> ListOfTasks;
+    private List<FileModel> suggestedFiles;
     private Boolean addButtonClicked;
     private Boolean VisibilityDetails { get; set; }
     public static List<TaskLabelModel> ListofLabelsId;
@@ -646,10 +642,10 @@
     private int[] nameofEmployees { get; set; } = new int[] { };
     private int[] oldEmployees { get; set; } = new int[] { };
     private string nameofProject;
-    BackendLibrary.Models.CommentModel Comment;
+    CommentModel Comment;
     private SfGrid<CommentModel> DefaultGridComments;
     private static List<CommentModel> CommentsList;
-    BackendLibrary.Models.CommentModel selectedComment;
+    CommentModel selectedComment;
     private EmployeeModel loggedEmployee;
     private bool commentDisable = true;
     private bool shouldDisplayTeamTasks = false;
@@ -902,7 +898,6 @@
     {
         SelectedTask = args;
 
-
         if (SelectedTask != null)
         {
             CommentsList = BackendLibrary.DataAccess.CommentData.GetAllByTaskId(SelectedTask.Task_id);
@@ -964,7 +959,6 @@
             NoSelectedTask.Show();
         }
     }
-
 
     private void AssignTask()
     {
@@ -1640,5 +1634,59 @@
         BackendLibrary.DataAccess.FileData.DownloadFile(SelectedFile);
         ToastFile.Show();
 
+    }
+
+    /// <summary>
+    /// Algorytm proponowania plików w szczegółach zadania.
+    /// </summary>
+    private void SuggestFiles()
+    {
+        List<FileModel> allFiles = FileData.GetAll();
+        List<TaskLabelModel> labelsFromTasksWithFiles = new List<TaskLabelModel>();
+
+        List<TaskLabelModel> currentTaskLabels = TaskLabelData.GetAllLabelsByTaskId(SelectedTask.Task_id);
+        Dictionary<int, int> labelOccurences = new Dictionary<int, int>();
+
+        // zebranie wszystkich etykiet z zadań które mają pliki
+        foreach (var file in allFiles)
+        {
+            if (file.Task_id != SelectedTask.Task_id)
+            {
+                labelsFromTasksWithFiles.AddRange(TaskLabelData.GetAllLabelsByTaskId(file.Task_id));
+            }
+        }
+
+        // policzenie ile razy występuje dana etykieta
+        foreach (var label in labelsFromTasksWithFiles)
+        {
+            if (labelOccurences.ContainsKey(label.Label_id))
+                labelOccurences[label.Label_id]++;
+            else
+                labelOccurences.Add(label.Label_id, 1);
+        }
+
+        // odfiltrowanie etykiet ktorymi nie jest opisane badane zadanie
+        List<int> labelsIds = new List<int>();
+        foreach (var label in currentTaskLabels)
+            labelsIds.Add(label.Label_id);
+        labelOccurences = labelOccurences
+            .Where(label => labelsIds.Contains(label.Key)).ToDictionary(i => i.Key, i => i.Value);
+
+        // posortowanie rosnąco po ilości wystąpień
+        labelOccurences = labelOccurences.OrderBy(key => key.Value).ToDictionary(i => i.Key, i => i.Value); ;
+
+        // dodanie wszystkich plików według kolejności dopasowania
+        foreach (var label in labelOccurences)
+        {
+            List<TaskLabelModel> labels = labelsFromTasksWithFiles.Where(l => l.Label_id == label.Key).ToList();
+
+            foreach (var task in labels)
+                suggestedFiles.AddRange(FileData.GetAllByTaskId(task.Task_id));
+        }
+
+        // zostawienie tylko 8 pierwszych (najlepiej dopasowanych) plików
+        suggestedFiles = suggestedFiles.GetRange(0, 8);
+
+        // odświeżenie sfgrid
     }
 }
