@@ -1,5 +1,5 @@
 ﻿@page "/tasks"
-
+ 
 <link href="css/popups.css" rel="stylesheet" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
@@ -176,7 +176,7 @@
                         <ValidationMessage For="@(() => TaskAdd.description)" />
                     </div>
                     <div class="form-group">
-                        <label for="Starttime" class="control-label">Czas rozpoczęcia</label>
+                        <label for="Starttime" class="control-label">Data rozpoczęcia</label>
                         <SfDateTimePicker TValue="DateTime" @bind-value="TaskAdd.start_time" CssClass="e-custom"></SfDateTimePicker>
                         <ValidationMessage For="@(() => TaskAdd.start_time)" />
                     </div>
@@ -281,17 +281,12 @@
                         <SfGrid @ref="suggestedEmployeesGrid" DataSource="suggestedEmployees" TValue="EmployeeStats">
                             <GridEvents CommandClicked="AddEmployeeToAssigned" TValue="EmployeeStats"></GridEvents>
                             <GridColumns>
-                                <GridColumn Field=@nameof(EmployeeStats.First_name) HeaderText="Imię" TextAlign="TextAlign.Left" Width="90"></GridColumn>
-                                <GridColumn Field=@nameof(EmployeeStats.Last_name) HeaderText="Nazwisko" TextAlign="TextAlign.Left" Width="90"></GridColumn>
-                                <GridColumn Field=@nameof(EmployeeStats.EmpLabelMatches) HeaderText="EmpLabelMatch" TextAlign="TextAlign.Center" Width="80"></GridColumn>
-                                <GridColumn Field=@nameof(EmployeeStats.TaskLabelMatches) HeaderText="TaskLabelMatch" TextAlign="TextAlign.Center" Width="80"></GridColumn>
-                                <GridColumn Field=@nameof(EmployeeStats.TaskDensity) HeaderText="TaskDensity" TextAlign="TextAlign.Center" Width="80"></GridColumn>
-                                <GridColumn Field=@nameof(EmployeeStats.FinalFactor) HeaderText="FinalFactor" TextAlign="TextAlign.Center" Width="80"></GridColumn>
-                                <GridColumn HeaderText="Dodaj" Width="50">
-                                    <GridCommandColumns>
-                                        <GridCommandColumn ButtonOption="@(new CommandButtonOptions() { IconCss = "e-icons e-add", CssClass = "e-flat" })"></GridCommandColumn>
-                                    </GridCommandColumns>
-                                </GridColumn>
+                                <GridColumn Field=@nameof(EmployeeStats.First_name) HeaderText="Imię" TextAlign="TextAlign.Left" Width="100"></GridColumn>
+                                <GridColumn Field=@nameof(EmployeeStats.Last_name) HeaderText="Nazwisko" TextAlign="TextAlign.Left" Width="100"></GridColumn>
+                                <GridColumn Field=@nameof(EmployeeStats.EmpLabelMatches) HeaderText="EmpLabelMatch" TextAlign="TextAlign.Center" Width="90"></GridColumn>
+                                <GridColumn Field=@nameof(EmployeeStats.TaskLabelMatches) HeaderText="TaskLabelMatch" TextAlign="TextAlign.Center" Width="90"></GridColumn>
+                                <GridColumn Field=@nameof(EmployeeStats.TaskDensity) HeaderText="TaskDensity" TextAlign="TextAlign.Center" Width="90"></GridColumn>
+                                <GridColumn Field=@nameof(EmployeeStats.FinalFactor) HeaderText="FinalFactor" TextAlign="TextAlign.Center" Width="90"></GridColumn>
                             </GridColumns>
                         </SfGrid>
                     </div>
@@ -331,7 +326,7 @@
                                             <ValidationMessage For="@(() => TaskEdit.description)" />
                                         </div>
                                         <div class="form-group">
-                                            <label for="Starttime" class="control-label">Czas rozpoczęcia</label>
+                                            <label for="Starttime" class="control-label">Data rozpoczęcia</label>
                                             <SfDateTimePicker TValue="DateTime" @bind-value="TaskEdit.start_time"></SfDateTimePicker>
                                             <ValidationMessage For="@(() => TaskEdit.start_time)" />
                                         </div>
@@ -453,8 +448,8 @@
                                                 <label class="form-group">Pliki:</label>
                                                 <div>
                                                     <div class="text-align">@*Wartości testowanej funkcji: @a1 *@</div>
-                                                    <SfUploader AutoUpload="false">
-                                                        <UploaderEvents ValueChange="AddFileFunction"></UploaderEvents>
+                                                    <SfUploader AutoUpload="false" Buttons="@browseBtn">
+                                                        <UploaderEvents ValueChange="AddFileFunction" ></UploaderEvents>
                                                     </SfUploader>
                                                 </div>
                                                 <div>
@@ -478,7 +473,7 @@
                                                         <GridPageSettings PageSize="5"></GridPageSettings>
                                                         <GridColumns>
                                                             <GridColumn Field=@nameof(FileModel.File_name) HeaderText="Nazwa pliku" TextAlign="TextAlign.Left" Width="500"></GridColumn>
-                                                            <GridColumn Field=@nameof(FileModel.Date) HeaderText="Data wstawienia" Format="d" Type="ColumnType.Date"
+                                                            <GridColumn Field=@nameof(FileModel.Date) HeaderText="Data dodania" Format="d" Type="ColumnType.Date"
                                                                         TextAlign="TextAlign.Left" Width="200"></GridColumn>
                                                         </GridColumns>
                                                     </SfGrid>
@@ -505,7 +500,7 @@
                                                         </GridEvents>
                                                         <GridColumns>
                                                             <GridColumn Field=@nameof(FileModel.File_name) HeaderText="Nazwa pliku" TextAlign="TextAlign.Left" Width="500"></GridColumn>
-                                                            <GridColumn Field=@nameof(FileModel.Date) HeaderText="Data wstawienia" Format="d" Type="ColumnType.Date"
+                                                            <GridColumn Field=@nameof(FileModel.Date) HeaderText="Data dodania" Format="d" Type="ColumnType.Date"
                                                                         TextAlign="TextAlign.Left" Width="200"></GridColumn>
                                                         </GridColumns>
                                                     </SfGrid>
@@ -514,21 +509,24 @@
 
                                             <SplitterPane Size="46%" Min="521.4px" Resizable="false">
                                                 <div>
+                                                    <label class="form-group">Komentarze</label>
                                                     <SfGrid DataSource="CommentsList"
                                                             @ref="CommentGrid"
-                                                            AllowPaging="true"
                                                             Locale="pl">
+                                                        <GridColumn></GridColumn>
                                                         <GridTemplates>
                                                             <RowTemplate>
                                                                 @{
                                                                     var comment = (context as CommentModel);
                                                                     <div class="answer">
-                                                                        <div class="authorname">
-                                                                            @EmployeeData.GetById(comment.Employee_id).First_name
-                                                                            @EmployeeData.GetById(comment.Employee_id).Last_name
-                                                                        </div>
-                                                                        <div class="detailsAnswer">
-                                                                            @comment.Date
+                                                                        <div>
+                                                                            <div class="authorname">
+                                                                                @EmployeeData.GetById(comment.Employee_id).First_name
+                                                                                @EmployeeData.GetById(comment.Employee_id).Last_name
+                                                                            </div>
+                                                                            <div class="detailsAnswer">
+                                                                                @comment.Date
+                                                                            </div>
                                                                         </div>
                                                                         <div class="posting">
                                                                             @((MarkupString)comment.Description)
@@ -540,12 +538,12 @@
                                                                 }
                                                             </RowTemplate>
                                                         </GridTemplates>
-                                                        <GridPageSettings PageSize="1"></GridPageSettings>
+                                                        <GridPageSettings PageSize="5"></GridPageSettings>
                                                         <GridSortSettings>
                                                         </GridSortSettings>
                                                     </SfGrid>
                                                     <EditForm Model="Comment" OnValidSubmit="AddNewComment">
-                                                        <SfRichTextEditor @ref="rteObj" @bind-Value="Comment.Description">
+                                                        <SfRichTextEditor @ref="rteObj" @bind-Value="Comment.Description" Locale="pl">
                                                             <RichTextEditorToolbarSettings Type="@Tooltype" Items="@Tools" EnableFloating="false"></RichTextEditorToolbarSettings>
                                                         </SfRichTextEditor>
                                                         <div class="col-12 text-center">
@@ -569,8 +567,9 @@
 </div>
 
 @code {
-        SfToast NoSelectedTask;
-        SfRichTextEditor rteObj;
+    private UploaderButtonsProps browseBtn = new UploaderButtonsProps() { Browse = "Wybierz plik" };
+    SfToast NoSelectedTask;
+    SfRichTextEditor rteObj;
     private SfGrid<TaskModel> DefaultGrid;
     private SfGrid<CommentModel> CommentGrid;
 

@@ -20,7 +20,7 @@ app {
     position: relative;
     display: flex;
     flex-direction: column;
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Montserrat', sans-serif; font-weight: normal;
 }
 
 /* okno dialogowe */
@@ -41,7 +41,8 @@ app {
     margin-right: 20px;
 }
 .e-grid .e-emptyrow {
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Montserrat', sans-serif; 
+    font-weight: normal;
     font-size: 10px;
 }
 
@@ -49,7 +50,8 @@ app {
     text-overflow: ellipsis;
     white-space: nowrap;
     font-size: 14px;
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Montserrat', sans-serif; 
+    font-weight: normal;
 }
 
 .e-gridheader {
@@ -59,7 +61,8 @@ app {
 
 .e-grid .e-rowcell {
     font-size: 16px;
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Montserrat', sans-serif; 
+    font-weight: normal;
 }
 
 .e-grid .e-icons {
@@ -68,7 +71,8 @@ app {
 
 .e-multi-select-wrapper .e-chips > .e-chipcontent {
     color: #fff;
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Montserrat', sans-serif; 
+    font-weight: normal;
     font-size: 14px;
 }
 
@@ -79,7 +83,8 @@ app {
 
 .e-dropdownbase .e-list-item {
     width: 100%;
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Montserrat', sans-serif; 
+    font-weight: normal;
     font-size: 13px;
 }
 
@@ -163,10 +168,9 @@ html, body {
     margin-right: 0px;
     margin-bottom: 10px;
     font-family: 'Josefin Sans', sans-serif;
-    background-image: url('/Images/back.mp4');
-    background-position: center;
-    background-size: 100%;
-    height: 150px;
+    background-image: url('/Images/header.png');
+    background-size: cover;
+    height: 140px;
 }
 
 
@@ -287,7 +291,7 @@ th {
     padding-right: 0;
     padding-top: 8px;
     font-family: 8px;
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Montserrat', sans-serif; font-weight: normal;
 }
 
 .e-pager .e-currentitem {
@@ -306,9 +310,33 @@ th {
     text-align: center;
 }
 
+/* Uploader plików */
+.e-upload .e-file-select-wrap .e-file-drop {
+    display: none;
+}
 
 
+.e-file-select-wrap {
+    font-family: 'Josefin Sans', sans-serif;
+    font-size: 18px;
+    justify-content: center;
+    min-width: 90px;
+}
 
 
+.e-pane .e-pane-vertical .e-scrollable .e-static-pane {
+    border: none;
+}
+
+.e-richtexteditor .e-lib .e-control {
+    margin-right: 30px;
+    margin-left: 30px;
+    margin-top: 10px;
+}
 
 
+.e-upload .e-control-wrapper .e-control-container .e-lib .e-keyboard {
+    margin-right: 30px;
+    margin-left: 30px;
+    margin-top: 10px;
+}

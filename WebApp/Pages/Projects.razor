@@ -106,12 +106,6 @@
                                         TextAlign="TextAlign.Left" Width="200"></GridColumn>
                             <GridColumn Field=@nameof(TaskModel.Deadline) HeaderText="Data zakończenia" Format="d" Type="ColumnType.Date"
                                         TextAlign="TextAlign.Left"></GridColumn>
-                            <GridColumn HeaderText="Zarządzaj" Width="150">
-                                <GridCommandColumns>
-                                    <GridCommandColumn Type="CommandButtonType.Edit" ButtonOption="@(new CommandButtonOptions() { IconCss = "e-icons e-edit", CssClass = "e-flat" })"></GridCommandColumn>
-                                    <GridCommandColumn Type="CommandButtonType.Delete" ButtonOption="@(new CommandButtonOptions() { IconCss = "e-icons e-delete", CssClass = "e-flat" })"></GridCommandColumn>
-                                </GridCommandColumns>
-                            </GridColumn>
                         </GridColumns>
                     </SfGrid>
 
@@ -126,12 +120,6 @@
                             <GridColumn Field=@nameof(EmpProjectPair.First_name) HeaderText="Imię" TextAlign="TextAlign.Left" Width="250"></GridColumn>
                             <GridColumn Field=@nameof(EmpProjectPair.Last_name) HeaderText="Nazwisko" TextAlign="TextAlign.Left" Width="250"></GridColumn>
                             <GridColumn Field=@nameof(EmpProjectPair.Email) HeaderText="E-mail" TextAlign="TextAlign.Left"></GridColumn>
-                            <GridColumn HeaderText="Zarządzaj" Width="150">
-                                <GridCommandColumns>
-                                    <GridCommandColumn Type="CommandButtonType.Edit" ButtonOption="@(new CommandButtonOptions() { IconCss = "e-icons e-edit", CssClass = "e-flat" })"></GridCommandColumn>
-                                    <GridCommandColumn Type="CommandButtonType.Delete" ButtonOption="@(new CommandButtonOptions() { IconCss = "e-icons e-delete", CssClass = "e-flat" })"></GridCommandColumn>
-                                </GridCommandColumns>
-                            </GridColumn>
                         </GridColumns>
                     </SfGrid>
                     <br />
@@ -143,12 +131,6 @@
         <GridColumns>
             <GridColumn Field=@nameof(ProjectModel.Project_id) IsPrimaryKey="true" HeaderText="ID" TextAlign="TextAlign.Left" Width="50"></GridColumn>
             <GridColumn Field=@nameof(ProjectModel.Name) IsPrimaryKey="true" HeaderText="Nazwa Projektu" TextAlign="TextAlign.Left" Width="300"></GridColumn>
-            <GridColumn HeaderText="Zarządzaj" Width="150">
-                <GridCommandColumns>
-                    <GridCommandColumn Type="CommandButtonType.Edit" ButtonOption="@(new CommandButtonOptions() { IconCss = "e-icons e-edit", CssClass = "e-flat" })"></GridCommandColumn>
-                    <GridCommandColumn Type="CommandButtonType.Delete" ButtonOption="@(new CommandButtonOptions() { IconCss = "e-icons e-delete", CssClass = "e-flat" })"></GridCommandColumn>
-                </GridCommandColumns>
-            </GridColumn>
         </GridColumns>
     </SfGrid>
 

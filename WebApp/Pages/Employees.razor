@@ -129,6 +129,7 @@
             <GridPageSettings PageSize="12"></GridPageSettings>
             <GridSearchSettings IgnoreCase="true"></GridSearchSettings>
             <GridEvents TValue="EmployeeModel"
+                        CommandClicked="OpenEditEmployeeWindow"
                          OnRecordDoubleClick="RowDoubleClickHandler"
                         RowSelected="RowSelectedHandler">
             </GridEvents>
@@ -224,6 +225,12 @@
     {
         visibility = true;
 
+    }
+
+    private void OpenEditEmployeeWindow(CommandClickEventArgs<EmployeeModel> args)
+    {
+        EmployeeModel SelectedEmployee = args.RowData;
+        DisplayEmployeeDetails(SelectedEmployee);
     }
 
     private void EditEmployee()
