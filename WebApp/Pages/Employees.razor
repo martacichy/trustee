@@ -24,14 +24,8 @@
             </SfToast>
         </div>
         @*Edycja pracownika*@
-        <SfDialog @bind-Visible="@VisibilityEdit"
-                  AllowDragging="true"
-                  Width="400px" Height="400px"
-                  MinHeight="400px"
-                  IsModal="true"
-                  ShowCloseIcon="true">
+        <SfDialog @bind-Visible="@VisibilityEdit" AllowDragging="true" Width="400px" Height="400px" MinHeight="400px" IsModal="true" ShowCloseIcon="true">
             <DialogTemplates>
-                <Header>Edycja pracownika</Header>
                 <Content>
                     <div class="dane">
                         <label for="Imie">@SelectedEmployee.First_name</label>
@@ -137,7 +131,7 @@
             <GridEvents TValue="EmployeeModel"
                         CommandClicked="OpenEditEmployeeWindow"
                          OnRecordDoubleClick="RowDoubleClickHandler"
-                        RowSelected="RowSelectedHandler" >
+                        RowSelected="RowSelectedHandler">
             </GridEvents>
             <GridColumns>
                 <GridColumn Field=@nameof(EmployeeModel.Employee_id) IsPrimaryKey="true" HeaderText="ID" TextAlign="TextAlign.Left" Width="50"></GridColumn>
@@ -235,10 +229,9 @@
 
     private void OpenEditEmployeeWindow(CommandClickEventArgs<EmployeeModel> args)
     {
-        SelectedEmployee = args.RowData;
+        EmployeeModel SelectedEmployee = args.RowData;
         DisplayEmployeeDetails(SelectedEmployee);
     }
-
 
     private void EditEmployee()
     {
@@ -267,6 +260,10 @@
         DisplayEmployeeDetails(SelectedEmployee);
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="SelectedEmployee"></param>
     private void DisplayEmployeeDetails(EmployeeModel SelectedEmployee)
     {
         if (SelectedEmployee.First_name != null)

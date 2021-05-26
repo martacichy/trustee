@@ -1,6 +1,5 @@
 @import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
 @import url('https://fonts.googleapis.com/css2?family=Josefin+Sans&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@200&display=swap');
 @import url('file:///C:\Users\Marta\Desktop\ZESP\WebApp\wwwroot\css\site.css');
 
 
@@ -20,7 +19,7 @@ app {
     position: relative;
     display: flex;
     flex-direction: column;
-    font-family: 'Montserrat', sans-serif; font-weight: normal;
+    font-family: 'Josefin Sans', sans-serif;
 }
 
 /* okno dialogowe */
@@ -40,19 +39,17 @@ app {
     margin-left: 20px;
     margin-right: 20px;
 }
-.e-grid .e-emptyrow {
-    font-family: 'Montserrat', sans-serif; 
-    font-weight: normal;
-    font-size: 10px;
-}
+    .e-grid .e-emptyrow {
+        font-family: 'Josefin Sans', sans-serif;
+        font-size: 10px;
+    }
 
-.e-grid.e-responsive .e-rowcell, .e-grid.e-responsive .e-headercelldiv {
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    font-size: 14px;
-    font-family: 'Montserrat', sans-serif; 
-    font-weight: normal;
-}
+    .e-grid.e-responsive .e-rowcell, .e-grid.e-responsive .e-headercelldiv {
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-size: 14px;
+        font-family: 'Josefin Sans', sans-serif;
+    }
 
 .e-gridheader {
     font-size: 18px;
@@ -60,9 +57,8 @@ app {
 }
 
 .e-grid .e-rowcell {
-    font-size: 16px;
-    font-family: 'Montserrat', sans-serif; 
-    font-weight: normal;
+    font-size: 18px;
+    font-family: 'Josefin Sans', sans-serif;
 }
 
 .e-grid .e-icons {
@@ -71,8 +67,7 @@ app {
 
 .e-multi-select-wrapper .e-chips > .e-chipcontent {
     color: #fff;
-    font-family: 'Montserrat', sans-serif; 
-    font-weight: normal;
+    font-family: 'Josefin Sans', sans-serif;
     font-size: 14px;
 }
 
@@ -83,8 +78,7 @@ app {
 
 .e-dropdownbase .e-list-item {
     width: 100%;
-    font-family: 'Montserrat', sans-serif; 
-    font-weight: normal;
+    font-family: 'Josefin Sans', sans-serif;
     font-size: 13px;
 }
 
@@ -129,10 +123,6 @@ app {
     margin-top: 5px;
     margin-right: 5px;
 }
-
-
-
-
 
 .deadline-below-today {
     color: white;
@@ -291,7 +281,7 @@ th {
     padding-right: 0;
     padding-top: 8px;
     font-family: 8px;
-    font-family: 'Montserrat', sans-serif; font-weight: normal;
+    font-family: 'Montserrat', sans-serif;
 }
 
 .e-pager .e-currentitem {
