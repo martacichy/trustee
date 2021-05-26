@@ -147,7 +147,7 @@
                             TextAlign="TextAlign.Left"></GridColumn>
                 <GridForeignColumn Field=@nameof(TaskModel.Project_id) HeaderText="Projekty"
                                    ForeignKeyValue="Name" ForeignDataSource="@projectsForUnstartedTasks" Width="150"></GridForeignColumn>
-                <GridColumn Field=@nameof(TaskModel.MatchFactor) HeaderText="Dopasowanie" TextAlign="TextAlign.Center"></GridColumn>
+                <GridColumn Field=@nameof(TaskModel.MatchFactor) HeaderText="DOPASOWANIE" TextAlign="TextAlign.Center"></GridColumn>
             </GridColumns>
         </SfGrid>
     </div>
@@ -286,12 +286,12 @@
                         <SfGrid @ref="suggestedEmployeesGrid" DataSource="suggestedEmployees" TValue="EmployeeStats">
                             <GridEvents CommandClicked="AddEmployeeToAssigned" TValue="EmployeeStats"></GridEvents>
                             <GridColumns>
-                                <GridColumn Field=@nameof(EmployeeStats.First_name) HeaderText="Imię" TextAlign="TextAlign.Left" Width="100"></GridColumn>
-                                <GridColumn Field=@nameof(EmployeeStats.Last_name) HeaderText="Nazwisko" TextAlign="TextAlign.Left" Width="100"></GridColumn>
-                                <GridColumn Field=@nameof(EmployeeStats.EmpLabelMatches) HeaderText="EmpLabelMatch" TextAlign="TextAlign.Center" Width="90"></GridColumn>
-                                <GridColumn Field=@nameof(EmployeeStats.TaskLabelMatches) HeaderText="TaskLabelMatch" TextAlign="TextAlign.Center" Width="90"></GridColumn>
-                                <GridColumn Field=@nameof(EmployeeStats.TaskDensity) HeaderText="TaskDensity" TextAlign="TextAlign.Center" Width="90"></GridColumn>
-                                <GridColumn Field=@nameof(EmployeeStats.FinalFactor) HeaderText="FinalFactor" TextAlign="TextAlign.Center" Width="90"></GridColumn>
+                                <GridColumn Field=@nameof(EmployeeStats.First_name) HeaderText="Imię" TextAlign="TextAlign.Left" Width="80"></GridColumn>
+                                <GridColumn Field=@nameof(EmployeeStats.Last_name) HeaderText="Nazwisko" TextAlign="TextAlign.Left" Width="95"></GridColumn>
+                                <GridColumn Field=@nameof(EmployeeStats.EmpLabelMatches) HeaderText="Kompetencje" TextAlign="TextAlign.Center" Width="105"></GridColumn>
+                                <GridColumn Field=@nameof(EmployeeStats.TaskLabelMatches) HeaderText="Doświadczenie" TextAlign="TextAlign.Center" Width="115"></GridColumn>
+                                <GridColumn Field=@nameof(EmployeeStats.TaskDensity) HeaderText="Obciążenie" TextAlign="TextAlign.Center" Width="100"></GridColumn>
+                                <GridColumn Field=@nameof(EmployeeStats.FinalFactor) HeaderText="DOPASOWANIE" TextAlign="TextAlign.Center" Width="130"></GridColumn>
                             </GridColumns>
                         </SfGrid>
                     </div>
