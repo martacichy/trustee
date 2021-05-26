@@ -159,8 +159,13 @@
 
     @* okno dodawania nowego zadania*@
 
-    <SfDialog @bind-Visible="@VisibilityAdd" Header="Nowe zadanie" Width="800px" Height="1200px" MinHeight="900px" IsModal="true" ShowCloseIcon="true" CssClass="e-custom">
+    <SfDialog @bind-Visible="@VisibilityAdd"
+              Width="800px" Height="1200px"
+              MinHeight="900px" IsModal="true"
+              ShowCloseIcon="true"
+              CssClass="e-custom">
         <DialogTemplates>
+            <Header>Nowe zadanie</Header>
             <Content>
                 <EditForm Model="@TaskAdd">
                     <DataAnnotationsValidator />
@@ -305,8 +310,14 @@
     </SfDialog>
 
     @* okno szczegolow zadania *@
-    <SfDialog @bind-Visible="@VisibilityDetails" AllowDragging="true" Width="1600px" Height="1600px" MinHeight="900px" IsModal="true" ShowCloseIcon="true">
+    <SfDialog @bind-Visible="@VisibilityDetails"
+              AllowDragging="true"
+              Width="1600px" Height="1600px"
+              MinHeight="900px"
+              IsModal="true"
+              ShowCloseIcon="true">
         <DialogTemplates>
+            <Header>Edycja zadania</Header>
             <Content>
                 <SfSplitter CssClass="out-splitter" Height="100%" Width="100%">
                     <SplitterPanes>
@@ -449,7 +460,7 @@
                                                 <div>
                                                     <div class="text-align">@*Wartości testowanej funkcji: @a1 *@</div>
                                                     <SfUploader AutoUpload="false" Buttons="@browseBtn">
-                                                        <UploaderEvents ValueChange="AddFileFunction" ></UploaderEvents>
+                                                        <UploaderEvents ValueChange="AddFileFunction"></UploaderEvents>
                                                     </SfUploader>
                                                 </div>
                                                 <div>

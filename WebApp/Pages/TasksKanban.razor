@@ -33,8 +33,14 @@
 
 </div>
 <div>
-    <SfDialog @bind-Visible="@VisibilityDetails" AllowDragging="true" Width="1600px" Height="1600px" MinHeight="900px" IsModal="true" ShowCloseIcon="true">
+    <SfDialog @bind-Visible="@VisibilityDetails"
+              AllowDragging="true"
+              Width="1600px" Height="1600px"
+              MinHeight="900px"
+              IsModal="true"
+              ShowCloseIcon="true">
         <DialogTemplates>
+            <Header>Edycja zadania</Header>
             <Content>
                 <SfSplitter CssClass="out-splitter" Height="100%" Width="100%">
                     <SplitterPanes>
