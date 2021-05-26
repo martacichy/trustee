@@ -980,17 +980,6 @@
         uriHelper.NavigateTo(uriHelper.Uri, forceLoad: true);
     }
 
-    // TODO - testowe zachowanie - do poprawy LUB usuniecia i rozwijania szczegółów w inny sposób
-    private void ExpandTaskDetails(RecordClickEventArgs<TaskModel> args)
-    {
-        SelectedTask = args.RowData;
-
-        if (SelectedTask != null)
-        {
-            // NavigationManager.NavigateTo("/task-details");
-        }
-    }
-
     /// <summary>
     /// Powraca do listy zadan po zamknieciu okna
     /// </summary>
