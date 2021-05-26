@@ -53,6 +53,9 @@
 
     private BackendLibrary.Validation.LoginValidation Log = new BackendLibrary.Validation.LoginValidation();
 
+    /// <summary>
+    /// Sprawdza, czy dane logowania są poprawne i przekierowuje na stronę główną.
+    /// </summary>
     private void LoginSubmit()
     {
         // tutaj nastepuje przypisanie wszystkich wartosci do obiektu UserLoggedIn, zgodnie z podanym loginem i haslem
@@ -75,8 +78,4 @@
         }
     }
 
-    private void HandleValidSubmit()
-    {
-
-    }
 }
