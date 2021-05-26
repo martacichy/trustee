@@ -137,7 +137,7 @@
             <GridEvents TValue="EmployeeModel"
                         CommandClicked="OpenEditEmployeeWindow"
                          OnRecordDoubleClick="RowDoubleClickHandler"
-                        RowSelected="RowSelectedHandler">
+                        RowSelected="RowSelectedHandler" >
             </GridEvents>
             <GridColumns>
                 <GridColumn Field=@nameof(EmployeeModel.Employee_id) IsPrimaryKey="true" HeaderText="ID" TextAlign="TextAlign.Left" Width="50"></GridColumn>
@@ -235,9 +235,10 @@
 
     private void OpenEditEmployeeWindow(CommandClickEventArgs<EmployeeModel> args)
     {
-        EmployeeModel SelectedEmployee = args.RowData;
+        SelectedEmployee = args.RowData;
         DisplayEmployeeDetails(SelectedEmployee);
     }
+
 
     private void EditEmployee()
     {
