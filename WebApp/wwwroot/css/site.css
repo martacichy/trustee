@@ -47,12 +47,12 @@ app {
     .e-grid.e-responsive .e-rowcell, .e-grid.e-responsive .e-headercelldiv {
         text-overflow: ellipsis;
         white-space: nowrap;
-        font-size: 14px;
+        font-size: 16px;
         font-family: 'Josefin Sans', sans-serif;
     }
 
 .e-gridheader {
-    font-size: 18px;
+    font-size: 20px;
     font-family: 'Josefin Sans', sans-serif;
 }
 
