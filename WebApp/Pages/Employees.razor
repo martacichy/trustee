@@ -24,14 +24,8 @@
             </SfToast>
         </div>
         @*Edycja pracownika*@
-        <SfDialog @bind-Visible="@VisibilityEdit"
-                  AllowDragging="true"
-                  Width="400px" Height="400px"
-                  MinHeight="400px"
-                  IsModal="true"
-                  ShowCloseIcon="true">
+        <SfDialog @bind-Visible="@VisibilityEdit" AllowDragging="true" Width="400px" Height="400px" MinHeight="400px" IsModal="true" ShowCloseIcon="true">
             <DialogTemplates>
-                <Header>Edycja pracownika</Header>
                 <Content>
                     <div class="dane">
                         <label for="Imie">@SelectedEmployee.First_name</label>
@@ -266,6 +260,10 @@
         DisplayEmployeeDetails(SelectedEmployee);
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="SelectedEmployee"></param>
     private void DisplayEmployeeDetails(EmployeeModel SelectedEmployee)
     {
         if (SelectedEmployee.First_name != null)
