@@ -25,7 +25,7 @@ namespace BackendLibrary.DataAccess
             }
         }
 
-        /// <summary> Zwraca model o przekazanym w argumencie id. </summary>
+        /// <summary> Zwraca etykietę o danym ID. </summary>
         public static LabelModel GetById(int label_id)
         {
             using (IDbConnection connection = new MySqlConnection(connectionString))
@@ -37,7 +37,7 @@ namespace BackendLibrary.DataAccess
             }
         }
 
-        /// <summary> Zwraca autowygenerowane Id w ostatnio wykonanym insercie.</summary>
+        /// <summary> Zwraca autowygenerowane ID w ostatnio wykonanym insercie.</summary>
         public static int GetMaxId()
         {
             using (IDbConnection connection = new MySqlConnection(connectionString))
@@ -48,7 +48,7 @@ namespace BackendLibrary.DataAccess
                 return id;
             }
         }
-
+        /// <summary> Zwraca etykietę o danej nazwie.</summary>
         public static int GetIdByName(String name)
         {
             using (IDbConnection connection = new MySqlConnection(connectionString))
@@ -59,7 +59,7 @@ namespace BackendLibrary.DataAccess
                 return id;
             }
         }
-
+        /// <summary> Zwraca nazwę etykiety o danym ID.</summary>
         public static string GetNameById(int id)
         {
             using (IDbConnection connection = new MySqlConnection(connectionString))
@@ -71,7 +71,7 @@ namespace BackendLibrary.DataAccess
             }
         }
 
-        /// <summary> Zwraca listę wszystkich etykiet danej firmy. </summary>
+        /// <summary> Zwraca listę wszystkich etykiet o danym ID firmy. </summary>
         public static List<LabelModel> GetAllByCompanyId(int company_id)
         {
             using (IDbConnection connection = new MySqlConnection(connectionString))
@@ -83,7 +83,7 @@ namespace BackendLibrary.DataAccess
             }
         }
 
-        /// <summary> Dodaje nową etykietę </summary>
+        /// <summary> Dodaje nową etykietę. </summary>
         public static void AddLabel(LabelModel newLabel)
         {
             using (IDbConnection connection = new MySqlConnection(connectionString))
@@ -104,7 +104,7 @@ namespace BackendLibrary.DataAccess
             }
         }
 
-        /// <summary> Aktualizuje daną etykietę </summary>
+        /// <summary> Aktualizuje daną etykietę. </summary>
         public static void UpdateLabel(LabelModel updatedLabel)
         {
             using (IDbConnection connection = new MySqlConnection(connectionString))
@@ -117,7 +117,7 @@ namespace BackendLibrary.DataAccess
         }
 
         /// <summary> Usuwa etykietę z bazy danych,
-        /// usuwając wcześniej wiersze z innych tabel, gdzie zawarty jest dany klucz obcy z tabeli Label
+        /// usuwając wcześniej wiersze z innych tabel, gdzie zawarty jest dany klucz obcy z tabeli Label.
         /// </summary>
         public static int DeleteLabel(int label_id)
         {

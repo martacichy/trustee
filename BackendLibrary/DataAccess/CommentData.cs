@@ -12,7 +12,7 @@ namespace BackendLibrary.DataAccess
     /// </summary>
     public class CommentData : SqlConnector
     {
-        /// <summary> Zwraca model o przekazanym w argumencie id zadania. </summary>
+        /// <summary> Zwraca komentarz o danym ID zadania. </summary>
         public static CommentModel GetByTaskId(int task_id)
         {
             using (IDbConnection connection = new MySqlConnection(connectionString))
@@ -24,7 +24,7 @@ namespace BackendLibrary.DataAccess
             }
         }
 
-        /// <summary> Zwraca model o przekazanym w argumencie id pracownika. </summary>
+        /// <summary> Zwraca komentarz o danym ID pracownika. </summary>
         public static CommentModel GetByEmployeeId(int employee_id)
         {
             using (IDbConnection connection = new MySqlConnection(connectionString))
@@ -36,7 +36,7 @@ namespace BackendLibrary.DataAccess
             }
         }
 
-        /// <summary> Listuje wszystkie komentarze dotycz¹ce zadania o wybranym id </summary>
+        /// <summary> Zwraca listê wszystkich komentarzy o danym ID zadania. </summary>
         public static List<CommentModel> GetAllByTaskId(int task_id)
         {
             using (IDbConnection connection = new MySqlConnection(connectionString))
@@ -60,7 +60,7 @@ namespace BackendLibrary.DataAccess
             }
         }
 
-        /// <summary> Usuwa komentarz o zadanym id. </summary>
+        /// <summary> Usuwa komentarz o danym ID. </summary>
         public static int DeleteComment(int comment_id)
         {
             using (IDbConnection connection = new MySqlConnection(connectionString))
