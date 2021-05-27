@@ -1,5 +1,4 @@
 ﻿@page "/tasks"
-
 <link href="css/popups.css" rel="stylesheet" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
@@ -433,7 +432,7 @@
                                         <div class="col-12 text-center">
                                             <br />
                                             <button type="submit" class="btn btn-primary" data-dismiss="modal" @onclick="SuggestEmployeesOnDetails">
-                                                Pokaż dopasowanych pracowników
+                                                Pokaż rekomendowanych pracowników
                                             </button>
                                         </div>
                                         <br />
@@ -1173,6 +1172,9 @@
             List<EmployeeModel> employeePool;
             List<EmployeeLabelModel> empLabels;
             List<TaskModel> empTasks;
+            List<EmployeeTaskModel> currentlyAssignedEmployees
+                = EmployeeTaskData.GetAllEmployeesByTaskId(SelectedTask.Task_id);
+            List<int> employeesIds = new List<int>();
 
             if (selectedProject == null)
             {
@@ -1238,8 +1240,17 @@
 
                 suggestedEmployees.Clear();
 
+                foreach (var emp in currentlyAssignedEmployees)
+                {
+                    employeesIds.Add(emp.Employee_id);
+                }
+
+                // dodanie do listy rekomendowanych pracownikow tych ktorzy nie sa jeszcze przypisani
                 foreach (var emp in employeeStats)
-                    suggestedEmployees.Add(emp);
+                {
+                    if (!employeesIds.Contains(emp.Employee_id))
+                        suggestedEmployees.Add(emp);
+                }
 
                 suggestedEmployeesGrid2.Refresh();
             }
@@ -1888,9 +1899,12 @@
             }
         }
 
-        // zostawienie tylko 8 pierwszych (najlepiej dopasowanych) plików
-        if (suggestedFiles.Count() >= 8)
-            suggestedFiles = suggestedFiles.GetRange(0, 8);
+        // usunięcie duplikatów
+        suggestedFiles = suggestedFiles.DistinctBy(file => file.File_name).ToList();
+
+        // zostawienie tylko 5 pierwszych (najlepiej dopasowanych) plików
+        if (suggestedFiles.Count() >= 5)
+            suggestedFiles = suggestedFiles.GetRange(0, 5);
 
         // odświeżenie sfgrid
         ProposedFileGrid.Refresh();
