@@ -13,7 +13,7 @@ namespace BackendLibrary.DataAccess
     /// </summary>
     public class EmployeeData : SqlConnector
     {
-        /// <summary> Zwraca listę wszystkich pracownikow. </summary>
+        /// <summary> Zwraca listę wszystkich pracowników. </summary>
         public static List<EmployeeModel> GetAll()
         {
             using (IDbConnection connection = new MySqlConnection(connectionString))
@@ -47,7 +47,7 @@ namespace BackendLibrary.DataAccess
             }
         }
 
-        /// <summary> Przypisuje dane id firmy danemu pracownikowi. </summary>
+        /// <summary> Przypisuje dane ID firmy do danego ID pracownika. </summary>
         public static Boolean SetCompanyForEmployee(int employeeId, int companyId)
         {
             using (IDbConnection connection = new MySqlConnection(connectionString))
@@ -62,7 +62,7 @@ namespace BackendLibrary.DataAccess
             }
         }
 
-        /// <summary> Zwraca model o przekazanym w argumencie id. </summary>
+        /// <summary> Zwraca pracownika o danym ID. </summary>
         public static EmployeeModel GetById(int employee_id)
         {
             using (IDbConnection connection = new MySqlConnection(connectionString))
@@ -74,7 +74,7 @@ namespace BackendLibrary.DataAccess
             }
         }
 
-        /// <summary> Zwraca listę wszystkich pracownikow danego projektu. </summary>
+        /// <summary> Zwraca listę wszystkich pracowników o danym ID projektu. </summary>
         public static List<EmployeeModel> GetAllByProjectId(int project_id)
         {
             using (IDbConnection connection = new MySqlConnection(connectionString))
@@ -89,7 +89,7 @@ namespace BackendLibrary.DataAccess
         }
 
         /// <summary>
-        /// Zwraca jednoelementowa liste, zawierajaca jednego pracownika, zgodnie z przekazanym ID,
+        /// Zwraca jednoelementowa liste, zawierajaca jednego pracownika, zgodnie z danym ID,
         /// funkcja stworzona specjalnie do edycji pracownika.
         /// </summary>
         public static List<EmployeeModel> GetByIdList(int employee_id)
@@ -103,7 +103,7 @@ namespace BackendLibrary.DataAccess
             }
         }
 
-        /// <summary> Zwraca id pracownika o podanym mailu. </summary>
+        /// <summary> Zwraca ID pracownika o danym mailu. </summary>
         public static int GetIdByEmail(string email)
         {
             using (IDbConnection connection = new MySqlConnection(connectionString))
@@ -115,7 +115,7 @@ namespace BackendLibrary.DataAccess
             }
         }
 
-        /// <summary> Zwraca listę wszystkich pracownikow danej firmy. </summary>
+        /// <summary> Zwraca listę wszystkich pracowników o danym ID firmy. </summary>
         public static List<EmployeeModel> GetAllByCompanyId(int company_id)
         {
             using (IDbConnection connection = new MySqlConnection(connectionString))
@@ -127,7 +127,7 @@ namespace BackendLibrary.DataAccess
             }
         }
 
-        /// <summary> Zwraca autowygenerowane Id w ostatnio wykonanym insercie.</summary>
+        /// <summary> Zwraca autowygenerowane ID w ostatnio wykonanym insercie.</summary>
         public static int GetMaxId()
         {
             using (IDbConnection connection = new MySqlConnection(connectionString))
@@ -179,7 +179,7 @@ namespace BackendLibrary.DataAccess
         }
 
 
-        /// <summary> Aktualizuje wybranego pracownika o nowe wartosci. </summary>
+        /// <summary> Aktualizuje wybranego pracownika o nowe wartości. </summary>
         public static void UpdateEmployee(EmployeeModel updatedEmployee)
         {
             using (IDbConnection connection = new MySqlConnection(connectionString))
