@@ -13,6 +13,9 @@
         <div class="actionBtn">
             <Sfbutton class="btn btn-primary" @onclick="AddEmployee"><i class="fa fa-plus"></i>&nbsp;Nowy pracownik</Sfbutton>
         </div>
+    }
+    @if (Login.UserLoggedIn.If_manager != 0)
+    {
         <div class="actionBtn">
             <Sfbutton class="btn btn-primary" @onclick="EditEmployee"><i class="fa fa-edit"></i>&nbsp;Edytuj</Sfbutton>
         </div>
@@ -129,6 +132,7 @@
             <GridPageSettings PageSize="12"></GridPageSettings>
             <GridSearchSettings IgnoreCase="true"></GridSearchSettings>
             <GridEvents TValue="EmployeeModel"
+                        CommandClicked="OpenEditEmployeeWindow"
                          OnRecordDoubleClick="RowDoubleClickHandler"
                         RowSelected="RowSelectedHandler">
             </GridEvents>
@@ -197,6 +201,9 @@
     private string pattern = @"^[a-zA-Z0-9]+$";
     private Boolean VisibilityAdd { get; set; }
 
+    /// <summary>
+    /// Metoda wywoływana, gdy komponent jest gotowy do uruchomienia.
+    /// </summary>
     protected override void OnInitialized()
     {
         if (Login.UserLoggedIn.If_manager == -1)
@@ -220,39 +227,80 @@
         visibility = false;
     }
 
+    /// <summary>
+    /// Otwiera okno dodawania pracownika.
+    /// </summary>
     private void AddEmployee()
     {
         visibility = true;
-
     }
 
+    /// <summary>
+    /// Otwiera okno edycji pracownika po naciśnięciu ikony edycji.
+    /// </summary>
+    /// <param name="args"></param>
+    private void OpenEditEmployeeWindow(CommandClickEventArgs<EmployeeModel> args)
+    {
+        if (Login.UserLoggedIn.If_manager != 0)
+        {
+            EmployeeModel SelectedEmployee = args.RowData;
+            DisplayEmployeeDetails(SelectedEmployee);
+        }
+    }
+
+    /// <summary>
+    /// Otwiera okno edycji pracownika po naciśnięciu przycisku.
+    /// </summary>
     private void EditEmployee()
     {
-        DisplayEmployeeDetails(SelectedEmployee);
+        if (Login.UserLoggedIn.If_manager != 0)
+        {
+            DisplayEmployeeDetails(SelectedEmployee);
+        }
+
     }
 
+    /// <summary>
+    /// Wyzwala zdarzenie gdy dany wiersz zostaje odznaczony.
+    /// </summary>
     public void RowDeselectHandler()
     {
         SelectedEmployee = null;
     }
 
+    /// <summary>
+    /// Zamyka okno edycji pracownika.
+    /// </summary>
+    /// <param name="args"></param>
     private void DialogEditClosed(CloseEventArgs args)
     {
         VisibilityEdit = false;
 
     }
 
+    /// <summary>
+    /// Wyzwala zdarzenie gdy dany wiersz jest zaznaczony.
+    /// </summary>
+    /// <param name="args"></param>
     private void RowSelectedHandler(RowSelectEventArgs<EmployeeModel> args)
     {
         SelectedEmployee = args.Data;
     }
 
+    /// <summary>
+    /// Otwiera stronę szczegółów pracownika po podwójnym kliknięciu.
+    /// </summary>
+    /// <param name="args"></param>
     private void RowDoubleClickHandler(RecordDoubleClickEventArgs<EmployeeModel> args)
     {
         SelectedEmployee = args.RowData;
         DisplayEmployeeDetails(SelectedEmployee);
     }
 
+    /// <summary>
+    /// Pobiera i wyświetla dane dotyczące danego pracownika.
+    /// </summary>
+    /// <param name="SelectedEmployee"></param>
     private void DisplayEmployeeDetails(EmployeeModel SelectedEmployee)
     {
         if (SelectedEmployee.First_name != null)
@@ -300,6 +348,11 @@
         }
     }
 
+    /// <summary>
+    /// Sprawdza czy dana etykieta znajduje się już w bazie danych.
+    /// </summary>
+    /// <param name="label"></param>
+    /// <returns></returns>
     private bool IsSelectedLabelsContainsInDbLabels(string label)
     {
         for (int i = 0; i < labelsInDb.Count; i++)
@@ -312,6 +365,10 @@
         return false;
     }
 
+    /// <summary>
+    /// Zapisuje nowe, nieistniejące w bazie danych etykiety.
+    /// </summary>
+    /// <param name="labels"></param>
     private void SaveLabels(string[] labels)
     {
         if (labels != null)
@@ -329,6 +386,9 @@
         }
     }
 
+    /// <summary>
+    /// Walidacja dla etykiet. Scala wybrane etykiety w jednego stringa i porównuje czy całość pasuje do wzorca.
+    /// </summary>
     private void MergeSelectedLabels(BackendLibrary.Validation.EditEmployeeValidation Employee, string[] selectedLabels)
     {
         mergedSelectedLabels = "";
@@ -344,6 +404,9 @@
 
     }
 
+    /// <summary>
+    /// Edytuje przypisane do pracownika etykiety.
+    /// </summary>
     private void EditEmployeeLabel()
     {
         for (int i = 0; i < ListofLabelsId.Count; i++)
@@ -364,6 +427,9 @@
 
     }
 
+    /// <summary>
+    /// Edytuje przypisane do pracownika projekty.
+    /// </summary>
     private void EditEmployeeProjects()
     {
         for (int i = 0; i < ListofProjectsId.Count; i++)
@@ -383,6 +449,11 @@
 
     }
 
+    /// <summary>
+    /// Sprawdza, czy zmieniono projekty dla danego pracownika.
+    /// </summary>
+    /// <param name="project"></param>
+    /// <returns></returns>
     private bool IsProjectsChanged(string project)
     {
         for(int i = 0; i < nameofProjects.Length; i++)
@@ -392,6 +463,11 @@
         return false;
     }
 
+    /// <summary>
+    /// Sprawdza, czy zmieniono etykiety dla danego pracownika.
+    /// </summary>
+    /// <param name="label"></param>
+    /// <returns></returns>
     private bool IsLabelsChanged(string label)
     {
         for (int i = 0; i < nameoflabels.Length; i++)
@@ -402,6 +478,9 @@
         return false;
     }
 
+    /// <summary>
+    /// Sprawdza, czy zostały dokonane zmiany w edycji pracownika oraz zapisuje je.
+    /// </summary>
     private void UpdateEmployee()
     {
         bool if_updated = false;
@@ -492,11 +571,6 @@
 
     }
 
-    private void EmployeeDetails(MouseEventArgs e)
-    {
-
-    }
-
     /// <summary>
     /// Próba dodania do firmy pracownika o przekazanym adresie e-mail.
     /// </summary>
@@ -524,19 +598,9 @@
         }
     }
 
-    private void overlayClick(MouseEventArgs args)
-    {
-        visibility = false;
-        errorMessage = "";
-        inputValue = "";
-    }
-
-    private void closeDialog()
-    {
-        errorMessage = "";
-        inputValue = "";
-    }
-
+    /// <summary>
+    /// Nie wiem
+    /// </summary>
     private void ClearEmployee()
     {
         EmployeeEdit.role = null;

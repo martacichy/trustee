@@ -63,7 +63,6 @@
         <GridEvents TValue="TaskModel"
                     RowSelected="RowSelectHandler"
                     OnRecordDoubleClick="SetAssingTaskButtonInisibleAndDisplayTaskDetails"
-                    OnRecordClick="ExpandTaskDetails"
                     CommandClicked="OnCommandClicked"
                     QueryCellInfo="CustomizeCell"
                     RowDeselected="RowDeselectHandler">
@@ -131,11 +130,9 @@
             <GridEvents TValue="TaskModel"
                         RowSelected="RowSelectHandler"
                         OnRecordDoubleClick="SetAssingTaskButtonVisibleAndDisplayTaskDetails"
-                        OnRecordClick="ExpandTaskDetails"
                         RowDeselected="RowDeselectHandler">
             </GridEvents>
 
-            
             <GridPageSettings PageSize="15"></GridPageSettings>
             <GridColumns>
                 <GridColumn Field=@nameof(TaskModel.Task_id) IsPrimaryKey="true" HeaderText="ID" TextAlign="TextAlign.Left" Width="50"></GridColumn>
@@ -147,7 +144,7 @@
                             TextAlign="TextAlign.Left"></GridColumn>
                 <GridForeignColumn Field=@nameof(TaskModel.Project_id) HeaderText="Projekty"
                                    ForeignKeyValue="Name" ForeignDataSource="@projectsForUnstartedTasks" Width="150"></GridForeignColumn>
-                <GridColumn Field=@nameof(TaskModel.MatchFactor) HeaderText="Dopasowanie" TextAlign="TextAlign.Center"></GridColumn>
+                <GridColumn Field=@nameof(TaskModel.MatchFactor) HeaderText="DOPASOWANIE" TextAlign="TextAlign.Center"></GridColumn>
             </GridColumns>
         </SfGrid>
     </div>
@@ -159,8 +156,13 @@
 
     @* okno dodawania nowego zadania*@
 
-    <SfDialog @bind-Visible="@VisibilityAdd" Header="Nowe zadanie" Width="800px" Height="1200px" MinHeight="900px" IsModal="true" ShowCloseIcon="true" CssClass="e-custom">
+    <SfDialog @bind-Visible="@VisibilityAdd"
+              Width="900px" Height="1200px"
+              MinHeight="900px" IsModal="true"
+              ShowCloseIcon="true"
+              CssClass="e-custom">
         <DialogTemplates>
+            <Header>Nowe zadanie</Header>
             <Content>
                 <EditForm Model="@TaskAdd">
                     <DataAnnotationsValidator />
@@ -176,7 +178,7 @@
                         <ValidationMessage For="@(() => TaskAdd.description)" />
                     </div>
                     <div class="form-group">
-                        <label for="Starttime" class="control-label">Czas rozpoczęcia</label>
+                        <label for="Starttime" class="control-label">Data rozpoczęcia</label>
                         <SfDateTimePicker TValue="DateTime" @bind-value="TaskAdd.start_time" CssClass="e-custom"></SfDateTimePicker>
                         <ValidationMessage For="@(() => TaskAdd.start_time)" />
                     </div>
@@ -266,7 +268,7 @@
                         </div>
                     </div>
 
-                    @* ALGORYTM *@
+                    @* ALGORYTM przy tworzeniu zadania *@
                     <div class="col-12 text-center">
                         <br />
                         <button type="submit" class="btn btn-primary" data-dismiss="modal" @onclick="SuggestEmployees">
@@ -277,21 +279,16 @@
                         </SfToast>
                     </div>
                     <br />
-                    <div style="width:750px; margin:auto;">
+                    <div style="width:850px; margin:auto;">
                         <SfGrid @ref="suggestedEmployeesGrid" DataSource="suggestedEmployees" TValue="EmployeeStats">
                             <GridEvents CommandClicked="AddEmployeeToAssigned" TValue="EmployeeStats"></GridEvents>
                             <GridColumns>
-                                <GridColumn Field=@nameof(EmployeeStats.First_name) HeaderText="Imię" TextAlign="TextAlign.Left" Width="90"></GridColumn>
-                                <GridColumn Field=@nameof(EmployeeStats.Last_name) HeaderText="Nazwisko" TextAlign="TextAlign.Left" Width="90"></GridColumn>
-                                <GridColumn Field=@nameof(EmployeeStats.EmpLabelMatches) HeaderText="EmpLabelMatch" TextAlign="TextAlign.Center" Width="80"></GridColumn>
-                                <GridColumn Field=@nameof(EmployeeStats.TaskLabelMatches) HeaderText="TaskLabelMatch" TextAlign="TextAlign.Center" Width="80"></GridColumn>
-                                <GridColumn Field=@nameof(EmployeeStats.TaskDensity) HeaderText="TaskDensity" TextAlign="TextAlign.Center" Width="80"></GridColumn>
-                                <GridColumn Field=@nameof(EmployeeStats.FinalFactor) HeaderText="FinalFactor" TextAlign="TextAlign.Center" Width="80"></GridColumn>
-                                <GridColumn HeaderText="Dodaj" Width="50">
-                                    <GridCommandColumns>
-                                        <GridCommandColumn ButtonOption="@(new CommandButtonOptions() { IconCss = "e-icons e-add", CssClass = "e-flat" })"></GridCommandColumn>
-                                    </GridCommandColumns>
-                                </GridColumn>
+                                <GridColumn Field=@nameof(EmployeeStats.First_name) HeaderText="Imię" TextAlign="TextAlign.Left" Width="80"></GridColumn>
+                                <GridColumn Field=@nameof(EmployeeStats.Last_name) HeaderText="Nazwisko" TextAlign="TextAlign.Left" Width="95"></GridColumn>
+                                <GridColumn Field=@nameof(EmployeeStats.EmpLabelMatches) HeaderText="Kompetencje" TextAlign="TextAlign.Center" Width="110"></GridColumn>
+                                <GridColumn Field=@nameof(EmployeeStats.TaskLabelMatches) HeaderText="Doświadczenie" TextAlign="TextAlign.Center" Width="120"></GridColumn>
+                                <GridColumn Field=@nameof(EmployeeStats.TaskDensity) HeaderText="Obciążenie" TextAlign="TextAlign.Center" Width="105"></GridColumn>
+                                <GridColumn Field=@nameof(EmployeeStats.FinalFactor) HeaderText="DOPASOWANIE" TextAlign="TextAlign.Center" Width="135"></GridColumn>
                             </GridColumns>
                         </SfGrid>
                     </div>
@@ -310,8 +307,14 @@
     </SfDialog>
 
     @* okno szczegolow zadania *@
-    <SfDialog @bind-Visible="@VisibilityDetails" AllowDragging="true" Width="1600px" Height="1600px" MinHeight="900px" IsModal="true" ShowCloseIcon="true">
+    <SfDialog @bind-Visible="@VisibilityDetails"
+              AllowDragging="true"
+              Width="1600px" Height="1600px"
+              MinHeight="900px"
+              IsModal="true"
+              ShowCloseIcon="true">
         <DialogTemplates>
+            <Header>Edycja zadania</Header>
             <Content>
                 <SfSplitter CssClass="out-splitter" Height="100%" Width="100%">
                     <SplitterPanes>
@@ -331,7 +334,7 @@
                                             <ValidationMessage For="@(() => TaskEdit.description)" />
                                         </div>
                                         <div class="form-group">
-                                            <label for="Starttime" class="control-label">Czas rozpoczęcia</label>
+                                            <label for="Starttime" class="control-label">Data rozpoczęcia</label>
                                             <SfDateTimePicker TValue="DateTime" @bind-value="TaskEdit.start_time"></SfDateTimePicker>
                                             <ValidationMessage For="@(() => TaskEdit.start_time)" />
                                         </div>
@@ -426,6 +429,31 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        @* ALGORYTM przy szczegółach zadania *@
+                                        <div class="col-12 text-center">
+                                            <br />
+                                            <button type="submit" class="btn btn-primary" data-dismiss="modal" @onclick="SuggestEmployeesOnDetails">
+                                                Pokaż dopasowanych pracowników
+                                            </button>
+                                        </div>
+                                        <br />
+                                        <div style="width: auto; margin:auto;">
+                                            <SfGrid @ref="suggestedEmployeesGrid2" DataSource="suggestedEmployees" TValue="EmployeeStats">
+                                                <GridEvents CommandClicked="AddEmployeeToAssigned" TValue="EmployeeStats"></GridEvents>
+                                                <GridColumns>
+                                                    <GridColumn Field=@nameof(EmployeeStats.First_name) HeaderText="Imię" TextAlign="TextAlign.Left" Width="80"></GridColumn>
+                                                    <GridColumn Field=@nameof(EmployeeStats.Last_name) HeaderText="Nazwisko" TextAlign="TextAlign.Left" Width="100"></GridColumn>
+                                                    <GridColumn Field=@nameof(EmployeeStats.FinalFactor) HeaderText="DOPASOWANIE" TextAlign="TextAlign.Center" Width="150"></GridColumn>
+                                                </GridColumns>
+                                            </SfGrid>
+                                        </div>
+                                        <br />
+                                        <div class="col-12 text-center">
+                                            <button type="submit" class="btn btn-primary" data-dismiss="modal" @onclick="SaveTask">Zapisz</button>
+                                            <SfToast @ref="SuccessTask" Title="Dodano nowe zadanie!" Timeout=3000 Content="@ToastContentAdd">
+                                                <ToastPosition X="Right"></ToastPosition>
+                                            </SfToast>
+                                        </div>
                                         <div class="col-12 text-center">
                                             <br />
                                             <Sfbutton class="btn btn-primary" hidden="@isAssignTaskButtonHidden" @onclick="AssignTask"><i class="fa fa-plus"></i>&nbsp;Przypisz zadanie do mnie</Sfbutton>
@@ -453,7 +481,7 @@
                                                 <label class="form-group">Pliki:</label>
                                                 <div>
                                                     <div class="text-align">@*Wartości testowanej funkcji: @a1 *@</div>
-                                                    <SfUploader AutoUpload="false">
+                                                    <SfUploader AutoUpload="false" Buttons="@browseBtn">
                                                         <UploaderEvents ValueChange="AddFileFunction"></UploaderEvents>
                                                     </SfUploader>
                                                 </div>
@@ -478,7 +506,7 @@
                                                         <GridPageSettings PageSize="5"></GridPageSettings>
                                                         <GridColumns>
                                                             <GridColumn Field=@nameof(FileModel.File_name) HeaderText="Nazwa pliku" TextAlign="TextAlign.Left" Width="500"></GridColumn>
-                                                            <GridColumn Field=@nameof(FileModel.Date) HeaderText="Data wstawienia" Format="d" Type="ColumnType.Date"
+                                                            <GridColumn Field=@nameof(FileModel.Date) HeaderText="Data dodania" Format="d" Type="ColumnType.Date"
                                                                         TextAlign="TextAlign.Left" Width="200"></GridColumn>
                                                         </GridColumns>
                                                     </SfGrid>
@@ -505,7 +533,7 @@
                                                         </GridEvents>
                                                         <GridColumns>
                                                             <GridColumn Field=@nameof(FileModel.File_name) HeaderText="Nazwa pliku" TextAlign="TextAlign.Left" Width="500"></GridColumn>
-                                                            <GridColumn Field=@nameof(FileModel.Date) HeaderText="Data wstawienia" Format="d" Type="ColumnType.Date"
+                                                            <GridColumn Field=@nameof(FileModel.Date) HeaderText="Data dodania" Format="d" Type="ColumnType.Date"
                                                                         TextAlign="TextAlign.Left" Width="200"></GridColumn>
                                                         </GridColumns>
                                                     </SfGrid>
@@ -514,21 +542,24 @@
 
                                             <SplitterPane Size="46%" Min="521.4px" Resizable="false">
                                                 <div>
+                                                    <label class="form-group">Komentarze</label>
                                                     <SfGrid DataSource="CommentsList"
                                                             @ref="CommentGrid"
-                                                            AllowPaging="true"
                                                             Locale="pl">
+                                                        <GridColumn></GridColumn>
                                                         <GridTemplates>
                                                             <RowTemplate>
                                                                 @{
                                                                     var comment = (context as CommentModel);
                                                                     <div class="answer">
-                                                                        <div class="authorname">
-                                                                            @EmployeeData.GetById(comment.Employee_id).First_name
-                                                                            @EmployeeData.GetById(comment.Employee_id).Last_name
-                                                                        </div>
-                                                                        <div class="detailsAnswer">
-                                                                            @comment.Date
+                                                                        <div>
+                                                                            <div class="authorname">
+                                                                                @EmployeeData.GetById(comment.Employee_id).First_name
+                                                                                @EmployeeData.GetById(comment.Employee_id).Last_name
+                                                                            </div>
+                                                                            <div class="detailsAnswer">
+                                                                                @comment.Date
+                                                                            </div>
                                                                         </div>
                                                                         <div class="posting">
                                                                             @((MarkupString)comment.Description)
@@ -540,12 +571,12 @@
                                                                 }
                                                             </RowTemplate>
                                                         </GridTemplates>
-                                                        <GridPageSettings PageSize="1"></GridPageSettings>
+                                                        <GridPageSettings PageSize="5"></GridPageSettings>
                                                         <GridSortSettings>
                                                         </GridSortSettings>
                                                     </SfGrid>
                                                     <EditForm Model="Comment" OnValidSubmit="AddNewComment">
-                                                        <SfRichTextEditor @ref="rteObj" @bind-Value="Comment.Description">
+                                                        <SfRichTextEditor @ref="rteObj" @bind-Value="Comment.Description" Locale="pl">
                                                             <RichTextEditorToolbarSettings Type="@Tooltype" Items="@Tools" EnableFloating="false"></RichTextEditorToolbarSettings>
                                                         </SfRichTextEditor>
                                                         <div class="col-12 text-center">
@@ -569,8 +600,9 @@
 </div>
 
 @code {
-        SfToast NoSelectedTask;
-        SfRichTextEditor rteObj;
+    private UploaderButtonsProps browseBtn = new UploaderButtonsProps() { Browse = "Wybierz plik" };
+    SfToast NoSelectedTask;
+    SfRichTextEditor rteObj;
     private SfGrid<TaskModel> DefaultGrid;
     private SfGrid<CommentModel> CommentGrid;
 
@@ -592,14 +624,15 @@
 
     // Zmienne z AddNewTask
     SfGrid<EmployeeStats> suggestedEmployeesGrid;
+    SfGrid<EmployeeStats> suggestedEmployeesGrid2;
     SfToast SuccessTask;
     SfToast WrongInput;
     private string ToastContentAdd { get; set; } = "Zadanie zostało pomyślnie dodane.";
     private string ToastWrongInput { get; set; }
-    private TaskValidation TaskAdd;
+    private TaskAddValidation TaskAdd;
     private List<LabelModel> labelsInDb;
     private List<EmployeeModel> employees;
-    private List<EmployeeStats> suggestedEmployees;
+    private List<EmployeeStats> suggestedEmployees = new List<EmployeeStats>();
     private List<ProjectModel> projectsInDb;
     private string[] selectedLabels { get; set; } = new string[] { };
     private int[] selectedEmployeesId = new int[] { };
@@ -620,7 +653,7 @@
     private string ToastContentEdit { get; set; } = "Zadanie zaktualizowane pomyslnie!";
     private string FailedContent { get; set; } = "Brak zmian w zadaniu!";
     private string ToastFileDownload { get; set; } = "sprawdź katalog Pobrane/";
-    private TaskValidation TaskEdit;
+    private TaskEditValidation TaskEdit;
     DateTime defaultDate = new DateTime(0001, 1, 1, 0, 0, 0);
     private Boolean VisibilityEdit { get; set; }
 
@@ -748,8 +781,8 @@
 
         DisplayProjects();
 
-        TaskAdd = new TaskValidation();
-        TaskEdit = new TaskValidation();
+        TaskAdd = new TaskAddValidation();
+        TaskEdit = new TaskEditValidation();
         labelsInDb = LabelData.GetAllByCompanyId(Login.UserLoggedIn.Company_id);
         employees = EmployeeData.GetAllByCompanyId(Login.UserLoggedIn.Company_id);
         projectsInDb = ProjectData.GetAllByCompanyId(Login.UserLoggedIn.Company_id);
@@ -840,11 +873,15 @@
 
     private void AddTask(MouseEventArgs e)
     {
+        suggestedEmployees = new List<EmployeeStats>();
+        suggestedEmployeesGrid.Refresh();
         VisibilityAdd = true;
     }
 
     private void EditTask()
     {
+        suggestedEmployees = new List<EmployeeStats>();
+        suggestedEmployeesGrid2.Refresh();
         DisplayTaskDetails(SelectedTask);
     }
 
@@ -895,6 +932,7 @@
     private void DisplayTaskDetails(TaskModel args)
     {
         SelectedTask = args;
+
 
         if (SelectedTask != null)
         {
@@ -970,17 +1008,6 @@
         uriHelper.NavigateTo(uriHelper.Uri, forceLoad: true);
     }
 
-    // TODO - testowe zachowanie - do poprawy LUB usuniecia i rozwijania szczegółów w inny sposób
-    private void ExpandTaskDetails(RecordClickEventArgs<TaskModel> args)
-    {
-        SelectedTask = args.RowData;
-
-        if (SelectedTask != null)
-        {
-            // NavigationManager.NavigateTo("/task-details");
-        }
-    }
-
     /// <summary>
     /// Powraca do listy zadan po zamknieciu okna
     /// </summary>
@@ -1021,7 +1048,7 @@
                 employeePool = EmployeeData.GetAllByProjectId(ProjectData.GetIdByName(selectedProject));
             }
 
-            MergeSelectedLabels(TaskAdd, selectedLabels);
+            MergeSelectedLabelsAdd(TaskAdd, selectedLabels);
             if (isMergedLabelsMatchToPattern)
             {
                 foreach (var emp in employeePool)
@@ -1074,12 +1101,106 @@
 
                 employeeStats = employeeStats.OrderByDescending(x => x.FinalFactor).ToList();
 
-                suggestedEmployees = new List<EmployeeStats>();
+                suggestedEmployees.Clear();
 
                 foreach (var emp in employeeStats)
                     suggestedEmployees.Add(emp);
 
                 suggestedEmployeesGrid.Refresh();
+            }
+            else
+            {
+                ToastWrongInput = "Wprowadzono niepoprawne etykiety.";
+                WrongInput.Show();
+            }
+        }
+        else
+        {
+            ToastWrongInput = "Wprowadzono niepoprawny zakres dat.";
+            WrongInput.Show();
+        }
+    }
+
+    /// <summary>
+    /// Uruchamia algorytm automatycznego proponowania pracowników w szczegółach zadania.
+    /// </summary>
+    private void SuggestEmployeesOnDetails()
+    {
+        if (TaskEdit.deadline >= TaskEdit.start_time)
+        {
+            List<EmployeeStats> employeeStats = new List<EmployeeStats>();
+            List<EmployeeModel> employeePool;
+            List<EmployeeLabelModel> empLabels;
+            List<TaskModel> empTasks;
+
+            if (selectedProject == null)
+            {
+                employeePool = employees;
+            }
+            else
+            {
+                employeePool = EmployeeData.GetAllByProjectId(ProjectData.GetIdByName(selectedProject));
+            }
+
+            MergeSelectedLabelsEdit(TaskEdit, selectedLabels);
+            if (isMergedLabelsMatchToPattern)
+            {
+                foreach (var emp in employeePool)
+                {
+                    // zebranie nazw etykiet pracownika
+                    List<string> empLabelNames = new List<string>();
+                    empLabels = EmployeeLabelData.GetAllLabelsByEmployeeId(emp.Employee_id);
+                    foreach (var label in empLabels)
+                        empLabelNames.Add(LabelData.GetNameById(label.Label_id));
+
+                    List<string> taskLabelNames = new List<string>();
+                    int taskCount = 0;
+                    empTasks = TaskData.GetAllByEmployeeId(emp.Employee_id);
+                    foreach (var task in empTasks)
+                    {
+                        // zebranie nazw etykiet archiwalnych zadań pracownika
+                        if (task.Status == "Zakończone")
+                        {
+                            List<TaskLabelModel> labels = TaskLabelData.GetAllLabelsByTaskId(task.Task_id);
+                            foreach (var label in labels)
+                            {
+                                string name = LabelData.GetNameById(label.Task_id);
+                                if (!taskLabelNames.Contains(name))
+                                    taskLabelNames.Add(name);
+                            }
+                        }
+                        // zsumowanie ilości zadań pracownika w okresie miedzy start_time a deadline
+                        // TODO - uwzglednienie dlugosci zadania jako wagi
+                        else
+                        {
+                            if (task.Start_time <= TaskEdit.deadline && task.Deadline >= TaskEdit.start_time)
+                                taskCount++;
+                        }
+                    }
+
+                    employeeStats.Add(new EmployeeStats
+                    {
+                        Employee_id = emp.Employee_id,
+                        First_name = emp.First_name,
+                        Last_name = emp.Last_name,
+
+                        TaskDensity = taskCount,
+                        EmpLabelMatches = selectedLabels.Intersect(empLabelNames).Count(),
+                        TaskLabelMatches = selectedLabels.Intersect(taskLabelNames).Count(),
+                    });
+                }
+
+                foreach (var emp in employeeStats)
+                    emp.CalculateFinalFactor(0.5, 1, 1.5);
+
+                employeeStats = employeeStats.OrderByDescending(x => x.FinalFactor).ToList();
+
+                suggestedEmployees.Clear();
+
+                foreach (var emp in employeeStats)
+                    suggestedEmployees.Add(emp);
+
+                suggestedEmployeesGrid2.Refresh();
             }
             else
             {
@@ -1181,7 +1302,7 @@
                 TaskAdd.description, TaskAdd.start_time, TaskAdd.deadline, TaskAdd.status, TaskAdd.auto_assigned, TaskAdd.project_id);
             }
 
-            MergeSelectedLabels(TaskAdd, selectedLabels);
+            MergeSelectedLabelsAdd(TaskAdd, selectedLabels);
 
             if (isMergedLabelsMatchToPattern)
             {
@@ -1197,9 +1318,9 @@
     }
 
     /// <summary>
-    /// Walidacja dla etykiet. Scala wybrane etykiety w jednego stringa i porównuje czy całość pasuje do wzorca.
+    /// Walidacja dla etykiet przy dodawaniu zadania. Scala wybrane etykiety w jednego stringa i porównuje czy całość pasuje do wzorca.
     /// </summary>
-    private void MergeSelectedLabels(BackendLibrary.Validation.TaskValidation Task, string[] selectedLabels)
+    private void MergeSelectedLabelsAdd(BackendLibrary.Validation.TaskAddValidation Task, string[] selectedLabels)
     {
         mergedSelectedLabels = "";
         if (selectedLabels != null)
@@ -1212,6 +1333,23 @@
         Task.SelectedLabel = mergedSelectedLabels;
         isMergedLabelsMatchToPattern = Regex.IsMatch(mergedSelectedLabels, pattern);
 
+    }
+
+    /// <summary>
+    /// Walidacja dla etykiet przy edycji zadania. Scala wybrane etykiety w jednego stringa i porównuje czy całość pasuje do wzorca.
+    /// </summary>
+    private void MergeSelectedLabelsEdit(BackendLibrary.Validation.TaskEditValidation Task, string[] selectedLabels)
+    {
+        mergedSelectedLabels = "";
+        if (selectedLabels != null)
+        {
+            for (int i = 0; i < selectedLabels.Length; i++)
+            {
+                mergedSelectedLabels += selectedLabels[i];
+            }
+        }
+        Task.SelectedLabel = mergedSelectedLabels;
+        isMergedLabelsMatchToPattern = Regex.IsMatch(mergedSelectedLabels, pattern);
     }
 
     /// <summary>
@@ -1333,6 +1471,8 @@
             CommentsList.Add(CommentAdd);
         }
         CommentGrid.Refresh();
+
+        this.rteObj.Value = null;
     }
 
     public void OnCommandClicked(CommandClickEventArgs<CommentModel> args)
@@ -1517,7 +1657,7 @@
                 TasksList.SelectedTask.Project_id);
             }
 
-            MergeSelectedLabels(TaskEdit, nameoflabels);
+            MergeSelectedLabelsEdit(TaskEdit, nameoflabels);
 
             if (isMergedLabelsMatchToPattern)
             {
@@ -1611,6 +1751,8 @@
         TaskEdit.deadline = defaultDate;
         TaskEdit.status = null;
         TaskEdit.auto_assigned = 0;
+        TaskEdit = new TaskEditValidation();
+        TaskAdd = new TaskAddValidation();
     }
 
     private void AddFileFunction(UploadChangeEventArgs args)
@@ -1685,7 +1827,7 @@
 
             foreach (var task in labels)
             {
-                if ( task.Task_id != selectedTaskId)
+                if (task.Task_id != selectedTaskId)
                     suggestedFiles.AddRange(FileData.GetAllByTaskId(task.Task_id));
             }
         }

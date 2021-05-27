@@ -106,12 +106,6 @@
                                         TextAlign="TextAlign.Left" Width="200"></GridColumn>
                             <GridColumn Field=@nameof(TaskModel.Deadline) HeaderText="Data zakończenia" Format="d" Type="ColumnType.Date"
                                         TextAlign="TextAlign.Left"></GridColumn>
-                            <GridColumn HeaderText="Zarządzaj" Width="150">
-                                <GridCommandColumns>
-                                    <GridCommandColumn Type="CommandButtonType.Edit" ButtonOption="@(new CommandButtonOptions() { IconCss = "e-icons e-edit", CssClass = "e-flat" })"></GridCommandColumn>
-                                    <GridCommandColumn Type="CommandButtonType.Delete" ButtonOption="@(new CommandButtonOptions() { IconCss = "e-icons e-delete", CssClass = "e-flat" })"></GridCommandColumn>
-                                </GridCommandColumns>
-                            </GridColumn>
                         </GridColumns>
                     </SfGrid>
 
@@ -126,12 +120,6 @@
                             <GridColumn Field=@nameof(EmpProjectPair.First_name) HeaderText="Imię" TextAlign="TextAlign.Left" Width="250"></GridColumn>
                             <GridColumn Field=@nameof(EmpProjectPair.Last_name) HeaderText="Nazwisko" TextAlign="TextAlign.Left" Width="250"></GridColumn>
                             <GridColumn Field=@nameof(EmpProjectPair.Email) HeaderText="E-mail" TextAlign="TextAlign.Left"></GridColumn>
-                            <GridColumn HeaderText="Zarządzaj" Width="150">
-                                <GridCommandColumns>
-                                    <GridCommandColumn Type="CommandButtonType.Edit" ButtonOption="@(new CommandButtonOptions() { IconCss = "e-icons e-edit", CssClass = "e-flat" })"></GridCommandColumn>
-                                    <GridCommandColumn Type="CommandButtonType.Delete" ButtonOption="@(new CommandButtonOptions() { IconCss = "e-icons e-delete", CssClass = "e-flat" })"></GridCommandColumn>
-                                </GridCommandColumns>
-                            </GridColumn>
                         </GridColumns>
                     </SfGrid>
                     <br />
@@ -143,12 +131,6 @@
         <GridColumns>
             <GridColumn Field=@nameof(ProjectModel.Project_id) IsPrimaryKey="true" HeaderText="ID" TextAlign="TextAlign.Left" Width="50"></GridColumn>
             <GridColumn Field=@nameof(ProjectModel.Name) IsPrimaryKey="true" HeaderText="Nazwa Projektu" TextAlign="TextAlign.Left" Width="300"></GridColumn>
-            <GridColumn HeaderText="Zarządzaj" Width="150">
-                <GridCommandColumns>
-                    <GridCommandColumn Type="CommandButtonType.Edit" ButtonOption="@(new CommandButtonOptions() { IconCss = "e-icons e-edit", CssClass = "e-flat" })"></GridCommandColumn>
-                    <GridCommandColumn Type="CommandButtonType.Delete" ButtonOption="@(new CommandButtonOptions() { IconCss = "e-icons e-delete", CssClass = "e-flat" })"></GridCommandColumn>
-                </GridCommandColumns>
-            </GridColumn>
         </GridColumns>
     </SfGrid>
 
@@ -171,6 +153,9 @@
     private Boolean visibility, isChecked;
     string toastContent;
 
+    /// <summary>
+    /// Metoda wywoływana, gdy komponent jest gotowy do uruchomienia.
+    /// </summary>
     protected override void OnInitialized()
     {
         if (Login.UserLoggedIn.If_manager == -1)
@@ -204,23 +189,36 @@
         }
     }
 
+    /// <summary>
+    /// Zwraca listę pracowników dla projektu o danym id.
+    /// </summary>
+    /// <param name="project_id"></param>
+    /// <returns></returns>
     private Query GetEmployeesQuery(int project_id)
     {
         return new Query().Where("Project_id", "equal", project_id);
     }
 
+    /// <summary>
+    /// Zwraca listę zadań dla projektu o danym id.
+    /// </summary>
+    /// <param name="project_id"></param>
+    /// <returns></returns>
     private Query GetTasksQuery(int project_id)
     {
         return new Query().Where("Project_id", "equal", project_id);
     }
 
+    /// <summary>
+    /// Wyświetla okno dodawania zadania.
+    /// </summary>
     private void AddTask()
     {
         visibility = true;
     }
 
     /// <summary>
-    /// Próba stworzenia nowego projektu.
+    /// Zapisuje nowo utworzony projekt.
     /// </summary>
     private void SaveProject()
     {
@@ -251,12 +249,19 @@
         }
     }
 
+    /// <summary>
+    /// Zamyka okno dodawania nowego projektu po kliknięciu poza oknem??????.
+    /// </summary>
+    /// <param name="args"></param>
     private void overlayClick(MouseEventArgs args)
     {
         visibility = false;
         isChecked = false;
     }
 
+    /// <summary>
+    /// Zamyka okno dodawania nowego projektu po kliknięciu przycisku zamknij.
+    /// </summary>
     private void closeDialog()
     {
         visibility = false;
