@@ -441,19 +441,13 @@
                                             <SfGrid @ref="suggestedEmployeesGrid2" DataSource="suggestedEmployees" TValue="EmployeeStats">
                                                 <GridEvents CommandClicked="AddEmployeeToAssigned" TValue="EmployeeStats"></GridEvents>
                                                 <GridColumns>
-                                                    <GridColumn Field=@nameof(EmployeeStats.First_name) HeaderText="Imię" TextAlign="TextAlign.Left" Width="80"></GridColumn>
-                                                    <GridColumn Field=@nameof(EmployeeStats.Last_name) HeaderText="Nazwisko" TextAlign="TextAlign.Left" Width="100"></GridColumn>
-                                                    <GridColumn Field=@nameof(EmployeeStats.FinalFactor) HeaderText="DOPASOWANIE" TextAlign="TextAlign.Center" Width="150"></GridColumn>
+                                                    <GridColumn Field=@nameof(EmployeeStats.First_name) HeaderText="Imię" TextAlign="TextAlign.Left" Width="85"></GridColumn>
+                                                    <GridColumn Field=@nameof(EmployeeStats.Last_name) HeaderText="Nazwisko" TextAlign="TextAlign.Left" Width="95"></GridColumn>
+                                                    <GridColumn Field=@nameof(EmployeeStats.FinalFactor) HeaderText="DOPASOWANIE" TextAlign="TextAlign.Center" Width="140"></GridColumn>
                                                 </GridColumns>
                                             </SfGrid>
                                         </div>
                                         <br />
-                                        <div class="col-12 text-center">
-                                            <button type="submit" class="btn btn-primary" data-dismiss="modal" @onclick="SaveTask">Zapisz</button>
-                                            <SfToast @ref="SuccessTask" Title="Dodano nowe zadanie!" Timeout=3000 Content="@ToastContentAdd">
-                                                <ToastPosition X="Right"></ToastPosition>
-                                            </SfToast>
-                                        </div>
                                         <div class="col-12 text-center">
                                             <br />
                                             <Sfbutton class="btn btn-primary" hidden="@isAssignTaskButtonHidden" @onclick="AssignTask"><i class="fa fa-plus"></i>&nbsp;Przypisz zadanie do mnie</Sfbutton>
