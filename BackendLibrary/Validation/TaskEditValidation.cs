@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace BackendLibrary.Validation
 {
-    public class TaskValidation
+    public class TaskEditValidation
     {
         [Required(ErrorMessage = "To pole jest obowiązkowe!")]
         [StringLength(30,
@@ -15,10 +15,10 @@ namespace BackendLibrary.Validation
         ErrorMessage = "To pole nie może mieć więcej niż 500 znaków.")]
         public string description { get; set; }
 
-        [DefaultDateAttribute(ErrorMessage = "Wprowadź poprawną datę rozpoczęcia.")]
+        [DefaultDate(ErrorMessage = "Wprowadź poprawną datę rozpoczęcia.")]
         public DateTime start_time { get; set; } = DateTime.Now;
 
-        [DateDeadlineAttribute(ErrorMessage = "Deadline nie może być wcześniejszy niż dzisiaj.")]
+        [DateDeadline(ErrorMessage = "Deadline nie może być wcześniejszy niż dzisiaj.")]
         public DateTime deadline { get; set; } = DateTime.Now;
 
         [Required(ErrorMessage = "To pole jest obowiązkowe!")]
@@ -31,23 +31,5 @@ namespace BackendLibrary.Validation
 
         [RegularExpression(@"^[a-zA-ZĄĆĘŁŃÓŚŹŻąćęłńóśźż]*$", ErrorMessage = "Dodając etykiete możesz używać tylko liter i cyfr!")]
         public string SelectedLabel { get; set; }
-    }
-
-    [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field | AttributeTargets.Parameter, AllowMultiple = false)]
-    public class DateDeadlineAttribute : ValidationAttribute
-    {
-        public override bool IsValid(object value)
-        {
-            return (DateTime)value >= DateTime.Today;
-        }
-    }
-
-    [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field | AttributeTargets.Parameter, AllowMultiple = false)]
-    public class DefaultDateAttribute : ValidationAttribute
-    {
-        public override bool IsValid(object value)
-        {
-            return (DateTime)value >= DateTime.Today;
-        }
     }
 }
