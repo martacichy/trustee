@@ -182,7 +182,7 @@
                                     </div>
                                     <div class="col-12 text-center">
                                         <br />
-                                        <Sfbutton class="btn btn-primary" hidden="@isAssignTaskButtonHidden" @onclick="AssignTask"><i class="fa fa-plus"></i>&nbsp;Przypisz zadanie do mnie</Sfbutton>
+                                        <Sfbutton class="btn btn-primary" hidden="@isAssignTaskButtonHidden" @onclick="AssignTaskToEmployee"><i class="fa fa-plus"></i>&nbsp;Przypisz zadanie do mnie</Sfbutton>
                                     </div>
                                 </EditForm>
 
@@ -320,7 +320,7 @@
             </SfSplitter>
         </Content>
     </DialogTemplates>
-    <DialogEvents Closed="@DialogEditClosed" OnOverlayClick="@overlayClick"></DialogEvents>
+    <DialogEvents Closed="@DialogEditClosed" OnOverlayClick="@OverlayClick"></DialogEvents>
     <DialogAnimationSettings Effect="DialogEffect.Fade"></DialogAnimationSettings>
 </SfDialog>
 
@@ -442,6 +442,10 @@
         new ToolbarItemModel() { Command = ToolbarCommand.FullScreen },
     };
 
+    /// <summary>
+    /// Metoda wywoływana, gdy komponent jest gotowy do uruchomienia. Pobiera dane potrzebne do wyświetlenia. 
+    /// Ustawia widoczność przycisków i możliwość edycji zadań w zależności od roli pracownika.
+    /// </summary>
     protected override void OnInitialized()
     {
         TaskList = TaskData.GetAllByEmployeeId(Login.UserLoggedIn.Employee_id);
@@ -470,13 +474,17 @@
         fillEmployeeTaskPairs();
         RowDeselectHandler();
     }
+
     private void OnDialogOpen(DialogOpenEventArgs<TaskModel> args)
     {
         args.Cancel = true;
     }
 
-    //TODO - obsługa DragStart i DragStop (<KanbanEvents />)
 
+    /// <summary>
+    /// Pobiera dane o zadaniu przy przeciągnięciu karty, zmieniając przy tym status zadania.
+
+    /// </summary>
     private void DragStop(Syncfusion.Blazor.Kanban.DragEventArgs<TaskModel> args)
     {
         SelectedTask = args.Data[0];
@@ -493,7 +501,7 @@
 
 
     /// <summary> Zamkniecie okna przy kliknieciu poza nie. </summary>
-    private void overlayClick(MouseEventArgs args)
+    private void OverlayClick(MouseEventArgs args)
     {
         VisibilityEdit = false;
         VisibilityDetails = false;
@@ -517,7 +525,10 @@
             element.Task_id));
         }
     }
-
+    /// <summary>
+    /// Zwraca listę pracowników dla zadania o danym ID.
+    /// </summary>
+    /// <param name="task_id"></param>
     private Query GetEmployeesQuery(int task_id)
     {
         return new Query().Where("Task_id", "equal", task_id);
@@ -540,22 +551,30 @@
         }
 
     }
-
+    /// <summary>
+    /// Pobiera i przypisuje wartości zaznaczonego zadania.
+    /// </summary>
     public void RowSelectHandler(RowSelectEventArgs<TaskModel> args)
     {
         SelectedTask = args.Data;
     }
-
+    /// <summary>
+    /// Przypisuje null do zadania, gdy wiersz zostaje odznaczony.
+    /// </summary>
     public void RowDeselectHandler()
     {
         SelectedTask = null;
     }
-
+    /// <summary>
+    /// Pobiera i przypisuje wartości zaznaczonego pliku.
+    /// </summary>
     public void RowSelectHandlerFile(RowSelectEventArgs<FileModel> args)
     {
         SelectedFile = args.Data;
     }
-
+    /// <summary>
+    /// Przypisuje null do projektu, gdy wiersz zostaje odznaczony.
+    /// </summary>
     public void RowDeselectHandlerFile()
     {
         SelectedFile = null;
@@ -568,29 +587,9 @@
             this.DefaultGrid.Search(searchStr);
         }
     }
-
-    private void AddTask(MouseEventArgs e)
-    {
-        VisibilityAdd = true;
-    }
-
-    private void EditTask()
-    {
-        DisplayTaskDetails(SelectedTask);
-    }
-
-    private void DeleteTask()
-    {
-        if (SelectedTask != null)
-        {
-            BackendLibrary.DataAccess.TaskData.DeleteTask(SelectedTask.Task_id);
-            uriHelper.NavigateTo(uriHelper.Uri, forceLoad: true);
-        }
-        else
-        {
-            NoSelectedTask.Show();
-        }
-    }
+    /// <summary>
+    /// Ustawia przycisk przypisywania zadania jako widoczny oraz wyświetla szczegóły zadania.
+    /// </summary>
     private void SetAssingTaskButtonVisibleAndDisplayTaskDetails(CardClickEventArgs<TaskModel> args)
     {
         EnabledStatus = false;
@@ -598,7 +597,9 @@
         isAssignTaskButtonHidden = false;
         DisplayTaskDetails(args.Data);
     }
-
+    /// <summary>
+    /// Ustawia przycisk przypisywania zadania jako niewidoczny oraz wyświetla szczegóły zadania.
+    /// </summary>
     private void SetAssingTaskButtonInisibleAndDisplayTaskDetails(CardClickEventArgs<TaskModel> args)
     {
         EnabledStatus = true;
@@ -606,7 +607,10 @@
         isAssignTaskButtonHidden = true;
         DisplayTaskDetails(args.Data);
     }
-
+    /// <summary>
+    /// Pobiera i wyświetla dane dotyczące danego zadania.
+    /// </summary>
+    /// <param name="SelectedTask"></param>
     private void DisplayTaskDetails(TaskModel args)
     {
         SelectedTask = args;
@@ -679,16 +683,17 @@
         }
     }
 
-
-    private void AssignTask()
+    /// <summary>
+    /// Przypisuje zadanie do pracownika i zapisuje je do bazy.
+    /// </summary>
+    private void AssignTaskToEmployee()
     {
-
         BackendLibrary.DataAccess.EmployeeTaskData.AddEmployeeTask(new EmployeeTaskModel(SelectedTask.Task_id, loggedEmployee.Employee_id));
         uriHelper.NavigateTo(uriHelper.Uri, forceLoad: true);
     }
 
     /// <summary>
-    /// Powraca do listy zadan po zamknieciu okna
+    /// Powraca do listy zadań po zamknieciu okna zadania.
     /// </summary>
     private void DialogClosed(CloseEventArgs args)
     {
@@ -698,6 +703,9 @@
         EnableProjectDropDown = false;
     }
 
+    /// <summary>
+    /// Powraca do listy zadań po zamknieciu okna edycji zadania.
+    /// </summary>
     private void DialogEditClosed(CloseEventArgs args)
     {
         VisibilityEdit = false;
@@ -894,33 +902,11 @@
         }
     }
 
-    /// <summary> Dodanie zaproponowanego pracownika do listy osób przypisanych do zadania
+    /// <summary> Dodanie zaproponowanego pracownika do listy osób przypisanych do zadania.
     /// <param name="args"></param>
     public void AddEmployeeToAssigned(CommandClickEventArgs<EmployeeStats> args)
     {
 
-    }
-
-    public void OnCommandClicked(CommandClickEventArgs<TaskModel> args)
-    {
-
-        if (args.CommandColumn.Type == CommandButtonType.Edit)
-        {
-            SetAssingTaskButtonInisibleAndDisplayTaskDetailsOnOneClick(args);
-        }
-        else if (args.CommandColumn.Type == CommandButtonType.Delete)
-        {
-            SelectedTask = args.RowData;
-            BackendLibrary.DataAccess.TaskData.DeleteTask(SelectedTask.Task_id);
-        }
-    }
-
-    private void SetAssingTaskButtonInisibleAndDisplayTaskDetailsOnOneClick(CommandClickEventArgs<TaskModel> args)
-    {
-        EnabledStatus = true;
-        isSaveButtonHidden = false;
-        isAssignTaskButtonHidden = true;
-        DisplayTaskDetails(args.RowData);
     }
 
     /// <summary>
@@ -1063,7 +1049,6 @@
     /// <summary>
     /// Zapisuje do bazy etykiety, których jeszcze nie ma w bazie.
     /// </summary>
-    //TODO - Trzeba jeszcze pobrac opis(czy w ogóle będzie opis etykiet? No chyba nie w prototypie)
     private void SaveLabels(string[] labels)
     {
         if (labels != null)
@@ -1095,7 +1080,7 @@
     }
 
     /// <summary>
-    /// Przypisuje etykiety do dodanego zadania
+    /// Przypisuje etykiety do dodanego zadania.
     /// </summary>
     private void SaveTaskLabel()
     {
@@ -1112,7 +1097,7 @@
     }
 
     /// <summary>
-    /// Przypisuje pracowników do dodanego zadania
+    /// Przypisuje pracowników do dodanego zadania.
     /// </summary>
     private void AddEmployeeToTask()
     {
@@ -1124,7 +1109,7 @@
     }
 
     /// <summary>
-    /// Zmienia pracowników danego zadania na nowych
+    /// Zmienia pracowników danego zadania na nowych.
     /// </summary>
     private void EditEmployeeToTask()
     {
@@ -1144,7 +1129,7 @@
     }
 
     /// <summary>
-    /// Zmienia etykiety danego zadania na nowe
+    /// Zmienia etykiety danego zadania na nowe.
     /// </summary>
     private void EditTaskLabel()
     {
@@ -1167,7 +1152,7 @@
     }
 
     /// <summary>
-    /// Dodaje nowy komentarz dotyczący wybranego zadania do bazy danych
+    /// Dodaje nowy komentarz dotyczący wybranego zadania do bazy danych.
     /// </summary>
     private void AddNewComment()
     {
@@ -1189,7 +1174,9 @@
             DeleteComment();
         }
     }
-
+    /// <summary>
+    /// Usuwa komentarz dotyczący wybranego zadania.
+    /// </summary>
     private void DeleteComment()
     {
 
@@ -1201,7 +1188,7 @@
     }
 
     /// <summary>
-    /// Sprawdza czy w edycji zmieniono pracownika
+    /// Sprawdza czy w edycji zmieniono pracownika.
     /// </summary>
     private bool IsEmployeesChanged(int employee)
     {
@@ -1214,7 +1201,7 @@
     }
 
     /// <summary>
-    /// Sprawdza czy w edycji zmieniono etykiete
+    /// Sprawdza czy w edycji zmieniono etykietę.
     /// </summary>
     private bool IsLabelsChanged(string label)
     {
@@ -1388,7 +1375,9 @@
             VisibilityEdit = false;
         }
     }
-
+    /// <summary>
+    /// Wyświetla zadania dla pracownika lub dla całego zespołu w zależności od wyboru użytkownika.
+    /// </summary>
     private void DisplayTeamTask()
     {
         SelectedTask = null;
@@ -1397,7 +1386,9 @@
         TaskList = TaskData.GetAllByEmployeeId(Login.UserLoggedIn.Employee_id);
 
     }
-
+    /// <summary>
+    /// Wyświetla wszystkie projekty przypisane do wybranego zadania.
+    /// </summary>
     private void DisplayProjects()
     {
         if (TaskList != null)
@@ -1416,7 +1407,9 @@
 
         }
     }
-
+    /// <summary>
+    /// Czyści wszystkie pola przy edycji/dodawaniu zadania.
+    /// </summary>
     private void ClearTask()
     {
         TaskEdit.name = null;
@@ -1426,7 +1419,9 @@
         TaskEdit.status = null;
         TaskEdit.auto_assigned = 0;
     }
-
+    /// <summary>
+    /// Dodaje plik do danego zadania.
+    /// </summary>
     private void AddFileFunction(UploadChangeEventArgs args)
     {
         foreach (var file in args.Files)
@@ -1443,7 +1438,9 @@
             FileList.Add(newfile);
         }
     }
-
+    /// <summary>
+    /// Pobiera plik z zaznaczonego zadania.
+    /// </summary>
     private void DownloadSelectedFile(RecordDoubleClickEventArgs<FileModel> args)
     {
         SelectedFile = new FileModel();
