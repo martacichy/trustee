@@ -12,7 +12,7 @@ namespace BackendLibrary.DataAccess
     /// </summary>
     public class TaskLabelData : SqlConnector
     {
-        /// <summary> Zwraca listę wszystkich etykiet danego zadania. </summary>
+        /// <summary> Zwraca listę wszystkich etykiet zadania o danym ID. </summary>
         public static List<TaskLabelModel> GetAllLabelsByTaskId(int taskId)
         {
             using (IDbConnection connection = new MySqlConnection(connectionString))

@@ -3,6 +3,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace BackendLibrary.Validation
 {
+    /// <summary>
+    /// Klasa odpowiadająca za walidację danych wprowadzanych podczas dodawania zadania.
+    /// </summary>
     public class TaskAddValidation
     {
         [Required(ErrorMessage = "To pole jest obowiązkowe!")]

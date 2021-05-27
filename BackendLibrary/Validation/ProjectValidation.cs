@@ -3,7 +3,7 @@
 namespace BackendLibrary.Validation
 {
     /// <summary>
-    /// Klasa odpowiadająca za walidację danych projektu, czyli ich poprawne wpisanie.
+    /// Klasa odpowiadająca za walidację danych wprowadzanych do projektu.
     /// </summary>
     public class ProjectValidation
     {

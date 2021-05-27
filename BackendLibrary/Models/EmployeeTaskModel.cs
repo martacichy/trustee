@@ -1,5 +1,8 @@
 ﻿namespace BackendLibrary.Models
 {
+    /// <summary>
+    /// Klasa reprezentująca parę pracownik i zadanie.
+    /// </summary>
     public class EmployeeTaskModel
     {
         public int Task_id { get; set; }

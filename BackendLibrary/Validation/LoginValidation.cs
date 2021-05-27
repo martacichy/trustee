@@ -2,6 +2,9 @@
 
 namespace BackendLibrary.Validation
 {
+    /// <summary>
+    /// Klasa odpowiadająca za walidację danych wporwadzanych przy logowaniu.
+    /// </summary>
     public class LoginValidation
     {
         [Required(ErrorMessage = "Wpisz login!")]

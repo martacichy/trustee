@@ -13,7 +13,7 @@ namespace BackendLibrary.DataAccess
     /// </summary>
     public class ProjectData : SqlConnector
     {
-        /// <summary> Zwraca listę wszystkich typów etykiet. </summary>
+        /// <summary> Zwraca listę wszystkich projektów. </summary>
         public static List<ProjectModel> GetAll()
         {
             using (IDbConnection connection = new MySqlConnection(connectionString))
@@ -25,7 +25,7 @@ namespace BackendLibrary.DataAccess
             }
         }
 
-        /// <summary> Zwraca model o przekazanym w argumencie id. </summary>
+        /// <summary> Zwraca projekt o danym ID. </summary>
         public static ProjectModel GetById(int project_id)
         {
             using (IDbConnection connection = new MySqlConnection(connectionString))
@@ -36,7 +36,7 @@ namespace BackendLibrary.DataAccess
                 return data;
             }
         }
-
+        /// <summary> Zwraca projekt o danym ID zadania. </summary>
         public static ProjectModel GetByTaskId(int task_id)
         {
             using (IDbConnection connection = new MySqlConnection(connectionString))
@@ -47,7 +47,7 @@ namespace BackendLibrary.DataAccess
                 return data;
             }
         }
-
+        /// <summary> Zwraca nazwę projektu o danym ID. </summary>
         public static string GetNameById(int project_id)
         {
             using (IDbConnection connection = new MySqlConnection(connectionString))
@@ -59,7 +59,7 @@ namespace BackendLibrary.DataAccess
             }
 
         }
-
+        /// <summary> Zwraca ID projektu o danej nazwie. </summary>
         public static int GetIdByName(String name)
         {
             using (IDbConnection connection = new MySqlConnection(connectionString))
@@ -72,20 +72,19 @@ namespace BackendLibrary.DataAccess
         }
 
 
-
-        /// <summary> Zwraca autowygenerowane Id w ostatnio wykonanym insercie.</summary>
+        /// <summary> Zwraca autowygenerowane ID w ostatnio wykonanym insercie.</summary>
         public static int GetMaxId()
         {
             using (IDbConnection connection = new MySqlConnection(connectionString))
             {
-                string sql = "SELECT max(project_id) from database06.project";
+                string sql = $"SELECT max(project_id) from database06.project";
                 int id = connection.Query<int>(sql).First();
 
                 return id;
             }
         }
 
-        /// <summary> Zwraca listę wszystkich projektów danej firmy. </summary>
+        /// <summary> Zwraca listę wszystkich projektów firmy o danym ID. </summary>
         public static List<ProjectModel> GetAllByCompanyId(int company_id)
         {
             using (IDbConnection connection = new MySqlConnection(connectionString))
@@ -97,7 +96,7 @@ namespace BackendLibrary.DataAccess
             }
         }
 
-        /// <summary> Dodaje nowy typ etykiety </summary>
+        /// <summary> Dodaje nowy projekt. </summary>
         public static void AddProject(ProjectModel newProject)
         {
             using (IDbConnection connection = new MySqlConnection(connectionString))
@@ -109,9 +108,8 @@ namespace BackendLibrary.DataAccess
             }
         }
 
-        /// <summary> Usuwa rodzaj etykiety z bazy danych,
-        /// a w etykietach, w których był użyty usuwa informację o rodzaju etykiety
-        /// </summary>
+        /// <summary> Usuwa projekt z bazy danych,
+        /// zmieniając wcześniej wiersze z tabeli Task, gdzie zawarty jest dany klucz obcy na wartość NULL </summary>
         public static int DeleteProject(int project_id)
         {
             using (IDbConnection connection = new MySqlConnection(connectionString))

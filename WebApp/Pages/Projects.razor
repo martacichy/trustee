@@ -13,7 +13,7 @@
     {
         <div>
             <div class="actionBtn">
-                <Sfbutton class="btn btn-primary" @onclick="AddTask"><i class="fa fa-plus"></i>&nbsp;Utwórz nowy projekt</Sfbutton>
+                <Sfbutton class="btn btn-primary" @onclick="OpenTaskAddingWindow"><i class="fa fa-plus"></i>&nbsp;Utwórz nowy projekt</Sfbutton>
             </div>
         </div>
         <br />
@@ -212,7 +212,7 @@
     /// <summary>
     /// Wyświetla okno dodawania zadania.
     /// </summary>
-    private void AddTask()
+    private void OpenTaskAddingWindow()
     {
         visibility = true;
     }

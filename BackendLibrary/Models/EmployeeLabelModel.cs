@@ -1,5 +1,8 @@
 ﻿namespace BackendLibrary.Models
 {
+    /// <summary>
+    /// Klasa reprezentująca firmę.
+    /// </summary>
     public class EmployeeLabelModel
     {
         public int Employee_id { get; set; }

@@ -24,7 +24,7 @@ namespace BackendLibrary.DataAccess
             }
         }
 
-        /// <summary> Zwraca model o przekazanym w argumencie id. </summary>
+        /// <summary> Zwraca firmę o danym ID. </summary>
         public static CompanyModel GetById(int company_id)
         {
             using (IDbConnection connection = new MySqlConnection(connectionString))
@@ -48,7 +48,7 @@ namespace BackendLibrary.DataAccess
             }
         }
 
-        /// <summary> Zwraca autowygenerowane Id w ostatnio wykonanym insercie.</summary>
+        /// <summary> Zwraca autowygenerowane ID w ostatnio wykonanym insercie.</summary>
         public static int GetMaxId()
         {
             using (IDbConnection connection = new MySqlConnection(connectionString))
