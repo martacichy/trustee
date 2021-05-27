@@ -21,6 +21,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Http.Features" Version="5.0.6" />
+    <PackageReference Include="morelinq" Version="3.3.2" />
     <PackageReference Include="Syncfusion.Blazor" Version="18.4.0.46" />
     <PackageReference Include="Syncfusion.Blazor.Themes" Version="18.4.0.46" />
     <PackageReference Include="Syroot.Windows.IO.KnownFolders" Version="1.2.3" />

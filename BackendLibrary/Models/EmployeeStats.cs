@@ -1,4 +1,6 @@
-﻿namespace BackendLibrary.Models
+﻿using System;
+
+namespace BackendLibrary.Models
 {
     public class EmployeeStats
     {
@@ -18,6 +20,8 @@
                 1 / (TaskDensity > 0 ? TaskDensity : 0.5) * weight1
                 + EmpLabelMatches * weight2
                 + TaskLabelMatches * weight3;
+
+            FinalFactor = Math.Round(FinalFactor, 2);
         }
     }
 }

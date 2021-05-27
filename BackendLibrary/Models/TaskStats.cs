@@ -1,4 +1,6 @@
-﻿namespace BackendLibrary.Models
+﻿using System;
+
+namespace BackendLibrary.Models
 {
     public class TaskStats
     {
@@ -14,6 +16,8 @@
             FinalFactor =
                 + EmpLabelMatches * weight1
                 + ArchivalTaskLabelMatches * weight2;
+
+            FinalFactor = Math.Round(FinalFactor, 2);
         }
     }
 }
