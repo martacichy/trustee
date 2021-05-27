@@ -2,6 +2,9 @@
 
 namespace BackendLibrary.Models
 {
+    /// <summary>
+    /// Klasa przechowująca informacje potrzebne do algorytmu dobierania zadań do pracownika.
+    /// </summary>
     public class TaskStats
     {
         public int Task_id { get; set; }

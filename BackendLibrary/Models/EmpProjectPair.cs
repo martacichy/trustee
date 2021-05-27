@@ -4,6 +4,9 @@ using System.Text;
 
 namespace BackendLibrary.Models
 {
+    /// <summary>
+    /// Klasa pomocnicza łącząca wybrane info. z modeli pracownika i projektu.
+    /// </summary>
     public class EmpProjectPair
     {
         public int Employee_id { get; set; }
