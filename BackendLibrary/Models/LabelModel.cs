@@ -1,5 +1,8 @@
 ﻿namespace BackendLibrary.Models
 {
+    /// <summary>
+    /// Klasa reprezentująca etykietę.
+    /// </summary>
     public class LabelModel
     {
         public int Label_id { get; set; }

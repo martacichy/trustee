@@ -1,5 +1,8 @@
 ﻿namespace BackendLibrary.Models
 {
+    /// <summary>
+    /// Klasa reprezentująca pracownika.
+    /// </summary>
     public class EmployeeModel
     {
         public int Employee_id { get; set; }

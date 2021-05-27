@@ -2,6 +2,9 @@
 
 namespace BackendLibrary.Models
 {
+    /// <summary>
+    /// Klasa reprezentująca zadanie.
+    /// </summary>
     public class TaskModel
     {
         public int Task_id { get; set; }

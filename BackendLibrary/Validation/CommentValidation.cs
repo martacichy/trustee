@@ -3,6 +3,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace BackendLibrary.Validation
 {
+    /// <summary>
+    /// Klasa odpowiadająca za walidację danych wprowadzanych do komenatarza.
+    /// </summary>
     class CommentValidation
     {
         public int Comment_id { get; set; }
