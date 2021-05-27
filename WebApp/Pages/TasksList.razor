@@ -1138,7 +1138,7 @@
                 }
 
                 foreach (var emp in employeeStats)
-                    emp.CalculateFinalFactor(1, 1, 1);
+                    emp.CalculateFinalFactor(1, 1.5, 1);
 
                 employeeStats = employeeStats.OrderByDescending(x => x.FinalFactor).ToList();
 
@@ -1232,7 +1232,7 @@
                 }
 
                 foreach (var emp in employeeStats)
-                    emp.CalculateFinalFactor(0.5, 1, 1.5);
+                    emp.CalculateFinalFactor(0.5, 1, 1.25);
 
                 employeeStats = employeeStats.OrderByDescending(x => x.FinalFactor).ToList();
 
@@ -1307,7 +1307,7 @@
         }
 
         foreach (var emp in taskStats)
-            emp.CalculateFinalFactor(1, 1);
+            emp.CalculateFinalFactor(1, 0.5);
 
         taskStats = taskStats.OrderByDescending(x => x.FinalFactor).ToList();
 

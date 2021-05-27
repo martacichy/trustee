@@ -175,12 +175,6 @@
                                     </div>
                                     <br />
                                     <div class="col-12 text-center">
-                                        <button type="submit" class="btn btn-primary" data-dismiss="modal" @onclick="SaveTask">Zapisz</button>
-                                        <SfToast @ref="SuccessTask" Title="Dodano nowe zadanie!" Timeout=3000 Content="@ToastContentAdd">
-                                            <ToastPosition X="Right"></ToastPosition>
-                                        </SfToast>
-                                    </div>
-                                    <div class="col-12 text-center">
                                         <br />
                                         <Sfbutton class="btn btn-primary" hidden="@isAssignTaskButtonHidden" @onclick="AssignTaskToEmployee"><i class="fa fa-plus"></i>&nbsp;Przypisz zadanie do mnie</Sfbutton>
                                     </div>
@@ -784,7 +778,7 @@
                 }
 
                 foreach (var emp in employeeStats)
-                    emp.CalculateFinalFactor(1, 1, 1);
+                    emp.CalculateFinalFactor(1, 1.5, 1);
 
                 employeeStats = employeeStats.OrderByDescending(x => x.FinalFactor).ToList();
 
@@ -878,7 +872,7 @@
                 }
 
                 foreach (var emp in employeeStats)
-                    emp.CalculateFinalFactor(0.5, 1, 1.5);
+                    emp.CalculateFinalFactor(0.5, 1, 1.25);
 
                 employeeStats = employeeStats.OrderByDescending(x => x.FinalFactor).ToList();
 
