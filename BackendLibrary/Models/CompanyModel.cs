@@ -2,6 +2,9 @@
 
 namespace BackendLibrary.Models
 {
+    /// <summary>
+    /// Klasa reprezentująca firmę.
+    /// </summary>
     public class CompanyModel
     {
         public int Company_id { get; set; }

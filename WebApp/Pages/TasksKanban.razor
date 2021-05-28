@@ -27,10 +27,7 @@
             <KanbanColumn HeaderText="Anulowane" KeyField="@(new List<string>() { "Anulowane" })"
                           AllowToggle="true" IsExpanded="false" AllowDrag="true"></KanbanColumn>
         </KanbanColumns>
-
     </SfKanban>
-
-
 </div>
 @* okno szczegolow zadania *@
 <SfDialog @bind-Visible="@VisibilityDetails"
@@ -159,13 +156,13 @@
                                     <div class="col-12 text-center">
                                         <br />
                                         <button type="submit" class="btn btn-primary" data-dismiss="modal" @onclick="SuggestEmployeesOnDetails">
-                                            Pokaż dopasowanych pracowników
+                                            Pokaż rekomendowanych pracowników
                                         </button>
                                     </div>
                                     <br />
                                     <div style="width: auto; margin:auto;">
                                         <SfGrid @ref="suggestedEmployeesGrid2" DataSource="suggestedEmployees" TValue="EmployeeStats">
-                                            <GridEvents CommandClicked="AddEmployeeToAssigned" TValue="EmployeeStats"></GridEvents>
+                                            <GridEvents TValue="EmployeeStats"></GridEvents>
                                             <GridColumns>
                                                 <GridColumn Field=@nameof(EmployeeStats.First_name) HeaderText="Imię" TextAlign="TextAlign.Left" Width="80"></GridColumn>
                                                 <GridColumn Field=@nameof(EmployeeStats.Last_name) HeaderText="Nazwisko" TextAlign="TextAlign.Left" Width="100"></GridColumn>
@@ -175,14 +172,8 @@
                                     </div>
                                     <br />
                                     <div class="col-12 text-center">
-                                        <button type="submit" class="btn btn-primary" data-dismiss="modal" @onclick="SaveTask">Zapisz</button>
-                                        <SfToast @ref="SuccessTask" Title="Dodano nowe zadanie!" Timeout=3000 Content="@ToastContentAdd">
-                                            <ToastPosition X="Right"></ToastPosition>
-                                        </SfToast>
-                                    </div>
-                                    <div class="col-12 text-center">
                                         <br />
-                                        <Sfbutton class="btn btn-primary" hidden="@isAssignTaskButtonHidden" @onclick="AssignTask"><i class="fa fa-plus"></i>&nbsp;Przypisz zadanie do mnie</Sfbutton>
+                                        <Sfbutton class="btn btn-primary" hidden="@isAssignTaskButtonHidden" @onclick="AssignTaskToEmployee"><i class="fa fa-plus"></i>&nbsp;Przypisz zadanie do mnie</Sfbutton>
                                     </div>
                                 </EditForm>
 
@@ -320,11 +311,9 @@
             </SfSplitter>
         </Content>
     </DialogTemplates>
-    <DialogEvents Closed="@DialogEditClosed" OnOverlayClick="@overlayClick"></DialogEvents>
+    <DialogEvents Closed="@DialogEditClosed" OnOverlayClick="@OverlayClick"></DialogEvents>
     <DialogAnimationSettings Effect="DialogEffect.Fade"></DialogAnimationSettings>
 </SfDialog>
-
-
 
 @code {
 
@@ -412,7 +401,6 @@
     public static string a2;
     public static byte[] a3;
 
-
     // Edytor tekstu
     private ToolbarType Tooltype = ToolbarType.MultiRow;
     private List<ToolbarItemModel> Tools = new List<ToolbarItemModel>()
@@ -442,6 +430,10 @@
         new ToolbarItemModel() { Command = ToolbarCommand.FullScreen },
     };
 
+    /// <summary>
+    /// Metoda wywoływana, gdy komponent jest gotowy do uruchomienia. Pobiera dane potrzebne do wyświetlenia.
+    /// Ustawia widoczność przycisków i możliwość edycji zadań w zależności od roli pracownika.
+    /// </summary>
     protected override void OnInitialized()
     {
         TaskList = TaskData.GetAllByEmployeeId(Login.UserLoggedIn.Employee_id);
@@ -470,13 +462,16 @@
         fillEmployeeTaskPairs();
         RowDeselectHandler();
     }
+
     private void OnDialogOpen(DialogOpenEventArgs<TaskModel> args)
     {
         args.Cancel = true;
     }
 
-    //TODO - obsługa DragStart i DragStop (<KanbanEvents />)
+    /// <summary>
+    /// Pobiera dane o zadaniu przy przeciągnięciu karty, zmieniając przy tym status zadania.
 
+    /// </summary>
     private void DragStop(Syncfusion.Blazor.Kanban.DragEventArgs<TaskModel> args)
     {
         SelectedTask = args.Data[0];
@@ -491,9 +486,8 @@
         UpdateTask();
     }
 
-
     /// <summary> Zamkniecie okna przy kliknieciu poza nie. </summary>
-    private void overlayClick(MouseEventArgs args)
+    private void OverlayClick(MouseEventArgs args)
     {
         VisibilityEdit = false;
         VisibilityDetails = false;
@@ -517,14 +511,17 @@
             element.Task_id));
         }
     }
-
+    /// <summary>
+    /// Zwraca listę pracowników dla zadania o danym ID.
+    /// </summary>
+    /// <param name="task_id"></param>
     private Query GetEmployeesQuery(int task_id)
     {
         return new Query().Where("Task_id", "equal", task_id);
     }
 
     /// <summary>
-    /// Toggle Button od projektow (zmiana stanu)
+    /// Po wciśnieciu przycisku włącza/wyłącza możliwość dodania projektu do zadania.
     /// </summary>
     private void OnChangeButton()
     {
@@ -540,27 +537,38 @@
         }
 
     }
-
+    /// <summary>
+    /// Pobiera i przypisuje wartości zaznaczonego zadania.
+    /// </summary>
     public void RowSelectHandler(RowSelectEventArgs<TaskModel> args)
     {
         SelectedTask = args.Data;
     }
-
+    /// <summary>
+    /// Przypisuje null do zadania, gdy wiersz zostaje odznaczony.
+    /// </summary>
     public void RowDeselectHandler()
     {
         SelectedTask = null;
     }
-
+    /// <summary>
+    /// Pobiera i przypisuje wartości zaznaczonego pliku.
+    /// </summary>
     public void RowSelectHandlerFile(RowSelectEventArgs<FileModel> args)
     {
         SelectedFile = args.Data;
     }
-
+    /// <summary>
+    /// Przypisuje null do projektu, gdy wiersz zostaje odznaczony.
+    /// </summary>
     public void RowDeselectHandlerFile()
     {
         SelectedFile = null;
     }
 
+    /// <summary>
+    /// Wyszukuje dane po zatwierdzeniu przyciskiem ENTER.
+    /// </summary>
     private void SearchOnEnter(KeyboardEventArgs e)
     {
         if (e.Code == "Enter" || e.Code == "NumpadEnter")
@@ -568,29 +576,9 @@
             this.DefaultGrid.Search(searchStr);
         }
     }
-
-    private void AddTask(MouseEventArgs e)
-    {
-        VisibilityAdd = true;
-    }
-
-    private void EditTask()
-    {
-        DisplayTaskDetails(SelectedTask);
-    }
-
-    private void DeleteTask()
-    {
-        if (SelectedTask != null)
-        {
-            BackendLibrary.DataAccess.TaskData.DeleteTask(SelectedTask.Task_id);
-            uriHelper.NavigateTo(uriHelper.Uri, forceLoad: true);
-        }
-        else
-        {
-            NoSelectedTask.Show();
-        }
-    }
+    /// <summary>
+    /// Ustawia przycisk przypisywania zadania jako widoczny oraz wyświetla szczegóły zadania.
+    /// </summary>
     private void SetAssingTaskButtonVisibleAndDisplayTaskDetails(CardClickEventArgs<TaskModel> args)
     {
         EnabledStatus = false;
@@ -598,7 +586,9 @@
         isAssignTaskButtonHidden = false;
         DisplayTaskDetails(args.Data);
     }
-
+    /// <summary>
+    /// Ustawia przycisk przypisywania zadania jako niewidoczny oraz wyświetla szczegóły zadania.
+    /// </summary>
     private void SetAssingTaskButtonInisibleAndDisplayTaskDetails(CardClickEventArgs<TaskModel> args)
     {
         EnabledStatus = true;
@@ -606,11 +596,13 @@
         isAssignTaskButtonHidden = true;
         DisplayTaskDetails(args.Data);
     }
-
+    /// <summary>
+    /// Pobiera i wyświetla dane dotyczące danego zadania.
+    /// </summary>
+    /// <param name="SelectedTask"></param>
     private void DisplayTaskDetails(TaskModel args)
     {
         SelectedTask = args;
-
 
         if (SelectedTask != null)
         {
@@ -679,16 +671,17 @@
         }
     }
 
-
-    private void AssignTask()
+    /// <summary>
+    /// Przypisuje zadanie do pracownika i zapisuje je do bazy.
+    /// </summary>
+    private void AssignTaskToEmployee()
     {
-
         BackendLibrary.DataAccess.EmployeeTaskData.AddEmployeeTask(new EmployeeTaskModel(SelectedTask.Task_id, loggedEmployee.Employee_id));
         uriHelper.NavigateTo(uriHelper.Uri, forceLoad: true);
     }
 
     /// <summary>
-    /// Powraca do listy zadan po zamknieciu okna
+    /// Powraca do listy zadań po zamknieciu okna zadania.
     /// </summary>
     private void DialogClosed(CloseEventArgs args)
     {
@@ -698,6 +691,9 @@
         EnableProjectDropDown = false;
     }
 
+    /// <summary>
+    /// Powraca do listy zadań po zamknieciu okna edycji zadania.
+    /// </summary>
     private void DialogEditClosed(CloseEventArgs args)
     {
         VisibilityEdit = false;
@@ -776,7 +772,7 @@
                 }
 
                 foreach (var emp in employeeStats)
-                    emp.CalculateFinalFactor(1, 1, 1);
+                    emp.CalculateFinalFactor(1, 1.5, 1);
 
                 employeeStats = employeeStats.OrderByDescending(x => x.FinalFactor).ToList();
 
@@ -811,6 +807,9 @@
             List<EmployeeModel> employeePool;
             List<EmployeeLabelModel> empLabels;
             List<TaskModel> empTasks;
+            List<EmployeeTaskModel> currentlyAssignedEmployees
+                = EmployeeTaskData.GetAllEmployeesByTaskId(SelectedTask.Task_id);
+            List<int> employeesIds = new List<int>();
 
             if (selectedProject == null)
             {
@@ -870,14 +869,23 @@
                 }
 
                 foreach (var emp in employeeStats)
-                    emp.CalculateFinalFactor(0.5, 1, 1.5);
+                    emp.CalculateFinalFactor(0.5, 1, 1.25);
 
                 employeeStats = employeeStats.OrderByDescending(x => x.FinalFactor).ToList();
 
                 suggestedEmployees.Clear();
 
+                foreach (var emp in currentlyAssignedEmployees)
+                {
+                    employeesIds.Add(emp.Employee_id);
+                }
+
+                // dodanie do listy rekomendowanych pracownikow tych ktorzy nie sa jeszcze przypisani
                 foreach (var emp in employeeStats)
-                    suggestedEmployees.Add(emp);
+                {
+                    if (!employeesIds.Contains(emp.Employee_id))
+                        suggestedEmployees.Add(emp);
+                }
 
                 suggestedEmployeesGrid2.Refresh();
             }
@@ -892,35 +900,6 @@
             ToastWrongInput = "Wprowadzono niepoprawny zakres dat.";
             WrongInput.Show();
         }
-    }
-
-    /// <summary> Dodanie zaproponowanego pracownika do listy osób przypisanych do zadania
-    /// <param name="args"></param>
-    public void AddEmployeeToAssigned(CommandClickEventArgs<EmployeeStats> args)
-    {
-
-    }
-
-    public void OnCommandClicked(CommandClickEventArgs<TaskModel> args)
-    {
-
-        if (args.CommandColumn.Type == CommandButtonType.Edit)
-        {
-            SetAssingTaskButtonInisibleAndDisplayTaskDetailsOnOneClick(args);
-        }
-        else if (args.CommandColumn.Type == CommandButtonType.Delete)
-        {
-            SelectedTask = args.RowData;
-            BackendLibrary.DataAccess.TaskData.DeleteTask(SelectedTask.Task_id);
-        }
-    }
-
-    private void SetAssingTaskButtonInisibleAndDisplayTaskDetailsOnOneClick(CommandClickEventArgs<TaskModel> args)
-    {
-        EnabledStatus = true;
-        isSaveButtonHidden = false;
-        isAssignTaskButtonHidden = true;
-        DisplayTaskDetails(args.RowData);
     }
 
     /// <summary>
@@ -1063,7 +1042,6 @@
     /// <summary>
     /// Zapisuje do bazy etykiety, których jeszcze nie ma w bazie.
     /// </summary>
-    //TODO - Trzeba jeszcze pobrac opis(czy w ogóle będzie opis etykiet? No chyba nie w prototypie)
     private void SaveLabels(string[] labels)
     {
         if (labels != null)
@@ -1095,7 +1073,7 @@
     }
 
     /// <summary>
-    /// Przypisuje etykiety do dodanego zadania
+    /// Przypisuje etykiety do dodanego zadania.
     /// </summary>
     private void SaveTaskLabel()
     {
@@ -1112,7 +1090,7 @@
     }
 
     /// <summary>
-    /// Przypisuje pracowników do dodanego zadania
+    /// Przypisuje pracowników do dodanego zadania.
     /// </summary>
     private void AddEmployeeToTask()
     {
@@ -1124,7 +1102,7 @@
     }
 
     /// <summary>
-    /// Zmienia pracowników danego zadania na nowych
+    /// Zmienia pracowników danego zadania na nowych.
     /// </summary>
     private void EditEmployeeToTask()
     {
@@ -1144,7 +1122,7 @@
     }
 
     /// <summary>
-    /// Zmienia etykiety danego zadania na nowe
+    /// Zmienia etykiety danego zadania na nowe.
     /// </summary>
     private void EditTaskLabel()
     {
@@ -1167,7 +1145,7 @@
     }
 
     /// <summary>
-    /// Dodaje nowy komentarz dotyczący wybranego zadania do bazy danych
+    /// Dodaje nowy komentarz dotyczący wybranego zadania do bazy danych.
     /// </summary>
     private void AddNewComment()
     {
@@ -1189,7 +1167,9 @@
             DeleteComment();
         }
     }
-
+    /// <summary>
+    /// Usuwa komentarz dotyczący wybranego zadania.
+    /// </summary>
     private void DeleteComment()
     {
 
@@ -1201,7 +1181,7 @@
     }
 
     /// <summary>
-    /// Sprawdza czy w edycji zmieniono pracownika
+    /// Sprawdza czy w edycji zmieniono pracownika.
     /// </summary>
     private bool IsEmployeesChanged(int employee)
     {
@@ -1214,7 +1194,7 @@
     }
 
     /// <summary>
-    /// Sprawdza czy w edycji zmieniono etykiete
+    /// Sprawdza czy w edycji zmieniono etykietę.
     /// </summary>
     private bool IsLabelsChanged(string label)
     {
@@ -1351,6 +1331,9 @@
 
     }
 
+    /// <summary>
+    /// Sprawdza, czy zostały dokonane zmiany w edycji zadania oraz zapisuje je.
+    /// </summary>
     private void UpdateTask()
     {
 
@@ -1388,7 +1371,9 @@
             VisibilityEdit = false;
         }
     }
-
+    /// <summary>
+    /// Wyświetla zadania dla pracownika lub dla całego zespołu w zależności od wyboru użytkownika.
+    /// </summary>
     private void DisplayTeamTask()
     {
         SelectedTask = null;
@@ -1397,7 +1382,9 @@
         TaskList = TaskData.GetAllByEmployeeId(Login.UserLoggedIn.Employee_id);
 
     }
-
+    /// <summary>
+    /// Wyświetla wszystkie projekty przypisane do wybranego zadania.
+    /// </summary>
     private void DisplayProjects()
     {
         if (TaskList != null)
@@ -1416,7 +1403,9 @@
 
         }
     }
-
+    /// <summary>
+    /// Czyści wszystkie pola przy edycji/dodawaniu zadania.
+    /// </summary>
     private void ClearTask()
     {
         TaskEdit.name = null;
@@ -1426,7 +1415,9 @@
         TaskEdit.status = null;
         TaskEdit.auto_assigned = 0;
     }
-
+    /// <summary>
+    /// Dodaje plik do danego zadania.
+    /// </summary>
     private void AddFileFunction(UploadChangeEventArgs args)
     {
         foreach (var file in args.Files)
@@ -1443,7 +1434,9 @@
             FileList.Add(newfile);
         }
     }
-
+    /// <summary>
+    /// Pobiera plik z zaznaczonego zadania.
+    /// </summary>
     private void DownloadSelectedFile(RecordDoubleClickEventArgs<FileModel> args)
     {
         SelectedFile = new FileModel();
@@ -1504,9 +1497,12 @@
             }
         }
 
-        // zostawienie tylko 8 pierwszych (najlepiej dopasowanych) plików
-        if (suggestedFiles.Count() >= 8)
-            suggestedFiles = suggestedFiles.GetRange(0, 8);
+        // usunięcie duplikatów
+        suggestedFiles = suggestedFiles.DistinctBy(file => file.File_name).ToList();
+
+        // zostawienie tylko 5 pierwszych (najlepiej dopasowanych) plików
+        if (suggestedFiles.Count() >= 5)
+            suggestedFiles = suggestedFiles.GetRange(0, 5);
 
         // odświeżenie sfgrid
         ProposedFileGrid.Refresh();

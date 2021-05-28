@@ -11,13 +11,13 @@
     @if (Login.UserLoggedIn.If_manager == 2)
     {
         <div class="actionBtn">
-            <Sfbutton class="btn btn-primary" @onclick="AddEmployee"><i class="fa fa-plus"></i>&nbsp;Nowy pracownik</Sfbutton>
+            <Sfbutton class="btn btn-primary" @onclick="OpenEmployeeAddWindow"><i class="fa fa-plus"></i>&nbsp;Nowy pracownik</Sfbutton>
         </div>
     }
     @if (Login.UserLoggedIn.If_manager != 0)
     {
         <div class="actionBtn">
-            <Sfbutton class="btn btn-primary" @onclick="EditEmployee"><i class="fa fa-edit"></i>&nbsp;Edytuj</Sfbutton>
+            <Sfbutton class="btn btn-primary" @onclick="OpenEmployeeEditWindowOnButton"><i class="fa fa-edit"></i>&nbsp;Edytuj</Sfbutton>
         </div>
     }
 </div>
@@ -132,7 +132,7 @@
             <GridPageSettings PageSize="12"></GridPageSettings>
             <GridSearchSettings IgnoreCase="true"></GridSearchSettings>
             <GridEvents TValue="EmployeeModel"
-                        CommandClicked="OpenEditEmployeeWindow"
+                        CommandClicked="OpenEmployeeEditWindow"
                          OnRecordDoubleClick="RowDoubleClickHandler"
                         RowSelected="RowSelectedHandler">
             </GridEvents>
@@ -202,7 +202,7 @@
     private Boolean VisibilityAdd { get; set; }
 
     /// <summary>
-    /// Metoda wywoływana, gdy komponent jest gotowy do uruchomienia.
+    /// Metoda wywoływana, gdy komponent jest gotowy do uruchomienia. Pobiera dane potrzebne do wyświetlenia.
     /// </summary>
     protected override void OnInitialized()
     {
@@ -230,7 +230,7 @@
     /// <summary>
     /// Otwiera okno dodawania pracownika.
     /// </summary>
-    private void AddEmployee()
+    private void OpenEmployeeAddWindow()
     {
         visibility = true;
     }
@@ -239,19 +239,19 @@
     /// Otwiera okno edycji pracownika po naciśnięciu ikony edycji.
     /// </summary>
     /// <param name="args"></param>
-    private void OpenEditEmployeeWindow(CommandClickEventArgs<EmployeeModel> args)
+    private void OpenEmployeeEditWindow(CommandClickEventArgs<EmployeeModel> args)
     {
         if (Login.UserLoggedIn.If_manager != 0)
         {
-            EmployeeModel SelectedEmployee = args.RowData;
+            SelectedEmployee = args.RowData;
             DisplayEmployeeDetails(SelectedEmployee);
         }
     }
 
     /// <summary>
-    /// Otwiera okno edycji pracownika po naciśnięciu przycisku.
+    /// Otwiera okno edycji zaznaczonego pracownika po naciśnięciu przycisku.
     /// </summary>
-    private void EditEmployee()
+    private void OpenEmployeeEditWindowOnButton()
     {
         if (Login.UserLoggedIn.If_manager != 0)
         {
@@ -261,7 +261,7 @@
     }
 
     /// <summary>
-    /// Wyzwala zdarzenie gdy dany wiersz zostaje odznaczony.
+    /// Przypisuje null do pracownika, gdy wiersz zostaje odznaczony.
     /// </summary>
     public void RowDeselectHandler()
     {
@@ -279,7 +279,7 @@
     }
 
     /// <summary>
-    /// Wyzwala zdarzenie gdy dany wiersz jest zaznaczony.
+    /// Pobiera i przypisuje warości zaznaczonego pracownika.
     /// </summary>
     /// <param name="args"></param>
     private void RowSelectedHandler(RowSelectEventArgs<EmployeeModel> args)
@@ -599,7 +599,7 @@
     }
 
     /// <summary>
-    /// Nie wiem
+    /// Usuwa rolę edytowanego pracownika.
     /// </summary>
     private void ClearEmployee()
     {

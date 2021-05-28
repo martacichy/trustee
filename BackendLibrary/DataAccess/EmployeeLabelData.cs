@@ -12,8 +12,7 @@ namespace BackendLibrary.DataAccess
     /// </summary>
     public class EmployeeLabelData : SqlConnector
     {
-        /// <summary> Zwraca listę wszystkich etykiet danego pracownika
-        /// (szukając po id pracownika). </summary>
+        /// <summary> Zwraca listę wszystkich etykiet o danym ID pracownika. </summary>
         public static List<EmployeeLabelModel> GetAllLabelsByEmployeeId(int employeeId)
         {
             using (IDbConnection connection = new MySqlConnection(connectionString))

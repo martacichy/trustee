@@ -12,7 +12,7 @@ namespace BackendLibrary.DataAccess
     /// </summary>
     public class EmployeeProjectData : SqlConnector
     {
-        /// <summary> Zwraca listę wszystkich pari pracownik-projekt. </summary>
+        /// <summary> Zwraca listę wszystkich par pracownik-projekt. </summary>
         public static List<EmployeeProjectModel> GetAll()
         {
             using (IDbConnection connection = new MySqlConnection(connectionString))
@@ -24,8 +24,7 @@ namespace BackendLibrary.DataAccess
             }
         }
 
-        /// <summary> Zwraca listę wszystkich powiązań projektów z danym pracownikiem
-        /// (szukając po id pracownika). </summary>
+        /// <summary> Zwraca listę wszystkich powiązań projektów z danym ID pracownika. </summary>
         public static List<EmployeeProjectModel> GetAllByEmployeeId(int employeeId)
         {
             using (IDbConnection connection = new MySqlConnection(connectionString))
@@ -37,8 +36,7 @@ namespace BackendLibrary.DataAccess
             }
         }
 
-        /// <summary> Zwraca listę wszystkich powiązań pracowników z danym projektem
-        /// (szukając po id projektu). </summary>
+        /// <summary> Zwraca listę wszystkich powiązań pracowników z danym ID projektu. </summary>
         public static List<EmployeeProjectModel> GetAllByProjectId(int projectId)
         {
             using (IDbConnection connection = new MySqlConnection(connectionString))
@@ -50,7 +48,7 @@ namespace BackendLibrary.DataAccess
             }
         }
 
-        /// <summary> Dodaje pracownikowa do projektu. </summary>
+        /// <summary> Dodaje pracownika do projektu. </summary>
         public static void AddEmployeeProject(EmployeeProjectModel newEmpProject)
         {
             using (IDbConnection connection = new MySqlConnection(connectionString))
