@@ -1,5 +1,8 @@
 ﻿namespace BackendLibrary.Models
 {
+    /// <summary>
+    /// Klasa reprezentująca parę zadanie i etykieta.
+    /// </summary>
     public class TaskLabelModel
     {
         public int Task_id { get; set; }

@@ -77,7 +77,7 @@
                 </EditForm>
             </Content>
         </DialogTemplates>
-        <DialogEvents Closed="@closeDialog" OnOverlayClick="@overlayClick"></DialogEvents>
+        <DialogEvents Closed="@CloseDialog" OnOverlayClick="@OverlayClick"></DialogEvents>
         <DialogAnimationSettings Effect="DialogEffect.Fade"></DialogAnimationSettings>
     </SfDialog>
 
@@ -154,7 +154,7 @@
     string toastContent;
 
     /// <summary>
-    /// Metoda wywoływana, gdy komponent jest gotowy do uruchomienia.
+    /// Metoda wywoływana, gdy komponent jest gotowy do uruchomienia. Pobiera dane potrzebne do wyświetlenia.
     /// </summary>
     protected override void OnInitialized()
     {
@@ -250,10 +250,10 @@
     }
 
     /// <summary>
-    /// Zamyka okno dodawania nowego projektu po kliknięciu poza oknem??????.
+    /// Zamyka okno dodawania nowego projektu po kliknięciu poza oknem.
     /// </summary>
     /// <param name="args"></param>
-    private void overlayClick(MouseEventArgs args)
+    private void OverlayClick(MouseEventArgs args)
     {
         visibility = false;
         isChecked = false;
@@ -262,7 +262,7 @@
     /// <summary>
     /// Zamyka okno dodawania nowego projektu po kliknięciu przycisku zamknij.
     /// </summary>
-    private void closeDialog()
+    private void CloseDialog()
     {
         visibility = false;
         isChecked = false;

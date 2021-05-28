@@ -521,7 +521,7 @@
     }
 
     /// <summary>
-    /// Toggle Button od projektow (zmiana stanu)
+    /// Po wciśnieciu przycisku włącza/wyłącza możliwość dodania projektu do zadania.
     /// </summary>
     private void OnChangeButton()
     {
@@ -566,6 +566,9 @@
         SelectedFile = null;
     }
 
+    /// <summary>
+    /// Wyszukuje dane po zatwierdzeniu przyciskiem ENTER.
+    /// </summary>
     private void SearchOnEnter(KeyboardEventArgs e)
     {
         if (e.Code == "Enter" || e.Code == "NumpadEnter")
