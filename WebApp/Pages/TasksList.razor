@@ -17,22 +17,24 @@
 @* wyświetlanie przycisku do tworzenia nowych zadań *@
 @if (Login.UserLoggedIn.If_manager == 1 || Login.UserLoggedIn.If_manager == 2)
 {
-    <div>
-        <div class="actionBtn">
-            <Sfbutton class="btn btn-primary" @onclick="OpenTaskAddWindow"><i class="fa fa-plus"></i>&nbsp;Dodaj zadanie</Sfbutton>
-        </div>
-        <div class="actionBtn">
-            <Sfbutton class="btn btn-primary" @onclick="OpenTaskEditWindow"><i class="fa fa-pencil"></i>&nbsp;Edytuj zadanie</Sfbutton>
-        </div>
-        <div class="actionBtn">
-            <Sfbutton class="btn btn-primary" id="deleteBtn" @onclick="DeleteTask"><i class="fa fa-trash"></i>&nbsp;Usuń zadanie</Sfbutton>
-        </div>
-        <div class="actionBtn">
-            <SfButton class="btn btn-primary" hidden=@readOnly>
-                <input type="checkbox" class="actionBtn" @bind-value="@shouldDisplayTeamTasks" @onclick="DisplayTeamTask" /> Wyświetl zadania zespołu
-            </SfButton>
-        </div>
+<div>
+    <div class="actionBtn">
+        <Sfbutton class="btn btn-primary" @onclick="OpenTaskAddWindow"><i class="fa fa-plus"></i>&nbsp;Dodaj zadanie</Sfbutton>
     </div>
+    <div class="actionBtn">
+        <Sfbutton class="btn btn-primary" @onclick="OpenTaskEditWindow"><i class="fa fa-pencil"></i>&nbsp;Edytuj zadanie</Sfbutton>
+    </div>
+    <div class="actionBtn">
+        <Sfbutton class="btn btn-primary" id="deleteBtn" @onclick="DeleteTask"><i class="fa fa-trash"></i>&nbsp;Usuń zadanie</Sfbutton>
+    </div>
+    <div class="actionBtn">
+        <SfButton class="btn btn-primary" hidden=@readOnly @onclick="DisplayTeamTaskBtn">
+            Wyświetl zadania całego zespołu
+            <input type="checkbox" @bind="@shouldDisplayTeamTasks" disabled="true"
+                   style="transform: scale(1.3); margin-top: 5px; margin-bottom: 0px; margin-right: 5px; margin-left: 5px;" />
+        </SfButton>
+    </div>
+</div>
 }
 
 <div class="actionBtn" style="float: right; width: auto;">
@@ -751,7 +753,7 @@
 
 
     /// <summary>
-    /// Metoda wywoływana, gdy komponent jest gotowy do uruchomienia. Pobiera dane potrzebne do wyświetlenia. 
+    /// Metoda wywoływana, gdy komponent jest gotowy do uruchomienia. Pobiera dane potrzebne do wyświetlenia.
     /// Ustawia widoczność przycisków i możliwość edycji zadań w zależności od roli pracownika.
     /// </summary>
     protected override void OnInitialized()
@@ -1748,6 +1750,7 @@
         }
 
     }
+
     /// <summary>
     /// Wyświetla zadania dla pracownika lub dla całego zespołu w zależności od wyboru użytkownika.
     /// </summary>
@@ -1774,7 +1777,15 @@
             TaskList = TaskData.GetArchivalTasksWithoutLoggedManager(Pages.Login.UserLoggedIn.Employee_id);
         }
         DisplayProjects();
+    }
 
+    /// <summary>
+    /// Wyświetla zadania dla pracownika lub dla całego zespołu - po kliknięciu w przycisk.
+    /// </summary>
+    private void DisplayTeamTaskBtn()
+    {
+        DisplayTeamTask();
+        shouldDisplayTeamTasks = !shouldDisplayTeamTasks;
     }
 
     /// <summary>
