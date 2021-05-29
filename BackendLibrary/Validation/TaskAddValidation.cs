@@ -9,8 +9,8 @@ namespace BackendLibrary.Validation
     public class TaskAddValidation
     {
         [Required(ErrorMessage = "To pole jest obowiązkowe!")]
-        [StringLength(30,
-        ErrorMessage = "To pole nie może mieć więcej niż 30 znaków.")]
+        [StringLength(50,
+        ErrorMessage = "To pole nie może mieć więcej niż 50 znaków.")]
         public string name { get; set; }
 
         [Required(ErrorMessage = "To pole jest obowiązkowe!")]
