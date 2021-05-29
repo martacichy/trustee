@@ -442,6 +442,9 @@
                                                 <GridColumns>
                                                     <GridColumn Field=@nameof(EmployeeStats.First_name) HeaderText="Imię" TextAlign="TextAlign.Left" Width="85"></GridColumn>
                                                     <GridColumn Field=@nameof(EmployeeStats.Last_name) HeaderText="Nazwisko" TextAlign="TextAlign.Left" Width="95"></GridColumn>
+                                                    <GridColumn Field=@nameof(EmployeeStats.TaskDensity) HeaderText="density" TextAlign="TextAlign.Left" Width="80"></GridColumn>
+                                                    <GridColumn Field=@nameof(EmployeeStats.EmpLabelMatches) HeaderText="emp-label" TextAlign="TextAlign.Left" Width="80"></GridColumn>
+                                                    <GridColumn Field=@nameof(EmployeeStats.TaskLabelMatches) HeaderText="task-label" TextAlign="TextAlign.Left" Width="80"></GridColumn>
                                                     <GridColumn Field=@nameof(EmployeeStats.FinalFactor) HeaderText="DOPASOWANIE" TextAlign="TextAlign.Center" Width="140"></GridColumn>
                                                 </GridColumns>
                                             </SfGrid>
@@ -1213,13 +1216,17 @@
                             }
                         }
                         // zsumowanie ilości zadań pracownika w okresie miedzy start_time a deadline
-                        // TODO - uwzglednienie dlugosci zadania jako wagi
                         else
                         {
                             if (task.Start_time <= TaskEdit.deadline && task.Deadline >= TaskEdit.start_time)
                                 taskCount++;
                         }
                     }
+
+                    Console.WriteLine("nameoflabels: " + nameoflabels.Count());
+                    Console.WriteLine("empLabelNames: " + empLabelNames.Count());
+                    Console.WriteLine("taskLabelNames: " + taskLabelNames.Count());
+                    Console.WriteLine();
 
                     employeeStats.Add(new EmployeeStats
                     {
@@ -1228,13 +1235,13 @@
                         Last_name = emp.Last_name,
 
                         TaskDensity = taskCount,
-                        EmpLabelMatches = selectedLabels.Intersect(empLabelNames).Count(),
-                        TaskLabelMatches = selectedLabels.Intersect(taskLabelNames).Count(),
+                        EmpLabelMatches = nameoflabels.Intersect(empLabelNames).Count(),
+                        TaskLabelMatches = nameoflabels.Intersect(taskLabelNames).Count(),
                     });
                 }
 
                 foreach (var emp in employeeStats)
-                    emp.CalculateFinalFactor(0.5, 1, 1.25);
+                    emp.CalculateFinalFactor(0.5, 1.5, 1);
 
                 employeeStats = employeeStats.OrderByDescending(x => x.FinalFactor).ToList();
 
@@ -1245,7 +1252,7 @@
                     employeesIds.Add(emp.Employee_id);
                 }
 
-                // dodanie do listy rekomendowanych pracownikow tych ktorzy nie sa jeszcze przypisani
+                // dodanie do listy rekomendowanych pracownikow tych ktorzy nie sa przypisani
                 foreach (var emp in employeeStats)
                 {
                     if (!employeesIds.Contains(emp.Employee_id))
