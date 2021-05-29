@@ -6,6 +6,9 @@ using XUnitPriorityOrderer;
 
 namespace BackendLibrary.Tests.Tests
 {
+    /// <summary>
+    /// Klasa testowa dla klasy LabelData.
+    /// </summary>
     [Order(3)]
     public class LabelDataTests
     {
