@@ -96,7 +96,7 @@
                     </EditForm>
                 </Content>
             </DialogTemplates>
-            <DialogEvents Closed="@DialogEditClosed"></DialogEvents>
+            <DialogEvents Closed="@DialogEditClosed" OnOverlayClick="@OverlayClick"></DialogEvents>
             <DialogAnimationSettings Effect="DialogEffect.Fade"></DialogAnimationSettings>
         </SfDialog>
     @*Dodawanie nowego pracownika*@
@@ -276,6 +276,14 @@
     {
         VisibilityEdit = false;
 
+    }
+
+    /// <summary>
+    /// Zamyka okno edycji pracownika po kliknięciu poza okno.
+    /// </summary>
+    private void OverlayClick(CloseEventArgs args)
+    {
+        VisibilityEdit = false;
     }
 
     /// <summary>
