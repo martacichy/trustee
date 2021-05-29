@@ -8,11 +8,11 @@ using System.Linq;
 namespace BackendLibrary.DataAccess
 {
     /// <summary>
-    ///  Klasa wysyłająca zapytania bazodanowe SQL dotyczące tabeli "task".
+    ///  Klasa wysyłająca zapytania bazodanowe SQL dotyczące tabeli "Task".
     /// </summary>
     public class TaskData : SqlConnector
     {
-        /// <summary> Zwraca listę wszystkich tasków. </summary>
+        /// <summary> Zwraca listę wszystkich zadań. </summary>
         public static List<TaskModel> GetAllTasks()
         {
             using (IDbConnection connection = new MySqlConnection(connectionString))
@@ -23,7 +23,7 @@ namespace BackendLibrary.DataAccess
                 return data;
             }
         }
-
+        /// <summary> Zwraca listę wszystkich zadań o danym ID firmy, które mają status nierozpoczęte. </summary>
         public static List<TaskModel> GetUnstartedTasksByCompanyId(int company_id)
         {
             using (IDbConnection connection = new MySqlConnection(connectionString))
@@ -37,7 +37,7 @@ namespace BackendLibrary.DataAccess
                 return data;
             }
         }
-
+        /// <summary> Zwraca listę wszystkich zadań o danym ID firmy, które mają status nierozpoczęte lub w toku.</summary>
         public static List<TaskModel> GetInProgressTasks(int company_id)
         {
             using (IDbConnection connection = new MySqlConnection(connectionString))
@@ -48,7 +48,7 @@ namespace BackendLibrary.DataAccess
                 return data;
             }
         }
-
+        /// <summary> Zwraca listę wszystkich zadań o danym ID firmy, które mają status różny od nierozpoczęte.</summary>
         public static List<TaskModel> GetAllTaskWithoutUnstartedByCompanyId(int company_id)
         {
             using (IDbConnection connection = new MySqlConnection(connectionString))
@@ -62,7 +62,7 @@ namespace BackendLibrary.DataAccess
 
 
 
-        /// <summary> Zwraca model o przekazanym w argumencie id. </summary>
+        /// <summary> Zwraca zadanie o danym ID. </summary>
         public static TaskModel GetById(int task_id)
         {
             using (IDbConnection connection = new MySqlConnection(connectionString))
@@ -89,7 +89,7 @@ namespace BackendLibrary.DataAccess
             }
         }
 
-        /// <summary> Zwraca autowygenerowane Id w ostatnio wykonanym insercie.</summary>
+        /// <summary> Zwraca autowygenerowane ID w ostatnio wykonanym insercie.</summary>
         public static int GetMaxId()
         {
             using (IDbConnection connection = new MySqlConnection(connectionString))
@@ -101,7 +101,7 @@ namespace BackendLibrary.DataAccess
             }
         }
 
-        /// <summary> Zwraca listę wszystkich tasków danej firmy. </summary>
+        /// <summary> Zwraca listę wszystkich zadań firmy o danym ID. </summary>
         public static List<TaskModel> GetAllByCompanyId(int company_id)
         {
             using (IDbConnection connection = new MySqlConnection(connectionString))
@@ -113,7 +113,7 @@ namespace BackendLibrary.DataAccess
             }
         }
 
-        /// <summary> Zwraca listę wszystkich tasków danego pracownika. </summary>
+        /// <summary> Zwraca listę wszystkich zadań pracownika o danym ID. </summary>
         public static List<TaskModel> GetAllByEmployeeId(int employee_id)
         {
             using (IDbConnection connection = new MySqlConnection(connectionString))
@@ -125,7 +125,7 @@ namespace BackendLibrary.DataAccess
                  return data;
             }
         }
-
+        /// <summary> Zwraca listę wszystkich zadań o danym ID pracownika, które mają status nierozpoczęte lub w toku.</summary>
         public static List<TaskModel> GetInProgressTaskByEmployeeId(int employee_id)
         {
             using (IDbConnection connection = new MySqlConnection(connectionString))
@@ -139,7 +139,7 @@ namespace BackendLibrary.DataAccess
             }
         }
 
-        /// <summary> Dodaje nowego taska. </summary>
+        /// <summary> Dodaje nowe zadanie. </summary>
         public static void AddTask(TaskModel newTask)
         {
             using (IDbConnection connection = new MySqlConnection(connectionString))
@@ -160,7 +160,7 @@ namespace BackendLibrary.DataAccess
             }
         }
 
-        /// <summary> Zwraca listę wszystkich archivalnych  tasków danego pracownika</summary>
+        /// <summary> Zwraca listę wszystkich zadań o danym ID pracownika, które mają status w zakończone lub anulowane.</summary>
         public static List<TaskModel> GetArchivalTasksByEmployeeId(int employee_id)
         {
             using (IDbConnection connection = new MySqlConnection(connectionString))
@@ -174,7 +174,7 @@ namespace BackendLibrary.DataAccess
             }
         }
 
-        /// <summary> Zwraca listę wszystkich tasków całego zespołu oprócz tasków zalogowanego kierownika, które mają status nierozpoczęte lub w toku</summary>
+        /// <summary> Zwraca listę wszystkich zadań całego zespołu oprócz zadań zalogowanego kierownika o danym ID, które mają status nierozpoczęte lub w toku.</summary>
         public static List<TaskModel> GetInProgressTasksWithoutLoggedManager(int employee_id)
         {
             using (IDbConnection connection = new MySqlConnection(connectionString))
@@ -187,7 +187,7 @@ namespace BackendLibrary.DataAccess
                 return data;
             }
         }
-
+        /// <summary> Zwraca listę wszystkich zadań całego zespołu oprócz zadańzalogowanego kierownika o danym ID, które mają status w zakończone lub anulowane.</summary>
         public static List<TaskModel> GetArchivalTasksWithoutLoggedManager(int employee_id)
         {
             using (IDbConnection connection = new MySqlConnection(connectionString))
@@ -201,9 +201,7 @@ namespace BackendLibrary.DataAccess
             }
         }
 
-
-
-        /// <summary> Aktualizuje wybranego taska o nowe wartosci. </summary>
+        /// <summary> Aktualizuje wybrane zadanie o nowe wartosci. </summary>
         public static void UpdateTask(TaskModel updatedTask)
         {
             using (IDbConnection connection = new MySqlConnection(connectionString))
@@ -227,7 +225,7 @@ namespace BackendLibrary.DataAccess
         }
 
         /// <summary> Usuwa zadanie z bazy danych,
-        /// usuwając wcześniej wiersze z innych tabel, gdzie zawarty jest dany klucz obcy z tabeli Task
+        /// usuwając wcześniej wiersze z innych tabel, gdzie zawarty jest dany klucz obcy z tabeli Task.
         /// </summary>
         public static int DeleteTask(int task_id)
         {

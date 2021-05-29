@@ -1,5 +1,8 @@
 ﻿namespace BackendLibrary.Models
 {
+    /// <summary>
+    /// Klasa reprezentująca projekt w firmie.
+    /// </summary>
     public class ProjectModel
     {
         public int Project_id { get; set; }

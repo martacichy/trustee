@@ -12,7 +12,7 @@ namespace BackendLibrary.DataAccess
     /// </summary>
     public class EmployeeTaskData : SqlConnector
     {
-        /// <summary> Zwraca listę wszystkich pari pracownik-projekt. </summary>
+        /// <summary> Zwraca listę wszystkich par pracownik-projekt. </summary>
         public static List<EmployeeTaskModel> GetAll()
         {
             using (IDbConnection connection = new MySqlConnection(connectionString))
@@ -24,7 +24,7 @@ namespace BackendLibrary.DataAccess
             }
         }
 
-        /// <summary> Zwraca listę wszystkich zadań danego pracownika. </summary>
+        /// <summary> Zwraca listę wszystkich zadań o danym ID pracownika. </summary>
         public static List<EmployeeTaskModel> GetAllTasksByEmployeeId(int employeeId)
         {
             using (IDbConnection connection = new MySqlConnection(connectionString))
@@ -35,7 +35,7 @@ namespace BackendLibrary.DataAccess
                 return data;
             }
         }
-        /// <summary> Zwraca wszystkie id pracowników przypisanych do danego zadania. </summary>
+        /// <summary> Zwraca listę wszystkich pracowników o danym ID zadania. </summary>
         public static List<EmployeeTaskModel> GetAllEmployeesByTaskId(int taskId)
         {
             using (IDbConnection connection = new MySqlConnection(connectionString))
@@ -46,8 +46,6 @@ namespace BackendLibrary.DataAccess
                 return data;
             }
         }
-
-
 
         /// <summary> Przypisuje zadanie pracownikowi. </summary>
         public static int AddEmployeeTask(EmployeeTaskModel newEmpTask)

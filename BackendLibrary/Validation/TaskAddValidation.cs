@@ -3,6 +3,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace BackendLibrary.Validation
 {
+    /// <summary>
+    /// Klasa odpowiadająca za walidację danych wprowadzanych podczas dodawania zadania.
+    /// </summary>
     public class TaskAddValidation
     {
         [Required(ErrorMessage = "To pole jest obowiązkowe!")]
@@ -33,6 +36,9 @@ namespace BackendLibrary.Validation
         public string SelectedLabel { get; set; }
     }
 
+    /// <summary>
+    /// Klasa odpowiadająca za walidację danych podczas ustawiania daty zakończenia zadania.
+    /// </summary>
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field | AttributeTargets.Parameter, AllowMultiple = false)]
     public class DateDeadlineAttribute : ValidationAttribute
     {
@@ -42,6 +48,9 @@ namespace BackendLibrary.Validation
         }
     }
 
+    /// <summary>
+    /// Klasa odpowiadająca za walidację danych podczas ustawiania daty rozpoczęcia zadania.
+    /// </summary>
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field | AttributeTargets.Parameter, AllowMultiple = false)]
     public class DefaultDateAttribute : ValidationAttribute
     {

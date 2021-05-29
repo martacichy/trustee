@@ -4,6 +4,9 @@ using XUnitPriorityOrderer;
 
 namespace BackendLibrary.Tests.Tests
 {
+    /// <summary>
+    /// Klasa testowa odpowiadająca za czyszczenie danych.
+    /// </summary>
     [Order(100)]
     public class CleaningAfterTests : BaseTestClass
     {

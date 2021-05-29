@@ -4,12 +4,12 @@ using System.Text;
 using System.IO;
 
 namespace BackendLibrary.Models
-{
+{ 
+    /// <summary>
+    /// Klasa reprezentująca plik.
+    /// </summary>
     public class FileModel
     {
-        /// <summary>
-        /// klasa dla plików, zgodnie z poradą ze stackoverflow :) 
-        /// </summary>
         public int File_id { get; set; }
         public int Task_id { get; set; }
         public int Employee_id { get; set; }

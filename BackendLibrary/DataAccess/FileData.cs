@@ -10,13 +10,15 @@ using System.IO;
 using System.Web;
 using Syroot.Windows.IO;
 
-
+/// <summary>
+///  Klasa wysyłająca zapytania bazodanowe SQL dotyczące tabeli "FileData".
+/// </summary>
 namespace BackendLibrary.DataAccess
 {
     public class FileData : SqlConnector
     {
         /// <summary>
-        /// dodaje nowy plik do bazy
+        /// Dodaje nowy plik.
         /// </summary>
         public static void AddFile(FileModel newFile)
         {
@@ -30,7 +32,7 @@ namespace BackendLibrary.DataAccess
         }
 
         /// <summary>
-        /// zwraca wszystkie pliki
+        /// Zwraca wszystkie pliki.
         /// </summary>
         public static List<FileModel> GetAll()
         {
@@ -44,7 +46,7 @@ namespace BackendLibrary.DataAccess
         }
 
         /// <summary>
-        /// zwraca wszystkie pliki przypisane do konkretnego zadania
+        /// Zwraca wszystkie pliki przypisane do zadania o danym ID.
         /// </summary>
         public static List<FileModel> GetAllByTaskId(int task_id)
         {
@@ -58,7 +60,7 @@ namespace BackendLibrary.DataAccess
         }
 
         /// <summary>
-        /// usuwa wybrany plik
+        /// Usuwa plik o danym ID.
         /// </summary>
         public static int DeleteFile(int file_id)
         {
@@ -73,7 +75,7 @@ namespace BackendLibrary.DataAccess
             }
         }
         /// <summary>
-        /// pobiera wybrany plik z bazy na nasz komputer(możliwe, że działa tylko pod windowsem)
+        /// Pobiera wybrany plik z bazy na nasz komputer.
         /// </summary>
         public static void DownloadFile(FileModel SelectedFile)
         {
@@ -103,9 +105,7 @@ namespace BackendLibrary.DataAccess
                     fs.Close();
                            
                     connection.Close();
-                }
-                
-
+                }               
             }
         }
     }  

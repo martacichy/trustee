@@ -1,5 +1,10 @@
-﻿namespace BackendLibrary.Models
+﻿using System;
+
+namespace BackendLibrary.Models
 {
+    /// <summary>
+    /// Klasa przechowująca informacje potrzebne do algorytmu dobierania zadań do pracownika.
+    /// </summary>
     public class TaskStats
     {
         public int Task_id { get; set; }
@@ -14,6 +19,8 @@
             FinalFactor =
                 + EmpLabelMatches * weight1
                 + ArchivalTaskLabelMatches * weight2;
+
+            FinalFactor = Math.Round(FinalFactor, 2);
         }
     }
 }
