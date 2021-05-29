@@ -4,9 +4,8 @@
     <br />
     <br />
     <h3>Pracownicy</h3>
-
 </div>
-    
+
 <div>
     @if (Login.UserLoggedIn.If_manager == 2)
     {
@@ -21,141 +20,145 @@
         </div>
     }
 </div>
-        <div class="form-group">
-            <SfToast @ref="NoSelectedEmployee" Title="Wybierz pracownika!" Timeout=2000>
-                <ToastPosition X="Center"></ToastPosition>
-            </SfToast>
-        </div>
-        @*Edycja pracownika*@
-        <SfDialog @bind-Visible="@VisibilityEdit" AllowDragging="true" Width="400px" Height="400px" MinHeight="400px" IsModal="true" ShowCloseIcon="true">
-            <DialogTemplates>
-                <Content>
-                    <div class="dane">
-                        <label for="Imie">@SelectedEmployee.First_name</label>
-                        <label for="Nazwisko">@SelectedEmployee.Last_name</label>
-                    </div>
-                    <EditForm Model="@EmployeeEdit">
-                        <DataAnnotationsValidator />
-                        <div class="col-lg-12 control-section multiselect-height">
-                            <div class="control-wrapper multi-select-parent">
-                                <div class="padding-top">
-                                    <label asp-for="Rola" class="control-label">Rola</label>
-                                    <SfDropDownList TValue="string" TItem="string"
-                                                    @bind-Value="@EmployeeEdit.role"
-                                                    Placeholder="Szukaj..."
-                                                    Enabled=@Enabled
-                                                    DataSource="@rola" AllowFiltering="true">
-                                        <DropDownListFieldSettings Text="status"> </DropDownListFieldSettings>
-                                    </SfDropDownList>
-                                    <ValidationMessage For="@(() => EmployeeEdit.role)" />
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-12 control-section multiselect-height">
-                            <div class="control-wrapper multi-select-parent">
-                                <div class="padding-top">
-                                    <label asp-for="etykiety" class="control-label">Etykiety</label>
-                                    <SfMultiSelect TValue="string[]" TItem="BackendLibrary.Models.LabelModel"
-                                                   @bind-Value="@nameoflabels"
-                                                   Enabled=@Enabled
-                                                   Placeholder="Szukaj..."
-                                                   DataSource="@labelsInDb" AllowFiltering="true" AllowCustomValue="true"
-                                                   Mode="@VisualMode.Box">
-                                        <MultiSelectFieldSettings Text="Name">  </MultiSelectFieldSettings>
-                                    </SfMultiSelect>
-                                    <ValidationMessage For="@(() => EmployeeEdit.SelectedLabel)" />
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-12 control-section multiselect-height">
-                            <div class="control-wrapper multi-select-parent">
-                                <div class="padding-top">
-                                    <label asp-for="projekt" class="control-label">Projekt</label>
-                                    <SfMultiSelect TValue="string[]" TItem="BackendLibrary.Models.ProjectModel"
-                                                   @bind-Value="@nameofProjects"
-                                                   Enabled=@Enabled
-                                                   Placeholder="Szukaj..."
-                                                   DataSource="@projectsInDb" AllowFiltering="true"
-                                                   Mode="@VisualMode.Box">
-                                        <MultiSelectFieldSettings Text="Name"></MultiSelectFieldSettings>
-                                    </SfMultiSelect>
-                                </div>
-                            </div>
-                        </div>
-                        <br />
-                        <br />
-                        <div class="col-12 text-center">
-                            <button class="btn btn-primary" data-dismiss="modal" @onclick="UpdateEmployee" hidden=@readOnly>Zapisz</button>
-                            <SfToast @ref="ToastObj" Title="Dane zaktualizowane pomyslnie!" Timeout=3000 Content="@ToastContentEdit">
-                                <ToastPosition X="Right"></ToastPosition>
-                            </SfToast>
-                            <SfToast @ref="FailedObj" Title="Brak zmian!" Timeout=3000 Content="@FailedContent">
-                                <ToastPosition X="Right"></ToastPosition>
-                            </SfToast>
-                        </div>
-                    </EditForm>
-                </Content>
-            </DialogTemplates>
-            <DialogEvents Closed="@DialogEditClosed" OnOverlayClick="@OverlayClick"></DialogEvents>
-            <DialogAnimationSettings Effect="DialogEffect.Fade"></DialogAnimationSettings>
-        </SfDialog>
-    @*Dodawanie nowego pracownika*@
-        <SfDialog @bind-Visible="@visibility" IsModal="true" Target="#target" Width="500px" ShowCloseIcon="true">
-            <DialogEvents></DialogEvents>
-            <DialogAnimationSettings Effect="DialogEffect.Zoom"></DialogAnimationSettings>
-            <DialogTemplates>
-                <Header>
-                    Dodaj pracownika
-                </Header>
-                <Content>
-                    <div class="form-control">
-                        <label>Wprowadź adres e-mail przypisany do pracownika, którego chcesz dodać.</label>
-                        <input type="email" @bind-value="@inputValue" name="Required" class="e-input" style="width: 415px;">
-                        <label style="color: indianred">@errorMessage</label>
-                    </div>
-                </Content>
-            </DialogTemplates>
-            <SfButton>
-                <SfButton Content="Dodaj" IsPrimary="true" OnClick="@submitAdd" />
-            </SfButton>
-        </SfDialog>
+<div class="form-group">
+    <SfToast @ref="NoSelectedEmployee" Title="Wybierz pracownika!" Timeout=2000>
+        <ToastPosition X="Center"></ToastPosition>
+    </SfToast>
+</div>
 
-        <br />
-        <br />
+@*Edycja pracownika*@
+<SfToast @ref="NoPermissions" Title="Nie masz uprawnień!" Timeout=3000 Content="@NoPermissionContent">
+    <ToastPosition X="Right"></ToastPosition>
+</SfToast>
+<SfDialog @bind-Visible="@VisibilityEdit" AllowDragging="true" Width="400px" Height="400px" MinHeight="400px" IsModal="true" ShowCloseIcon="true">
+    <DialogTemplates>
+        <Content>
+            <div class="dane">
+                <label for="Imie">@SelectedEmployee.First_name</label>
+                <label for="Nazwisko">@SelectedEmployee.Last_name</label>
+            </div>
+            <EditForm Model="@EmployeeEdit">
+                <DataAnnotationsValidator />
+                <div class="col-lg-12 control-section multiselect-height">
+                    <div class="control-wrapper multi-select-parent">
+                        <div class="padding-top">
+                            <label asp-for="Rola" class="control-label">Rola</label>
+                            <SfDropDownList TValue="string" TItem="string"
+                                            @bind-Value="@EmployeeEdit.role"
+                                            Placeholder="Szukaj..."
+                                            Enabled=@Enabled
+                                            DataSource="@rola" AllowFiltering="true">
+                                <DropDownListFieldSettings Text="status"> </DropDownListFieldSettings>
+                            </SfDropDownList>
+                            <ValidationMessage For="@(() => EmployeeEdit.role)" />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-12 control-section multiselect-height">
+                    <div class="control-wrapper multi-select-parent">
+                        <div class="padding-top">
+                            <label asp-for="etykiety" class="control-label">Etykiety</label>
+                            <SfMultiSelect TValue="string[]" TItem="BackendLibrary.Models.LabelModel"
+                                           @bind-Value="@nameoflabels"
+                                           Enabled=@Enabled
+                                           Placeholder="Szukaj..."
+                                           DataSource="@labelsInDb" AllowFiltering="true" AllowCustomValue="true"
+                                           Mode="@VisualMode.Box">
+                                <MultiSelectFieldSettings Text="Name">  </MultiSelectFieldSettings>
+                            </SfMultiSelect>
+                            <ValidationMessage For="@(() => EmployeeEdit.SelectedLabel)" />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-12 control-section multiselect-height">
+                    <div class="control-wrapper multi-select-parent">
+                        <div class="padding-top">
+                            <label asp-for="projekt" class="control-label">Projekt</label>
+                            <SfMultiSelect TValue="string[]" TItem="BackendLibrary.Models.ProjectModel"
+                                           @bind-Value="@nameofProjects"
+                                           Enabled=@Enabled
+                                           Placeholder="Szukaj..."
+                                           DataSource="@projectsInDb" AllowFiltering="true"
+                                           Mode="@VisualMode.Box">
+                                <MultiSelectFieldSettings Text="Name"></MultiSelectFieldSettings>
+                            </SfMultiSelect>
+                        </div>
+                    </div>
+                </div>
+                <br />
+                <br />
+                <div class="col-12 text-center">
+                    <button class="btn btn-primary" data-dismiss="modal" @onclick="UpdateEmployee" hidden=@readOnly>Zapisz</button>
+                    <SfToast @ref="ToastObj" Title="Dane zaktualizowane pomyslnie!" Timeout=3000 Content="@ToastContentEdit">
+                        <ToastPosition X="Right"></ToastPosition>
+                    </SfToast>
+                    <SfToast @ref="FailedObj" Title="Brak zmian!" Timeout=3000 Content="@FailedContent">
+                        <ToastPosition X="Right"></ToastPosition>
+                    </SfToast>
+                </div>
+            </EditForm>
+        </Content>
+    </DialogTemplates>
+    <DialogEvents Closed="@DialogEditClosed" OnOverlayClick="@OverlayClick"></DialogEvents>
+    <DialogAnimationSettings Effect="DialogEffect.Fade"></DialogAnimationSettings>
+</SfDialog>
+@*Dodawanie nowego pracownika*@
+<SfDialog @bind-Visible="@visibility" IsModal="true" Target="#target" Width="500px" ShowCloseIcon="true">
+    <DialogEvents></DialogEvents>
+    <DialogAnimationSettings Effect="DialogEffect.Zoom"></DialogAnimationSettings>
+    <DialogTemplates>
+        <Header>
+            Dodaj pracownika
+        </Header>
+        <Content>
+            <div class="form-control">
+                <label>Wprowadź adres e-mail przypisany do pracownika, którego chcesz dodać.</label>
+                <input type="email" @bind-value="@inputValue" name="Required" class="e-input" style="width: 415px;">
+                <label style="color: indianred">@errorMessage</label>
+            </div>
+        </Content>
+    </DialogTemplates>
+    <SfButton>
+        <SfButton Content="Dodaj" IsPrimary="true" OnClick="@submitAdd" />
+    </SfButton>
+</SfDialog>
 
-        <SfGrid DataSource="EmployeeList"
-                AllowPaging="true"
-                AllowSorting="true"
-                AllowFiltering="false"
-                ContextMenuItems="@(new List<object>()
+<br />
+<br />
+
+<SfGrid DataSource="EmployeeList"
+        AllowPaging="true"
+        AllowSorting="true"
+        AllowFiltering="false"
+        ContextMenuItems="@(new List<object>()
             {"SortAscending", "SortDescending", "Copy"})">
-            <GridPageSettings PageSize="12"></GridPageSettings>
-            <GridSearchSettings IgnoreCase="true"></GridSearchSettings>
-            <GridEvents TValue="EmployeeModel"
-                        CommandClicked="OpenEmployeeEditWindow"
-                         OnRecordDoubleClick="RowDoubleClickHandler"
-                        RowSelected="RowSelectedHandler">
-            </GridEvents>
-            <GridColumns>
-                <GridColumn Field=@nameof(EmployeeModel.Employee_id) IsPrimaryKey="true" HeaderText="ID" TextAlign="TextAlign.Left" Width="50"></GridColumn>
-                <GridColumn Field=@nameof(EmployeeModel.First_name) HeaderText="Imię" TextAlign="TextAlign.Left" Width="80"></GridColumn>
-                <GridColumn Field=@nameof(EmployeeModel.Last_name) HeaderText="Nazwisko" TextAlign="TextAlign.Left" Width="120"></GridColumn>
-                <GridColumn Field=@nameof(EmployeeModel.Email) HeaderText="E-mail" TextAlign="TextAlign.Left" Width="120"></GridColumn>
-                <GridColumn Field=@nameof(EmployeeModel.UserType) HeaderText="Rodzaj" TextAlign="TextAlign.Left" Width="80"></GridColumn>
-                <GridColumn HeaderText="Zarządzaj" Width="150">
-                    <GridCommandColumns>
-                        <GridCommandColumn Type="CommandButtonType.Edit" ButtonOption="@(new CommandButtonOptions() { IconCss = "e-icons e-edit", CssClass = "e-flat" })"></GridCommandColumn>
-                    </GridCommandColumns>
-                </GridColumn>
-            </GridColumns>
-        </SfGrid>
-
+    <GridPageSettings PageSize="12"></GridPageSettings>
+    <GridSearchSettings IgnoreCase="true"></GridSearchSettings>
+    <GridEvents TValue="EmployeeModel"
+                CommandClicked="OpenEmployeeEditWindow"
+                OnRecordDoubleClick="RowDoubleClickHandler"
+                RowSelected="RowSelectedHandler">
+    </GridEvents>
+    <GridColumns>
+        <GridColumn Field=@nameof(EmployeeModel.Employee_id) IsPrimaryKey="true" HeaderText="ID" TextAlign="TextAlign.Left" Width="50"></GridColumn>
+        <GridColumn Field=@nameof(EmployeeModel.First_name) HeaderText="Imię" TextAlign="TextAlign.Left" Width="80"></GridColumn>
+        <GridColumn Field=@nameof(EmployeeModel.Last_name) HeaderText="Nazwisko" TextAlign="TextAlign.Left" Width="120"></GridColumn>
+        <GridColumn Field=@nameof(EmployeeModel.Email) HeaderText="E-mail" TextAlign="TextAlign.Left" Width="120"></GridColumn>
+        <GridColumn Field=@nameof(EmployeeModel.UserType) HeaderText="Rodzaj" TextAlign="TextAlign.Left" Width="80"></GridColumn>
+        <GridColumn HeaderText="Zarządzaj" Width="150">
+            <GridCommandColumns>
+                <GridCommandColumn Type="CommandButtonType.Edit" ButtonOption="@(new CommandButtonOptions() { IconCss = "e-icons e-edit", CssClass = "e-flat" })"></GridCommandColumn>
+            </GridCommandColumns>
+        </GridColumn>
+    </GridColumns>
+</SfGrid>
 
 @code {
     /// <summary>
     /// Strona wyświetlająca listę pracowników.
     /// </summary>
     SfToast NoSelectedEmployee;
+    SfToast NoPermissions;
 
     public static List<EmployeeModel> EmployeeList;
     public static EmployeeModel SelectedEmployee;
@@ -173,6 +176,7 @@
     SfToast FailedObj;
     private string ToastContentEdit { get; set; } = "Dane zaktualizowane pomyslnie!";
     private string FailedContent { get; set; } = "Brak zmian!";
+    private string NoPermissionContent { get; set; } = "Zwykły pracownik nie może edytować tych danych.";
     private BackendLibrary.Validation.EditEmployeeValidation EmployeeEdit;
     DateTime defaultDate = new DateTime(0001, 1, 1, 0, 0, 0);
     private Boolean VisibilityEdit { get; set; }
@@ -246,6 +250,10 @@
             SelectedEmployee = args.RowData;
             DisplayEmployeeDetails(SelectedEmployee);
         }
+        else
+        {
+            NoPermissions.Show();
+        }
     }
 
     /// <summary>
@@ -257,7 +265,10 @@
         {
             DisplayEmployeeDetails(SelectedEmployee);
         }
-
+        else
+        {
+            NoPermissions.Show();
+        }
     }
 
     /// <summary>
@@ -315,7 +326,6 @@
         {
             ListOfEmployee = EmployeeData.GetByIdList(Pages.Employees.SelectedEmployee.Employee_id); //jednoelementowa lista zawierająca wybranego pracownika
 
-
             //tutaj przechowywane są id etykiet, nastepnie odpowiednie etykiety wpisane do tablicy
             ListofLabelsId = EmployeeLabelData.GetAllLabelsByEmployeeId(Pages.Employees.SelectedEmployee.Employee_id);
             this.nameoflabels = new string[ListofLabelsId.Count];
@@ -346,7 +356,6 @@
             EmployeeEdit.email = SelectedEmployee.Email;
             EmployeeEdit.login = SelectedEmployee.Login;
             EmployeeEdit.password = SelectedEmployee.Password;
-
 
             VisibilityEdit = true;
         }
@@ -445,9 +454,9 @@
             BackendLibrary.DataAccess.EmployeeProjectData.DeleteEmployeeProject(ListofProjectsId[i].Employee_id, ListofProjectsId[i].Project_id);
         }
 
-        if(nameofProjects != null)
+        if (nameofProjects != null)
         {
-            for(int i = 0; i < nameofProjects.Length; i++)
+            for (int i = 0; i < nameofProjects.Length; i++)
             {
                 projectIdByName = BackendLibrary.DataAccess.ProjectData.GetIdByName(nameofProjects[i]);
                 BackendLibrary.Models.EmployeeProjectModel employeeProject = new BackendLibrary.Models.EmployeeProjectModel(projectIdByName, SelectedEmployee.Employee_id);
@@ -464,7 +473,7 @@
     /// <returns></returns>
     private bool IsProjectsChanged(string project)
     {
-        for(int i = 0; i < nameofProjects.Length; i++)
+        for (int i = 0; i < nameofProjects.Length; i++)
         {
             if (project.Equals(nameofProjects[i])) return true;
         }
@@ -527,7 +536,7 @@
                 if_updated = true;
         }
 
-        if(oldProjects != null && nameofProjects != null)
+        if (oldProjects != null && nameofProjects != null)
         {
             if (oldProjects.Length == nameofProjects.Length)
             {
@@ -548,7 +557,7 @@
             else if_updated = true;
         }
 
-        if(if_updated == true)
+        if (if_updated == true)
         {
             BackendLibrary.Models.EmployeeModel updatedEmployee = new BackendLibrary.Models.EmployeeModel(SelectedEmployee.Employee_id, SelectedEmployee.Company_id,
                 SelectedEmployee.First_name, SelectedEmployee.Last_name, SelectedEmployee.Email, SelectedEmployee.If_manager, SelectedEmployee.Login, SelectedEmployee.Password);
