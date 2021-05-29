@@ -1072,7 +1072,7 @@
     /// </summary>
     private void SuggestEmployees()
     {
-        if (TaskAdd.deadline >= DateTime.Today && TaskAdd.start_time >= DateTime.Today)
+        if (TaskAdd.deadline >= TaskAdd.start_time)
         {
             List<EmployeeStats> employeeStats = new List<EmployeeStats>();
             List<EmployeeModel> employeePool;
@@ -1338,7 +1338,7 @@
     {
         BackendLibrary.Models.TaskModel newTask;
         if (TaskAdd.name != null && TaskAdd.description != null && TaskAdd.status != null
-            && TaskAdd.deadline >= DateTime.Today && TaskAdd.start_time >= DateTime.Today)
+            && TaskAdd.deadline >= TaskAdd.start_time)
         {
             if (selectedProject == null)
             {
@@ -1366,6 +1366,11 @@
                 uriHelper.NavigateTo(uriHelper.Uri, forceLoad: true);
                 VisibilityAdd = false;
             }
+        }
+        else
+        {
+            ToastWrongInput = "Wprowadzono niepoprawne dane. Sprawdź tytuł, opis i zakres dat.";
+            WrongInput.Show();
         }
     }
 

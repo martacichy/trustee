@@ -21,7 +21,7 @@ namespace BackendLibrary.Validation
         [DefaultDate(ErrorMessage = "Wprowadź poprawną datę rozpoczęcia.")]
         public DateTime start_time { get; set; } = DateTime.Now;
 
-        [DateDeadline(ErrorMessage = "Deadline nie może być wcześniejszy niż dzisiaj.")]
+        [DateDeadline(ErrorMessage = "Wprowadź poprawną datę zakończenia.")]
         public DateTime deadline { get; set; } = DateTime.Now;
 
         [Required(ErrorMessage = "To pole jest obowiązkowe!")]
@@ -41,7 +41,7 @@ namespace BackendLibrary.Validation
     {
         public override bool IsValid(object value)
         {
-            return (DateTime)value >= DateTime.Today;
+            return (DateTime)value >= DateTime.MinValue;
         }
     }
 
@@ -50,7 +50,7 @@ namespace BackendLibrary.Validation
     {
         public override bool IsValid(object value)
         {
-            return (DateTime)value >= DateTime.Today;
+            return (DateTime)value >= DateTime.MinValue;
         }
     }
 }
