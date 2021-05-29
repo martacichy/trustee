@@ -31,7 +31,7 @@ namespace BackendLibrary.Validation
 
         public string password { get; set; }
 
-        [RegularExpression(@"^[a-zA-Z0-9]+$", ErrorMessage = "Dodając etykiete możesz używać tylko liter i cyfr!")]
+        [RegularExpression(@"^[a-zA-ZĄĆĘŁŃÓŚŹŻąćęłńóśźż]*$", ErrorMessage = "Dodając etykiete możesz używać tylko liter i cyfr!")]
         public string SelectedLabel { get; set; }
     }
 }
