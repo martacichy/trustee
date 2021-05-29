@@ -10,7 +10,9 @@ using System.IO;
 using System.Web;
 using Syroot.Windows.IO;
 
-
+/// <summary>
+///  Klasa wysyłająca zapytania bazodanowe SQL dotyczące tabeli "FileData".
+/// </summary>
 namespace BackendLibrary.DataAccess
 {
     public class FileData : SqlConnector

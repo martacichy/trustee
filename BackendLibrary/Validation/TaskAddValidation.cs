@@ -36,6 +36,9 @@ namespace BackendLibrary.Validation
         public string SelectedLabel { get; set; }
     }
 
+    /// <summary>
+    /// Klasa odpowiadająca za walidację danych podczas ustawiania daty zakończenia zadania.
+    /// </summary>
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field | AttributeTargets.Parameter, AllowMultiple = false)]
     public class DateDeadlineAttribute : ValidationAttribute
     {
@@ -45,6 +48,9 @@ namespace BackendLibrary.Validation
         }
     }
 
+    /// <summary>
+    /// Klasa odpowiadająca za walidację danych podczas ustawiania daty rozpoczęcia zadania.
+    /// </summary>
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field | AttributeTargets.Parameter, AllowMultiple = false)]
     public class DefaultDateAttribute : ValidationAttribute
     {
