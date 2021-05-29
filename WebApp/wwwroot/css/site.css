@@ -90,6 +90,13 @@ app {
     margin-top: 30px;
 }
 
+.h3-warning {
+    font-size: 30px;
+    font-weight: bold;
+    margin-top: 30px;
+    color: red;
+}
+
 .authorname {
     font-size: 14px;
     font-family: 'Josefin Sans', sans-serif;
