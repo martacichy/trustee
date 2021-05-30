@@ -1,5 +1,6 @@
 # Trustee
 ### Projekt stworzony w ramach Programowania Zespołowego 2020/2021 przez Zespół 6.
+#### Użyte technologie to framework Blazor Server z backendem w ASP .NET Core 3.1 oraz MySQL Server 8.0.
 ##### Trustee jest aplikacją do zarządzania zadaniami w małych oraz średnich firmach.
 Projekt rozwiązuje problem dostępu do najważniejszych informacji zadania - zasobów takich
 jak pliki, linki, osoby powiązane z problemem, czy materiały pomocnicze. W ten sposób
