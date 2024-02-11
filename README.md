@@ -3,14 +3,15 @@ Projekt stworzony w ramach Programowania Zespołowego 2020/2021 przez Zespół 6
 
 ## Film prezentujący aplikację
 
-![](https://www.youtube.com/watch?v=AJAgC8LQgRo)
+[Link do filmu na Youtube](https://www.youtube.com/watch?v=AJAgC8LQgRo) 
+
+## Dokumentacja
 
 
+## Strona internetowa projektu
 
 
-
-
-
+## Skład zespołu
 
 
 
