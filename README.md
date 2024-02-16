@@ -7,9 +7,9 @@ Projekt stworzony w ramach Programowania Zespołowego 2020/2021 przez Zespół 6
 
 ## Dokumentacja
 
-[Techniczna](https://github.com/martacichy/trustee/blob/main/Dokumentacja/doc-tech.pdf)\n
-[Użytkowa](https://github.com/martacichy/trustee/blob/main/Dokumentacja/doc-uzyt.pdf)\n
-Kodu\n
+[Techniczna](https://github.com/martacichy/trustee/blob/main/Dokumentacja/doc-tech.pdf)\
+[Użytkowa](https://github.com/martacichy/trustee/blob/main/Dokumentacja/doc-uzyt.pdf)\
+Kodu
 
 ## Strona internetowa projektu
 
@@ -17,11 +17,11 @@ Kodu\n
 
 ## Skład zespołu
 
-Marta Cichy - Kierownik zespołu, Frontend Developer\n
-Patryk Zając - Sekretarz zespołu, Frontend Developer\n
-Artur Kolaska - Główny Developer\n
-Łukasz Szyjkowski - Backend Developer\n
-Patryk Murawski - Backend Developer\n
+Marta Cichy - Kierownik zespołu, Frontend Developer\
+Patryk Zając - Sekretarz zespołu, Frontend Developern
+Artur Kolaska - Główny Developer\
+Łukasz Szyjkowski - Backend Developer\
+Patryk Murawski - Backend Developer
 
 
 
