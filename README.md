@@ -7,21 +7,21 @@ Projekt stworzony w ramach Programowania Zespołowego 2020/2021 przez Zespół 6
 
 ## Dokumentacja
 
-Techniczna
-Użytkowa
-Kodu
+[Techniczna](https://github.com/martacichy/trustee/blob/main/Dokumentacja/doc-tech.pdf)\n
+[Użytkowa](https://github.com/martacichy/trustee/blob/main/Dokumentacja/doc-uzyt.pdf)\n
+Kodu\n
 
 ## Strona internetowa projektu
 
-Repozytorium Github z projektem strony internetowej
+[Repozytorium Github z projektem strony internetowej](https://github.com/DarkArbiterr/TrusteeWWW)
 
 ## Skład zespołu
 
-Marta Cichy - Kierownik zespołu, Frontend Developer
-Patryk Zając - Sekretarz zespołu, Frontend Developer
-Artur Kolaska - Główny Developer
-Łukasz Szyjkowski - Backend Developer
-Patryk Murawski - Backend Developer
+Marta Cichy - Kierownik zespołu, Frontend Developer\n
+Patryk Zając - Sekretarz zespołu, Frontend Developer\n
+Artur Kolaska - Główny Developer\n
+Łukasz Szyjkowski - Backend Developer\n
+Patryk Murawski - Backend Developer\n
 
 
 
